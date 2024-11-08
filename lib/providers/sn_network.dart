@@ -5,7 +5,7 @@ import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:native_dio_adapter/native_dio_adapter.dart';
 
-const kUseLocalNetwork = false;
+const kUseLocalNetwork = true;
 
 class SnNetworkProvider {
   late final Dio client;

@@ -48,6 +48,7 @@ dependencies:
   very_good_infinite_list: ^0.9.0
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.8.0
   icons_launcher: ^3.0.0
+  flutter_native_splash: ^2.4.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -132,3 +134,11 @@ icons_launcher:
     linux:
       enable: false
       image_path: "assets/icon/icon-light-radius.png"
+
+flutter_native_splash:
+  image: "assets/icon/icon-light-radius-mac.png"
+  color: "#ffffff"
+  color_dark: "#000000"
+  branding: "assets/icon/branding-light.png"
+  branding_dark: "assets/icon/branding-dark.png"
+  branding_bottom_padding: 24
