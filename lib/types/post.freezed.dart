@@ -28,7 +28,7 @@ mixin _$SnPost {
   dynamic get body => throw _privateConstructorUsedError;
   String get language => throw _privateConstructorUsedError;
   String? get alias => throw _privateConstructorUsedError;
-  String get aliasPrefix => throw _privateConstructorUsedError;
+  String? get aliasPrefix => throw _privateConstructorUsedError;
   List<dynamic> get tags => throw _privateConstructorUsedError;
   List<dynamic> get categories => throw _privateConstructorUsedError;
   dynamic get reactions => throw _privateConstructorUsedError;
@@ -77,7 +77,7 @@ abstract class $SnPostCopyWith<$Res> {
       dynamic body,
       String language,
       String? alias,
-      String aliasPrefix,
+      String? aliasPrefix,
       List<dynamic> tags,
       List<dynamic> categories,
       dynamic reactions,
@@ -130,7 +130,7 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? body = freezed,
     Object? language = null,
     Object? alias = freezed,
-    Object? aliasPrefix = null,
+    Object? aliasPrefix = freezed,
     Object? tags = null,
     Object? categories = null,
     Object? reactions = freezed,
@@ -189,10 +189,10 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.alias
           : alias // ignore: cast_nullable_to_non_nullable
               as String?,
-      aliasPrefix: null == aliasPrefix
+      aliasPrefix: freezed == aliasPrefix
           ? _value.aliasPrefix
           : aliasPrefix // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       tags: null == tags
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
@@ -329,7 +329,7 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       dynamic body,
       String language,
       String? alias,
-      String aliasPrefix,
+      String? aliasPrefix,
       List<dynamic> tags,
       List<dynamic> categories,
       dynamic reactions,
@@ -382,7 +382,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? body = freezed,
     Object? language = null,
     Object? alias = freezed,
-    Object? aliasPrefix = null,
+    Object? aliasPrefix = freezed,
     Object? tags = null,
     Object? categories = null,
     Object? reactions = freezed,
@@ -441,10 +441,10 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value.alias
           : alias // ignore: cast_nullable_to_non_nullable
               as String?,
-      aliasPrefix: null == aliasPrefix
+      aliasPrefix: freezed == aliasPrefix
           ? _value.aliasPrefix
           : aliasPrefix // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       tags: null == tags
           ? _value._tags
           : tags // ignore: cast_nullable_to_non_nullable
@@ -605,7 +605,7 @@ class _$SnPostImpl implements _SnPost {
   @override
   final String? alias;
   @override
-  final String aliasPrefix;
+  final String? aliasPrefix;
   final List<dynamic> _tags;
   @override
   List<dynamic> get tags {
@@ -795,7 +795,7 @@ abstract class _SnPost implements SnPost {
       required final dynamic body,
       required final String language,
       required final String? alias,
-      required final String aliasPrefix,
+      required final String? aliasPrefix,
       required final List<dynamic> tags,
       required final List<dynamic> categories,
       required final dynamic reactions,
@@ -840,7 +840,7 @@ abstract class _SnPost implements SnPost {
   @override
   String? get alias;
   @override
-  String get aliasPrefix;
+  String? get aliasPrefix;
   @override
   List<dynamic> get tags;
   @override

@@ -8,44 +8,44 @@ part of 'post.dart';
 
 _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       id: (json['id'] as num).toInt(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      deletedAt: json['deletedAt'] == null
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
           ? null
-          : DateTime.parse(json['deletedAt'] as String),
+          : DateTime.parse(json['deleted_at'] as String),
       type: json['type'] as String,
       body: json['body'],
       language: json['language'] as String,
       alias: json['alias'] as String?,
-      aliasPrefix: json['aliasPrefix'] as String,
+      aliasPrefix: json['alias_prefix'] as String?,
       tags: json['tags'] as List<dynamic>,
       categories: json['categories'] as List<dynamic>,
       reactions: json['reactions'],
       replies: json['replies'],
-      replyId: json['replyId'],
-      repostId: json['repostId'],
-      replyTo: json['replyTo'],
-      repostTo: json['repostTo'],
-      visibleUsersList: json['visibleUsersList'],
-      invisibleUsersList: json['invisibleUsersList'],
+      replyId: json['reply_id'],
+      repostId: json['repost_id'],
+      replyTo: json['reply_to'],
+      repostTo: json['repost_to'],
+      visibleUsersList: json['visible_users_list'],
+      invisibleUsersList: json['invisible_users_list'],
       visibility: (json['visibility'] as num).toInt(),
-      editedAt: json['editedAt'] == null
+      editedAt: json['edited_at'] == null
           ? null
-          : DateTime.parse(json['editedAt'] as String),
-      pinnedAt: json['pinnedAt'] == null
+          : DateTime.parse(json['edited_at'] as String),
+      pinnedAt: json['pinned_at'] == null
           ? null
-          : DateTime.parse(json['pinnedAt'] as String),
-      lockedAt: json['lockedAt'] == null
+          : DateTime.parse(json['pinned_at'] as String),
+      lockedAt: json['locked_at'] == null
           ? null
-          : DateTime.parse(json['lockedAt'] as String),
-      isDraft: json['isDraft'] as bool,
-      publishedAt: DateTime.parse(json['publishedAt'] as String),
-      publishedUntil: json['publishedUntil'],
-      totalUpvote: (json['totalUpvote'] as num).toInt(),
-      totalDownvote: (json['totalDownvote'] as num).toInt(),
-      realmId: (json['realmId'] as num?)?.toInt(),
+          : DateTime.parse(json['locked_at'] as String),
+      isDraft: json['is_draft'] as bool,
+      publishedAt: DateTime.parse(json['published_at'] as String),
+      publishedUntil: json['published_until'],
+      totalUpvote: (json['total_upvote'] as num).toInt(),
+      totalDownvote: (json['total_downvote'] as num).toInt(),
+      realmId: (json['realm_id'] as num?)?.toInt(),
       realm: json['realm'],
-      publisherId: (json['publisherId'] as num).toInt(),
+      publisherId: (json['publisher_id'] as num).toInt(),
       publisher:
           SnPublisher.fromJson(json['publisher'] as Map<String, dynamic>),
       metric: SnMetric.fromJson(json['metric'] as Map<String, dynamic>),
@@ -54,38 +54,38 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
 Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
-      'deletedAt': instance.deletedAt?.toIso8601String(),
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
       'type': instance.type,
       'body': instance.body,
       'language': instance.language,
       'alias': instance.alias,
-      'aliasPrefix': instance.aliasPrefix,
+      'alias_prefix': instance.aliasPrefix,
       'tags': instance.tags,
       'categories': instance.categories,
       'reactions': instance.reactions,
       'replies': instance.replies,
-      'replyId': instance.replyId,
-      'repostId': instance.repostId,
-      'replyTo': instance.replyTo,
-      'repostTo': instance.repostTo,
-      'visibleUsersList': instance.visibleUsersList,
-      'invisibleUsersList': instance.invisibleUsersList,
+      'reply_id': instance.replyId,
+      'repost_id': instance.repostId,
+      'reply_to': instance.replyTo,
+      'repost_to': instance.repostTo,
+      'visible_users_list': instance.visibleUsersList,
+      'invisible_users_list': instance.invisibleUsersList,
       'visibility': instance.visibility,
-      'editedAt': instance.editedAt?.toIso8601String(),
-      'pinnedAt': instance.pinnedAt?.toIso8601String(),
-      'lockedAt': instance.lockedAt?.toIso8601String(),
-      'isDraft': instance.isDraft,
-      'publishedAt': instance.publishedAt.toIso8601String(),
-      'publishedUntil': instance.publishedUntil,
-      'totalUpvote': instance.totalUpvote,
-      'totalDownvote': instance.totalDownvote,
-      'realmId': instance.realmId,
+      'edited_at': instance.editedAt?.toIso8601String(),
+      'pinned_at': instance.pinnedAt?.toIso8601String(),
+      'locked_at': instance.lockedAt?.toIso8601String(),
+      'is_draft': instance.isDraft,
+      'published_at': instance.publishedAt.toIso8601String(),
+      'published_until': instance.publishedUntil,
+      'total_upvote': instance.totalUpvote,
+      'total_downvote': instance.totalDownvote,
+      'realm_id': instance.realmId,
       'realm': instance.realm,
-      'publisherId': instance.publisherId,
-      'publisher': instance.publisher,
-      'metric': instance.metric,
+      'publisher_id': instance.publisherId,
+      'publisher': instance.publisher.toJson(),
+      'metric': instance.metric.toJson(),
     };
 
 _$SnBodyImpl _$$SnBodyImplFromJson(Map<String, dynamic> json) => _$SnBodyImpl(
@@ -109,50 +109,50 @@ Map<String, dynamic> _$$SnBodyImplToJson(_$SnBodyImpl instance) =>
 
 _$SnMetricImpl _$$SnMetricImplFromJson(Map<String, dynamic> json) =>
     _$SnMetricImpl(
-      replyCount: (json['replyCount'] as num).toInt(),
-      reactionCount: (json['reactionCount'] as num).toInt(),
+      replyCount: (json['reply_count'] as num).toInt(),
+      reactionCount: (json['reaction_count'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$SnMetricImplToJson(_$SnMetricImpl instance) =>
     <String, dynamic>{
-      'replyCount': instance.replyCount,
-      'reactionCount': instance.reactionCount,
+      'reply_count': instance.replyCount,
+      'reaction_count': instance.reactionCount,
     };
 
 _$SnPublisherImpl _$$SnPublisherImplFromJson(Map<String, dynamic> json) =>
     _$SnPublisherImpl(
       id: (json['id'] as num).toInt(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      deletedAt: json['deletedAt'] == null
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
           ? null
-          : DateTime.parse(json['deletedAt'] as String),
+          : DateTime.parse(json['deleted_at'] as String),
       type: (json['type'] as num).toInt(),
       name: json['name'] as String,
       nick: json['nick'] as String,
       description: json['description'] as String,
       avatar: json['avatar'] as String,
       banner: json['banner'] as String,
-      totalUpvote: (json['totalUpvote'] as num).toInt(),
-      totalDownvote: (json['totalDownvote'] as num).toInt(),
-      realmId: (json['realmId'] as num?)?.toInt(),
-      accountId: (json['accountId'] as num).toInt(),
+      totalUpvote: (json['total_upvote'] as num).toInt(),
+      totalDownvote: (json['total_downvote'] as num).toInt(),
+      realmId: (json['realm_id'] as num?)?.toInt(),
+      accountId: (json['account_id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$SnPublisherImplToJson(_$SnPublisherImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
-      'deletedAt': instance.deletedAt?.toIso8601String(),
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
       'type': instance.type,
       'name': instance.name,
       'nick': instance.nick,
       'description': instance.description,
       'avatar': instance.avatar,
       'banner': instance.banner,
-      'totalUpvote': instance.totalUpvote,
-      'totalDownvote': instance.totalDownvote,
-      'realmId': instance.realmId,
-      'accountId': instance.accountId,
+      'total_upvote': instance.totalUpvote,
+      'total_downvote': instance.totalDownvote,
+      'realm_id': instance.realmId,
+      'account_id': instance.accountId,
     };

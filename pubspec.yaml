@@ -2,7 +2,7 @@ name: surface
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -63,13 +62,13 @@ dev_dependencies:
   build_runner: ^2.4.13
   freezed: ^2.5.7
   json_serializable: ^6.8.0
+  icons_launcher: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -104,3 +103,32 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+icons_launcher:
+  image_path: "assets/icon/icon.png"
+  platforms:
+    android:
+      enable: true
+      image_path: "assets/icon/icon.png"
+      notification_image: "assets/icon/icon.png"
+      adaptive_background_color: "#ffffff"
+      adaptive_foreground_image: "assets/icon/icon.png"
+      adaptive_monochrome_image: "assets/icon/icon-dark.png"
+    ios:
+      enable: true
+      image_path: "assets/icon/icon-light.png"
+      dark_path: "assets/icon/icon-dark.png"
+      tinted_path: "assets/icon/icon-dark.png"
+    web:
+      enable: true
+      image_path: "assets/icon/icon-light-radius.png"
+      favicon_path: "assets/icon/icon-light-radius.png"
+    macos:
+      enable: false
+      image_path: "assets/icon/icon-light-radius-mac.png"
+    windows:
+      enable: false
+      image_path: "assets/icon/icon-light-radius.png"
+    linux:
+      enable: false
+      image_path: "assets/icon/icon-light-radius.png"

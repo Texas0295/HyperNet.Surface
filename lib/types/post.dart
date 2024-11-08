@@ -14,7 +14,7 @@ class SnPost with _$SnPost {
     required dynamic body,
     required String language,
     required String? alias,
-    required String aliasPrefix,
+    required String? aliasPrefix,
     required List<dynamic> tags,
     required List<dynamic> categories,
     required dynamic reactions,
