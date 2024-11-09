@@ -33,11 +33,15 @@ class SolianApp extends StatelessWidget {
           providers: [
             Provider(create: (_) => SnNetworkProvider()),
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
-            ChangeNotifierProvider(create: (_) => UserProvider()),
+            ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
           ],
           child: Builder(builder: (context) {
+            // Initialize some providers
+            context.read<UserProvider>();
+
             final th = context.watch<ThemeProvider>();
+
             return MaterialApp.router(
               theme: th.theme.light,
               darkTheme: th.theme.dark,
