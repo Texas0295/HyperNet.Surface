@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:native_dio_adapter/native_dio_adapter.dart';
+import 'package:surface/providers/adapters/sn_network_universal.dart';
 
 const kUseLocalNetwork = true;
 
@@ -87,10 +85,7 @@ class SnNetworkProvider {
       ),
     );
 
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
-      // Switch to native implementation if possible
-      client.httpClientAdapter = NativeAdapter();
-    }
+    client = addClientAdapter(client);
   }
 
   String getAttachmentUrl(String ky) {
