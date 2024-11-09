@@ -12,7 +12,7 @@ const kAtkStoreKey = 'nex_user_atk';
 const kRtkStoreKey = 'nex_user_rtk';
 
 class SnNetworkProvider {
-  late final Dio client;
+  late Dio client;
 
   late final FlutterSecureStorage _storage = FlutterSecureStorage();
 
