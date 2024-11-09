@@ -1,15 +1,25 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:croppy/croppy.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:path/path.dart' show basename;
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
+import 'package:surface/widgets/universal_image.dart';
 
 class AccountPublisherEditScreen extends StatefulWidget {
   final String name;
@@ -89,6 +99,76 @@ class _AccountPublisherEditScreenState
     _nickController.text = ua.user!.nick;
     _nameController.text = ua.user!.name;
     _descriptionController.text = ua.user!.description;
+    setState(() {});
+  }
+
+  final _imagePicker = ImagePicker();
+
+  Future<void> _updateImage(String place) async {
+    final image = await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+    if (!mounted) return;
+
+    final ImageProvider imageProvider =
+        kIsWeb ? NetworkImage(image.path) : FileImage(File(image.path));
+    final aspectRatios = place == 'banner'
+        ? [CropAspectRatio(width: 16, height: 7)]
+        : [CropAspectRatio(width: 1, height: 1)];
+    final result = (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+        ? await showCupertinoImageCropper(
+            // ignore: use_build_context_synchronously
+            context,
+            allowedAspectRatios: aspectRatios,
+            imageProvider: imageProvider,
+          )
+        : await showMaterialImageCropper(
+            // ignore: use_build_context_synchronously
+            context,
+            allowedAspectRatios: aspectRatios,
+            imageProvider: imageProvider,
+          );
+
+    if (result == null) return;
+
+    if (!mounted) return;
+    final attach = context.read<SnAttachmentProvider>();
+
+    setState(() => _isBusy = true);
+
+    final rawBytes =
+        (await result.uiImage.toByteData(format: ImageByteFormat.png))!
+            .buffer
+            .asUint8List();
+
+    try {
+      final attachment = await attach.directUploadOne(
+        rawBytes,
+        basename(image.path),
+        'avatar',
+        null,
+        mimetype: 'image/png',
+      );
+
+      if (!mounted) return;
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.put(
+        '/cgi/id/users/me/$place',
+        data: {'attachment': attachment.rid},
+      );
+
+      if (!mounted) return;
+      final ua = context.read<UserProvider>();
+      await ua.refreshUser();
+
+      if (!mounted) return;
+      context.showSnackbar('accountProfileEditApplied'.tr());
+      _syncWidget();
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
   }
 
   @override
@@ -107,11 +187,59 @@ class _AccountPublisherEditScreenState
 
   @override
   Widget build(BuildContext context) {
+    final sn = context.read<SnNetworkProvider>();
+
     return AppScaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             LoadingIndicator(isActive: _isBusy),
+            const Gap(24),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Material(
+                  elevation: 0,
+                  child: InkWell(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Container(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHigh,
+                          child: _banner != null
+                              ? UniversalImage(
+                                  sn.getAttachmentUrl(_banner!),
+                                  fit: BoxFit.cover,
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      _updateImage('banner');
+                    },
+                  ),
+                ),
+                Positioned(
+                  bottom: -28,
+                  left: 16,
+                  child: Material(
+                    elevation: 2,
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                    child: InkWell(
+                      child: AccountImage(content: _avatar, radius: 40),
+                      onTap: () {
+                        _updateImage('avatar');
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Gap(8 + 28),
             TextField(
               controller: _nameController,
               readOnly: true,
