@@ -4,12 +4,11 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
 
 class SnAttachmentProvider {
-  late final SnNetworkProvider sn;
-
+  late final SnNetworkProvider _sn;
   final Map<String, SnAttachment> _cache = {};
 
   SnAttachmentProvider(BuildContext context) {
-    sn = context.read<SnNetworkProvider>();
+    _sn = context.read<SnNetworkProvider>();
   }
 
   Future<SnAttachment> getOne(String rid, {noCache = false}) async {
@@ -17,7 +16,7 @@ class SnAttachmentProvider {
       return _cache[rid]!;
     }
 
-    final resp = await sn.client.get('/cgi/uc/attachments/$rid/meta');
+    final resp = await _sn.client.get('/cgi/uc/attachments/$rid/meta');
     final out = SnAttachment.fromJson(resp.data);
     _cache[rid] = out;
 
@@ -33,7 +32,7 @@ class SnAttachmentProvider {
       return rids.map((rid) => _cache[rid]!).toList();
     }
 
-    final resp = await sn.client.get('/cgi/uc/attachments', queryParameters: {
+    final resp = await _sn.client.get('/cgi/uc/attachments', queryParameters: {
       'take': pendingFetch.length,
       'id': pendingFetch.join(','),
     });

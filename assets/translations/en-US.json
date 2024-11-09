@@ -35,5 +35,13 @@
   "loginEnterPassword": "Enter the code",
   "loginSuccess": "Logged in as {}",
   "authFactorPassword": "Password",
-  "authFactorEmail": "Email verification code"
+  "authFactorEmail": "Email verification code",
+  "accountIntroTitle": "Hello there!",
+  "accountIntroSubtitle": "Pick an option below to get started.",
+  "accountLogout": "Logout",
+  "accountLogoutSubtitle": "Log out of the current account.",
+  "accountLogoutConfirmTitle": "Are you sure you want to logout?",
+  "accountLogoutConfirm": "You will need to re-enter your account password, even if you have already done so. This is required to login again.",
+  "accountPublishers": "Your publishers",
+  "accountPublishersSubtitle": "Manage your publish identities."
 }

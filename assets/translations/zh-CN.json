@@ -35,5 +35,13 @@
   "loginEnterPassword": "验证代码",
   "loginSuccess": "登录为 {}",
   "authFactorPassword": "密码",
-  "authFactorEmail": "电邮一次性验证码"
+  "authFactorEmail": "电邮一次性验证码",
+  "accountIntroTitle": "喜欢您来！",
+  "accountIntroSubtitle": "登陆以探索更广大的世界。",
+  "accountLogout": "退出登录",
+  "accountLogoutSubtitle": "注销当前账户的登陆状态。",
+  "accountLogoutConfirmTitle": "您确定要退出登录吗？",
+  "accountLogoutConfirm": "您需要重新输入账号密码，甚至可能需要多步验证来再次登陆。",
+  "accountPublishers": "你的发布者",
+  "accountPublishersSubtitle": "管理你的公共形象。"
 }

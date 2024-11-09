@@ -10,12 +10,11 @@ class UserProvider extends ChangeNotifier {
   bool isAuthorized = false;
   SnAccount? user;
 
-  late final SnNetworkProvider sn;
-
+  late final SnNetworkProvider _sn;
   late final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   UserProvider(BuildContext context) {
-    sn = context.read<SnNetworkProvider>();
+    _sn = context.read<SnNetworkProvider>();
 
     _storage.read(key: kAtkStoreKey).then((value) {
       isAuthorized = value != null;
@@ -31,12 +30,19 @@ class UserProvider extends ChangeNotifier {
   Future<SnAccount?> refreshUser() async {
     if (!isAuthorized) return null;
 
-    final resp = await sn.client.get('/cgi/id/users/me');
+    final resp = await _sn.client.get('/cgi/id/users/me');
     final out = SnAccount.fromJson(resp.data);
 
     user = out;
     notifyListeners();
 
     return out;
+  }
+
+  void logoutUser() async {
+    _sn.clearTokenPair();
+    isAuthorized = false;
+    user = null;
+    notifyListeners();
   }
 }

@@ -67,7 +67,7 @@ class SnNetworkProvider {
               final b64 = utf8.fuse(base64Url);
               final payload = b64.decode(rawPayload);
               final exp = jsonDecode(payload)['exp'];
-              if (exp >= DateTime.now().millisecondsSinceEpoch) {
+              if (exp <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
                 log('Access token need refresh, doing it at ${DateTime.now()}');
                 atk = await refreshToken();
               }
@@ -78,6 +78,8 @@ class SnNetworkProvider {
                 log('Access token refresh failed...');
               }
             }
+          } catch (err) {
+            log('Failed to authenticate user: $err');
           } finally {
             handler.next(options);
           }
@@ -114,7 +116,12 @@ class SnNetworkProvider {
     final rtk = await _storage.read(key: kRtkStoreKey);
     if (rtk == null) return null;
 
-    final resp = await client.post('/cgi/id/auth/token', data: {
+    final dio = Dio();
+    dio.options.baseUrl = kUseLocalNetwork
+        ? 'http://localhost:8001'
+        : 'https://api.sn.solsynth.dev';
+
+    final resp = await dio.post('/cgi/id/auth/token', data: {
       'grant_type': 'refresh_token',
       'refresh_token': rtk,
     });
