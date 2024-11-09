@@ -4,7 +4,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/universal_image.dart';
 
 class AccountImage extends StatelessWidget {
-  final String content;
+  final String? content;
   final Color? backgroundColor;
   final Color? foregroundColor;
   final double? radius;
@@ -22,21 +22,21 @@ class AccountImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
-    final url = sn.getAttachmentUrl(content);
+    final url = sn.getAttachmentUrl(content ?? '');
 
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     return CircleAvatar(
       key: Key('attachment-${content.hashCode}'),
       radius: radius,
       backgroundColor: backgroundColor,
-      backgroundImage: content.isNotEmpty
+      backgroundImage: (content?.isNotEmpty ?? false)
           ? ResizeImage(
               UniversalImage.provider(url),
               width: ((radius ?? 20) * devicePixelRatio * 2).round(),
               height: ((radius ?? 20) * devicePixelRatio * 2).round(),
             )
           : null,
-      child: content.isEmpty
+      child: (content?.isEmpty ?? true)
           ? (fallbackWidget ??
               Icon(
                 Icons.account_circle,

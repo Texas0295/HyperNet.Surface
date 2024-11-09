@@ -1,3 +1,4 @@
+import 'package:croppy/croppy.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,7 @@ class SolianApp extends StatelessWidget {
               locale: context.locale,
               supportedLocales: context.supportedLocales,
               localizationsDelegates: [
+                CroppyLocalizations.delegate,
                 RelativeTimeLocalizations.delegate,
                 ...context.localizationDelegates,
               ],

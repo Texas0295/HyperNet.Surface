@@ -75,6 +75,16 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           }).padding(all: 20),
         ).padding(horizontal: 8, top: 16, bottom: 4),
         ListTile(
+          title: Text('accountProfileEdit').tr(),
+          subtitle: Text('accountProfileEditSubtitle').tr(),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+          leading: const Icon(Symbols.contact_page),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () {
+            GoRouter.of(context).pushNamed('accountProfileEdit');
+          },
+        ),
+        ListTile(
           title: Text('accountPublishers').tr(),
           subtitle: Text('accountPublishersSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),

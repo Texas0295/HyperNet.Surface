@@ -11,6 +11,7 @@
   "screenAccountPublishers": "Publishers",
   "screenAccountPublisherNew": "New Publisher",
   "screenAccountPublisherEdit": "Edit Publisher",
+  "screenAccountProfileEdit": "Edit Profile",
   "dialogOkay": "Okay",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -36,6 +37,10 @@
   "fieldDescription": "Description",
   "fieldUsernameCannotEditHint": "Username cannot be edited after created",
   "fieldUsernameLookupHint": "You can use username, phone number or email to login",
+  "fieldFirstName": "First name",
+  "fieldLastName": "Last name",
+  "fieldBirthday": "Birthday",
+  "fieldImageHint": "You can click those profile pictures to edit them.",
   "forgotPassword": "Forgot password",
   "loginPickFactor": "Pick a factor",
   "loginMultiFactor": {
@@ -54,6 +59,9 @@
   "accountLogoutConfirm": "You will need to re-enter your account password, even if you have already done so. This is required to login again.",
   "accountPublishers": "Your publishers",
   "accountPublishersSubtitle": "Manage your publish identities.",
+  "accountProfileEdit": "Edit your profile",
+  "accountProfileEditSubtitle": "Make your Solarpass account more looks like you.",
+  "accountProfileEditApplied": "Profile modification applied.",
   "publishersNew": "New Publisher",
   "publisherNewSubtitle": "Create a new publisher identity.",
   "publisherSyncWithAccount": "Sync with account"

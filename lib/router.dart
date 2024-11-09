@@ -1,8 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:surface/screens/account.dart';
-import 'package:surface/screens/account/publisher_edit.dart';
-import 'package:surface/screens/account/publisher_new.dart';
-import 'package:surface/screens/account/publishers.dart';
+import 'package:surface/screens/account/profile_edit.dart';
+import 'package:surface/screens/account/publishers/publisher_edit.dart';
+import 'package:surface/screens/account/publishers/publisher_new.dart';
+import 'package:surface/screens/account/publishers/publishers.dart';
 import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/explore.dart';
@@ -49,6 +50,11 @@ final appRouter = GoRouter(
           path: '/auth/register',
           name: 'authRegister',
           builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: '/account/profile/edit',
+          name: 'accountProfileEdit',
+          builder: (context, state) => const ProfileEditScreen(),
         ),
         GoRoute(
           path: '/account/publishers',

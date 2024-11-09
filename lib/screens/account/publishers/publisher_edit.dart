@@ -134,7 +134,7 @@ class _AccountPublisherEditScreenState
             const Gap(4),
             TextField(
               controller: _descriptionController,
-              maxLines: 3,
+              maxLines: null,
               minLines: 3,
               decoration: InputDecoration(
                 labelText: 'fieldDescription'.tr(),
