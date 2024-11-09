@@ -64,5 +64,7 @@
   "accountProfileEditApplied": "Profile modification applied.",
   "publishersNew": "New Publisher",
   "publisherNewSubtitle": "Create a new publisher identity.",
-  "publisherSyncWithAccount": "Sync with account"
+  "publisherSyncWithAccount": "Sync with account",
+  "writePostTypeStory": "Post a story",
+  "writePostTypeArticle": "Write an article"
 }

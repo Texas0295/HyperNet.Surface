@@ -8,6 +8,8 @@ import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
 
 class AppScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final Widget? floatingActionButton;
   final String? title;
   final Widget? body;
   final bool autoImplyAppBar;
@@ -15,6 +17,8 @@ class AppScaffold extends StatelessWidget {
   const AppScaffold({
     super.key,
     this.appBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.title,
     this.body,
     this.autoImplyAppBar = false,
@@ -44,6 +48,8 @@ class AppScaffold extends StatelessWidget {
                             : null)
                 : null),
         body: body,
+        floatingActionButtonLocation: floatingActionButtonLocation,
+        floatingActionButton: floatingActionButton,
         bottomNavigationBar:
             isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),

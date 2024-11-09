@@ -8,6 +8,7 @@ import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
+import 'package:surface/screens/post/post_editor.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 final appRouter = GoRouter(
@@ -32,6 +33,18 @@ final appRouter = GoRouter(
           path: '/account',
           name: 'account',
           builder: (context, state) => const AccountScreen(),
+        ),
+      ],
+    ),
+    ShellRoute(
+      builder: (context, state, child) => AppScaffold(
+        body: child,
+      ),
+      routes: [
+        GoRoute(
+          path: '/post/write/:mode',
+          name: 'postEditor',
+          builder: (context, state) => const PostEditorScreen(),
         ),
       ],
     ),

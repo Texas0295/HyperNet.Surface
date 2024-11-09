@@ -1,5 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -16,6 +20,8 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  final _fabKey = GlobalKey<ExpandableFabState>();
+
   bool _isBusy = true;
 
   final List<SnPost> _posts = List.empty(growable: true);
@@ -71,6 +77,78 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return AppScaffold(
       appBar: AppBar(
         title: Text('screenExplore').tr(),
+      ),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+        key: _fabKey,
+        distance: 75,
+        type: ExpandableFabType.up,
+        childrenAnimation: ExpandableFabAnimation.none,
+        overlayStyle: ExpandableFabOverlayStyle(blur: 10),
+        openButtonBuilder: RotateFloatingActionButtonBuilder(
+          child: const Icon(Symbols.add, size: 28),
+          fabSize: ExpandableFabSize.regular,
+          foregroundColor:
+              Theme.of(context).floatingActionButtonTheme.foregroundColor,
+          backgroundColor:
+              Theme.of(context).floatingActionButtonTheme.backgroundColor,
+          shape: const CircleBorder(),
+        ),
+        closeButtonBuilder: DefaultFloatingActionButtonBuilder(
+          child: const Icon(Symbols.close, size: 28),
+          fabSize: ExpandableFabSize.regular,
+          foregroundColor:
+              Theme.of(context).floatingActionButtonTheme.foregroundColor,
+          backgroundColor:
+              Theme.of(context).floatingActionButtonTheme.backgroundColor,
+          shape: const CircleBorder(),
+        ),
+        children: [
+          Row(
+            children: [
+              Text('writePostTypeStory').tr(),
+              const Gap(20),
+              FloatingActionButton(
+                heroTag: null,
+                tooltip: 'writePostTypeStory'.tr(),
+                onPressed: () {
+                  GoRouter.of(context).pushNamed('postEditor', pathParameters: {
+                    'mode': 'story',
+                  }).then((value) {
+                    if (value == true) {
+                      _posts.clear();
+                      _fetchPosts();
+                    }
+                  });
+                  _fabKey.currentState!.toggle();
+                },
+                child: const Icon(Symbols.post_rounded),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('writePostTypeArticle').tr(),
+              const Gap(20),
+              FloatingActionButton(
+                heroTag: null,
+                tooltip: 'writePostTypeArticle'.tr(),
+                onPressed: () {
+                  GoRouter.of(context).pushNamed('postEditor', pathParameters: {
+                    'mode': 'article',
+                  }).then((value) {
+                    if (value == true) {
+                      _posts.clear();
+                      _fetchPosts();
+                    }
+                  });
+                  _fabKey.currentState!.toggle();
+                },
+                child: const Icon(Symbols.news),
+              ),
+            ],
+          ),
+        ],
       ),
       body: InfiniteList(
         itemCount: _posts.length,
