@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
@@ -40,7 +41,10 @@ class SolianApp extends StatelessWidget {
               darkTheme: th.theme.dark,
               locale: context.locale,
               supportedLocales: context.supportedLocales,
-              localizationsDelegates: context.localizationDelegates,
+              localizationsDelegates: [
+                RelativeTimeLocalizations.delegate,
+                ...context.localizationDelegates,
+              ],
               routerConfig: appRouter,
             );
           }),

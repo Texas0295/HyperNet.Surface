@@ -27,9 +27,14 @@ class SnNetworkProvider {
       ],
     ));
 
-    if (!kIsWeb && Platform.isAndroid || Platform.isIOS || Platform.isMacOS) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
       // Switch to native implementation if possible
       client.httpClientAdapter = NativeAdapter();
     }
+  }
+
+  String getAttachmentUrl(String ky) {
+    if (ky.startsWith("http://")) return ky;
+    return '${client.options.baseUrl}/cgi/uc/attachments/$ky';
   }
 }
