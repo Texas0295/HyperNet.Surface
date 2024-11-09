@@ -25,7 +25,7 @@ mixin _$SnPost {
   DateTime get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
-  dynamic get body => throw _privateConstructorUsedError;
+  Map<String, dynamic> get body => throw _privateConstructorUsedError;
   String get language => throw _privateConstructorUsedError;
   String? get alias => throw _privateConstructorUsedError;
   String? get aliasPrefix => throw _privateConstructorUsedError;
@@ -53,6 +53,7 @@ mixin _$SnPost {
   int get publisherId => throw _privateConstructorUsedError;
   SnPublisher get publisher => throw _privateConstructorUsedError;
   SnMetric get metric => throw _privateConstructorUsedError;
+  SnPostPreload? get preload => throw _privateConstructorUsedError;
 
   /// Serializes this SnPost to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -74,7 +75,7 @@ abstract class $SnPostCopyWith<$Res> {
       DateTime updatedAt,
       DateTime? deletedAt,
       String type,
-      dynamic body,
+      Map<String, dynamic> body,
       String language,
       String? alias,
       String? aliasPrefix,
@@ -101,10 +102,12 @@ abstract class $SnPostCopyWith<$Res> {
       dynamic realm,
       int publisherId,
       SnPublisher publisher,
-      SnMetric metric});
+      SnMetric metric,
+      SnPostPreload? preload});
 
   $SnPublisherCopyWith<$Res> get publisher;
   $SnMetricCopyWith<$Res> get metric;
+  $SnPostPreloadCopyWith<$Res>? get preload;
 }
 
 /// @nodoc
@@ -127,7 +130,7 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? updatedAt = null,
     Object? deletedAt = freezed,
     Object? type = null,
-    Object? body = freezed,
+    Object? body = null,
     Object? language = null,
     Object? alias = freezed,
     Object? aliasPrefix = freezed,
@@ -155,6 +158,7 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? publisherId = null,
     Object? publisher = null,
     Object? metric = null,
+    Object? preload = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -177,10 +181,10 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      body: freezed == body
+      body: null == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as Map<String, dynamic>,
       language: null == language
           ? _value.language
           : language // ignore: cast_nullable_to_non_nullable
@@ -289,6 +293,10 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.metric
           : metric // ignore: cast_nullable_to_non_nullable
               as SnMetric,
+      preload: freezed == preload
+          ? _value.preload
+          : preload // ignore: cast_nullable_to_non_nullable
+              as SnPostPreload?,
     ) as $Val);
   }
 
@@ -311,6 +319,20 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
       return _then(_value.copyWith(metric: value) as $Val);
     });
   }
+
+  /// Create a copy of SnPost
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnPostPreloadCopyWith<$Res>? get preload {
+    if (_value.preload == null) {
+      return null;
+    }
+
+    return $SnPostPreloadCopyWith<$Res>(_value.preload!, (value) {
+      return _then(_value.copyWith(preload: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -326,7 +348,7 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       DateTime updatedAt,
       DateTime? deletedAt,
       String type,
-      dynamic body,
+      Map<String, dynamic> body,
       String language,
       String? alias,
       String? aliasPrefix,
@@ -353,12 +375,15 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       dynamic realm,
       int publisherId,
       SnPublisher publisher,
-      SnMetric metric});
+      SnMetric metric,
+      SnPostPreload? preload});
 
   @override
   $SnPublisherCopyWith<$Res> get publisher;
   @override
   $SnMetricCopyWith<$Res> get metric;
+  @override
+  $SnPostPreloadCopyWith<$Res>? get preload;
 }
 
 /// @nodoc
@@ -379,7 +404,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? deletedAt = freezed,
     Object? type = null,
-    Object? body = freezed,
+    Object? body = null,
     Object? language = null,
     Object? alias = freezed,
     Object? aliasPrefix = freezed,
@@ -407,6 +432,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? publisherId = null,
     Object? publisher = null,
     Object? metric = null,
+    Object? preload = freezed,
   }) {
     return _then(_$SnPostImpl(
       id: null == id
@@ -429,10 +455,10 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      body: freezed == body
-          ? _value.body
+      body: null == body
+          ? _value._body
           : body // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as Map<String, dynamic>,
       language: null == language
           ? _value.language
           : language // ignore: cast_nullable_to_non_nullable
@@ -541,6 +567,10 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value.metric
           : metric // ignore: cast_nullable_to_non_nullable
               as SnMetric,
+      preload: freezed == preload
+          ? _value.preload
+          : preload // ignore: cast_nullable_to_non_nullable
+              as SnPostPreload?,
     ));
   }
 }
@@ -554,7 +584,7 @@ class _$SnPostImpl implements _SnPost {
       required this.updatedAt,
       required this.deletedAt,
       required this.type,
-      required this.body,
+      required final Map<String, dynamic> body,
       required this.language,
       required this.alias,
       required this.aliasPrefix,
@@ -581,8 +611,10 @@ class _$SnPostImpl implements _SnPost {
       required this.realm,
       required this.publisherId,
       required this.publisher,
-      required this.metric})
-      : _tags = tags,
+      required this.metric,
+      this.preload})
+      : _body = body,
+        _tags = tags,
         _categories = categories;
 
   factory _$SnPostImpl.fromJson(Map<String, dynamic> json) =>
@@ -598,8 +630,14 @@ class _$SnPostImpl implements _SnPost {
   final DateTime? deletedAt;
   @override
   final String type;
+  final Map<String, dynamic> _body;
   @override
-  final dynamic body;
+  Map<String, dynamic> get body {
+    if (_body is EqualUnmodifiableMapView) return _body;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_body);
+  }
+
   @override
   final String language;
   @override
@@ -666,10 +704,12 @@ class _$SnPostImpl implements _SnPost {
   final SnPublisher publisher;
   @override
   final SnMetric metric;
+  @override
+  final SnPostPreload? preload;
 
   @override
   String toString() {
-    return 'SnPost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, body: $body, language: $language, alias: $alias, aliasPrefix: $aliasPrefix, tags: $tags, categories: $categories, reactions: $reactions, replies: $replies, replyId: $replyId, repostId: $repostId, replyTo: $replyTo, repostTo: $repostTo, visibleUsersList: $visibleUsersList, invisibleUsersList: $invisibleUsersList, visibility: $visibility, editedAt: $editedAt, pinnedAt: $pinnedAt, lockedAt: $lockedAt, isDraft: $isDraft, publishedAt: $publishedAt, publishedUntil: $publishedUntil, totalUpvote: $totalUpvote, totalDownvote: $totalDownvote, realmId: $realmId, realm: $realm, publisherId: $publisherId, publisher: $publisher, metric: $metric)';
+    return 'SnPost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, body: $body, language: $language, alias: $alias, aliasPrefix: $aliasPrefix, tags: $tags, categories: $categories, reactions: $reactions, replies: $replies, replyId: $replyId, repostId: $repostId, replyTo: $replyTo, repostTo: $repostTo, visibleUsersList: $visibleUsersList, invisibleUsersList: $invisibleUsersList, visibility: $visibility, editedAt: $editedAt, pinnedAt: $pinnedAt, lockedAt: $lockedAt, isDraft: $isDraft, publishedAt: $publishedAt, publishedUntil: $publishedUntil, totalUpvote: $totalUpvote, totalDownvote: $totalDownvote, realmId: $realmId, realm: $realm, publisherId: $publisherId, publisher: $publisher, metric: $metric, preload: $preload)';
   }
 
   @override
@@ -685,7 +725,7 @@ class _$SnPostImpl implements _SnPost {
             (identical(other.deletedAt, deletedAt) ||
                 other.deletedAt == deletedAt) &&
             (identical(other.type, type) || other.type == type) &&
-            const DeepCollectionEquality().equals(other.body, body) &&
+            const DeepCollectionEquality().equals(other._body, _body) &&
             (identical(other.language, language) ||
                 other.language == language) &&
             (identical(other.alias, alias) || other.alias == alias) &&
@@ -727,7 +767,8 @@ class _$SnPostImpl implements _SnPost {
                 other.publisherId == publisherId) &&
             (identical(other.publisher, publisher) ||
                 other.publisher == publisher) &&
-            (identical(other.metric, metric) || other.metric == metric));
+            (identical(other.metric, metric) || other.metric == metric) &&
+            (identical(other.preload, preload) || other.preload == preload));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -739,7 +780,7 @@ class _$SnPostImpl implements _SnPost {
         updatedAt,
         deletedAt,
         type,
-        const DeepCollectionEquality().hash(body),
+        const DeepCollectionEquality().hash(_body),
         language,
         alias,
         aliasPrefix,
@@ -766,7 +807,8 @@ class _$SnPostImpl implements _SnPost {
         const DeepCollectionEquality().hash(realm),
         publisherId,
         publisher,
-        metric
+        metric,
+        preload
       ]);
 
   /// Create a copy of SnPost
@@ -792,7 +834,7 @@ abstract class _SnPost implements SnPost {
       required final DateTime updatedAt,
       required final DateTime? deletedAt,
       required final String type,
-      required final dynamic body,
+      required final Map<String, dynamic> body,
       required final String language,
       required final String? alias,
       required final String? aliasPrefix,
@@ -819,7 +861,8 @@ abstract class _SnPost implements SnPost {
       required final dynamic realm,
       required final int publisherId,
       required final SnPublisher publisher,
-      required final SnMetric metric}) = _$SnPostImpl;
+      required final SnMetric metric,
+      final SnPostPreload? preload}) = _$SnPostImpl;
 
   factory _SnPost.fromJson(Map<String, dynamic> json) = _$SnPostImpl.fromJson;
 
@@ -834,7 +877,7 @@ abstract class _SnPost implements SnPost {
   @override
   String get type;
   @override
-  dynamic get body;
+  Map<String, dynamic> get body;
   @override
   String get language;
   @override
@@ -889,12 +932,174 @@ abstract class _SnPost implements SnPost {
   SnPublisher get publisher;
   @override
   SnMetric get metric;
+  @override
+  SnPostPreload? get preload;
 
   /// Create a copy of SnPost
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SnPostImplCopyWith<_$SnPostImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SnPostPreload _$SnPostPreloadFromJson(Map<String, dynamic> json) {
+  return _SnPostPreload.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnPostPreload {
+  List<SnAttachment>? get attachments => throw _privateConstructorUsedError;
+
+  /// Serializes this SnPostPreload to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnPostPreloadCopyWith<SnPostPreload> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnPostPreloadCopyWith<$Res> {
+  factory $SnPostPreloadCopyWith(
+          SnPostPreload value, $Res Function(SnPostPreload) then) =
+      _$SnPostPreloadCopyWithImpl<$Res, SnPostPreload>;
+  @useResult
+  $Res call({List<SnAttachment>? attachments});
+}
+
+/// @nodoc
+class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
+    implements $SnPostPreloadCopyWith<$Res> {
+  _$SnPostPreloadCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? attachments = freezed,
+  }) {
+    return _then(_value.copyWith(
+      attachments: freezed == attachments
+          ? _value.attachments
+          : attachments // ignore: cast_nullable_to_non_nullable
+              as List<SnAttachment>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnPostPreloadImplCopyWith<$Res>
+    implements $SnPostPreloadCopyWith<$Res> {
+  factory _$$SnPostPreloadImplCopyWith(
+          _$SnPostPreloadImpl value, $Res Function(_$SnPostPreloadImpl) then) =
+      __$$SnPostPreloadImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<SnAttachment>? attachments});
+}
+
+/// @nodoc
+class __$$SnPostPreloadImplCopyWithImpl<$Res>
+    extends _$SnPostPreloadCopyWithImpl<$Res, _$SnPostPreloadImpl>
+    implements _$$SnPostPreloadImplCopyWith<$Res> {
+  __$$SnPostPreloadImplCopyWithImpl(
+      _$SnPostPreloadImpl _value, $Res Function(_$SnPostPreloadImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? attachments = freezed,
+  }) {
+    return _then(_$SnPostPreloadImpl(
+      attachments: freezed == attachments
+          ? _value._attachments
+          : attachments // ignore: cast_nullable_to_non_nullable
+              as List<SnAttachment>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnPostPreloadImpl implements _SnPostPreload {
+  const _$SnPostPreloadImpl({required final List<SnAttachment>? attachments})
+      : _attachments = attachments;
+
+  factory _$SnPostPreloadImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnPostPreloadImplFromJson(json);
+
+  final List<SnAttachment>? _attachments;
+  @override
+  List<SnAttachment>? get attachments {
+    final value = _attachments;
+    if (value == null) return null;
+    if (_attachments is EqualUnmodifiableListView) return _attachments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'SnPostPreload(attachments: $attachments)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnPostPreloadImpl &&
+            const DeepCollectionEquality()
+                .equals(other._attachments, _attachments));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_attachments));
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnPostPreloadImplCopyWith<_$SnPostPreloadImpl> get copyWith =>
+      __$$SnPostPreloadImplCopyWithImpl<_$SnPostPreloadImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnPostPreloadImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnPostPreload implements SnPostPreload {
+  const factory _SnPostPreload(
+      {required final List<SnAttachment>? attachments}) = _$SnPostPreloadImpl;
+
+  factory _SnPostPreload.fromJson(Map<String, dynamic> json) =
+      _$SnPostPreloadImpl.fromJson;
+
+  @override
+  List<SnAttachment>? get attachments;
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnPostPreloadImplCopyWith<_$SnPostPreloadImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

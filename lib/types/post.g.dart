@@ -14,7 +14,7 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
           ? null
           : DateTime.parse(json['deleted_at'] as String),
       type: json['type'] as String,
-      body: json['body'],
+      body: json['body'] as Map<String, dynamic>,
       language: json['language'] as String,
       alias: json['alias'] as String?,
       aliasPrefix: json['alias_prefix'] as String?,
@@ -49,6 +49,9 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       publisher:
           SnPublisher.fromJson(json['publisher'] as Map<String, dynamic>),
       metric: SnMetric.fromJson(json['metric'] as Map<String, dynamic>),
+      preload: json['preload'] == null
+          ? null
+          : SnPostPreload.fromJson(json['preload'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
@@ -86,6 +89,19 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'publisher_id': instance.publisherId,
       'publisher': instance.publisher.toJson(),
       'metric': instance.metric.toJson(),
+      'preload': instance.preload?.toJson(),
+    };
+
+_$SnPostPreloadImpl _$$SnPostPreloadImplFromJson(Map<String, dynamic> json) =>
+    _$SnPostPreloadImpl(
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => SnAttachment.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$SnPostPreloadImplToJson(_$SnPostPreloadImpl instance) =>
+    <String, dynamic>{
+      'attachments': instance.attachments?.map((e) => e.toJson()).toList(),
     };
 
 _$SnBodyImpl _$$SnBodyImplFromJson(Map<String, dynamic> json) => _$SnBodyImpl(

@@ -4,6 +4,7 @@ import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 
@@ -18,6 +19,8 @@ class PostItem extends StatelessWidget {
       children: [
         _PostContentHeader(data: data),
         _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
+        if (data.preload?.attachments?.isNotEmpty ?? true)
+          AttachmentList(data: data.preload!.attachments!, bordered: true),
       ],
     );
   }

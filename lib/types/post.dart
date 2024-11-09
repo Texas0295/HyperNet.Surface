@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:surface/types/attachment.dart';
 
 part 'post.freezed.dart';
 part 'post.g.dart';
@@ -11,7 +12,7 @@ class SnPost with _$SnPost {
     required DateTime updatedAt,
     required DateTime? deletedAt,
     required String type,
-    required dynamic body,
+    required Map<String, dynamic> body,
     required String language,
     required String? alias,
     required String? aliasPrefix,
@@ -39,9 +40,20 @@ class SnPost with _$SnPost {
     required int publisherId,
     required SnPublisher publisher,
     required SnMetric metric,
+    SnPostPreload? preload,
   }) = _SnPost;
 
   factory SnPost.fromJson(Map<String, Object?> json) => _$SnPostFromJson(json);
+}
+
+@freezed
+class SnPostPreload with _$SnPostPreload {
+  const factory SnPostPreload({
+    required List<SnAttachment>? attachments,
+  }) = _SnPostPreload;
+
+  factory SnPostPreload.fromJson(Map<String, Object?> json) =>
+      _$SnPostPreloadFromJson(json);
 }
 
 @freezed

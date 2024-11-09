@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -31,6 +32,7 @@ class SolianApp extends StatelessWidget {
         child: MultiProvider(
           providers: [
             Provider(create: (_) => SnNetworkProvider()),
+            Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             ChangeNotifierProvider(create: (_) => UserProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
           ],
