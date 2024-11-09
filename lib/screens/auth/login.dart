@@ -158,8 +158,9 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
       context.showSnackbar('loginSuccess'.tr(args: [
         '@${userinfo!.name} (${userinfo.nick})',
       ]));
-
-      Navigator.pop(context);
+      await Future.delayed(const Duration(milliseconds: 1850), () {
+        Navigator.pop(context);
+      });
     } catch (err) {
       context.showErrorDialog(err);
       return;

@@ -21,5 +21,6 @@ ThemeData createAppTheme() {
       seedColor: Colors.indigo,
       brightness: Brightness.light,
     ),
+    iconTheme: const IconThemeData(fill: 0, weight: 400, opticalSize: 20),
   );
 }

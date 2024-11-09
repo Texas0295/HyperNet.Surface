@@ -28,11 +28,10 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<SnAccount?> refreshUser() async {
-    if (!isAuthorized) return null;
-
     final resp = await _sn.client.get('/cgi/id/users/me');
     final out = SnAccount.fromJson(resp.data);
 
+    isAuthorized = true;
     user = out;
     notifyListeners();
 
@@ -40,7 +39,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   void logoutUser() async {
-    _sn.clearTokenPair();
+    await _sn.clearTokenPair();
     isAuthorized = false;
     user = null;
     notifyListeners();

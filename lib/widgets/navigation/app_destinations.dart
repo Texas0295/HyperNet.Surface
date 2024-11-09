@@ -16,17 +16,17 @@ class AppNavDestination {
 
 List<AppNavDestination> appDestinations = [
   AppNavDestination(
-    icon: Icon(Symbols.home),
+    icon: Icon(Symbols.home, weight: 400, opticalSize: 20),
     screen: 'home',
     label: tr('screenHome'),
   ),
   AppNavDestination(
-    icon: Icon(Symbols.explore),
+    icon: Icon(Symbols.explore, weight: 400, opticalSize: 20),
     screen: 'explore',
     label: tr('screenExplore'),
   ),
   AppNavDestination(
-    icon: Icon(Symbols.account_circle),
+    icon: Icon(Symbols.account_circle, weight: 400, opticalSize: 20),
     screen: 'account',
     label: tr('screenAccount'),
   ),

@@ -31,7 +31,7 @@ class AccountScreen extends StatelessWidget {
 }
 
 class _AuthorizedAccountScreen extends StatelessWidget {
-  const _AuthorizedAccountScreen({super.key});
+  const _AuthorizedAccountScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,9 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.face),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {},
+          onTap: () {
+            GoRouter.of(context).pushNamed('accountPublishers');
+          },
         ),
         ListTile(
           title: Text('accountLogout').tr(),
@@ -105,7 +107,7 @@ class _AuthorizedAccountScreen extends StatelessWidget {
 }
 
 class _UnauthorizedAccountScreen extends StatelessWidget {
-  const _UnauthorizedAccountScreen({super.key});
+  const _UnauthorizedAccountScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +119,10 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Symbols.waving_hand, size: 32),
+                const CircleAvatar(
+                  radius: 28,
+                  child: Icon(Symbols.waving_hand, size: 28),
+                ),
                 const Gap(8),
                 Text('accountIntroTitle')
                     .tr()
