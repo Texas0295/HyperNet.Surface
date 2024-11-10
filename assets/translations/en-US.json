@@ -14,6 +14,7 @@
   "screenAccountPublisherNew": "New Publisher",
   "screenAccountPublisherEdit": "Edit Publisher",
   "screenAccountProfileEdit": "Edit Profile",
+  "screenSettings": "Settings",
   "dialogOkay": "Okay",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -80,5 +81,22 @@
   "postPublish": "Publish",
   "postEditingNotice": "You're about to editing a post that posted {}.",
   "postReplyingNotice": "You're about to reply to a post that posted {}.",
-  "postRepostingNotice": "You're about to repost a post that posted {}."
+  "postRepostingNotice": "You're about to repost a post that posted {}.",
+  "postReact": "React",
+  "postComments": {
+    "one": "{} comment",
+    "other": "{} comments"
+  },
+  "settingsAppearance": "Appearance",
+  "settingsBackgroundImage": "Background Image",
+  "settingsBackgroundImageDescription": "Set the background image that will be applied globally.",
+  "settingsBackgroundImageClear": "Clear Existing Background Image",
+  "settingsBackgroundImageClearDescription": "Reset the background image to blank.",
+  "settingsThemeMaterial3": "Use Material You Design",
+  "settingsThemeMaterial3Description": "Set the application theme to Material 3 Design.",
+  "settingsNetwork": "Network",
+  "settingsNetworkServer": "HyperNet Server",
+  "settingsNetworkServerDescription": "Set the HyperNet server address, choose ours or build your own.",
+  "settingsNetworkServerReset": "Reset to Official Server",
+  "settingsNetworkServerResetDescription": "Reset to the official server address of Solar Network."
 }

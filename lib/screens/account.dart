@@ -20,6 +20,14 @@ class AccountScreen extends StatelessWidget {
     return AppScaffold(
       appBar: AppBar(
         title: Text("screenAccount").tr(),
+        actions: [
+          IconButton(
+            icon: const Icon(Symbols.settings, fill: 1),
+            onPressed: () {
+              GoRouter.of(context).pushNamed('settings');
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: ua.isAuthorized

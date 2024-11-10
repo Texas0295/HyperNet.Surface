@@ -2,9 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:surface/theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  late ThemeSet theme;
+  ThemeSet? theme;
 
   ThemeProvider() {
-    theme = createAppThemeSet();
+    createAppThemeSet().then((value) {
+      theme = value;
+      notifyListeners();
+    });
+  }
+
+  void reloadTheme({bool? useMaterial3}) {
+    createAppThemeSet().then((value) {
+      theme = value;
+      notifyListeners();
+    });
   }
 }

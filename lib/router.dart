@@ -9,6 +9,7 @@ import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
 import 'package:surface/screens/post/post_editor.dart';
+import 'package:surface/screens/settings.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 final appRouter = GoRouter(
@@ -96,6 +97,19 @@ final appRouter = GoRouter(
           builder: (context, state) => AccountPublisherEditScreen(
             name: state.pathParameters['name']!,
           ),
+        ),
+      ],
+    ),
+    ShellRoute(
+      builder: (context, state, child) => AppScaffold(
+        body: child,
+        autoImplyAppBar: true,
+      ),
+      routes: [
+        GoRoute(
+          path: '/settings',
+          name: 'settings',
+          builder: (context, state) => const SettingsScreen(),
         ),
       ],
     ),

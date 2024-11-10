@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -468,8 +469,17 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     onTapOutside: (_) =>
                         FocusManager.instance.primaryFocus?.unfocus(),
                   )
-                ].expand((ele) => [ele, const Gap(8)]).toList()
-                  ..removeLast(),
+                ]
+                    .expandIndexed(
+                      (idx, ele) => [
+                        if (idx != 0 ||
+                            ![_editingOg, _replyingTo, _repostingTo]
+                                .any((x) => x != null))
+                          const Gap(8),
+                        ele,
+                      ],
+                    )
+                    .toList(),
               ),
             ),
           ),

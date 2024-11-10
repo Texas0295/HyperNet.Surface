@@ -37,25 +37,7 @@ class SolianApp extends StatelessWidget {
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
           ],
-          child: Builder(builder: (context) {
-            // Initialize some providers
-            context.read<UserProvider>();
-
-            final th = context.watch<ThemeProvider>();
-
-            return MaterialApp.router(
-              theme: th.theme.light,
-              darkTheme: th.theme.dark,
-              locale: context.locale,
-              supportedLocales: context.supportedLocales,
-              localizationsDelegates: [
-                CroppyLocalizations.delegate,
-                RelativeTimeLocalizations.delegate,
-                ...context.localizationDelegates,
-              ],
-              routerConfig: appRouter,
-            );
-          }),
+          child: AppMainContent(),
         ),
       ),
       breakpoints: [
@@ -63,6 +45,30 @@ class SolianApp extends StatelessWidget {
         const Breakpoint(start: 451, end: 800, name: TABLET),
         const Breakpoint(start: 801, end: 1920, name: DESKTOP),
       ],
+    );
+  }
+}
+
+class AppMainContent extends StatelessWidget {
+  const AppMainContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    context.read<UserProvider>();
+
+    final th = context.watch<ThemeProvider>();
+
+    return MaterialApp.router(
+      theme: th.theme?.light,
+      darkTheme: th.theme?.dark,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: [
+        CroppyLocalizations.delegate,
+        RelativeTimeLocalizations.delegate,
+        ...context.localizationDelegates,
+      ],
+      routerConfig: appRouter,
     );
   }
 }

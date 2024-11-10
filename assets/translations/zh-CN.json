@@ -14,6 +14,7 @@
   "screenAccountPublisherNew": "新建发布者",
   "screenAccountPublisherEdit": "编辑发布者",
   "screenAccountProfileEdit": "编辑资料",
+  "screenSettings": "设置",
   "dialogOkay": "好的",
   "dialogCancel": "取消",
   "dialogConfirm": "确认",
@@ -80,5 +81,22 @@
   "postPublish": "发布",
   "postEditingNotice": "你正在修改由 {} 发布的帖子。",
   "postReplyingNotice": "你正在回复由 {} 发布的帖子。",
-  "postRepostingNotice": "你正在转发由 {} 发布的帖子。"
+  "postRepostingNotice": "你正在转发由 {} 发布的帖子。",
+  "postReact": "反应",
+  "postComments": {
+    "one": "{} 条评论",
+    "other": "{} 条评论"
+  },
+  "settingsAppearance": "外观",
+  "settingsBackgroundImage": "背景图片",
+  "settingsBackgroundImageDescription": "设置应用全局生效的的背景图片。",
+  "settingsBackgroundImageClear": "清除现存背景图",
+  "settingsBackgroundImageClearDescription": "将应用背景图重置为空白。",
+  "settingsThemeMaterial3": "使用 Material You 设计范式",
+  "settingsThemeMaterial3Description": "将应用主题设置为 Material 3 设计范式的主题。",
+  "settingsNetwork": "网络",
+  "settingsNetworkServer": "HyperNet 服务器",
+  "settingsNetworkServerDescription": "设置 HyperNet 服务器地址，选择我们提供的，或者自己搭建。",
+  "settingsNetworkServerReset": "重设为官方服务器",
+  "settingsNetworkServerResetDescription": "重设为 Solar Network 的服务器地址。"
 }
