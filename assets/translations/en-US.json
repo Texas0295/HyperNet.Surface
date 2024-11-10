@@ -1,4 +1,6 @@
 {
+  "nextVersionAlert": "Heavy Development Alert",
+  "nextVersionNotice": "You are using Solian 2.0 Preview, which is the first version of Solian 2.0. The current stable branch (sn.solsynth.dev) is 1.4. This version is still under heavy development, some features may not be stable, and not all features are supported. You can roll back to 1.4.X version via TestFlight, or continue to experience the new version (sn-next.solsynth.dev).",
   "screen": "Screen",
   "screenHome": "Home",
   "screenExplore": "Explore",
@@ -32,6 +34,8 @@
   "loading": "Loading...",
   "delete": "Delete",
   "report": "Report",
+  "repost": "Repost",
+  "reply": "Reply",
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",
