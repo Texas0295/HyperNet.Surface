@@ -338,11 +338,15 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_isBusy)
-                  LinearProgressIndicator(
-                    value: _progress,
-                    minHeight: 2,
-                  ),
+                if (_isBusy && _progress != null)
+                  TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: 1),
+                    duration: Duration(milliseconds: 300),
+                    builder: (context, value, _) =>
+                        LinearProgressIndicator(value: value, minHeight: 2),
+                  )
+                else if (_isBusy)
+                  const LinearProgressIndicator(value: null, minHeight: 2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

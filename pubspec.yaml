@@ -67,6 +67,9 @@ dependencies:
   flutter_expandable_fab: ^2.3.0
   dropdown_button2: ^2.3.9
   flutter_context_menu: ^0.2.0
+  dismissible_page: ^1.0.2
+  uuid: ^4.5.1
+  photo_view: ^0.15.0
 
 dev_dependencies:
   flutter_test:

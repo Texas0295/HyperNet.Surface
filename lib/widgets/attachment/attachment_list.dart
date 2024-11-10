@@ -1,6 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 
@@ -15,6 +18,10 @@ class AttachmentList extends StatelessWidget {
     this.maxListHeight,
   });
 
+  static const double kMaxListItemWidth = 520;
+  static const BorderRadius kDefaultRadius =
+      BorderRadius.all(Radius.circular(8));
+
   @override
   Widget build(BuildContext context) {
     final borderSide = (bordered ?? false)
@@ -23,11 +30,36 @@ class AttachmentList extends StatelessWidget {
 
     if (data.isEmpty) return const SizedBox.shrink();
     if (data.length == 1) {
+      if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
+        return Container(
+          constraints: BoxConstraints(
+            maxWidth: math.min(
+              MediaQuery.of(context).size.width - 20,
+              kMaxListItemWidth,
+            ),
+          ),
+          decoration: BoxDecoration(
+            border: Border(top: borderSide, bottom: borderSide),
+            borderRadius: kDefaultRadius,
+          ),
+          child: AspectRatio(
+            aspectRatio: data[0].metadata['ratio']?.toDouble() ?? 1,
+            child: ClipRRect(
+              borderRadius: kDefaultRadius,
+              child: AttachmentItem(data: data[0], isExpandable: true),
+            ),
+          ),
+        );
+      }
+
       return Container(
         decoration: BoxDecoration(
           border: Border(top: borderSide, bottom: borderSide),
         ),
-        child: AttachmentItem(data: data[0]),
+        child: AspectRatio(
+          aspectRatio: data[0].metadata['ratio']?.toDouble() ?? 1,
+          child: AttachmentItem(data: data[0], isExpandable: true),
+        ),
       );
     }
 
@@ -39,20 +71,22 @@ class AttachmentList extends StatelessWidget {
           shrinkWrap: true,
           itemCount: data.length,
           itemBuilder: (context, idx) {
-            const radius = BorderRadius.all(Radius.circular(8));
             return Container(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width - 20,
+                maxWidth: math.min(
+                  MediaQuery.of(context).size.width - 20,
+                  kMaxListItemWidth,
+                ),
               ),
               decoration: BoxDecoration(
                 border: Border(top: borderSide, bottom: borderSide),
-                borderRadius: radius,
+                borderRadius: kDefaultRadius,
               ),
               child: AspectRatio(
                 aspectRatio: data[idx].metadata['ratio']?.toDouble() ?? 1,
                 child: ClipRRect(
-                  borderRadius: radius,
-                  child: AttachmentItem(data: data[idx]),
+                  borderRadius: kDefaultRadius,
+                  child: AttachmentItem(data: data[idx], isExpandable: true),
                 ),
               ),
             );
