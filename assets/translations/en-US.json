@@ -78,5 +78,7 @@
   "fieldPostTitle": "Title",
   "fieldPostDescription": "Description",
   "postPublish": "Publish",
-  "postEditingNotice": "You're about to editing a post that posted {}."
+  "postEditingNotice": "You're about to editing a post that posted {}.",
+  "postReplyingNotice": "You're about to reply to a post that posted {}.",
+  "postRepostingNotice": "You're about to repost a post that posted {}."
 }

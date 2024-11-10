@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
@@ -34,6 +36,9 @@ class _PostContentHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ua = context.read<UserProvider>();
+    final isAuthor = ua.isAuthorized && data.publisher.accountId == ua.user!.id;
+
     return Row(
       children: [
         AccountImage(content: data.publisher.avatar),
@@ -47,8 +52,9 @@ class _PostContentHeader extends StatelessWidget {
                 children: [
                   Text('@${data.publisher.name}').fontSize(13),
                   const Gap(4),
-                  Text(RelativeTime(context).format(data.publishedAt))
-                      .fontSize(13),
+                  Text(RelativeTime(context).format(
+                    data.publishedAt ?? data.createdAt,
+                  )).fontSize(13),
                 ],
               ).opacity(0.8),
             ],
@@ -60,30 +66,65 @@ class _PostContentHeader extends StatelessWidget {
             visualDensity: VisualDensity(horizontal: -4, vertical: -4),
           ),
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            if (isAuthor)
+              PopupMenuItem(
+                child: Row(
+                  children: [
+                    const Icon(Symbols.edit),
+                    const Gap(16),
+                    Text('edit').tr(),
+                  ],
+                ),
+                onTap: () {
+                  GoRouter.of(context).pushNamed(
+                    'postEditor',
+                    pathParameters: {'mode': data.typePlural},
+                    queryParameters: {'editing': data.id.toString()},
+                  );
+                },
+              ),
+            if (isAuthor)
+              PopupMenuItem(
+                child: Row(
+                  children: [
+                    const Icon(Symbols.delete),
+                    const Gap(16),
+                    Text('delete').tr(),
+                  ],
+                ),
+              ),
+            if (isAuthor) const PopupMenuDivider(),
             PopupMenuItem(
               child: Row(
                 children: [
-                  const Icon(Symbols.edit),
+                  const Icon(Symbols.reply),
                   const Gap(16),
-                  Text('edit').tr(),
+                  Text('reply').tr(),
                 ],
               ),
               onTap: () {
                 GoRouter.of(context).pushNamed(
                   'postEditor',
                   pathParameters: {'mode': data.typePlural},
-                  queryParameters: {'editing': data.id.toString()},
+                  queryParameters: {'replying': data.id.toString()},
                 );
               },
             ),
             PopupMenuItem(
               child: Row(
                 children: [
-                  const Icon(Symbols.delete),
+                  const Icon(Symbols.forward),
                   const Gap(16),
-                  Text('delete').tr(),
+                  Text('repost').tr(),
                 ],
               ),
+              onTap: () {
+                GoRouter.of(context).pushNamed(
+                  'postEditor',
+                  pathParameters: {'mode': data.typePlural},
+                  queryParameters: {'reposting': data.id.toString()},
+                );
+              },
             ),
             const PopupMenuDivider(),
             PopupMenuItem(

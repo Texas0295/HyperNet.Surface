@@ -44,7 +44,7 @@ mixin _$SnPost {
   DateTime? get pinnedAt => throw _privateConstructorUsedError;
   DateTime? get lockedAt => throw _privateConstructorUsedError;
   bool get isDraft => throw _privateConstructorUsedError;
-  DateTime get publishedAt => throw _privateConstructorUsedError;
+  DateTime? get publishedAt => throw _privateConstructorUsedError;
   dynamic get publishedUntil => throw _privateConstructorUsedError;
   int get totalUpvote => throw _privateConstructorUsedError;
   int get totalDownvote => throw _privateConstructorUsedError;
@@ -94,7 +94,7 @@ abstract class $SnPostCopyWith<$Res> {
       DateTime? pinnedAt,
       DateTime? lockedAt,
       bool isDraft,
-      DateTime publishedAt,
+      DateTime? publishedAt,
       dynamic publishedUntil,
       int totalUpvote,
       int totalDownvote,
@@ -149,7 +149,7 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? pinnedAt = freezed,
     Object? lockedAt = freezed,
     Object? isDraft = null,
-    Object? publishedAt = null,
+    Object? publishedAt = freezed,
     Object? publishedUntil = freezed,
     Object? totalUpvote = null,
     Object? totalDownvote = null,
@@ -257,10 +257,10 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.isDraft
           : isDraft // ignore: cast_nullable_to_non_nullable
               as bool,
-      publishedAt: null == publishedAt
+      publishedAt: freezed == publishedAt
           ? _value.publishedAt
           : publishedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       publishedUntil: freezed == publishedUntil
           ? _value.publishedUntil
           : publishedUntil // ignore: cast_nullable_to_non_nullable
@@ -367,7 +367,7 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       DateTime? pinnedAt,
       DateTime? lockedAt,
       bool isDraft,
-      DateTime publishedAt,
+      DateTime? publishedAt,
       dynamic publishedUntil,
       int totalUpvote,
       int totalDownvote,
@@ -423,7 +423,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? pinnedAt = freezed,
     Object? lockedAt = freezed,
     Object? isDraft = null,
-    Object? publishedAt = null,
+    Object? publishedAt = freezed,
     Object? publishedUntil = freezed,
     Object? totalUpvote = null,
     Object? totalDownvote = null,
@@ -531,10 +531,10 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value.isDraft
           : isDraft // ignore: cast_nullable_to_non_nullable
               as bool,
-      publishedAt: null == publishedAt
+      publishedAt: freezed == publishedAt
           ? _value.publishedAt
           : publishedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       publishedUntil: freezed == publishedUntil
           ? _value.publishedUntil
           : publishedUntil // ignore: cast_nullable_to_non_nullable
@@ -688,7 +688,7 @@ class _$SnPostImpl extends _SnPost {
   @override
   final bool isDraft;
   @override
-  final DateTime publishedAt;
+  final DateTime? publishedAt;
   @override
   final dynamic publishedUntil;
   @override
@@ -854,7 +854,7 @@ abstract class _SnPost extends SnPost {
       required final DateTime? pinnedAt,
       required final DateTime? lockedAt,
       required final bool isDraft,
-      required final DateTime publishedAt,
+      required final DateTime? publishedAt,
       required final dynamic publishedUntil,
       required final int totalUpvote,
       required final int totalDownvote,
@@ -917,7 +917,7 @@ abstract class _SnPost extends SnPost {
   @override
   bool get isDraft;
   @override
-  DateTime get publishedAt;
+  DateTime? get publishedAt;
   @override
   dynamic get publishedUntil;
   @override

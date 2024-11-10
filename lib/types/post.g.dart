@@ -39,7 +39,9 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
           ? null
           : DateTime.parse(json['locked_at'] as String),
       isDraft: json['is_draft'] as bool,
-      publishedAt: DateTime.parse(json['published_at'] as String),
+      publishedAt: json['published_at'] == null
+          ? null
+          : DateTime.parse(json['published_at'] as String),
       publishedUntil: json['published_until'],
       totalUpvote: (json['total_upvote'] as num).toInt(),
       totalDownvote: (json['total_downvote'] as num).toInt(),
@@ -80,7 +82,7 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'pinned_at': instance.pinnedAt?.toIso8601String(),
       'locked_at': instance.lockedAt?.toIso8601String(),
       'is_draft': instance.isDraft,
-      'published_at': instance.publishedAt.toIso8601String(),
+      'published_at': instance.publishedAt?.toIso8601String(),
       'published_until': instance.publishedUntil,
       'total_upvote': instance.totalUpvote,
       'total_downvote': instance.totalDownvote,

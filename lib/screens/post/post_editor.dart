@@ -191,6 +191,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
           'title': _title,
           'description': _description,
           'attachments': _attachments.map((e) => e.rid).toList(),
+          if (_replyingTo != null) 'reply_to': _replyingTo!.id,
+          if (_repostingTo != null) 'repost_to': _repostingTo!.id,
         },
         onSendProgress: (count, total) {
           setState(() {
@@ -385,19 +387,58 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
           const Divider(height: 1),
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                top: _editingOg == null ? 8 : 0,
-                bottom: 8,
-              ),
+              padding: EdgeInsets.only(bottom: 8),
               child: Column(
                 children: [
+                  // Replying Notice
+                  if (_replyingTo != null)
+                    Column(
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.transparent,
+                          ),
+                          child: ExpansionTile(
+                            minTileHeight: 48,
+                            leading: const Icon(Symbols.reply).padding(left: 4),
+                            title: Text('postReplyingNotice')
+                                .fontSize(15)
+                                .tr(args: ['@${_replyingTo!.publisher.name}']),
+                            children: <Widget>[PostItem(data: _replyingTo!)],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                      ],
+                    ),
+                  // Reposting Notice
+                  if (_repostingTo != null)
+                    Column(
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.transparent,
+                          ),
+                          child: ExpansionTile(
+                            minTileHeight: 48,
+                            leading:
+                                const Icon(Symbols.forward).padding(left: 4),
+                            title: Text('postRepostingNotice')
+                                .fontSize(15)
+                                .tr(args: ['@${_repostingTo!.publisher.name}']),
+                            children: <Widget>[PostItem(data: _repostingTo!)],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                      ],
+                    ),
                   // Editing Notice
                   if (_editingOg != null)
                     Column(
                       children: [
                         Theme(
-                          data: Theme.of(context)
-                              .copyWith(dividerColor: Colors.transparent),
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.transparent,
+                          ),
                           child: ExpansionTile(
                             minTileHeight: 48,
                             leading:
@@ -405,13 +446,10 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                             title: Text('postEditingNotice')
                                 .fontSize(15)
                                 .tr(args: ['@${_editingOg!.publisher.name}']),
-                            children: <Widget>[
-                              PostItem(data: _editingOg!),
-                            ],
+                            children: <Widget>[PostItem(data: _editingOg!)],
                           ),
                         ),
                         const Divider(height: 1),
-                        const Gap(8)
                       ],
                     ),
                   // Content Input Area
@@ -430,7 +468,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     onTapOutside: (_) =>
                         FocusManager.instance.primaryFocus?.unfocus(),
                   )
-                ],
+                ].expand((ele) => [ele, const Gap(8)]).toList()
+                  ..removeLast(),
               ),
             ),
           ),
@@ -448,7 +487,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                LoadingIndicator(isActive: _isBusy),
+                LoadingIndicator(isActive: _isLoading),
                 if (_isBusy && _progress != null)
                   TweenAnimationBuilder<double>(
                     tween: Tween(begin: 0, end: 1),

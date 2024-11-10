@@ -1,6 +1,6 @@
 {
   "nextVersionAlert": "高强度开发提示",
-  "nextVersionNotice": "您正在使用的是 Solian 2.0 的抢先体验版本，目前稳定分支（sn.solsynth.dev）版本为 1.4。该版本还在剧烈的开发中，部分功能可能不稳定，也并非所有功能都支持了。您可以通过 TestFlight 回滚到 1.4.X 或者继续体验新版本（sn-next.solsynth.dev）。",
+  "nextVersionNotice": "您正在使用的是 Solian 2.0 的抢先体验版本，目前稳定分支（sn.solsynth.dev）版本为 1.4。该版本还在持续的开发中，部分功能可能不稳定，也并非所有功能都支持了。您可以通过 TestFlight 回滚到 1.4.X 或者继续体验新版本（sn-next.solsynth.dev）。",
   "screen": "页面",
   "screenHome": "首页",
   "screenExplore": "探索",
@@ -78,5 +78,7 @@
   "fieldPostTitle": "标题",
   "fieldPostDescription": "描述",
   "postPublish": "发布",
-  "postEditingNotice": "你正在修改由 {} 发布的帖子。"
+  "postEditingNotice": "你正在修改由 {} 发布的帖子。",
+  "postReplyingNotice": "你正在回复由 {} 发布的帖子。",
+  "postRepostingNotice": "你正在转发由 {} 发布的帖子。"
 }
