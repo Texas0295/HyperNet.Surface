@@ -98,5 +98,8 @@
   "settingsNetworkServer": "HyperNet 服务器",
   "settingsNetworkServerDescription": "设置 HyperNet 服务器地址，选择我们提供的，或者自己搭建。",
   "settingsNetworkServerReset": "重设为官方服务器",
-  "settingsNetworkServerResetDescription": "重设为 Solar Network 的服务器地址。"
+  "settingsNetworkServerResetDescription": "重设为 Solar Network 的服务器地址。",
+  "settingsNetworkServerPreset": "预设的 HyperNet 服务器",
+  "settingsNetworkServerPresetDescription": "你可以在旁边的列表中选择我们提供的预设 HyperNet 服务器地址。",
+  "settingsNetworkServerSaved": "服务器地址已保存。"
 }

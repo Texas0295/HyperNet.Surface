@@ -4,24 +4,29 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surface/providers/adapters/sn_network_universal.dart';
-
-const kUseLocalNetwork = true;
 
 const kAtkStoreKey = 'nex_user_atk';
 const kRtkStoreKey = 'nex_user_rtk';
 
+const kNetworkServerDefault = 'https://api.sn-next.solsynth.dev';
+const kNetworkServerStoreKey = 'app_server_url';
+
+const kNetworkServerDirectory = [
+  ('SN Preview', 'https://api.sn-next.solsynth.dev'),
+  ('SN Stable', 'https://api.sn.solsynth.dev'),
+  ('Local', 'http://localhost:8001'),
+];
+
 class SnNetworkProvider {
   late Dio client;
 
+  late final SharedPreferences _prefs;
   late final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   SnNetworkProvider() {
     client = Dio();
-
-    client.options.baseUrl = kUseLocalNetwork
-        ? 'http://localhost:8001'
-        : 'https://api.sn.solsynth.dev';
 
     client.interceptors.add(RetryInterceptor(
       dio: client,
@@ -86,6 +91,12 @@ class SnNetworkProvider {
     );
 
     client = addClientAdapter(client);
+
+    SharedPreferences.getInstance().then((prefs) {
+      _prefs = prefs;
+      client.options.baseUrl =
+          _prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
+    });
   }
 
   String getAttachmentUrl(String ky) {
@@ -112,9 +123,7 @@ class SnNetworkProvider {
     if (rtk == null) return null;
 
     final dio = Dio();
-    dio.options.baseUrl = kUseLocalNetwork
-        ? 'http://localhost:8001'
-        : 'https://api.sn.solsynth.dev';
+    dio.options.baseUrl = client.options.baseUrl;
 
     final resp = await dio.post('/cgi/id/auth/token', data: {
       'grant_type': 'refresh_token',
@@ -126,5 +135,9 @@ class SnNetworkProvider {
     await setTokenPair(atk, nRtk);
 
     return atk;
+  }
+
+  void setBaseUrl(String url) {
+    client.options.baseUrl = url;
   }
 }

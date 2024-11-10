@@ -34,7 +34,7 @@ class PostItem extends StatelessWidget {
 
 class _PostBottomAction extends StatelessWidget {
   final SnPost data;
-  const _PostBottomAction({super.key, required this.data});
+  const _PostBottomAction({required this.data});
 
   @override
   Widget build(BuildContext context) {

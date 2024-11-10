@@ -98,5 +98,8 @@
   "settingsNetworkServer": "HyperNet Server",
   "settingsNetworkServerDescription": "Set the HyperNet server address, choose ours or build your own.",
   "settingsNetworkServerReset": "Reset to Official Server",
-  "settingsNetworkServerResetDescription": "Reset to the official server address of Solar Network."
+  "settingsNetworkServerResetDescription": "Reset to the official server address of Solar Network.",
+  "settingsNetworkServerPreset": "Present HyperNet Server",
+  "settingsNetworkServerPresetDescription": "You can choose one of our preset HyperNet server addresses from the list on the right.",
+  "settingsNetworkServerSaved": "Server address saved."
 }
