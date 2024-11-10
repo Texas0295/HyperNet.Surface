@@ -21,7 +21,6 @@ class SnAttachment with _$SnAttachment {
     required int refCount,
     required dynamic fileChunks,
     required dynamic cleanedAt,
-    required Map<String, dynamic> metadata,
     required bool isMature,
     required bool isAnalyzed,
     required bool isUploaded,
@@ -31,6 +30,7 @@ class SnAttachment with _$SnAttachment {
     required SnAttachmentPool? pool,
     required int poolId,
     required int accountId,
+    @Default({}) Map<String, dynamic> metadata,
   }) = _SnAttachment;
 
   factory SnAttachment.fromJson(Map<String, Object?> json) =>

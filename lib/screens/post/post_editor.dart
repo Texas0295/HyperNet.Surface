@@ -4,15 +4,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
-import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
+import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
+import 'package:surface/widgets/dialog.dart';
+import 'package:provider/provider.dart';
 
 class PostEditorScreen extends StatefulWidget {
   final String mode;
@@ -33,6 +37,9 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   SnPublisher? _publisher;
   List<SnPublisher>? _publishers;
 
+  final List<XFile> _selectedMedia = List.empty(growable: true);
+  final List<SnAttachment> _attachments = List.empty(growable: true);
+
   void _fetchPublishers() async {
     final sn = context.read<SnNetworkProvider>();
     final resp = await sn.client.get('/cgi/co/publishers');
@@ -49,19 +56,41 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
 
   final TextEditingController _contentController = TextEditingController();
 
+  double? _progress;
+
   void _performAction() async {
     if (_isBusy || _publisher == null) return;
 
     final sn = context.read<SnNetworkProvider>();
+    final attach = context.read<SnAttachmentProvider>();
 
     setState(() => _isBusy = true);
 
+    // Uploading attachments
+    try {
+      for (final media in _selectedMedia) {
+        final place = await attach.chunkedUploadInitialize(
+          await media.length(),
+          media.name,
+          'interactive',
+          null,
+        );
+        final item = await attach.chunkedUploadParts(media, place.$1, place.$2);
+        _attachments.add(item);
+      }
+    } catch (err) {
+      context.showErrorDialog(err);
+      return;
+    }
+
+    // Finishing up
     try {
       await sn.client.post('/cgi/co/${widget.mode}', data: {
         'publisher': _publisher!.id,
         'content': _contentController.value.text,
         'title': _title,
         'description': _description,
+        'attachments': _attachments.map((e) => e.rid).toList(),
       });
       Navigator.pop(context, true);
     } catch (err) {
@@ -86,6 +115,15 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
         setState(() {});
       }
     });
+  }
+
+  final _imagePicker = ImagePicker();
+
+  void _selectMedia() async {
+    final result = await _imagePicker.pickMultipleMedia();
+    if (result.isEmpty) return;
+    _selectedMedia.addAll(result);
+    setState(() {});
   }
 
   @override
@@ -248,13 +286,23 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               ),
             ),
           ),
+          if (_selectedMedia.isNotEmpty)
+            PostMediaPendingList(
+              data: _selectedMedia,
+              onRemove: (idx) {
+                setState(() {
+                  _selectedMedia.removeAt(idx);
+                });
+              },
+            ).padding(bottom: 8),
           Material(
             elevation: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_isBusy)
-                  const LinearProgressIndicator(
+                  LinearProgressIndicator(
+                    value: _progress,
                     minHeight: 2,
                   ),
                 Row(
@@ -268,7 +316,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           child: Row(
                             children: [
                               IconButton(
-                                onPressed: () {},
+                                onPressed: _isBusy ? null : _selectMedia,
                                 icon: Icon(
                                   Symbols.add_photo_alternate,
                                   color: Theme.of(context).colorScheme.primary,

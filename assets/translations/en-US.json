@@ -30,6 +30,7 @@
   "create": "Create",
   "preview": "Preview",
   "loading": "Loading...",
+  "delete": "Delete",
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",

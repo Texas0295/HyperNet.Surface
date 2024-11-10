@@ -23,7 +23,6 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       refCount: (json['ref_count'] as num).toInt(),
       fileChunks: json['file_chunks'],
       cleanedAt: json['cleaned_at'],
-      metadata: json['metadata'] as Map<String, dynamic>,
       isMature: json['is_mature'] as bool,
       isAnalyzed: json['is_analyzed'] as bool,
       isUploaded: json['is_uploaded'] as bool,
@@ -35,6 +34,7 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
           : SnAttachmentPool.fromJson(json['pool'] as Map<String, dynamic>),
       poolId: (json['pool_id'] as num).toInt(),
       accountId: (json['account_id'] as num).toInt(),
+      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
@@ -54,7 +54,6 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'ref_count': instance.refCount,
       'file_chunks': instance.fileChunks,
       'cleaned_at': instance.cleanedAt,
-      'metadata': instance.metadata,
       'is_mature': instance.isMature,
       'is_analyzed': instance.isAnalyzed,
       'is_uploaded': instance.isUploaded,
@@ -64,6 +63,7 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'pool': instance.pool?.toJson(),
       'pool_id': instance.poolId,
       'account_id': instance.accountId,
+      'metadata': instance.metadata,
     };
 
 _$SnAttachmentPoolImpl _$$SnAttachmentPoolImplFromJson(

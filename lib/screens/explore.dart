@@ -84,7 +84,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         distance: 75,
         type: ExpandableFabType.up,
         childrenAnimation: ExpandableFabAnimation.none,
-        overlayStyle: ExpandableFabOverlayStyle(blur: 10),
+        overlayStyle: ExpandableFabOverlayStyle(
+          color: Theme.of(context)
+              .colorScheme
+              .surface
+              .withAlpha((255 * 0.5).round()),
+        ),
         openButtonBuilder: RotateFloatingActionButtonBuilder(
           child: const Icon(Symbols.add, size: 28),
           fabSize: ExpandableFabSize.regular,

@@ -8,8 +8,12 @@ class AttachmentList extends StatelessWidget {
   final List<SnAttachment> data;
   final bool? bordered;
   final double? maxListHeight;
-  const AttachmentList(
-      {super.key, required this.data, this.bordered, this.maxListHeight});
+  const AttachmentList({
+    super.key,
+    required this.data,
+    this.bordered,
+    this.maxListHeight,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +41,19 @@ class AttachmentList extends StatelessWidget {
           itemBuilder: (context, idx) {
             const radius = BorderRadius.all(Radius.circular(8));
             return Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width - 20,
+              ),
               decoration: BoxDecoration(
                 border: Border(top: borderSide, bottom: borderSide),
                 borderRadius: radius,
               ),
-              child: ClipRRect(
-                borderRadius: radius,
-                child: AttachmentItem(data: data[idx]),
+              child: AspectRatio(
+                aspectRatio: data[idx].metadata['ratio']?.toDouble() ?? 1,
+                child: ClipRRect(
+                  borderRadius: radius,
+                  child: AttachmentItem(data: data[idx]),
+                ),
               ),
             );
           },

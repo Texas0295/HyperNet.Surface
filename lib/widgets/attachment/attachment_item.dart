@@ -14,9 +14,9 @@ class AttachmentItem extends StatelessWidget {
     final sn = context.read<SnNetworkProvider>();
     switch (tp) {
       case 'image':
-        return AspectRatio(
-          aspectRatio: data.metadata['ratio']?.toDouble(),
-          child: UniversalImage(sn.getAttachmentUrl(data.rid)),
+        return UniversalImage(
+          sn.getAttachmentUrl(data.rid),
+          fit: BoxFit.cover,
         );
       default:
         return const Placeholder();
