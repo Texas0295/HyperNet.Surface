@@ -58,42 +58,80 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
 
   double? _progress;
 
+  static const kAttachmentProgressWeight = 0.9;
+  static const kPostingProgressWeight = 0.1;
+
   void _performAction() async {
     if (_isBusy || _publisher == null) return;
 
     final sn = context.read<SnNetworkProvider>();
     final attach = context.read<SnAttachmentProvider>();
 
-    setState(() => _isBusy = true);
+    setState(() {
+      _progress = 0;
+      _isBusy = true;
+    });
 
     // Uploading attachments
     try {
-      for (final media in _selectedMedia) {
+      for (int i = 0; i < _selectedMedia.length; i++) {
+        final media = _selectedMedia[i];
         final place = await attach.chunkedUploadInitialize(
           await media.length(),
           media.name,
           'interactive',
           null,
         );
-        final item = await attach.chunkedUploadParts(media, place.$1, place.$2);
+
+        final item = await attach.chunkedUploadParts(
+          media,
+          place.$1,
+          place.$2,
+          onProgress: (progress) {
+            // Calculate overall progress for attachments
+            setState(() {
+              _progress = ((i + progress) / _selectedMedia.length) *
+                  kAttachmentProgressWeight;
+            });
+          },
+        );
+
         _attachments.add(item);
       }
     } catch (err) {
+      if (!mounted) return;
       context.showErrorDialog(err);
+      setState(() => _isBusy = false);
       return;
     }
 
-    // Finishing up
+    setState(() => _progress = kAttachmentProgressWeight);
+
+    // Posting the content
     try {
+      final baseProgressVal = _progress!;
       await sn.client.post('/cgi/co/${widget.mode}', data: {
         'publisher': _publisher!.id,
         'content': _contentController.value.text,
         'title': _title,
         'description': _description,
         'attachments': _attachments.map((e) => e.rid).toList(),
+      }, onSendProgress: (count, total) {
+        setState(() {
+          _progress =
+              baseProgressVal + (count / total) * (kPostingProgressWeight / 2);
+        });
+      }, onReceiveProgress: (count, total) {
+        setState(() {
+          _progress = baseProgressVal +
+              (kPostingProgressWeight / 2) +
+              (count / total) * (kPostingProgressWeight / 2);
+        });
       });
+      if (!mounted) return;
       Navigator.pop(context, true);
     } catch (err) {
+      if (!mounted) return;
       context.showErrorDialog(err);
     } finally {
       setState(() => _isBusy = false);
