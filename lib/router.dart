@@ -46,6 +46,15 @@ final appRouter = GoRouter(
           name: 'postEditor',
           builder: (context, state) => PostEditorScreen(
             mode: state.pathParameters['mode']!,
+            postEditId: int.tryParse(
+              state.uri.queryParameters['editing'] ?? '',
+            ),
+            postReplyId: int.tryParse(
+              state.uri.queryParameters['replying'] ?? '',
+            ),
+            postRepostId: int.tryParse(
+              state.uri.queryParameters['reposting'] ?? '',
+            ),
           ),
         ),
       ],

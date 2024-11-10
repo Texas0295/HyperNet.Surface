@@ -121,7 +121,7 @@ class _PublisherNewPersonalState extends State<_PublisherNewPersonal> {
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: _isBusy ? null : _performAction,
-            icon: const Icon(Icons.add),
+            icon: const Icon(Symbols.add),
             label: Text('create').tr(),
           ),
         ).padding(horizontal: 2),

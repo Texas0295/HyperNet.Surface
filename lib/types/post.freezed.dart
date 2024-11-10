@@ -577,7 +577,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SnPostImpl implements _SnPost {
+class _$SnPostImpl extends _SnPost {
   const _$SnPostImpl(
       {required this.id,
       required this.createdAt,
@@ -615,7 +615,8 @@ class _$SnPostImpl implements _SnPost {
       this.preload})
       : _body = body,
         _tags = tags,
-        _categories = categories;
+        _categories = categories,
+        super._();
 
   factory _$SnPostImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnPostImplFromJson(json);
@@ -827,7 +828,7 @@ class _$SnPostImpl implements _SnPost {
   }
 }
 
-abstract class _SnPost implements SnPost {
+abstract class _SnPost extends SnPost {
   const factory _SnPost(
       {required final int id,
       required final DateTime createdAt,
@@ -863,6 +864,7 @@ abstract class _SnPost implements SnPost {
       required final SnPublisher publisher,
       required final SnMetric metric,
       final SnPostPreload? preload}) = _$SnPostImpl;
+  const _SnPost._() : super._();
 
   factory _SnPost.fromJson(Map<String, dynamic> json) = _$SnPostImpl.fromJson;
 

@@ -12,8 +12,8 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 final Map<int, (String label, IconData icon, bool isOtp)> _factorLabelMap = {
-  0: ('authFactorPassword'.tr(), Icons.password, false),
-  1: ('authFactorEmail'.tr(), Icons.email, true),
+  0: ('authFactorPassword'.tr(), Symbols.password, false),
+  1: ('authFactorEmail'.tr(), Symbols.email, true),
 };
 
 class LoginScreen extends StatefulWidget {
@@ -225,7 +225,7 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('next').tr(),
-                  const Icon(Icons.chevron_right),
+                  const Icon(Symbols.chevron_right),
                 ],
               ),
             ),
@@ -320,7 +320,7 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
                           ),
                         ),
                         secondary: Icon(
-                          _factorLabelMap[x.type]?.$2 ?? Icons.question_mark,
+                          _factorLabelMap[x.type]?.$2 ?? Symbols.question_mark,
                         ),
                         title: Text(
                           _factorLabelMap[x.type]?.$1 ?? 'unknown'.tr(),
@@ -355,7 +355,7 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('next'.tr()),
-                  const Icon(Icons.chevron_right),
+                  const Icon(Symbols.chevron_right),
                 ],
               ),
             ),
@@ -505,7 +505,7 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('next').tr(),
-                  const Icon(Icons.chevron_right),
+                  const Icon(Symbols.chevron_right),
                 ],
               ),
             ),
@@ -538,7 +538,7 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
                         children: [
                           Text('termAcceptLink'.tr()),
                           const Gap(4),
-                          const Icon(Icons.launch, size: 14),
+                          const Icon(Symbols.launch, size: 14),
                         ],
                       ),
                       onTap: () {

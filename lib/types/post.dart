@@ -6,6 +6,8 @@ part 'post.g.dart';
 
 @freezed
 class SnPost with _$SnPost {
+  const SnPost._();
+
   const factory SnPost({
     required int id,
     required DateTime createdAt,
@@ -44,6 +46,11 @@ class SnPost with _$SnPost {
   }) = _SnPost;
 
   factory SnPost.fromJson(Map<String, Object?> json) => _$SnPostFromJson(json);
+
+  String get typePlural => switch (type) {
+        'story' => 'stories',
+        _ => '${type}s',
+      };
 }
 
 @freezed

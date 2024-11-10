@@ -31,6 +31,7 @@
   "preview": "Preview",
   "loading": "Loading...",
   "delete": "Delete",
+  "report": "Report",
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",
@@ -72,5 +73,6 @@
   "fieldPostContent": "What happened?!",
   "fieldPostTitle": "Title",
   "fieldPostDescription": "Description",
-  "postPublish": "Publish"
+  "postPublish": "Publish",
+  "postEditingNotice": "You're about to editing a post that posted {}."
 }

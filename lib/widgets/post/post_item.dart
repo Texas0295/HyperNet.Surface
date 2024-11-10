@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -52,13 +54,48 @@ class _PostContentHeader extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          onPressed: () {},
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          icon: const Icon(
-            Symbols.more_horiz,
-            size: 16,
+        PopupMenuButton(
+          icon: const Icon(Symbols.more_horiz),
+          style: const ButtonStyle(
+            visualDensity: VisualDensity(horizontal: -4, vertical: -4),
           ),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            PopupMenuItem(
+              child: Row(
+                children: [
+                  const Icon(Symbols.edit),
+                  const Gap(16),
+                  Text('edit').tr(),
+                ],
+              ),
+              onTap: () {
+                GoRouter.of(context).pushNamed(
+                  'postEditor',
+                  pathParameters: {'mode': data.typePlural},
+                  queryParameters: {'editing': data.id.toString()},
+                );
+              },
+            ),
+            PopupMenuItem(
+              child: Row(
+                children: [
+                  const Icon(Symbols.delete),
+                  const Gap(16),
+                  Text('delete').tr(),
+                ],
+              ),
+            ),
+            const PopupMenuDivider(),
+            PopupMenuItem(
+              child: Row(
+                children: [
+                  const Icon(Symbols.flag),
+                  const Gap(16),
+                  Text('report').tr(),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     ).padding(horizontal: 12, vertical: 8);

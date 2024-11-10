@@ -146,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text('next').tr(),
-                      const Icon(Icons.chevron_right),
+                      const Icon(Symbols.chevron_right),
                     ],
                   ),
                 ),

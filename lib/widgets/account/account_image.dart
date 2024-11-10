@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -39,7 +40,7 @@ class AccountImage extends StatelessWidget {
       child: (content?.isEmpty ?? true)
           ? (fallbackWidget ??
               Icon(
-                Icons.account_circle,
+                Symbols.account_circle,
                 size: radius != null ? radius! * 1.2 : 24,
                 color: foregroundColor,
               ))

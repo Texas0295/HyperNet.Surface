@@ -96,7 +96,7 @@ class _PublisherScreenState extends State<PublisherScreen> {
                         PopupMenuItem(
                           child: Row(
                             children: [
-                              const Icon(Icons.edit),
+                              const Icon(Symbols.edit),
                               const Gap(16),
                               Text('edit').tr(),
                             ],

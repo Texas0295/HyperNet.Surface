@@ -27,7 +27,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final List<SnPost> _posts = List.empty(growable: true);
   int? _postCount;
 
-  void _fetchPosts() async {
+  Future<void> _fetchPosts() async {
     if (_postCount != null && _posts.length >= _postCount!) return;
 
     setState(() => _isBusy = true);
@@ -75,9 +75,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBar: AppBar(
-        title: Text('screenExplore').tr(),
-      ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         key: _fabKey,
@@ -155,15 +152,31 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
       ),
-      body: InfiniteList(
-        itemCount: _posts.length,
-        isLoading: _isBusy,
-        hasReachedMax: _postCount != null && _posts.length >= _postCount!,
-        onFetchData: _fetchPosts,
-        itemBuilder: (context, idx) {
-          return PostItem(data: _posts[idx]);
+      body: RefreshIndicator(
+        displacement: 40 + MediaQuery.of(context).padding.top,
+        onRefresh: () {
+          _posts.clear();
+          return _fetchPosts();
         },
-        separatorBuilder: (context, index) => const Divider(),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text('screenExplore').tr(),
+              floating: true,
+              snap: true,
+            ),
+            SliverInfiniteList(
+              itemCount: _posts.length,
+              isLoading: _isBusy,
+              hasReachedMax: _postCount != null && _posts.length >= _postCount!,
+              onFetchData: _fetchPosts,
+              itemBuilder: (context, idx) {
+                return PostItem(data: _posts[idx]);
+              },
+              separatorBuilder: (context, index) => const Divider(),
+            )
+          ],
+        ),
       ),
     );
   }

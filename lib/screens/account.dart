@@ -79,7 +79,7 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           subtitle: Text('accountProfileEditSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.contact_page),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Symbols.chevron_right),
           onTap: () {
             GoRouter.of(context).pushNamed('accountProfileEdit');
           },
@@ -89,7 +89,7 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           subtitle: Text('accountPublishersSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.face),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Symbols.chevron_right),
           onTap: () {
             GoRouter.of(context).pushNamed('accountPublishers');
           },
@@ -99,7 +99,7 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           subtitle: Text('accountLogoutSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.logout),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Symbols.chevron_right),
           onTap: () {
             context
                 .showConfirmDialog(
@@ -147,7 +147,7 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
           subtitle: Text('screenAuthLoginSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.login),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Symbols.chevron_right),
           onTap: () {
             GoRouter.of(context).pushNamed('authLogin');
           },
@@ -157,7 +157,7 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
           subtitle: Text('screenAuthRegisterSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.person_add),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Symbols.chevron_right),
           onTap: () {
             GoRouter.of(context).pushNamed('authRegister');
           },

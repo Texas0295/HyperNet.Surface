@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -67,7 +68,7 @@ class UniversalImage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AnimateWidgetExtensions(Icon(Icons.close, size: 24))
+                      AnimateWidgetExtensions(Icon(Symbols.close, size: 24))
                           .animate(onPlay: (e) => e.repeat(reverse: true))
                           .fade(duration: 500.ms),
                       Text(
@@ -123,7 +124,7 @@ class UniversalImage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AnimateWidgetExtensions(Icon(Icons.close, size: 24))
+                      AnimateWidgetExtensions(Icon(Symbols.close, size: 24))
                           .animate(onPlay: (e) => e.repeat(reverse: true))
                           .fade(duration: 500.ms),
                       Text(

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
@@ -12,7 +13,9 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
+import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -20,7 +23,16 @@ import 'package:provider/provider.dart';
 
 class PostEditorScreen extends StatefulWidget {
   final String mode;
-  const PostEditorScreen({super.key, required this.mode});
+  final int? postEditId;
+  final int? postReplyId;
+  final int? postRepostId;
+  const PostEditorScreen({
+    super.key,
+    required this.mode,
+    required this.postEditId,
+    required this.postReplyId,
+    required this.postRepostId,
+  });
 
   @override
   State<PostEditorScreen> createState() => _PostEditorScreenState();
@@ -33,6 +45,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   };
 
   bool _isBusy = false;
+  bool _isLoading = false;
 
   SnPublisher? _publisher;
   List<SnPublisher>? _publishers;
@@ -40,7 +53,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   final List<XFile> _selectedMedia = List.empty(growable: true);
   final List<SnAttachment> _attachments = List.empty(growable: true);
 
-  void _fetchPublishers() async {
+  Future<void> _fetchPublishers() async {
     final sn = context.read<SnNetworkProvider>();
     final resp = await sn.client.get('/cgi/co/publishers');
     _publishers = List<SnPublisher>.from(
@@ -49,6 +62,63 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     setState(() {
       _publisher = _publishers?.first;
     });
+  }
+
+  SnPost? _editingOg;
+  SnPost? _replyingTo;
+  SnPost? _repostingTo;
+
+  Future<void> _fetchRelatedPost() async {
+    final sn = context.read<SnNetworkProvider>();
+    final attach = context.read<SnAttachmentProvider>();
+
+    try {
+      setState(() => _isLoading = true);
+
+      if (widget.postEditId != null) {
+        final resp = await sn.client.get('/cgi/co/posts/${widget.postEditId}');
+        final post = SnPost.fromJson(resp.data);
+        final attachments = await attach
+            .getMultiple(post.body['attachments']?.cast<String>() ?? []);
+        _title = post.body['title'];
+        _description = post.body['description'];
+        _contentController.text = post.body['content'] ?? '';
+        _attachments.addAll(attachments);
+
+        _editingOg = post.copyWith(
+          preload: SnPostPreload(
+            attachments: attachments,
+          ),
+        );
+      }
+
+      if (widget.postReplyId != null) {
+        final resp = await sn.client.get('/cgi/co/posts/${widget.postReplyId}');
+        final post = SnPost.fromJson(resp.data);
+        _replyingTo = post.copyWith(
+          preload: SnPostPreload(
+            attachments: await attach
+                .getMultiple(post.body['attachments']?.cast<String>() ?? []),
+          ),
+        );
+      }
+
+      if (widget.postRepostId != null) {
+        final resp =
+            await sn.client.get('/cgi/co/posts/${widget.postRepostId}');
+        final post = SnPost.fromJson(resp.data);
+        _repostingTo = post.copyWith(
+          preload: SnPostPreload(
+            attachments: await attach
+                .getMultiple(post.body['attachments']?.cast<String>() ?? []),
+          ),
+        );
+      }
+    } catch (err) {
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   String? _title;
@@ -110,24 +180,35 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     // Posting the content
     try {
       final baseProgressVal = _progress!;
-      await sn.client.post('/cgi/co/${widget.mode}', data: {
-        'publisher': _publisher!.id,
-        'content': _contentController.value.text,
-        'title': _title,
-        'description': _description,
-        'attachments': _attachments.map((e) => e.rid).toList(),
-      }, onSendProgress: (count, total) {
-        setState(() {
-          _progress =
-              baseProgressVal + (count / total) * (kPostingProgressWeight / 2);
-        });
-      }, onReceiveProgress: (count, total) {
-        setState(() {
-          _progress = baseProgressVal +
-              (kPostingProgressWeight / 2) +
-              (count / total) * (kPostingProgressWeight / 2);
-        });
-      });
+      await sn.client.request(
+        [
+          '/cgi/co/${widget.mode}',
+          if (widget.postEditId != null) '${widget.postEditId}',
+        ].join('/'),
+        data: {
+          'publisher': _publisher!.id,
+          'content': _contentController.value.text,
+          'title': _title,
+          'description': _description,
+          'attachments': _attachments.map((e) => e.rid).toList(),
+        },
+        onSendProgress: (count, total) {
+          setState(() {
+            _progress = baseProgressVal +
+                (count / total) * (kPostingProgressWeight / 2);
+          });
+        },
+        onReceiveProgress: (count, total) {
+          setState(() {
+            _progress = baseProgressVal +
+                (kPostingProgressWeight / 2) +
+                (count / total) * (kPostingProgressWeight / 2);
+          });
+        },
+        options: Options(
+          method: widget.postEditId != null ? 'PUT' : 'POST',
+        ),
+      );
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (err) {
@@ -177,6 +258,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
       context.showErrorDialog('Unknown post type');
       Navigator.pop(context);
     }
+    _fetchRelatedPost();
     _fetchPublishers();
   }
 
@@ -221,6 +303,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               items: <DropdownMenuItem<SnPublisher>>[
                 ...(_publishers?.map(
                       (item) => DropdownMenuItem<SnPublisher>(
+                        enabled: _editingOg == null,
                         value: item,
                         child: Row(
                           children: [
@@ -302,9 +385,36 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
           const Divider(height: 1),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.only(
+                top: _editingOg == null ? 8 : 0,
+                bottom: 8,
+              ),
               child: Column(
                 children: [
+                  // Editing Notice
+                  if (_editingOg != null)
+                    Column(
+                      children: [
+                        Theme(
+                          data: Theme.of(context)
+                              .copyWith(dividerColor: Colors.transparent),
+                          child: ExpansionTile(
+                            minTileHeight: 48,
+                            leading:
+                                const Icon(Symbols.edit_note).padding(left: 4),
+                            title: Text('postEditingNotice')
+                                .fontSize(15)
+                                .tr(args: ['@${_editingOg!.publisher.name}']),
+                            children: <Widget>[
+                              PostItem(data: _editingOg!),
+                            ],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        const Gap(8)
+                      ],
+                    ),
+                  // Content Input Area
                   TextField(
                     controller: _contentController,
                     maxLines: null,
@@ -338,6 +448,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                LoadingIndicator(isActive: _isBusy),
                 if (_isBusy && _progress != null)
                   TweenAnimationBuilder<double>(
                     tween: Tween(begin: 0, end: 1),
