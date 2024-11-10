@@ -70,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     .bold()
                     .fontSize(17)
                     .tr()
-                    .padding(horizontal: 20),
+                    .padding(horizontal: 20, bottom: 4),
                 if (!kIsWeb)
                   ListTile(
                     title: Text('settingsBackgroundImage').tr(),
@@ -141,7 +141,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     .bold()
                     .fontSize(17)
                     .tr()
-                    .padding(horizontal: 20),
+                    .padding(horizontal: 20, bottom: 4),
                 TextField(
                   controller: _serverUrlController,
                   decoration: InputDecoration(

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -276,14 +278,14 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
         ),
         flexibleSpace: Column(
           children: [
-            Text(_title ?? 'Untitled')
+            Text(_title ?? 'untitled'.tr())
                 .textStyle(Theme.of(context).textTheme.titleLarge!)
                 .textColor(Colors.white),
             Text(_kTitleMap[widget.mode]!)
                 .tr()
                 .textColor(Colors.white.withAlpha((255 * 0.9).round())),
           ],
-        ).padding(top: MediaQuery.of(context).padding.top),
+        ).padding(top: math.max(MediaQuery.of(context).padding.top, 8)),
         actions: [
           IconButton(
             icon: const Icon(Symbols.tune),

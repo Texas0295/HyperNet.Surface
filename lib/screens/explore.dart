@@ -171,7 +171,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
               hasReachedMax: _postCount != null && _posts.length >= _postCount!,
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
-                return PostItem(data: _posts[idx]);
+                return GestureDetector(
+                  child: PostItem(data: _posts[idx]),
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(
+                      'postDetail',
+                      pathParameters: {'slug': _posts[idx].id.toString()},
+                      extra: _posts[idx],
+                    );
+                  },
+                );
               },
               separatorBuilder: (context, index) => const Divider(),
             )

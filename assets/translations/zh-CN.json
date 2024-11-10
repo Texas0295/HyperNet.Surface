@@ -37,6 +37,9 @@
   "report": "检举",
   "repost": "转帖",
   "reply": "回贴",
+  "untitled": "无题",
+  "postDetail": "帖子详情",
+  "postNoun": "帖子",
   "fieldUsername": "用户名",
   "fieldNickname": "显示名",
   "fieldEmail": "电子邮箱地址",
@@ -84,6 +87,7 @@
   "postRepostingNotice": "你正在转发由 {} 发布的帖子。",
   "postReact": "反应",
   "postComments": {
+    "zero": "评论",
     "one": "{} 条评论",
     "other": "{} 条评论"
   },

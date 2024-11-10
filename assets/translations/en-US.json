@@ -37,6 +37,9 @@
   "report": "Report",
   "repost": "Repost",
   "reply": "Reply",
+  "untitled": "Untitled",
+  "postDetail": "Post detail",
+  "postNoun": "Post",
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",
@@ -84,6 +87,7 @@
   "postRepostingNotice": "You're about to repost a post that posted {}.",
   "postReact": "React",
   "postComments": {
+    "zero": "Comment",
     "one": "{} comment",
     "other": "{} comments"
   },

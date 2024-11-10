@@ -8,8 +8,10 @@ import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
+import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
 import 'package:surface/screens/settings.dart';
+import 'package:surface/types/post.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 final appRouter = GoRouter(
@@ -58,6 +60,14 @@ final appRouter = GoRouter(
             ),
           ),
         ),
+        GoRoute(
+          path: '/post/:slug',
+          name: 'postDetail',
+          builder: (context, state) => PostDetailScreen(
+            slug: state.pathParameters['slug']!,
+            preload: state.extra as SnPost?,
+          ),
+        )
       ],
     ),
     ShellRoute(

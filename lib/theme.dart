@@ -23,15 +23,22 @@ Future<ThemeData> createAppTheme(
 }) async {
   final prefs = await SharedPreferences.getInstance();
 
+  final colorScheme = ColorScheme.fromSeed(
+    seedColor: Colors.indigo,
+    brightness: brightness,
+  );
+
   return ThemeData(
     useMaterial3:
         useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? false),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.indigo,
-      brightness: brightness,
-    ),
+    colorScheme: colorScheme,
     brightness: brightness,
-    iconTheme: const IconThemeData(fill: 0, weight: 400, opticalSize: 20),
+    iconTheme: IconThemeData(
+      fill: 0,
+      weight: 400,
+      opticalSize: 20,
+      color: colorScheme.onSurface,
+    ),
     scaffoldBackgroundColor: Colors.transparent,
   );
 }
