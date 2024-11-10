@@ -10,6 +10,8 @@ class AppBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
     return ScaffoldMessenger(
       child: FutureBuilder(
         future:
@@ -21,17 +23,28 @@ class AppBackground extends StatelessWidget {
             if (file.existsSync()) {
               return Container(
                 color: Theme.of(context).colorScheme.surface,
-                child: Container(
-                  decoration: BoxDecoration(
-                    backgroundBlendMode: BlendMode.darken,
-                    color: Theme.of(context).colorScheme.surface,
-                    image: DecorationImage(
-                      opacity: 0.2,
-                      image: FileImage(file),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: child,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        backgroundBlendMode: BlendMode.darken,
+                        color: Theme.of(context).colorScheme.surface,
+                        image: DecorationImage(
+                          opacity: 0.2,
+                          image: ResizeImage(
+                            FileImage(file),
+                            width: (constraints.maxWidth * devicePixelRatio)
+                                .round(),
+                            height: (constraints.maxHeight * devicePixelRatio)
+                                .round(),
+                            policy: ResizeImagePolicy.fit,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: child,
+                    );
+                  },
                 ),
               );
             }

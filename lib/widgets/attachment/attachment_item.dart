@@ -23,10 +23,14 @@ class AttachmentItem extends StatelessWidget {
       case 'image':
         return Hero(
           tag: 'attachment-${data.rid}-$heroTag',
-          child: UniversalImage(
-            sn.getAttachmentUrl(data.rid),
-            fit: BoxFit.cover,
-          ),
+          child: LayoutBuilder(builder: (context, constraints) {
+            return UniversalImage(
+              sn.getAttachmentUrl(data.rid),
+              fit: BoxFit.cover,
+              cacheHeight: constraints.maxHeight,
+              cacheWidth: constraints.maxWidth,
+            );
+          }),
         );
       default:
         return const Placeholder();
