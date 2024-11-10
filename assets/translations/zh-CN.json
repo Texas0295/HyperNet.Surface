@@ -66,5 +66,10 @@
   "publisherNewSubtitle": "创建一个新的公共身份。",
   "publisherSyncWithAccount": "同步账户信息",
   "writePostTypeStory": "发动态",
-  "writePostTypeArticle": "写文章"
+  "writePostTypeArticle": "写文章",
+  "fieldPostPublisher": "帖子发布者",
+  "fieldPostContent": "发生什么事了？！",
+  "fieldPostTitle": "标题",
+  "fieldPostDescription": "描述",
+  "postPublish": "发布"
 }

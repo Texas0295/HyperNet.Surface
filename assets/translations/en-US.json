@@ -66,5 +66,10 @@
   "publisherNewSubtitle": "Create a new publisher identity.",
   "publisherSyncWithAccount": "Sync with account",
   "writePostTypeStory": "Post a story",
-  "writePostTypeArticle": "Write an article"
+  "writePostTypeArticle": "Write an article",
+  "fieldPostPublisher": "Post publisher",
+  "fieldPostContent": "What happened?!",
+  "fieldPostTitle": "Title",
+  "fieldPostDescription": "Description",
+  "postPublish": "Publish"
 }

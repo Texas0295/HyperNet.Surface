@@ -113,7 +113,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 tooltip: 'writePostTypeStory'.tr(),
                 onPressed: () {
                   GoRouter.of(context).pushNamed('postEditor', pathParameters: {
-                    'mode': 'story',
+                    'mode': 'stories',
                   }).then((value) {
                     if (value == true) {
                       _posts.clear();
@@ -135,7 +135,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 tooltip: 'writePostTypeArticle'.tr(),
                 onPressed: () {
                   GoRouter.of(context).pushNamed('postEditor', pathParameters: {
-                    'mode': 'article',
+                    'mode': 'articles',
                   }).then((value) {
                     if (value == true) {
                       _posts.clear();

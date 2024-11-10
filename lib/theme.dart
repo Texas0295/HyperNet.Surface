@@ -9,18 +9,19 @@ class ThemeSet {
 
 ThemeSet createAppThemeSet() {
   return ThemeSet(
-    light: createAppTheme(),
-    dark: createAppTheme(),
+    light: createAppTheme(Brightness.light),
+    dark: createAppTheme(Brightness.dark),
   );
 }
 
-ThemeData createAppTheme() {
+ThemeData createAppTheme(Brightness brightness) {
   return ThemeData(
     useMaterial3: false,
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colors.indigo,
-      brightness: Brightness.light,
+      brightness: brightness,
     ),
+    brightness: brightness,
     iconTheme: const IconThemeData(fill: 0, weight: 400, opticalSize: 20),
   );
 }

@@ -44,7 +44,9 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/post/write/:mode',
           name: 'postEditor',
-          builder: (context, state) => const PostEditorScreen(),
+          builder: (context, state) => PostEditorScreen(
+            mode: state.pathParameters['mode']!,
+          ),
         ),
       ],
     ),
