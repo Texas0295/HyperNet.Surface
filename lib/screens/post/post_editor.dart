@@ -328,7 +328,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                         ),
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
-                      )
+                      ),
                     ]
                         .expandIndexed(
                           (idx, ele) => [
@@ -390,7 +390,12 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           onPressed: (_writeController.isBusy ||
                                   _writeController.publisher == null)
                               ? null
-                              : () => _writeController.post(context),
+                              : () {
+                                  _writeController.post(context).then((_) {
+                                    if (!context.mounted) return;
+                                    Navigator.pop(context, true);
+                                  });
+                                },
                           icon: const Icon(Symbols.send),
                           label: Text('postPublish').tr(),
                         ),

@@ -9,6 +9,7 @@ import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/post/post_item.dart';
+import 'package:surface/widgets/post/post_mini_editor.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class PostCommentSliverList extends StatefulWidget {
@@ -16,10 +17,10 @@ class PostCommentSliverList extends StatefulWidget {
   const PostCommentSliverList({super.key, required this.parentPostId});
 
   @override
-  State<PostCommentSliverList> createState() => _PostCommentSliverListState();
+  State<PostCommentSliverList> createState() => PostCommentSliverListState();
 }
 
-class _PostCommentSliverListState extends State<PostCommentSliverList> {
+class PostCommentSliverListState extends State<PostCommentSliverList> {
   bool _isBusy = true;
 
   final List<SnPost> _posts = List.empty(growable: true);
@@ -67,6 +68,11 @@ class _PostCommentSliverListState extends State<PostCommentSliverList> {
     if (mounted) setState(() => _isBusy = false);
   }
 
+  Future<void> refresh() async {
+    _posts.clear();
+    _fetchPosts();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -97,7 +103,7 @@ class _PostCommentSliverListState extends State<PostCommentSliverList> {
   }
 }
 
-class PostCommentListPopup extends StatelessWidget {
+class PostCommentListPopup extends StatefulWidget {
   final int postId;
   final int commentCount;
   const PostCommentListPopup({
@@ -107,7 +113,16 @@ class PostCommentListPopup extends StatelessWidget {
   });
 
   @override
+  State<PostCommentListPopup> createState() => _PostCommentListPopupState();
+}
+
+class _PostCommentListPopupState extends State<PostCommentListPopup> {
+  final GlobalKey<PostCommentSliverListState> _childListKey = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,14 +132,36 @@ class PostCommentListPopup extends StatelessWidget {
             const Icon(Symbols.comment, size: 24),
             const Gap(16),
             Text('postCommentsDetailed')
-                .plural(commentCount)
+                .plural(widget.commentCount)
                 .textStyle(Theme.of(context).textTheme.titleLarge!),
           ],
         ).padding(horizontal: 20, top: 16, bottom: 12),
         Expanded(
           child: CustomScrollView(
             slivers: [
-              PostCommentSliverList(parentPostId: postId),
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 240,
+                  decoration: BoxDecoration(
+                    border: Border.symmetric(
+                      horizontal: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 1 / devicePixelRatio,
+                      ),
+                    ),
+                  ),
+                  child: PostMiniEditor(
+                    postReplyId: widget.postId,
+                    onPost: () {
+                      _childListKey.currentState!.refresh();
+                    },
+                  ),
+                ),
+              ),
+              PostCommentSliverList(
+                key: _childListKey,
+                parentPostId: widget.postId,
+              ),
             ],
           ),
         ),

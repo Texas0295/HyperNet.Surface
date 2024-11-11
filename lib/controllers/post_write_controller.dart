@@ -234,7 +234,7 @@ class PostWriteController extends ChangeNotifier {
     }
   }
 
-  void post(BuildContext context) async {
+  Future<void> post(BuildContext context) async {
     if (isBusy || publisher == null) return;
 
     final sn = context.read<SnNetworkProvider>();
@@ -294,8 +294,9 @@ class PostWriteController extends ChangeNotifier {
         data: {
           'publisher': publisher!.id,
           'content': contentController.text,
-          'title': titleController.text,
-          'description': descriptionController.text,
+          if (titleController.text.isNotEmpty) 'title': titleController.text,
+          if (descriptionController.text.isNotEmpty)
+            'description': descriptionController.text,
           'attachments': attachments
               .where((e) => e.attachment != null)
               .map((e) => e.attachment!.rid)
@@ -322,8 +323,6 @@ class PostWriteController extends ChangeNotifier {
           method: editingPost != null ? 'PUT' : 'POST',
         ),
       );
-      if (!context.mounted) return;
-      Navigator.pop(context, true);
     } catch (err) {
       if (!context.mounted) return;
       context.showErrorDialog(err);
@@ -365,6 +364,20 @@ class PostWriteController extends ChangeNotifier {
 
   void setIsBusy(bool value) {
     isBusy = value;
+    notifyListeners();
+  }
+
+  void reset() {
+    publishedAt = null;
+    publishedUntil = null;
+    titleController.clear();
+    descriptionController.clear();
+    contentController.clear();
+    attachments.clear();
+    editingPost = null;
+    replyingPost = null;
+    repostingPost = null;
+    mode = kTitleMap.keys.first;
     notifyListeners();
   }
 

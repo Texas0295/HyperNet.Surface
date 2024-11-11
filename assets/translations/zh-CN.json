@@ -92,6 +92,7 @@
   "postReplyingNotice": "你正在回复由 {} 发布的帖子。",
   "postRepostingNotice": "你正在转发由 {} 发布的帖子。",
   "postReact": "反应",
+  "postPosted": "帖子已经发表。",
   "postComments": {
     "zero": "评论",
     "one": "{} 条评论",

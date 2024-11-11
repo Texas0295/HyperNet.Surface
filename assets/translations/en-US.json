@@ -86,6 +86,7 @@
   "fieldPostTitle": "Title",
   "fieldPostDescription": "Description",
   "postPublish": "Publish",
+  "postPosted": "Post has been posted.",
   "postPublishedAt": "Published At",
   "postPublishedUntil": "Published Until",
   "postEditingNotice": "You're about to editing a post that posted {}.",

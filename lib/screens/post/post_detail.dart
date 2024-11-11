@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_attachment.dart';
@@ -14,6 +15,7 @@ import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_item.dart';
+import 'package:surface/widgets/post/post_mini_editor.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String slug;
@@ -68,8 +70,12 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     _fetchPost();
   }
 
+  final GlobalKey<PostCommentSliverListState> _childListKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
     return AppScaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -98,17 +104,47 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
           if (_data != null)
             SliverToBoxAdapter(
-              child: PostItem(data: _data!),
+              child: PostItem(data: _data!, showComments: false),
             ),
           const SliverToBoxAdapter(child: Divider(height: 1)),
           if (_data != null)
             SliverToBoxAdapter(
-              child: Text('postCommentsDetailed')
-                  .plural(_data!.metric.replyCount)
-                  .textStyle(Theme.of(context).textTheme.titleLarge!)
-                  .padding(horizontal: 16, top: 12, bottom: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(Symbols.comment, size: 24),
+                  const Gap(16),
+                  Text('postCommentsDetailed')
+                      .plural(_data!.metric.replyCount)
+                      .textStyle(Theme.of(context).textTheme.titleLarge!),
+                ],
+              ).padding(horizontal: 20, vertical: 12),
             ),
-          if (_data != null) PostCommentSliverList(parentPostId: _data!.id),
+          if (_data != null)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 240,
+                decoration: BoxDecoration(
+                  border: Border.symmetric(
+                    horizontal: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                      width: 1 / devicePixelRatio,
+                    ),
+                  ),
+                ),
+                child: PostMiniEditor(
+                  postReplyId: _data!.id,
+                  onPost: () {
+                    _childListKey.currentState!.refresh();
+                  },
+                ),
+              ),
+            ),
+          if (_data != null)
+            PostCommentSliverList(
+              key: _childListKey,
+              parentPostId: _data!.id,
+            ),
           SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
         ],
       ),
