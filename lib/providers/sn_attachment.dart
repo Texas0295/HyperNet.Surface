@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -165,7 +166,10 @@ class SnAttachmentProvider {
     for (final entry in chunks.entries) {
       queue.add(() async {
         final beginCursor = entry.value * chunkSize;
-        final endCursor = (entry.value + 1) * chunkSize;
+        final endCursor = math.min<int>(
+          (entry.value + 1) * chunkSize,
+          await file.length(),
+        );
         final data = Uint8List.fromList(await file
             .openRead(beginCursor, endCursor)
             .expand((chunk) => chunk)

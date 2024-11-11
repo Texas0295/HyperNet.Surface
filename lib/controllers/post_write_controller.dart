@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -47,7 +48,10 @@ class PostWriteMedia {
   PostWriteMedia.fromFile(this.file, {this.attachment, this.raw}) {
     name = file!.name;
 
-    switch (file?.mimeType?.split('/').firstOrNull) {
+    String? mimetype = file!.mimeType;
+    mimetype ??= lookupMimeType(file!.path);
+
+    switch (mimetype?.split('/').firstOrNull) {
       case 'image':
         type = PostWriteMediaType.image;
         break;
@@ -94,7 +98,17 @@ class PostWriteMedia {
   }) {
     if (attachment != null) {
       final sn = context.read<SnNetworkProvider>();
-      return UniversalImage.provider(sn.getAttachmentUrl(attachment!.rid));
+      final ImageProvider provider =
+          UniversalImage.provider(sn.getAttachmentUrl(attachment!.rid));
+      if (width != null && height != null) {
+        return ResizeImage(
+          provider,
+          width: width,
+          height: height,
+          policy: ResizeImagePolicy.fit,
+        );
+      }
+      return provider;
     } else if (file != null) {
       final ImageProvider provider =
           kIsWeb ? NetworkImage(file!.path) : FileImage(File(file!.path));
@@ -321,6 +335,11 @@ class PostWriteController extends ChangeNotifier {
 
   void addAttachments(Iterable<PostWriteMedia> items) {
     attachments.addAll(items);
+    notifyListeners();
+  }
+
+  void setAttachmentAt(int idx, PostWriteMedia item) {
+    attachments[idx] = item;
     notifyListeners();
   }
 

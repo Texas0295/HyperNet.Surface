@@ -343,10 +343,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               ),
               if (_writeController.attachments.isNotEmpty)
                 PostMediaPendingList(
-                  data: _writeController.attachments,
-                  onRemove: (idx) {
-                    _writeController.removeAttachmentAt(idx);
-                  },
+                  controller: _writeController,
                 ).padding(bottom: 8),
               Material(
                 elevation: 2,
