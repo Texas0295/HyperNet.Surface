@@ -34,7 +34,7 @@ class SnPost with _$SnPost {
     required DateTime? lockedAt,
     required bool isDraft,
     required DateTime? publishedAt,
-    required dynamic publishedUntil,
+    required DateTime? publishedUntil,
     required int totalUpvote,
     required int totalDownvote,
     required int? realmId,

@@ -42,7 +42,9 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       publishedAt: json['published_at'] == null
           ? null
           : DateTime.parse(json['published_at'] as String),
-      publishedUntil: json['published_until'],
+      publishedUntil: json['published_until'] == null
+          ? null
+          : DateTime.parse(json['published_until'] as String),
       totalUpvote: (json['total_upvote'] as num).toInt(),
       totalDownvote: (json['total_downvote'] as num).toInt(),
       realmId: (json['realm_id'] as num?)?.toInt(),
@@ -83,7 +85,7 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'locked_at': instance.lockedAt?.toIso8601String(),
       'is_draft': instance.isDraft,
       'published_at': instance.publishedAt?.toIso8601String(),
-      'published_until': instance.publishedUntil,
+      'published_until': instance.publishedUntil?.toIso8601String(),
       'total_upvote': instance.totalUpvote,
       'total_downvote': instance.totalDownvote,
       'realm_id': instance.realmId,

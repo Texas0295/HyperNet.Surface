@@ -35,6 +35,7 @@ class AccountImage extends StatelessWidget {
               UniversalImage.provider(url),
               width: ((radius ?? 20) * devicePixelRatio * 2).round(),
               height: ((radius ?? 20) * devicePixelRatio * 2).round(),
+              policy: ResizeImagePolicy.fit,
             )
           : null,
       child: (content?.isEmpty ?? true)

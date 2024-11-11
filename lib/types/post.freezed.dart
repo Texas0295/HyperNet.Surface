@@ -45,7 +45,7 @@ mixin _$SnPost {
   DateTime? get lockedAt => throw _privateConstructorUsedError;
   bool get isDraft => throw _privateConstructorUsedError;
   DateTime? get publishedAt => throw _privateConstructorUsedError;
-  dynamic get publishedUntil => throw _privateConstructorUsedError;
+  DateTime? get publishedUntil => throw _privateConstructorUsedError;
   int get totalUpvote => throw _privateConstructorUsedError;
   int get totalDownvote => throw _privateConstructorUsedError;
   int? get realmId => throw _privateConstructorUsedError;
@@ -95,7 +95,7 @@ abstract class $SnPostCopyWith<$Res> {
       DateTime? lockedAt,
       bool isDraft,
       DateTime? publishedAt,
-      dynamic publishedUntil,
+      DateTime? publishedUntil,
       int totalUpvote,
       int totalDownvote,
       int? realmId,
@@ -264,7 +264,7 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
       publishedUntil: freezed == publishedUntil
           ? _value.publishedUntil
           : publishedUntil // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as DateTime?,
       totalUpvote: null == totalUpvote
           ? _value.totalUpvote
           : totalUpvote // ignore: cast_nullable_to_non_nullable
@@ -368,7 +368,7 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       DateTime? lockedAt,
       bool isDraft,
       DateTime? publishedAt,
-      dynamic publishedUntil,
+      DateTime? publishedUntil,
       int totalUpvote,
       int totalDownvote,
       int? realmId,
@@ -538,7 +538,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
       publishedUntil: freezed == publishedUntil
           ? _value.publishedUntil
           : publishedUntil // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as DateTime?,
       totalUpvote: null == totalUpvote
           ? _value.totalUpvote
           : totalUpvote // ignore: cast_nullable_to_non_nullable
@@ -690,7 +690,7 @@ class _$SnPostImpl extends _SnPost {
   @override
   final DateTime? publishedAt;
   @override
-  final dynamic publishedUntil;
+  final DateTime? publishedUntil;
   @override
   final int totalUpvote;
   @override
@@ -756,8 +756,8 @@ class _$SnPostImpl extends _SnPost {
             (identical(other.isDraft, isDraft) || other.isDraft == isDraft) &&
             (identical(other.publishedAt, publishedAt) ||
                 other.publishedAt == publishedAt) &&
-            const DeepCollectionEquality()
-                .equals(other.publishedUntil, publishedUntil) &&
+            (identical(other.publishedUntil, publishedUntil) ||
+                other.publishedUntil == publishedUntil) &&
             (identical(other.totalUpvote, totalUpvote) ||
                 other.totalUpvote == totalUpvote) &&
             (identical(other.totalDownvote, totalDownvote) ||
@@ -801,7 +801,7 @@ class _$SnPostImpl extends _SnPost {
         lockedAt,
         isDraft,
         publishedAt,
-        const DeepCollectionEquality().hash(publishedUntil),
+        publishedUntil,
         totalUpvote,
         totalDownvote,
         realmId,
@@ -855,7 +855,7 @@ abstract class _SnPost extends SnPost {
       required final DateTime? lockedAt,
       required final bool isDraft,
       required final DateTime? publishedAt,
-      required final dynamic publishedUntil,
+      required final DateTime? publishedUntil,
       required final int totalUpvote,
       required final int totalDownvote,
       required final int? realmId,
@@ -919,7 +919,7 @@ abstract class _SnPost extends SnPost {
   @override
   DateTime? get publishedAt;
   @override
-  dynamic get publishedUntil;
+  DateTime? get publishedUntil;
   @override
   int get totalUpvote;
   @override

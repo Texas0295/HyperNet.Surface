@@ -1,15 +1,13 @@
-import 'dart:io';
-
-import 'package:cross_file/cross_file.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/controllers/post_write_controller.dart';
 
 class PostMediaPendingList extends StatelessWidget {
-  final List<XFile> data;
+  final List<PostWriteMedia> data;
   final Function(int idx)? onRemove;
   const PostMediaPendingList({
     super.key,
@@ -19,6 +17,8 @@ class PostMediaPendingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
     return Container(
       constraints: const BoxConstraints(maxHeight: 120),
       child: ListView.separated(
@@ -53,9 +53,25 @@ class PostMediaPendingList extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: kIsWeb
-                      ? Image.network(file.path, fit: BoxFit.cover)
-                      : Image.file(File(file.path), fit: BoxFit.cover),
+                  child: switch (file.type) {
+                    PostWriteMediaType.image =>
+                      LayoutBuilder(builder: (context, constraints) {
+                        return Image(
+                          image: file.getImageProvider(
+                            context,
+                            width: (constraints.maxWidth * devicePixelRatio)
+                                .round(),
+                            height: (constraints.maxHeight * devicePixelRatio)
+                                .round(),
+                          )!,
+                          fit: BoxFit.cover,
+                        );
+                      }),
+                    _ => Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        child: const Icon(Symbols.docs).center(),
+                      ),
+                  },
                 ),
               ),
             ),
