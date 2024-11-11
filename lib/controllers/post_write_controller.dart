@@ -363,6 +363,11 @@ class PostWriteController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setIsBusy(bool value) {
+    isBusy = value;
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     contentController.dispose();

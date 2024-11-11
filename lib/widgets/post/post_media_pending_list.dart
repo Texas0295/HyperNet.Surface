@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
+import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/attachment/attachment_detail.dart';
+import 'package:surface/widgets/dialog.dart';
 
 class PostMediaPendingList extends StatelessWidget {
   final PostWriteController controller;
@@ -36,6 +39,8 @@ class PostMediaPendingList extends StatelessWidget {
     if (result == null) return;
     if (!context.mounted) return;
 
+    controller.setIsBusy(true);
+
     final rawBytes =
         (await result.uiImage.toByteData(format: ImageByteFormat.png))!
             .buffer
@@ -44,6 +49,26 @@ class PostMediaPendingList extends StatelessWidget {
       idx,
       PostWriteMedia.fromBytes(rawBytes, media.name, media.type),
     );
+
+    controller.setIsBusy(false);
+  }
+
+  void _deleteAttachment(BuildContext context, int idx) async {
+    final media = controller.attachments[idx];
+    if (media.attachment == null) return;
+
+    controller.setIsBusy(true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.delete('/cgi/uc/attachments/${media.attachment!.id}');
+      controller.removeAttachmentAt(idx);
+    } catch (err) {
+      if (!context.mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      controller.setIsBusy(false);
+    }
   }
 
   @override
@@ -83,6 +108,14 @@ class PostMediaPendingList extends StatelessWidget {
                         label: 'crop'.tr(),
                         icon: Symbols.crop,
                         onSelected: () => _cropImage(context, idx),
+                      ),
+                    if (media.attachment != null)
+                      MenuItem(
+                        label: 'delete'.tr(),
+                        icon: Symbols.delete,
+                        onSelected: controller.isBusy
+                            ? null
+                            : () => _deleteAttachment(context, idx),
                       ),
                     if (media.attachment == null)
                       MenuItem(
