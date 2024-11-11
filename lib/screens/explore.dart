@@ -168,6 +168,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             SliverInfiniteList(
               itemCount: _posts.length,
               isLoading: _isBusy,
+              centerLoading: true,
               hasReachedMax: _postCount != null && _posts.length >= _postCount!,
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
@@ -182,8 +183,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   },
                 );
               },
-              separatorBuilder: (context, index) => const Divider(),
-            )
+              separatorBuilder: (context, index) => const Divider(height: 1),
+            ),
           ],
         ),
       ),

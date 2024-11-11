@@ -91,6 +91,11 @@
     "one": "{} 条评论",
     "other": "{} 条评论"
   },
+  "postCommentsDetailed": {
+    "zero": "没有评论",
+    "one": "{} 条评论",
+    "other": "{} 条评论"
+  },
   "settingsAppearance": "外观",
   "settingsBackgroundImage": "背景图片",
   "settingsBackgroundImageDescription": "设置应用全局生效的的背景图片。",

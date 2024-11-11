@@ -91,6 +91,11 @@
     "one": "{} comment",
     "other": "{} comments"
   },
+  "postCommentsDetailed": {
+    "zero": "No comments",
+    "one": "{} comment",
+    "other": "{} comments"
+  },
   "settingsAppearance": "Appearance",
   "settingsBackgroundImage": "Background Image",
   "settingsBackgroundImageDescription": "Set the background image that will be applied globally.",

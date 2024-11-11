@@ -26,6 +26,7 @@ class AttachmentItem extends StatelessWidget {
           child: LayoutBuilder(builder: (context, constraints) {
             return UniversalImage(
               sn.getAttachmentUrl(data.rid),
+              key: Key('attachment-${data.rid}-$heroTag'),
               fit: BoxFit.cover,
               cacheHeight: constraints.maxHeight,
               cacheWidth: constraints.maxWidth,

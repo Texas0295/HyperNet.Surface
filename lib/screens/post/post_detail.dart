@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -11,6 +12,7 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
+import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_item.dart';
 
 class PostDetailScreen extends StatefulWidget {
@@ -89,13 +91,26 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ],
         ).padding(top: math.max(MediaQuery.of(context).padding.top, 8)),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            LoadingIndicator(isActive: _isBusy),
-            if (_data != null) PostItem(data: _data!),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: LoadingIndicator(isActive: _isBusy),
+          ),
+          if (_data != null)
+            SliverToBoxAdapter(
+              child: PostItem(data: _data!),
+            ),
+          const SliverToBoxAdapter(child: Divider(height: 1)),
+          if (_data != null)
+            SliverToBoxAdapter(
+              child: Text('postCommentsDetailed')
+                  .plural(_data!.metric.replyCount)
+                  .textStyle(Theme.of(context).textTheme.titleLarge!)
+                  .padding(horizontal: 16, top: 12, bottom: 4),
+            ),
+          if (_data != null) PostCommentSliverList(parentPostId: _data!.id),
+          SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
+        ],
       ),
     );
   }

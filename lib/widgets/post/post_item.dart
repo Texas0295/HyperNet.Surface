@@ -11,10 +11,16 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
+import 'package:surface/widgets/post/post_comment_list.dart';
 
 class PostItem extends StatelessWidget {
   final SnPost data;
-  const PostItem({super.key, required this.data});
+  final bool showComments;
+  const PostItem({
+    super.key,
+    required this.data,
+    this.showComments = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +30,12 @@ class PostItem extends StatelessWidget {
         _PostContentHeader(data: data).padding(horizontal: 12, vertical: 8),
         _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
         if (data.preload?.attachments?.isNotEmpty ?? true)
-          AttachmentList(data: data.preload!.attachments!, bordered: true),
-        _PostBottomAction(data: data)
-            .padding(left: 20, right: 26, top: 8, bottom: 2),
+          AttachmentList(
+            data: data.preload!.attachments!,
+            bordered: true,
+          ),
+        _PostBottomAction(data: data, showComments: showComments)
+            .padding(left: 12, right: 18),
       ],
     );
   }
@@ -34,7 +43,8 @@ class PostItem extends StatelessWidget {
 
 class _PostBottomAction extends StatelessWidget {
   final SnPost data;
-  const _PostBottomAction({required this.data});
+  final bool showComments;
+  const _PostBottomAction({required this.data, required this.showComments});
 
   @override
   Widget build(BuildContext context) {
@@ -53,25 +63,38 @@ class _PostBottomAction extends StatelessWidget {
                   const Gap(8),
                   Text('postReact').tr(),
                 ],
-              ),
+              ).padding(horizontal: 8, vertical: 8),
               onTap: () {},
             ),
-            const Gap(16),
-            InkWell(
-              child: Row(
-                children: [
-                  Icon(Symbols.comment, size: 20, color: iconColor),
-                  const Gap(8),
-                  Text('postComments').plural(data.metric.replyCount),
-                ],
+            if (showComments)
+              InkWell(
+                child: Row(
+                  children: [
+                    Icon(Symbols.comment, size: 20, color: iconColor),
+                    const Gap(8),
+                    Text('postComments').plural(data.metric.replyCount),
+                  ],
+                ).padding(horizontal: 8, vertical: 8),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    builder: (context) => PostCommentListPopup(
+                      postId: data.id,
+                      commentCount: data.metric.replyCount,
+                    ),
+                  );
+                },
               ),
-              onTap: () {},
-            ),
           ].expand((ele) => [ele, const Gap(8)]).toList()
             ..removeLast(),
         ),
         InkWell(
-          child: Icon(Symbols.share, size: 20, color: iconColor),
+          child: Icon(
+            Symbols.share,
+            size: 20,
+            color: iconColor,
+          ).padding(horizontal: 8, vertical: 8),
           onTap: () {},
         ),
       ],
