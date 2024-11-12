@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTicket: (p0) => setState(() {
                     _currentTicket = p0;
                   }),
-                  onNext: (p0) => setState(() {
+                  onNext: () => setState(() {
                     _period = 1;
                   }),
                 ),

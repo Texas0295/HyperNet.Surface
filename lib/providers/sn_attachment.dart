@@ -44,12 +44,18 @@ class SnAttachmentProvider {
       'take': pendingFetch.length,
       'id': pendingFetch.join(','),
     });
-    final out = resp.data['data'].map((e) => SnAttachment.fromJson(e)).toList();
+    final out = resp.data['data']
+        .where((e) => e['id'] != 0)
+        .map((e) => SnAttachment.fromJson(e))
+        .toList();
 
     for (var i = 0; i < out.length; i++) {
       _cache[pendingFetch[i]] = out[i];
     }
-    return rids.map((rid) => _cache[rid]!).toList();
+    return rids
+        .where((rid) => _cache.containsKey(rid))
+        .map((rid) => _cache[rid]!)
+        .toList();
   }
 
   static Map<String, String> mimetypeOverrides = {

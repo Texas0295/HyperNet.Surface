@@ -30,67 +30,21 @@ class UniversalImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    final double? resizeHeight =
+        cacheHeight != null ? (cacheHeight! * devicePixelRatio) : null;
+    final double? resizeWidth =
+        cacheWidth != null ? (cacheWidth! * devicePixelRatio) : null;
 
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
-      return CachedNetworkImage(
-        imageUrl: url,
-        width: width,
-        height: height,
-        fit: fit,
-        memCacheHeight: cacheHeight != null
-            ? (cacheHeight! * devicePixelRatio).round()
-            : null,
-        memCacheWidth: cacheWidth != null
-            ? (cacheWidth! * devicePixelRatio).round()
-            : null,
-        progressIndicatorBuilder: noProgressIndicator
-            ? null
-            : (context, url, downloadProgress) => Center(
-                  child: TweenAnimationBuilder(
-                    tween: Tween(
-                      begin: 0,
-                      end: downloadProgress.progress ?? 0,
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    builder: (context, value, _) => CircularProgressIndicator(
-                      value: downloadProgress.progress != null
-                          ? value.toDouble()
-                          : null,
-                    ),
-                  ),
-                ),
-        errorWidget: noErrorWidget
-            ? null
-            : (context, url, error) {
-                return Container(
-                  color: Theme.of(context).colorScheme.surface,
-                  constraints: const BoxConstraints(maxWidth: 280),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AnimateWidgetExtensions(Icon(Symbols.close, size: 24))
-                          .animate(onPlay: (e) => e.repeat(reverse: true))
-                          .fade(duration: 500.ms),
-                      Text(
-                        error.toString(),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ).center(),
-                );
-              },
-      );
-    }
-    return Image.network(
-      url,
+    return Image(
+      image: ResizeImage(
+        UniversalImage.provider(url),
+        width: resizeWidth?.round(),
+        height: resizeHeight?.round(),
+        policy: ResizeImagePolicy.fit,
+      ),
       width: width,
       height: height,
       fit: fit,
-      cacheHeight: cacheHeight != null
-          ? (cacheHeight! * devicePixelRatio).round()
-          : null,
-      cacheWidth:
-          cacheWidth != null ? (cacheWidth! * devicePixelRatio).round() : null,
       loadingBuilder: noProgressIndicator
           ? null
           : (BuildContext context, Widget child,

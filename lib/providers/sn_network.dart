@@ -100,7 +100,7 @@ class SnNetworkProvider {
   }
 
   String getAttachmentUrl(String ky) {
-    if (ky.startsWith("http://")) return ky;
+    if (ky.startsWith("http")) return ky;
     return '${client.options.baseUrl}/cgi/uc/attachments/$ky';
   }
 
