@@ -49,9 +49,10 @@ class SnAttachmentProvider {
         .map((e) => SnAttachment.fromJson(e))
         .toList();
 
-    for (var i = 0; i < out.length; i++) {
-      _cache[pendingFetch[i]] = out[i];
+    for (final item in out) {
+      _cache[item.rid] = item;
     }
+
     return rids
         .where((rid) => _cache.containsKey(rid))
         .map((rid) => _cache[rid]!)

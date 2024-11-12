@@ -100,3 +100,37 @@ class UniversalImage extends StatelessWidget {
     return NetworkImage(url);
   }
 }
+
+class AutoResizeUniversalImage extends StatelessWidget {
+  final String url;
+  final double? width, height;
+  final BoxFit? fit;
+  final bool noProgressIndicator;
+  final bool noErrorWidget;
+
+  const AutoResizeUniversalImage(
+    this.url, {
+    super.key,
+    this.width,
+    this.height,
+    this.fit,
+    this.noProgressIndicator = false,
+    this.noErrorWidget = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return UniversalImage(
+        url,
+        fit: fit,
+        width: width,
+        height: height,
+        noProgressIndicator: noProgressIndicator,
+        noErrorWidget: noErrorWidget,
+        cacheHeight: constraints.maxHeight,
+        cacheWidth: constraints.maxWidth,
+      );
+    });
+  }
+}

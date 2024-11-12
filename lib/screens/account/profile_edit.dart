@@ -232,7 +232,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         color:
                             Theme.of(context).colorScheme.surfaceContainerHigh,
                         child: _banner != null
-                            ? UniversalImage(
+                            ? AutoResizeUniversalImage(
                                 sn.getAttachmentUrl(_banner!),
                                 fit: BoxFit.cover,
                               )

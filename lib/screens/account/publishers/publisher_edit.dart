@@ -210,7 +210,7 @@ class _AccountPublisherEditScreenState
                               .colorScheme
                               .surfaceContainerHigh,
                           child: _banner != null
-                              ? UniversalImage(
+                              ? AutoResizeUniversalImage(
                                   sn.getAttachmentUrl(_banner!),
                                   fit: BoxFit.cover,
                                 )
