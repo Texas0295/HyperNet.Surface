@@ -20,7 +20,6 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       aliasPrefix: json['alias_prefix'] as String?,
       tags: json['tags'] as List<dynamic>,
       categories: json['categories'] as List<dynamic>,
-      reactions: json['reactions'],
       replies: json['replies'],
       replyId: json['reply_id'],
       repostId: json['repost_id'],
@@ -47,8 +46,6 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
           : DateTime.parse(json['published_until'] as String),
       totalUpvote: (json['total_upvote'] as num).toInt(),
       totalDownvote: (json['total_downvote'] as num).toInt(),
-      realmId: (json['realm_id'] as num?)?.toInt(),
-      realm: json['realm'],
       publisherId: (json['publisher_id'] as num).toInt(),
       publisher:
           SnPublisher.fromJson(json['publisher'] as Map<String, dynamic>),
@@ -71,7 +68,6 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'alias_prefix': instance.aliasPrefix,
       'tags': instance.tags,
       'categories': instance.categories,
-      'reactions': instance.reactions,
       'replies': instance.replies,
       'reply_id': instance.replyId,
       'repost_id': instance.repostId,
@@ -88,8 +84,6 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'published_until': instance.publishedUntil?.toIso8601String(),
       'total_upvote': instance.totalUpvote,
       'total_downvote': instance.totalDownvote,
-      'realm_id': instance.realmId,
-      'realm': instance.realm,
       'publisher_id': instance.publisherId,
       'publisher': instance.publisher.toJson(),
       'metric': instance.metric.toJson(),
@@ -131,12 +125,17 @@ _$SnMetricImpl _$$SnMetricImplFromJson(Map<String, dynamic> json) =>
     _$SnMetricImpl(
       replyCount: (json['reply_count'] as num).toInt(),
       reactionCount: (json['reaction_count'] as num).toInt(),
+      reactionList: (json['reaction_list'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, (e as num).toInt()),
+          ) ??
+          const {},
     );
 
 Map<String, dynamic> _$$SnMetricImplToJson(_$SnMetricImpl instance) =>
     <String, dynamic>{
       'reply_count': instance.replyCount,
       'reaction_count': instance.reactionCount,
+      'reaction_list': instance.reactionList,
     };
 
 _$SnPublisherImpl _$$SnPublisherImplFromJson(Map<String, dynamic> json) =>

@@ -31,7 +31,6 @@ mixin _$SnPost {
   String? get aliasPrefix => throw _privateConstructorUsedError;
   List<dynamic> get tags => throw _privateConstructorUsedError;
   List<dynamic> get categories => throw _privateConstructorUsedError;
-  dynamic get reactions => throw _privateConstructorUsedError;
   dynamic get replies => throw _privateConstructorUsedError;
   dynamic get replyId => throw _privateConstructorUsedError;
   dynamic get repostId => throw _privateConstructorUsedError;
@@ -48,8 +47,6 @@ mixin _$SnPost {
   DateTime? get publishedUntil => throw _privateConstructorUsedError;
   int get totalUpvote => throw _privateConstructorUsedError;
   int get totalDownvote => throw _privateConstructorUsedError;
-  int? get realmId => throw _privateConstructorUsedError;
-  dynamic get realm => throw _privateConstructorUsedError;
   int get publisherId => throw _privateConstructorUsedError;
   SnPublisher get publisher => throw _privateConstructorUsedError;
   SnMetric get metric => throw _privateConstructorUsedError;
@@ -81,7 +78,6 @@ abstract class $SnPostCopyWith<$Res> {
       String? aliasPrefix,
       List<dynamic> tags,
       List<dynamic> categories,
-      dynamic reactions,
       dynamic replies,
       dynamic replyId,
       dynamic repostId,
@@ -98,8 +94,6 @@ abstract class $SnPostCopyWith<$Res> {
       DateTime? publishedUntil,
       int totalUpvote,
       int totalDownvote,
-      int? realmId,
-      dynamic realm,
       int publisherId,
       SnPublisher publisher,
       SnMetric metric,
@@ -136,7 +130,6 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? aliasPrefix = freezed,
     Object? tags = null,
     Object? categories = null,
-    Object? reactions = freezed,
     Object? replies = freezed,
     Object? replyId = freezed,
     Object? repostId = freezed,
@@ -153,8 +146,6 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? publishedUntil = freezed,
     Object? totalUpvote = null,
     Object? totalDownvote = null,
-    Object? realmId = freezed,
-    Object? realm = freezed,
     Object? publisherId = null,
     Object? publisher = null,
     Object? metric = null,
@@ -205,10 +196,6 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
-      reactions: freezed == reactions
-          ? _value.reactions
-          : reactions // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       replies: freezed == replies
           ? _value.replies
           : replies // ignore: cast_nullable_to_non_nullable
@@ -273,14 +260,6 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.totalDownvote
           : totalDownvote // ignore: cast_nullable_to_non_nullable
               as int,
-      realmId: freezed == realmId
-          ? _value.realmId
-          : realmId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      realm: freezed == realm
-          ? _value.realm
-          : realm // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       publisherId: null == publisherId
           ? _value.publisherId
           : publisherId // ignore: cast_nullable_to_non_nullable
@@ -354,7 +333,6 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       String? aliasPrefix,
       List<dynamic> tags,
       List<dynamic> categories,
-      dynamic reactions,
       dynamic replies,
       dynamic replyId,
       dynamic repostId,
@@ -371,8 +349,6 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       DateTime? publishedUntil,
       int totalUpvote,
       int totalDownvote,
-      int? realmId,
-      dynamic realm,
       int publisherId,
       SnPublisher publisher,
       SnMetric metric,
@@ -410,7 +386,6 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? aliasPrefix = freezed,
     Object? tags = null,
     Object? categories = null,
-    Object? reactions = freezed,
     Object? replies = freezed,
     Object? replyId = freezed,
     Object? repostId = freezed,
@@ -427,8 +402,6 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? publishedUntil = freezed,
     Object? totalUpvote = null,
     Object? totalDownvote = null,
-    Object? realmId = freezed,
-    Object? realm = freezed,
     Object? publisherId = null,
     Object? publisher = null,
     Object? metric = null,
@@ -479,10 +452,6 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
-      reactions: freezed == reactions
-          ? _value.reactions
-          : reactions // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       replies: freezed == replies
           ? _value.replies
           : replies // ignore: cast_nullable_to_non_nullable
@@ -547,14 +516,6 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value.totalDownvote
           : totalDownvote // ignore: cast_nullable_to_non_nullable
               as int,
-      realmId: freezed == realmId
-          ? _value.realmId
-          : realmId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      realm: freezed == realm
-          ? _value.realm
-          : realm // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       publisherId: null == publisherId
           ? _value.publisherId
           : publisherId // ignore: cast_nullable_to_non_nullable
@@ -590,7 +551,6 @@ class _$SnPostImpl extends _SnPost {
       required this.aliasPrefix,
       required final List<dynamic> tags,
       required final List<dynamic> categories,
-      required this.reactions,
       required this.replies,
       required this.replyId,
       required this.repostId,
@@ -607,8 +567,6 @@ class _$SnPostImpl extends _SnPost {
       required this.publishedUntil,
       required this.totalUpvote,
       required this.totalDownvote,
-      required this.realmId,
-      required this.realm,
       required this.publisherId,
       required this.publisher,
       required this.metric,
@@ -662,8 +620,6 @@ class _$SnPostImpl extends _SnPost {
   }
 
   @override
-  final dynamic reactions;
-  @override
   final dynamic replies;
   @override
   final dynamic replyId;
@@ -696,10 +652,6 @@ class _$SnPostImpl extends _SnPost {
   @override
   final int totalDownvote;
   @override
-  final int? realmId;
-  @override
-  final dynamic realm;
-  @override
   final int publisherId;
   @override
   final SnPublisher publisher;
@@ -710,7 +662,7 @@ class _$SnPostImpl extends _SnPost {
 
   @override
   String toString() {
-    return 'SnPost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, body: $body, language: $language, alias: $alias, aliasPrefix: $aliasPrefix, tags: $tags, categories: $categories, reactions: $reactions, replies: $replies, replyId: $replyId, repostId: $repostId, replyTo: $replyTo, repostTo: $repostTo, visibleUsersList: $visibleUsersList, invisibleUsersList: $invisibleUsersList, visibility: $visibility, editedAt: $editedAt, pinnedAt: $pinnedAt, lockedAt: $lockedAt, isDraft: $isDraft, publishedAt: $publishedAt, publishedUntil: $publishedUntil, totalUpvote: $totalUpvote, totalDownvote: $totalDownvote, realmId: $realmId, realm: $realm, publisherId: $publisherId, publisher: $publisher, metric: $metric, preload: $preload)';
+    return 'SnPost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, body: $body, language: $language, alias: $alias, aliasPrefix: $aliasPrefix, tags: $tags, categories: $categories, replies: $replies, replyId: $replyId, repostId: $repostId, replyTo: $replyTo, repostTo: $repostTo, visibleUsersList: $visibleUsersList, invisibleUsersList: $invisibleUsersList, visibility: $visibility, editedAt: $editedAt, pinnedAt: $pinnedAt, lockedAt: $lockedAt, isDraft: $isDraft, publishedAt: $publishedAt, publishedUntil: $publishedUntil, totalUpvote: $totalUpvote, totalDownvote: $totalDownvote, publisherId: $publisherId, publisher: $publisher, metric: $metric, preload: $preload)';
   }
 
   @override
@@ -735,7 +687,6 @@ class _$SnPostImpl extends _SnPost {
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
-            const DeepCollectionEquality().equals(other.reactions, reactions) &&
             const DeepCollectionEquality().equals(other.replies, replies) &&
             const DeepCollectionEquality().equals(other.replyId, replyId) &&
             const DeepCollectionEquality().equals(other.repostId, repostId) &&
@@ -762,8 +713,6 @@ class _$SnPostImpl extends _SnPost {
                 other.totalUpvote == totalUpvote) &&
             (identical(other.totalDownvote, totalDownvote) ||
                 other.totalDownvote == totalDownvote) &&
-            (identical(other.realmId, realmId) || other.realmId == realmId) &&
-            const DeepCollectionEquality().equals(other.realm, realm) &&
             (identical(other.publisherId, publisherId) ||
                 other.publisherId == publisherId) &&
             (identical(other.publisher, publisher) ||
@@ -787,7 +736,6 @@ class _$SnPostImpl extends _SnPost {
         aliasPrefix,
         const DeepCollectionEquality().hash(_tags),
         const DeepCollectionEquality().hash(_categories),
-        const DeepCollectionEquality().hash(reactions),
         const DeepCollectionEquality().hash(replies),
         const DeepCollectionEquality().hash(replyId),
         const DeepCollectionEquality().hash(repostId),
@@ -804,8 +752,6 @@ class _$SnPostImpl extends _SnPost {
         publishedUntil,
         totalUpvote,
         totalDownvote,
-        realmId,
-        const DeepCollectionEquality().hash(realm),
         publisherId,
         publisher,
         metric,
@@ -841,7 +787,6 @@ abstract class _SnPost extends SnPost {
       required final String? aliasPrefix,
       required final List<dynamic> tags,
       required final List<dynamic> categories,
-      required final dynamic reactions,
       required final dynamic replies,
       required final dynamic replyId,
       required final dynamic repostId,
@@ -858,8 +803,6 @@ abstract class _SnPost extends SnPost {
       required final DateTime? publishedUntil,
       required final int totalUpvote,
       required final int totalDownvote,
-      required final int? realmId,
-      required final dynamic realm,
       required final int publisherId,
       required final SnPublisher publisher,
       required final SnMetric metric,
@@ -890,8 +833,6 @@ abstract class _SnPost extends SnPost {
   List<dynamic> get tags;
   @override
   List<dynamic> get categories;
-  @override
-  dynamic get reactions;
   @override
   dynamic get replies;
   @override
@@ -924,10 +865,6 @@ abstract class _SnPost extends SnPost {
   int get totalUpvote;
   @override
   int get totalDownvote;
-  @override
-  int? get realmId;
-  @override
-  dynamic get realm;
   @override
   int get publisherId;
   @override
@@ -1356,6 +1293,7 @@ SnMetric _$SnMetricFromJson(Map<String, dynamic> json) {
 mixin _$SnMetric {
   int get replyCount => throw _privateConstructorUsedError;
   int get reactionCount => throw _privateConstructorUsedError;
+  Map<String, int> get reactionList => throw _privateConstructorUsedError;
 
   /// Serializes this SnMetric to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1372,7 +1310,7 @@ abstract class $SnMetricCopyWith<$Res> {
   factory $SnMetricCopyWith(SnMetric value, $Res Function(SnMetric) then) =
       _$SnMetricCopyWithImpl<$Res, SnMetric>;
   @useResult
-  $Res call({int replyCount, int reactionCount});
+  $Res call({int replyCount, int reactionCount, Map<String, int> reactionList});
 }
 
 /// @nodoc
@@ -1392,6 +1330,7 @@ class _$SnMetricCopyWithImpl<$Res, $Val extends SnMetric>
   $Res call({
     Object? replyCount = null,
     Object? reactionCount = null,
+    Object? reactionList = null,
   }) {
     return _then(_value.copyWith(
       replyCount: null == replyCount
@@ -1402,6 +1341,10 @@ class _$SnMetricCopyWithImpl<$Res, $Val extends SnMetric>
           ? _value.reactionCount
           : reactionCount // ignore: cast_nullable_to_non_nullable
               as int,
+      reactionList: null == reactionList
+          ? _value.reactionList
+          : reactionList // ignore: cast_nullable_to_non_nullable
+              as Map<String, int>,
     ) as $Val);
   }
 }
@@ -1414,7 +1357,7 @@ abstract class _$$SnMetricImplCopyWith<$Res>
       __$$SnMetricImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int replyCount, int reactionCount});
+  $Res call({int replyCount, int reactionCount, Map<String, int> reactionList});
 }
 
 /// @nodoc
@@ -1432,6 +1375,7 @@ class __$$SnMetricImplCopyWithImpl<$Res>
   $Res call({
     Object? replyCount = null,
     Object? reactionCount = null,
+    Object? reactionList = null,
   }) {
     return _then(_$SnMetricImpl(
       replyCount: null == replyCount
@@ -1442,6 +1386,10 @@ class __$$SnMetricImplCopyWithImpl<$Res>
           ? _value.reactionCount
           : reactionCount // ignore: cast_nullable_to_non_nullable
               as int,
+      reactionList: null == reactionList
+          ? _value._reactionList
+          : reactionList // ignore: cast_nullable_to_non_nullable
+              as Map<String, int>,
     ));
   }
 }
@@ -1449,7 +1397,11 @@ class __$$SnMetricImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SnMetricImpl implements _SnMetric {
-  const _$SnMetricImpl({required this.replyCount, required this.reactionCount});
+  const _$SnMetricImpl(
+      {required this.replyCount,
+      required this.reactionCount,
+      final Map<String, int> reactionList = const {}})
+      : _reactionList = reactionList;
 
   factory _$SnMetricImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnMetricImplFromJson(json);
@@ -1458,10 +1410,18 @@ class _$SnMetricImpl implements _SnMetric {
   final int replyCount;
   @override
   final int reactionCount;
+  final Map<String, int> _reactionList;
+  @override
+  @JsonKey()
+  Map<String, int> get reactionList {
+    if (_reactionList is EqualUnmodifiableMapView) return _reactionList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_reactionList);
+  }
 
   @override
   String toString() {
-    return 'SnMetric(replyCount: $replyCount, reactionCount: $reactionCount)';
+    return 'SnMetric(replyCount: $replyCount, reactionCount: $reactionCount, reactionList: $reactionList)';
   }
 
   @override
@@ -1472,12 +1432,15 @@ class _$SnMetricImpl implements _SnMetric {
             (identical(other.replyCount, replyCount) ||
                 other.replyCount == replyCount) &&
             (identical(other.reactionCount, reactionCount) ||
-                other.reactionCount == reactionCount));
+                other.reactionCount == reactionCount) &&
+            const DeepCollectionEquality()
+                .equals(other._reactionList, _reactionList));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, replyCount, reactionCount);
+  int get hashCode => Object.hash(runtimeType, replyCount, reactionCount,
+      const DeepCollectionEquality().hash(_reactionList));
 
   /// Create a copy of SnMetric
   /// with the given fields replaced by the non-null parameter values.
@@ -1498,7 +1461,8 @@ class _$SnMetricImpl implements _SnMetric {
 abstract class _SnMetric implements SnMetric {
   const factory _SnMetric(
       {required final int replyCount,
-      required final int reactionCount}) = _$SnMetricImpl;
+      required final int reactionCount,
+      final Map<String, int> reactionList}) = _$SnMetricImpl;
 
   factory _SnMetric.fromJson(Map<String, dynamic> json) =
       _$SnMetricImpl.fromJson;
@@ -1507,6 +1471,8 @@ abstract class _SnMetric implements SnMetric {
   int get replyCount;
   @override
   int get reactionCount;
+  @override
+  Map<String, int> get reactionList;
 
   /// Create a copy of SnMetric
   /// with the given fields replaced by the non-null parameter values.

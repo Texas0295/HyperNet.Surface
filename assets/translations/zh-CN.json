@@ -93,6 +93,14 @@
   "postRepostingNotice": "你正在转发由 {} 发布的帖子。",
   "postReact": "反应",
   "postPosted": "帖子已经发表。",
+  "postReactions": "帖子的反应",
+  "postReactionPoints": {
+    "zero": "{} 点",
+    "one": "{} 点",
+    "other": "{} 点"
+  },
+  "postReactCompleted": "反应已被添加。",
+  "postReactUncompleted": "反应已被移除。",
   "postComments": {
     "zero": "评论",
     "one": "{} 条评论",

@@ -12,15 +12,24 @@ import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
+import 'package:surface/widgets/post/post_reaction.dart';
 
 class PostItem extends StatelessWidget {
   final SnPost data;
+  final bool showReactions;
   final bool showComments;
+  final Function(SnPost data)? onChanged;
   const PostItem({
     super.key,
     required this.data,
+    this.showReactions = true,
     this.showComments = true,
+    this.onChanged,
   });
+
+  void _onChanged(SnPost data) {
+    if (onChanged != null) onChanged!(data);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +43,12 @@ class PostItem extends StatelessWidget {
             data: data.preload!.attachments!,
             bordered: true,
           ),
-        _PostBottomAction(data: data, showComments: showComments)
-            .padding(left: 12, right: 18),
+        _PostBottomAction(
+          data: data,
+          showComments: showComments,
+          showReactions: showReactions,
+          onChanged: _onChanged,
+        ).padding(left: 12, right: 18),
       ],
     );
   }
@@ -44,7 +57,14 @@ class PostItem extends StatelessWidget {
 class _PostBottomAction extends StatelessWidget {
   final SnPost data;
   final bool showComments;
-  const _PostBottomAction({required this.data, required this.showComments});
+  final bool showReactions;
+  final Function(SnPost data) onChanged;
+  const _PostBottomAction({
+    required this.data,
+    required this.showComments,
+    required this.showReactions,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +76,40 @@ class _PostBottomAction extends StatelessWidget {
       children: [
         Row(
           children: [
-            InkWell(
-              child: Row(
-                children: [
-                  Icon(Symbols.add_reaction, size: 20, color: iconColor),
-                  const Gap(8),
-                  Text('postReact').tr(),
-                ],
-              ).padding(horizontal: 8, vertical: 8),
-              onTap: () {},
-            ),
+            if (showReactions)
+              InkWell(
+                child: Row(
+                  children: [
+                    Icon(Symbols.add_reaction, size: 20, color: iconColor),
+                    const Gap(8),
+                    if (data.totalDownvote > 0 || data.totalUpvote > 0)
+                      Text('postReactionPoints').plural(
+                        data.totalUpvote - data.totalDownvote,
+                      )
+                    else
+                      Text('postReact').tr(),
+                  ],
+                ).padding(horizontal: 8, vertical: 8),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => PostReactionPopup(
+                      data: data,
+                      onChanged: (value, isPositive, delta) {
+                        onChanged(data.copyWith(
+                          totalUpvote: isPositive
+                              ? data.totalUpvote + delta
+                              : data.totalUpvote,
+                          totalDownvote: !isPositive
+                              ? data.totalDownvote + delta
+                              : data.totalDownvote,
+                          metric: data.metric.copyWith(reactionList: value),
+                        ));
+                      },
+                    ),
+                  );
+                },
+              ),
             if (showComments)
               InkWell(
                 child: Row(

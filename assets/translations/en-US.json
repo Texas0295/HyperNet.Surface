@@ -93,6 +93,14 @@
   "postReplyingNotice": "You're about to reply to a post that posted {}.",
   "postRepostingNotice": "You're about to repost a post that posted {}.",
   "postReact": "React",
+  "postReactions": "Reactions of Post",
+  "postReactionPoints": {
+    "zero": "{}pt",
+    "one": "{}pt",
+    "other": "{}pts"
+  },
+  "postReactCompleted": "Reaction has been added.",
+  "postReactUncompleted": "Reaction has been removed.",
   "postComments": {
     "zero": "Comment",
     "one": "{} comment",

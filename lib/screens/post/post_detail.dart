@@ -136,6 +136,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   postReplyId: _data!.id,
                   onPost: () {
                     _childListKey.currentState!.refresh();
+                    setState(() {
+                      _data = _data!.copyWith(
+                        metric: _data!.metric.copyWith(
+                          replyCount: _data!.metric.replyCount + 1,
+                        ),
+                      );
+                    });
                   },
                 ),
               ),

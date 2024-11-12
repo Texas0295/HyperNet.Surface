@@ -20,7 +20,6 @@ class SnPost with _$SnPost {
     required String? aliasPrefix,
     required List<dynamic> tags,
     required List<dynamic> categories,
-    required dynamic reactions,
     required dynamic replies,
     required dynamic replyId,
     required dynamic repostId,
@@ -37,8 +36,6 @@ class SnPost with _$SnPost {
     required DateTime? publishedUntil,
     required int totalUpvote,
     required int totalDownvote,
-    required int? realmId,
-    required dynamic realm,
     required int publisherId,
     required SnPublisher publisher,
     required SnMetric metric,
@@ -81,6 +78,7 @@ class SnMetric with _$SnMetric {
   const factory SnMetric({
     required int replyCount,
     required int reactionCount,
+    @Default({}) Map<String, int> reactionList,
   }) = _SnMetric;
 
   factory SnMetric.fromJson(Map<String, Object?> json) =>
