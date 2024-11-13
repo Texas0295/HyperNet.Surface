@@ -125,5 +125,9 @@
   "settingsNetworkServerResetDescription": "重设为 Solar Network 的服务器地址。",
   "settingsNetworkServerPreset": "预设的 HyperNet 服务器",
   "settingsNetworkServerPresetDescription": "你可以在旁边的列表中选择我们提供的预设 HyperNet 服务器地址。",
-  "settingsNetworkServerSaved": "服务器地址已保存。"
+  "settingsNetworkServerSaved": "服务器地址已保存。",
+  "sensitiveContent": "敏感内容",
+  "sensitiveContentCollapsed": "敏感内容已折叠。",
+  "sensitiveContentDescription": "此内容已被标记，可能不适合所有人查看。",
+  "sensitiveContentReveal": "显示内容"
 }

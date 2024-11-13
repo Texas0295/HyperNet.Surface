@@ -28,6 +28,9 @@ class AttachmentDetailPopup extends StatelessWidget {
         tag: 'attachment-${data.rid}-${heroTag ?? uuid.v4()}',
         child: PhotoView(
           key: Key('attachment-detail-${data.rid}-$heroTag'),
+          backgroundDecoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.7),
+          ),
           imageProvider: UniversalImage.provider(
             sn.getAttachmentUrl(data.rid),
           ),

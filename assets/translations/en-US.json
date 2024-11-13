@@ -125,5 +125,9 @@
   "settingsNetworkServerResetDescription": "Reset to the official server address of Solar Network.",
   "settingsNetworkServerPreset": "Present HyperNet Server",
   "settingsNetworkServerPresetDescription": "You can choose one of our preset HyperNet server addresses from the list on the right.",
-  "settingsNetworkServerSaved": "Server address saved."
+  "settingsNetworkServerSaved": "Server address saved.",
+  "sensitiveContent": "Sensitive Content",
+  "sensitiveContentCollapsed": "Sensitive content has been collapsed.",
+  "sensitiveContentDescription": "This content has been marked as sensitive, and may not be suitable for all viewers.",
+  "sensitiveContentReveal": "Reveal"
 }
