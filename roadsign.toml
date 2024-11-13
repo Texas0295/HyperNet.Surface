@@ -1,0 +1,9 @@
+id = "solian-next"
+
+[[locations]]
+id = "solian-next"
+host = ["sn-next.solsynth.dev"]
+path = ["/"]
+[[locations.destinations]]
+id = "solian-next-web"
+uri = "files:///workdir/solian-next?fallback=index.html&index=index.html"
