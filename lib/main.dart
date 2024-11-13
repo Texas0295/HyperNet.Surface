@@ -35,6 +35,7 @@ class SolianApp extends StatelessWidget {
         supportedLocales: [Locale('en', 'US'), Locale('zh', 'CN')],
         fallbackLocale: Locale('en', 'US'),
         useFallbackTranslations: true,
+        useOnlyLangCode: true,
         assetLoader: JsonAssetLoader(),
         child: MultiProvider(
           providers: [
