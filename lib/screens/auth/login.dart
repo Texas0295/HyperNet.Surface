@@ -271,13 +271,14 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
 
     try {
       // Request one-time-password code
-      sn.client.post('/cgi/id/auth/factors/$_factorPicked');
+      await sn.client.post('/cgi/id/auth/factors/$_factorPicked');
       widget.onPickFactor(
         widget.factors!.where((x) => x.id == _factorPicked).first,
       );
       widget.onNext();
     } catch (err) {
-      context.showErrorDialog(err);
+      // ignore: use_build_context_synchronously
+      if (context.mounted) context.showErrorDialog(err);
       return;
     } finally {
       setState(() => _isBusy = false);
