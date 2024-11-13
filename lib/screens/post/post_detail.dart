@@ -47,13 +47,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         resp.data['body']['attachments']?.cast<String>() ?? [],
       );
       if (!mounted) return;
-      setState(() {
-        _data = SnPost.fromJson(resp.data).copyWith(
-          preload: SnPostPreload(
-            attachments: attachments,
-          ),
-        );
-      });
+      _data = SnPost.fromJson(resp.data).copyWith(
+        preload: SnPostPreload(
+          attachments: attachments,
+        ),
+      );
     } catch (err) {
       context.showErrorDialog(err);
     } finally {
@@ -87,13 +85,19 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           },
         ),
         flexibleSpace: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(_data?.body['title'] ?? 'postNoun'.tr())
-                .textStyle(Theme.of(context).textTheme.titleLarge!)
-                .textColor(Colors.white),
-            Text('postDetail')
-                .tr()
-                .textColor(Colors.white.withAlpha((255 * 0.9).round())),
+            if (_data?.body['title'] != null)
+              Text(_data?.body['title'] ?? 'postNoun'.tr())
+                  .textStyle(Theme.of(context).textTheme.titleLarge!)
+                  .textColor(Colors.white),
+            if (_data?.body['title'] != null)
+              Text('postDetail'.tr())
+                  .textColor(Colors.white.withAlpha((255 * 0.9).round()))
+            else
+              Text('postDetail'.tr())
+                  .textStyle(Theme.of(context).textTheme.titleLarge!)
+                  .textColor(Colors.white),
           ],
         ).padding(top: math.max(MediaQuery.of(context).padding.top, 8)),
       ),
@@ -104,7 +108,10 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
           if (_data != null)
             SliverToBoxAdapter(
-              child: PostItem(data: _data!, showComments: false),
+              child: PostItem(
+                data: _data!,
+                showComments: false,
+              ),
             ),
           const SliverToBoxAdapter(child: Divider(height: 1)),
           if (_data != null)

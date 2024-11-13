@@ -20,13 +20,23 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       aliasPrefix: json['alias_prefix'] as String?,
       tags: json['tags'] as List<dynamic>,
       categories: json['categories'] as List<dynamic>,
-      replies: json['replies'],
-      replyId: json['reply_id'],
-      repostId: json['repost_id'],
-      replyTo: json['reply_to'],
-      repostTo: json['repost_to'],
-      visibleUsersList: json['visible_users_list'],
-      invisibleUsersList: json['invisible_users_list'],
+      replies: (json['replies'] as List<dynamic>?)
+          ?.map((e) => SnPost.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      replyId: (json['reply_id'] as num?)?.toInt(),
+      repostId: (json['repost_id'] as num?)?.toInt(),
+      replyTo: json['reply_to'] == null
+          ? null
+          : SnPost.fromJson(json['reply_to'] as Map<String, dynamic>),
+      repostTo: json['repost_to'] == null
+          ? null
+          : SnPost.fromJson(json['repost_to'] as Map<String, dynamic>),
+      visibleUsersList: (json['visible_users_list'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      invisibleUsersList: (json['invisible_users_list'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
       visibility: (json['visibility'] as num).toInt(),
       editedAt: json['edited_at'] == null
           ? null
@@ -68,11 +78,11 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'alias_prefix': instance.aliasPrefix,
       'tags': instance.tags,
       'categories': instance.categories,
-      'replies': instance.replies,
+      'replies': instance.replies?.map((e) => e.toJson()).toList(),
       'reply_id': instance.replyId,
       'repost_id': instance.repostId,
-      'reply_to': instance.replyTo,
-      'repost_to': instance.repostTo,
+      'reply_to': instance.replyTo?.toJson(),
+      'repost_to': instance.repostTo?.toJson(),
       'visible_users_list': instance.visibleUsersList,
       'invisible_users_list': instance.invisibleUsersList,
       'visibility': instance.visibility,

@@ -38,6 +38,11 @@ class PostItem extends StatelessWidget {
       children: [
         _PostContentHeader(data: data).padding(horizontal: 12, vertical: 8),
         _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
+        if (data.repostTo != null)
+          _PostQuoteContent(child: data.repostTo!).padding(
+            horizontal: 8,
+            bottom: 4,
+          ),
         if (data.preload?.attachments?.isNotEmpty ?? true)
           AttachmentList(
             data: data.preload!.attachments!,
@@ -148,7 +153,13 @@ class _PostBottomAction extends StatelessWidget {
 
 class _PostContentHeader extends StatelessWidget {
   final SnPost data;
-  const _PostContentHeader({required this.data});
+  final bool isCompact;
+  final bool showActions;
+  const _PostContentHeader({
+    required this.data,
+    this.isCompact = false,
+    this.showActions = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -157,13 +168,16 @@ class _PostContentHeader extends StatelessWidget {
 
     return Row(
       children: [
-        AccountImage(content: data.publisher.avatar),
-        const Gap(12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        AccountImage(
+          content: data.publisher.avatar,
+          radius: isCompact ? 12 : 20,
+        ),
+        Gap(isCompact ? 8 : 12),
+        if (isCompact)
+          Row(
             children: [
               Text(data.publisher.nick).bold(),
+              const Gap(4),
               Row(
                 children: [
                   Text('@${data.publisher.name}').fontSize(13),
@@ -174,86 +188,104 @@ class _PostContentHeader extends StatelessWidget {
                 ],
               ).opacity(0.8),
             ],
+          )
+        else
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(data.publisher.nick).bold(),
+                Row(
+                  children: [
+                    Text('@${data.publisher.name}').fontSize(13),
+                    const Gap(4),
+                    Text(RelativeTime(context).format(
+                      data.publishedAt ?? data.createdAt,
+                    )).fontSize(13),
+                  ],
+                ).opacity(0.8),
+              ],
+            ),
           ),
-        ),
-        PopupMenuButton(
-          icon: const Icon(Symbols.more_horiz),
-          style: const ButtonStyle(
-            visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-          ),
-          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            if (isAuthor)
+        if (showActions)
+          PopupMenuButton(
+            icon: const Icon(Symbols.more_horiz),
+            style: const ButtonStyle(
+              visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+            ),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              if (isAuthor)
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      const Icon(Symbols.edit),
+                      const Gap(16),
+                      Text('edit').tr(),
+                    ],
+                  ),
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(
+                      'postEditor',
+                      pathParameters: {'mode': data.typePlural},
+                      queryParameters: {'editing': data.id.toString()},
+                    );
+                  },
+                ),
+              if (isAuthor)
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      const Icon(Symbols.delete),
+                      const Gap(16),
+                      Text('delete').tr(),
+                    ],
+                  ),
+                ),
+              if (isAuthor) const PopupMenuDivider(),
               PopupMenuItem(
                 child: Row(
                   children: [
-                    const Icon(Symbols.edit),
+                    const Icon(Symbols.reply),
                     const Gap(16),
-                    Text('edit').tr(),
+                    Text('reply').tr(),
                   ],
                 ),
                 onTap: () {
                   GoRouter.of(context).pushNamed(
                     'postEditor',
                     pathParameters: {'mode': data.typePlural},
-                    queryParameters: {'editing': data.id.toString()},
+                    queryParameters: {'replying': data.id.toString()},
                   );
                 },
               ),
-            if (isAuthor)
               PopupMenuItem(
                 child: Row(
                   children: [
-                    const Icon(Symbols.delete),
+                    const Icon(Symbols.forward),
                     const Gap(16),
-                    Text('delete').tr(),
+                    Text('repost').tr(),
+                  ],
+                ),
+                onTap: () {
+                  GoRouter.of(context).pushNamed(
+                    'postEditor',
+                    pathParameters: {'mode': data.typePlural},
+                    queryParameters: {'reposting': data.id.toString()},
+                  );
+                },
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                child: Row(
+                  children: [
+                    const Icon(Symbols.flag),
+                    const Gap(16),
+                    Text('report').tr(),
                   ],
                 ),
               ),
-            if (isAuthor) const PopupMenuDivider(),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  const Icon(Symbols.reply),
-                  const Gap(16),
-                  Text('reply').tr(),
-                ],
-              ),
-              onTap: () {
-                GoRouter.of(context).pushNamed(
-                  'postEditor',
-                  pathParameters: {'mode': data.typePlural},
-                  queryParameters: {'replying': data.id.toString()},
-                );
-              },
-            ),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  const Icon(Symbols.forward),
-                  const Gap(16),
-                  Text('repost').tr(),
-                ],
-              ),
-              onTap: () {
-                GoRouter.of(context).pushNamed(
-                  'postEditor',
-                  pathParameters: {'mode': data.typePlural},
-                  queryParameters: {'reposting': data.id.toString()},
-                );
-              },
-            ),
-            const PopupMenuDivider(),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  const Icon(Symbols.flag),
-                  const Gap(16),
-                  Text('report').tr(),
-                ],
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
       ],
     );
   }
@@ -267,5 +299,31 @@ class _PostContentBody extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data['content'] == null) return const SizedBox.shrink();
     return MarkdownTextContent(content: data['content']);
+  }
+}
+
+class _PostQuoteContent extends StatelessWidget {
+  final SnPost child;
+  const _PostQuoteContent({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 1,
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        children: [
+          _PostContentHeader(data: child, isCompact: true, showActions: false)
+              .padding(bottom: 4),
+          _PostContentBody(data: child.body),
+        ],
+      ),
+    );
   }
 }

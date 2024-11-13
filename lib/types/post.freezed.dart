@@ -31,13 +31,13 @@ mixin _$SnPost {
   String? get aliasPrefix => throw _privateConstructorUsedError;
   List<dynamic> get tags => throw _privateConstructorUsedError;
   List<dynamic> get categories => throw _privateConstructorUsedError;
-  dynamic get replies => throw _privateConstructorUsedError;
-  dynamic get replyId => throw _privateConstructorUsedError;
-  dynamic get repostId => throw _privateConstructorUsedError;
-  dynamic get replyTo => throw _privateConstructorUsedError;
-  dynamic get repostTo => throw _privateConstructorUsedError;
-  dynamic get visibleUsersList => throw _privateConstructorUsedError;
-  dynamic get invisibleUsersList => throw _privateConstructorUsedError;
+  List<SnPost>? get replies => throw _privateConstructorUsedError;
+  int? get replyId => throw _privateConstructorUsedError;
+  int? get repostId => throw _privateConstructorUsedError;
+  SnPost? get replyTo => throw _privateConstructorUsedError;
+  SnPost? get repostTo => throw _privateConstructorUsedError;
+  List<int>? get visibleUsersList => throw _privateConstructorUsedError;
+  List<int>? get invisibleUsersList => throw _privateConstructorUsedError;
   int get visibility => throw _privateConstructorUsedError;
   DateTime? get editedAt => throw _privateConstructorUsedError;
   DateTime? get pinnedAt => throw _privateConstructorUsedError;
@@ -78,13 +78,13 @@ abstract class $SnPostCopyWith<$Res> {
       String? aliasPrefix,
       List<dynamic> tags,
       List<dynamic> categories,
-      dynamic replies,
-      dynamic replyId,
-      dynamic repostId,
-      dynamic replyTo,
-      dynamic repostTo,
-      dynamic visibleUsersList,
-      dynamic invisibleUsersList,
+      List<SnPost>? replies,
+      int? replyId,
+      int? repostId,
+      SnPost? replyTo,
+      SnPost? repostTo,
+      List<int>? visibleUsersList,
+      List<int>? invisibleUsersList,
       int visibility,
       DateTime? editedAt,
       DateTime? pinnedAt,
@@ -99,6 +99,8 @@ abstract class $SnPostCopyWith<$Res> {
       SnMetric metric,
       SnPostPreload? preload});
 
+  $SnPostCopyWith<$Res>? get replyTo;
+  $SnPostCopyWith<$Res>? get repostTo;
   $SnPublisherCopyWith<$Res> get publisher;
   $SnMetricCopyWith<$Res> get metric;
   $SnPostPreloadCopyWith<$Res>? get preload;
@@ -199,31 +201,31 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
       replies: freezed == replies
           ? _value.replies
           : replies // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<SnPost>?,
       replyId: freezed == replyId
           ? _value.replyId
           : replyId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int?,
       repostId: freezed == repostId
           ? _value.repostId
           : repostId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int?,
       replyTo: freezed == replyTo
           ? _value.replyTo
           : replyTo // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as SnPost?,
       repostTo: freezed == repostTo
           ? _value.repostTo
           : repostTo // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as SnPost?,
       visibleUsersList: freezed == visibleUsersList
           ? _value.visibleUsersList
           : visibleUsersList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<int>?,
       invisibleUsersList: freezed == invisibleUsersList
           ? _value.invisibleUsersList
           : invisibleUsersList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<int>?,
       visibility: null == visibility
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -283,6 +285,34 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $SnPostCopyWith<$Res>? get replyTo {
+    if (_value.replyTo == null) {
+      return null;
+    }
+
+    return $SnPostCopyWith<$Res>(_value.replyTo!, (value) {
+      return _then(_value.copyWith(replyTo: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SnPost
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnPostCopyWith<$Res>? get repostTo {
+    if (_value.repostTo == null) {
+      return null;
+    }
+
+    return $SnPostCopyWith<$Res>(_value.repostTo!, (value) {
+      return _then(_value.copyWith(repostTo: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SnPost
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $SnPublisherCopyWith<$Res> get publisher {
     return $SnPublisherCopyWith<$Res>(_value.publisher, (value) {
       return _then(_value.copyWith(publisher: value) as $Val);
@@ -333,13 +363,13 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       String? aliasPrefix,
       List<dynamic> tags,
       List<dynamic> categories,
-      dynamic replies,
-      dynamic replyId,
-      dynamic repostId,
-      dynamic replyTo,
-      dynamic repostTo,
-      dynamic visibleUsersList,
-      dynamic invisibleUsersList,
+      List<SnPost>? replies,
+      int? replyId,
+      int? repostId,
+      SnPost? replyTo,
+      SnPost? repostTo,
+      List<int>? visibleUsersList,
+      List<int>? invisibleUsersList,
       int visibility,
       DateTime? editedAt,
       DateTime? pinnedAt,
@@ -354,6 +384,10 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       SnMetric metric,
       SnPostPreload? preload});
 
+  @override
+  $SnPostCopyWith<$Res>? get replyTo;
+  @override
+  $SnPostCopyWith<$Res>? get repostTo;
   @override
   $SnPublisherCopyWith<$Res> get publisher;
   @override
@@ -453,33 +487,33 @@ class __$$SnPostImplCopyWithImpl<$Res>
           : categories // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
       replies: freezed == replies
-          ? _value.replies
+          ? _value._replies
           : replies // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<SnPost>?,
       replyId: freezed == replyId
           ? _value.replyId
           : replyId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int?,
       repostId: freezed == repostId
           ? _value.repostId
           : repostId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int?,
       replyTo: freezed == replyTo
           ? _value.replyTo
           : replyTo // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as SnPost?,
       repostTo: freezed == repostTo
           ? _value.repostTo
           : repostTo // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as SnPost?,
       visibleUsersList: freezed == visibleUsersList
-          ? _value.visibleUsersList
+          ? _value._visibleUsersList
           : visibleUsersList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<int>?,
       invisibleUsersList: freezed == invisibleUsersList
-          ? _value.invisibleUsersList
+          ? _value._invisibleUsersList
           : invisibleUsersList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<int>?,
       visibility: null == visibility
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -551,13 +585,13 @@ class _$SnPostImpl extends _SnPost {
       required this.aliasPrefix,
       required final List<dynamic> tags,
       required final List<dynamic> categories,
-      required this.replies,
+      required final List<SnPost>? replies,
       required this.replyId,
       required this.repostId,
       required this.replyTo,
       required this.repostTo,
-      required this.visibleUsersList,
-      required this.invisibleUsersList,
+      required final List<int>? visibleUsersList,
+      required final List<int>? invisibleUsersList,
       required this.visibility,
       required this.editedAt,
       required this.pinnedAt,
@@ -574,6 +608,9 @@ class _$SnPostImpl extends _SnPost {
       : _body = body,
         _tags = tags,
         _categories = categories,
+        _replies = replies,
+        _visibleUsersList = visibleUsersList,
+        _invisibleUsersList = invisibleUsersList,
         super._();
 
   factory _$SnPostImpl.fromJson(Map<String, dynamic> json) =>
@@ -619,20 +656,46 @@ class _$SnPostImpl extends _SnPost {
     return EqualUnmodifiableListView(_categories);
   }
 
+  final List<SnPost>? _replies;
   @override
-  final dynamic replies;
+  List<SnPost>? get replies {
+    final value = _replies;
+    if (value == null) return null;
+    if (_replies is EqualUnmodifiableListView) return _replies;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
-  final dynamic replyId;
+  final int? replyId;
   @override
-  final dynamic repostId;
+  final int? repostId;
   @override
-  final dynamic replyTo;
+  final SnPost? replyTo;
   @override
-  final dynamic repostTo;
+  final SnPost? repostTo;
+  final List<int>? _visibleUsersList;
   @override
-  final dynamic visibleUsersList;
+  List<int>? get visibleUsersList {
+    final value = _visibleUsersList;
+    if (value == null) return null;
+    if (_visibleUsersList is EqualUnmodifiableListView)
+      return _visibleUsersList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<int>? _invisibleUsersList;
   @override
-  final dynamic invisibleUsersList;
+  List<int>? get invisibleUsersList {
+    final value = _invisibleUsersList;
+    if (value == null) return null;
+    if (_invisibleUsersList is EqualUnmodifiableListView)
+      return _invisibleUsersList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final int visibility;
   @override
@@ -687,15 +750,17 @@ class _$SnPostImpl extends _SnPost {
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
-            const DeepCollectionEquality().equals(other.replies, replies) &&
-            const DeepCollectionEquality().equals(other.replyId, replyId) &&
-            const DeepCollectionEquality().equals(other.repostId, repostId) &&
-            const DeepCollectionEquality().equals(other.replyTo, replyTo) &&
-            const DeepCollectionEquality().equals(other.repostTo, repostTo) &&
+            const DeepCollectionEquality().equals(other._replies, _replies) &&
+            (identical(other.replyId, replyId) || other.replyId == replyId) &&
+            (identical(other.repostId, repostId) ||
+                other.repostId == repostId) &&
+            (identical(other.replyTo, replyTo) || other.replyTo == replyTo) &&
+            (identical(other.repostTo, repostTo) ||
+                other.repostTo == repostTo) &&
             const DeepCollectionEquality()
-                .equals(other.visibleUsersList, visibleUsersList) &&
+                .equals(other._visibleUsersList, _visibleUsersList) &&
             const DeepCollectionEquality()
-                .equals(other.invisibleUsersList, invisibleUsersList) &&
+                .equals(other._invisibleUsersList, _invisibleUsersList) &&
             (identical(other.visibility, visibility) ||
                 other.visibility == visibility) &&
             (identical(other.editedAt, editedAt) ||
@@ -736,13 +801,13 @@ class _$SnPostImpl extends _SnPost {
         aliasPrefix,
         const DeepCollectionEquality().hash(_tags),
         const DeepCollectionEquality().hash(_categories),
-        const DeepCollectionEquality().hash(replies),
-        const DeepCollectionEquality().hash(replyId),
-        const DeepCollectionEquality().hash(repostId),
-        const DeepCollectionEquality().hash(replyTo),
-        const DeepCollectionEquality().hash(repostTo),
-        const DeepCollectionEquality().hash(visibleUsersList),
-        const DeepCollectionEquality().hash(invisibleUsersList),
+        const DeepCollectionEquality().hash(_replies),
+        replyId,
+        repostId,
+        replyTo,
+        repostTo,
+        const DeepCollectionEquality().hash(_visibleUsersList),
+        const DeepCollectionEquality().hash(_invisibleUsersList),
         visibility,
         editedAt,
         pinnedAt,
@@ -787,13 +852,13 @@ abstract class _SnPost extends SnPost {
       required final String? aliasPrefix,
       required final List<dynamic> tags,
       required final List<dynamic> categories,
-      required final dynamic replies,
-      required final dynamic replyId,
-      required final dynamic repostId,
-      required final dynamic replyTo,
-      required final dynamic repostTo,
-      required final dynamic visibleUsersList,
-      required final dynamic invisibleUsersList,
+      required final List<SnPost>? replies,
+      required final int? replyId,
+      required final int? repostId,
+      required final SnPost? replyTo,
+      required final SnPost? repostTo,
+      required final List<int>? visibleUsersList,
+      required final List<int>? invisibleUsersList,
       required final int visibility,
       required final DateTime? editedAt,
       required final DateTime? pinnedAt,
@@ -834,19 +899,19 @@ abstract class _SnPost extends SnPost {
   @override
   List<dynamic> get categories;
   @override
-  dynamic get replies;
+  List<SnPost>? get replies;
   @override
-  dynamic get replyId;
+  int? get replyId;
   @override
-  dynamic get repostId;
+  int? get repostId;
   @override
-  dynamic get replyTo;
+  SnPost? get replyTo;
   @override
-  dynamic get repostTo;
+  SnPost? get repostTo;
   @override
-  dynamic get visibleUsersList;
+  List<int>? get visibleUsersList;
   @override
-  dynamic get invisibleUsersList;
+  List<int>? get invisibleUsersList;
   @override
   int get visibility;
   @override
