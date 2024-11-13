@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
@@ -33,6 +34,10 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isListAttachments =
+        ResponsiveBreakpoints.of(context).largerThan(MOBILE) ||
+            (data.preload?.attachments?.length ?? 0) > 1;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,14 +45,14 @@ class PostItem extends StatelessWidget {
         _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
         if (data.repostTo != null)
           _PostQuoteContent(child: data.repostTo!).padding(
-            horizontal: 8,
-            bottom: 4,
+            horizontal: 12,
           ),
         if (data.preload?.attachments?.isNotEmpty ?? true)
           AttachmentList(
             data: data.preload!.attachments!,
             bordered: true,
-          ),
+            maxHeight: 520,
+          ).padding(horizontal: isListAttachments ? 12 : 0),
         _PostBottomAction(
           data: data,
           showComments: showComments,

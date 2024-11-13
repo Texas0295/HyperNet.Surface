@@ -30,14 +30,16 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isShowDrawer = showDrawer;
+    final isShowDrawer = showDrawer
+        ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
+        : false;
     final isShowBottomNavigation = (showBottomNavigation)
-        ? (ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE))
+        ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
         : false;
 
     final state = GoRouter.maybeOf(context);
 
-    return AppBackground(
+    final innerWidget = AppBackground(
       child: Scaffold(
         appBar: appBar ??
             (autoImplyAppBar
@@ -59,5 +61,17 @@ class AppScaffold extends StatelessWidget {
             isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),
     );
+
+    if (showDrawer) {
+      return Row(
+        children: [
+          AppNavigationDrawer(),
+          VerticalDivider(width: 1, color: Theme.of(context).dividerColor),
+          Expanded(child: innerWidget),
+        ],
+      );
+    }
+
+    return innerWidget;
   }
 }

@@ -10,15 +10,15 @@ import 'package:surface/widgets/attachment/attachment_item.dart';
 class AttachmentList extends StatelessWidget {
   final List<SnAttachment> data;
   final bool? bordered;
-  final double? maxListHeight;
+  final double? maxHeight;
   const AttachmentList({
     super.key,
     required this.data,
     this.bordered,
-    this.maxListHeight,
+    this.maxHeight,
   });
 
-  static const double kMaxListItemWidth = 520;
+  static const double kMaxItemWidth = 520;
   static const BorderRadius kDefaultRadius =
       BorderRadius.all(Radius.circular(8));
 
@@ -33,9 +33,10 @@ class AttachmentList extends StatelessWidget {
       if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
         return Container(
           constraints: BoxConstraints(
+            maxHeight: maxHeight ?? double.infinity,
             maxWidth: math.min(
               MediaQuery.of(context).size.width - 20,
-              kMaxListItemWidth,
+              kMaxItemWidth,
             ),
           ),
           decoration: BoxDecoration(
@@ -64,7 +65,7 @@ class AttachmentList extends StatelessWidget {
     }
 
     return Container(
-      constraints: BoxConstraints(maxHeight: maxListHeight ?? 320),
+      constraints: BoxConstraints(maxHeight: maxHeight ?? 320),
       child: ScrollConfiguration(
         behavior: _AttachmentListScrollBehavior(),
         child: ListView.separated(
@@ -73,9 +74,10 @@ class AttachmentList extends StatelessWidget {
           itemBuilder: (context, idx) {
             return Container(
               constraints: BoxConstraints(
+                maxHeight: maxHeight ?? double.infinity,
                 maxWidth: math.min(
                   MediaQuery.of(context).size.width - 20,
-                  kMaxListItemWidth,
+                  kMaxItemWidth,
                 ),
               ),
               decoration: BoxDecoration(

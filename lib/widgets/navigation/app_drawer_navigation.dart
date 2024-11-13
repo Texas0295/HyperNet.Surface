@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/navigation.dart';
 
@@ -27,6 +30,10 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
   Widget build(BuildContext context) {
     final nav = context.watch<NavigationProvider>();
 
+    final backgroundColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+        ? Theme.of(context).colorScheme.surface
+        : null;
+
     return ListenableBuilder(
       listenable: nav,
       builder: (context, _) {
@@ -36,6 +43,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
         ];
 
         return NavigationDrawer(
+          backgroundColor: backgroundColor,
           selectedIndex: nav.currentIndex,
           children: [
             Column(
@@ -48,7 +56,8 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
               ],
             ).padding(
               horizontal: 32,
-              vertical: 8,
+              top: math.max(MediaQuery.of(context).padding.top, 16),
+              bottom: 16,
             ),
             ...destinations.where((ele) => ele.isPinned).map((ele) {
               return NavigationDrawerDestination(

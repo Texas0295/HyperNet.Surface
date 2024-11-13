@@ -97,9 +97,9 @@
   "postReact": "React",
   "postReactions": "Reactions of Post",
   "postReactionPoints": {
-    "zero": "{}pt",
-    "one": "{}pt",
-    "other": "{}pts"
+    "zero": "{} pt",
+    "one": "{} pt",
+    "other": "{} pts"
   },
   "postReactCompleted": "Reaction has been added.",
   "postReactUncompleted": "Reaction has been removed.",
