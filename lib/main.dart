@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
@@ -39,6 +40,7 @@ class SolianApp extends StatelessWidget {
           providers: [
             Provider(create: (_) => SnNetworkProvider()),
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
+            ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
           ],
@@ -59,6 +61,7 @@ class AppMainContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<NavigationProvider>();
     context.read<UserProvider>();
 
     final th = context.watch<ThemeProvider>();

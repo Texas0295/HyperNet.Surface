@@ -4,8 +4,10 @@ import 'package:surface/screens/account/profile_edit.dart';
 import 'package:surface/screens/account/publishers/publisher_edit.dart';
 import 'package:surface/screens/account/publishers/publisher_new.dart';
 import 'package:surface/screens/account/publishers/publishers.dart';
+import 'package:surface/screens/album.dart';
 import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
+import 'package:surface/screens/chat.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
 import 'package:surface/screens/post/post_detail.dart';
@@ -20,6 +22,7 @@ final appRouter = GoRouter(
       builder: (context, state, child) => AppScaffold(
         body: child,
         showBottomNavigation: true,
+        showDrawer: true,
       ),
       routes: [
         GoRoute(
@@ -36,6 +39,16 @@ final appRouter = GoRouter(
           path: '/account',
           name: 'account',
           builder: (context, state) => const AccountScreen(),
+        ),
+        GoRoute(
+          path: '/chat',
+          name: 'chat',
+          builder: (context, state) => const ChatScreen(),
+        ),
+        GoRoute(
+          path: '/album',
+          name: 'album',
+          builder: (context, state) => const AlbumScreen(),
         ),
       ],
     ),
@@ -74,6 +87,7 @@ final appRouter = GoRouter(
       builder: (context, state, child) => AppScaffold(
         body: child,
         autoImplyAppBar: true,
+        showDrawer: true,
       ),
       routes: [
         GoRoute(

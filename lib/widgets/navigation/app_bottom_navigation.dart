@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:surface/widgets/navigation/app_destinations.dart';
+import 'package:provider/provider.dart';
+import 'package:surface/providers/navigation.dart';
 
 class AppBottomNavigationBar extends StatefulWidget {
   const AppBottomNavigationBar({super.key});
@@ -10,23 +12,46 @@ class AppBottomNavigationBar extends StatefulWidget {
 }
 
 class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
-  int _currentIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<NavigationProvider>()
+          .autoDetectIndex(GoRouter.maybeOf(context));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      type: BottomNavigationBarType.fixed,
-      showUnselectedLabels: false,
-      items: appDestinations.map((ele) {
-        return BottomNavigationBarItem(
-          icon: ele.icon,
-          label: ele.label,
+    final nav = context.watch<NavigationProvider>();
+
+    return ListenableBuilder(
+      listenable: nav,
+      builder: (context, _) {
+        if (!nav.isIndexInRange(0, nav.pinnedDestinationCount)) {
+          return const SizedBox.shrink();
+        }
+
+        final destinations = [
+          ...nav.destinations.where((ele) => ele.isPinned),
+        ];
+
+        return BottomNavigationBar(
+          currentIndex: nav.getIndexInRange(0, nav.pinnedDestinationCount),
+          type: BottomNavigationBarType.fixed,
+          showUnselectedLabels: false,
+          items: destinations.map((ele) {
+            return BottomNavigationBarItem(
+              icon: ele.icon,
+              label: ele.label.tr(),
+            );
+          }).toList(),
+          onTap: (idx) {
+            nav.setIndex(idx);
+            GoRouter.of(context).goNamed(destinations[idx].screen);
+          },
         );
-      }).toList(),
-      onTap: (idx) {
-        setState(() => _currentIndex = idx);
-        GoRouter.of(context).goNamed(appDestinations[idx].screen);
       },
     );
   }

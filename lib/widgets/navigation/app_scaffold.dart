@@ -5,6 +5,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
+import 'package:surface/widgets/navigation/app_drawer_navigation.dart';
 
 class AppScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
@@ -14,6 +15,7 @@ class AppScaffold extends StatelessWidget {
   final Widget? body;
   final bool autoImplyAppBar;
   final bool showBottomNavigation;
+  final bool showDrawer;
   const AppScaffold({
     super.key,
     this.appBar,
@@ -23,12 +25,14 @@ class AppScaffold extends StatelessWidget {
     this.body,
     this.autoImplyAppBar = false,
     this.showBottomNavigation = false,
+    this.showDrawer = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isShowDrawer = showDrawer;
     final isShowBottomNavigation = (showBottomNavigation)
-        ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
+        ? (ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE))
         : false;
 
     final state = GoRouter.maybeOf(context);
@@ -50,6 +54,7 @@ class AppScaffold extends StatelessWidget {
         body: body,
         floatingActionButtonLocation: floatingActionButtonLocation,
         floatingActionButton: floatingActionButton,
+        drawer: isShowDrawer ? AppNavigationDrawer() : null,
         bottomNavigationBar:
             isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),
