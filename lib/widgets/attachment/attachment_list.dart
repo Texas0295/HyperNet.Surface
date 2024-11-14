@@ -26,6 +26,11 @@ class AttachmentList extends StatelessWidget {
     final borderSide = (bordered ?? false)
         ? BorderSide(width: 1, color: Theme.of(context).dividerColor)
         : BorderSide.none;
+    final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
+    final constraints = BoxConstraints(
+      minWidth: 80,
+      maxHeight: maxHeight ?? double.infinity,
+    );
 
     if (data.isEmpty) return const SizedBox.shrink();
     if (data.length == 1) {
@@ -34,11 +39,9 @@ class AttachmentList extends StatelessWidget {
           // Single child list-like displaying
           padding: listPadding ?? EdgeInsets.zero,
           child: Container(
-            constraints: BoxConstraints(
-              minWidth: 80,
-              maxHeight: maxHeight ?? double.infinity,
-            ),
+            constraints: constraints,
             decoration: BoxDecoration(
+              color: backgroundColor,
               border: Border(top: borderSide, bottom: borderSide),
               borderRadius: kDefaultRadius,
             ),
@@ -55,6 +58,7 @@ class AttachmentList extends StatelessWidget {
 
       return Container(
         decoration: BoxDecoration(
+          color: backgroundColor,
           border: Border(top: borderSide, bottom: borderSide),
         ),
         child: AspectRatio(
@@ -72,22 +76,32 @@ class AttachmentList extends StatelessWidget {
           shrinkWrap: true,
           itemCount: data.length,
           itemBuilder: (context, idx) {
-            return Container(
-              constraints: BoxConstraints(
-                minWidth: 80,
-                maxHeight: maxHeight ?? double.infinity,
-              ),
-              decoration: BoxDecoration(
-                border: Border(top: borderSide, bottom: borderSide),
-                borderRadius: kDefaultRadius,
-              ),
-              child: AspectRatio(
-                aspectRatio: data[idx].metadata['ratio']?.toDouble() ?? 1,
-                child: ClipRRect(
-                  borderRadius: kDefaultRadius,
-                  child: AttachmentItem(data: data[idx], isExpandable: true),
+            return Stack(
+              children: [
+                Container(
+                  constraints: constraints,
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    border: Border(top: borderSide, bottom: borderSide),
+                    borderRadius: kDefaultRadius,
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: data[idx].metadata['ratio']?.toDouble() ?? 1,
+                    child: ClipRRect(
+                      borderRadius: kDefaultRadius,
+                      child:
+                          AttachmentItem(data: data[idx], isExpandable: true),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  right: 12,
+                  bottom: 12,
+                  child: Chip(
+                    label: Text('${idx + 1}/${data.length}'),
+                  ),
+                ),
+              ],
             );
           },
           separatorBuilder: (context, index) => const Gap(8),
