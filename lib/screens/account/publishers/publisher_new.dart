@@ -8,7 +8,6 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
-import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class AccountPublisherNewScreen extends StatefulWidget {
   const AccountPublisherNewScreen({super.key});
@@ -23,7 +22,7 @@ class _AccountPublisherNewScreenState extends State<AccountPublisherNewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [

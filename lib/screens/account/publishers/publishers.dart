@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +10,6 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
-import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class PublisherScreen extends StatefulWidget {
   const PublisherScreen({super.key});
@@ -55,7 +53,7 @@ class _PublisherScreenState extends State<PublisherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return Scaffold(
       body: Column(
         children: [
           ListTile(

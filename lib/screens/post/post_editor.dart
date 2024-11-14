@@ -15,7 +15,6 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/loading_indicator.dart';
-import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
@@ -111,7 +110,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     return ListenableBuilder(
       listenable: _writeController,
       builder: (context, _) {
-        return AppScaffold(
+        return Scaffold(
           appBar: AppBar(
             leading: BackButton(
               onPressed: () {

@@ -6,77 +6,83 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
 import 'package:surface/widgets/navigation/app_drawer_navigation.dart';
+import 'package:surface/widgets/navigation/app_rail_navigation.dart';
 
 class AppScaffold extends StatelessWidget {
-  final PreferredSizeWidget? appBar;
-  final FloatingActionButtonLocation? floatingActionButtonLocation;
-  final Widget? floatingActionButton;
   final String? title;
   final Widget? body;
-  final bool autoImplyAppBar;
+  final bool showAppBar;
   final bool showBottomNavigation;
-  final bool showDrawer;
   const AppScaffold({
     super.key,
-    this.appBar,
-    this.floatingActionButton,
-    this.floatingActionButtonLocation,
     this.title,
     this.body,
-    this.autoImplyAppBar = false,
+    this.showAppBar = true,
     this.showBottomNavigation = false,
-    this.showDrawer = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isShowDrawer = showDrawer
-        ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
-        : false;
     final isShowBottomNavigation = (showBottomNavigation)
         ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
         : false;
 
     final state = GoRouter.maybeOf(context);
+    final autoTitle = state != null
+        ? 'screen${state.routerDelegate.currentConfiguration.last.route.name?.capitalize()}'
+        : 'screen';
 
-    final innerWidget = AppBackground(
+    return Scaffold(
+      appBar: showAppBar
+          ? AppBar(
+              title: Text(title ?? autoTitle.tr()),
+            )
+          : null,
+      body: body,
+      bottomNavigationBar:
+          isShowBottomNavigation ? AppBottomNavigationBar() : null,
+    );
+  }
+}
+
+class AppRootScaffold extends StatelessWidget {
+  final Widget body;
+  const AppRootScaffold({super.key, required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    final isCollapseDrawer =
+        ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
+    final isExpandDrawer = ResponsiveBreakpoints.of(context).largerThan(TABLET);
+
+    final innerWidget = isCollapseDrawer
+        ? body
+        : Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                      width: 1 / devicePixelRatio,
+                    ),
+                  ),
+                ),
+                child: isExpandDrawer
+                    ? AppNavigationDrawer(elevation: 0)
+                    : AppRailNavigation(),
+              ),
+              Expanded(child: body),
+            ],
+          );
+
+    return AppBackground(
       child: Scaffold(
-        appBar: appBar ??
-            (autoImplyAppBar
-                ? AppBar(
-                    title: title != null
-                        ? Text(title!)
-                        : state != null
-                            ? Text(
-                                ('screen${state.routerDelegate.currentConfiguration.last.route.name?.capitalize()}')
-                                    .tr(),
-                              )
-                            : null)
-                : null),
-        body: body,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        floatingActionButton: floatingActionButton,
-        drawer: isShowDrawer ? AppNavigationDrawer() : null,
-        bottomNavigationBar:
-            isShowBottomNavigation ? AppBottomNavigationBar() : null,
+        body: innerWidget,
+        drawer: !isExpandDrawer ? AppNavigationDrawer() : null,
       ),
     );
-
-    if (showDrawer && ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
-      final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-
-      return Row(
-        children: [
-          AppNavigationDrawer(),
-          VerticalDivider(
-            width: 1 / devicePixelRatio,
-            thickness: 1 / devicePixelRatio,
-          ),
-          Expanded(child: innerWidget),
-        ],
-      );
-    }
-
-    return innerWidget;
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -11,14 +9,15 @@ class AttachmentList extends StatelessWidget {
   final List<SnAttachment> data;
   final bool? bordered;
   final double? maxHeight;
+  final EdgeInsets? listPadding;
   const AttachmentList({
     super.key,
     required this.data,
     this.bordered,
     this.maxHeight,
+    this.listPadding,
   });
 
-  static const double kMaxItemWidth = 520;
   static const BorderRadius kDefaultRadius =
       BorderRadius.all(Radius.circular(8));
 
@@ -31,23 +30,24 @@ class AttachmentList extends StatelessWidget {
     if (data.isEmpty) return const SizedBox.shrink();
     if (data.length == 1) {
       if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
-        return Container(
-          constraints: BoxConstraints(
-            maxHeight: maxHeight ?? double.infinity,
-            maxWidth: math.min(
-              MediaQuery.of(context).size.width - 20,
-              kMaxItemWidth,
+        return Padding(
+          // Single child list-like displaying
+          padding: listPadding ?? EdgeInsets.zero,
+          child: Container(
+            constraints: BoxConstraints(
+              minWidth: 80,
+              maxHeight: maxHeight ?? double.infinity,
             ),
-          ),
-          decoration: BoxDecoration(
-            border: Border(top: borderSide, bottom: borderSide),
-            borderRadius: kDefaultRadius,
-          ),
-          child: AspectRatio(
-            aspectRatio: data[0].metadata['ratio']?.toDouble() ?? 1,
-            child: ClipRRect(
+            decoration: BoxDecoration(
+              border: Border(top: borderSide, bottom: borderSide),
               borderRadius: kDefaultRadius,
-              child: AttachmentItem(data: data[0], isExpandable: true),
+            ),
+            child: AspectRatio(
+              aspectRatio: data[0].metadata['ratio']?.toDouble() ?? 1,
+              child: ClipRRect(
+                borderRadius: kDefaultRadius,
+                child: AttachmentItem(data: data[0], isExpandable: true),
+              ),
             ),
           ),
         );
@@ -74,11 +74,8 @@ class AttachmentList extends StatelessWidget {
           itemBuilder: (context, idx) {
             return Container(
               constraints: BoxConstraints(
+                minWidth: 80,
                 maxHeight: maxHeight ?? double.infinity,
-                maxWidth: math.min(
-                  MediaQuery.of(context).size.width - 20,
-                  kMaxItemWidth,
-                ),
               ),
               decoration: BoxDecoration(
                 border: Border(top: borderSide, bottom: borderSide),
@@ -94,7 +91,7 @@ class AttachmentList extends StatelessWidget {
             );
           },
           separatorBuilder: (context, index) => const Gap(8),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: listPadding,
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
         ),

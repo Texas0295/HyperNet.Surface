@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +7,8 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/navigation.dart';
 
 class AppNavigationDrawer extends StatefulWidget {
-  const AppNavigationDrawer({super.key});
+  final double? elevation;
+  const AppNavigationDrawer({super.key, this.elevation});
 
   @override
   State<AppNavigationDrawer> createState() => _AppNavigationDrawerState();
@@ -43,6 +42,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
         ];
 
         return NavigationDrawer(
+          elevation: widget.elevation,
           backgroundColor: backgroundColor,
           selectedIndex: nav.currentIndex,
           children: [
@@ -56,7 +56,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
               ],
             ).padding(
               horizontal: 32,
-              top: math.max(MediaQuery.of(context).padding.top, 16),
+              top: MediaQuery.of(context).padding.top > 16 ? 0 : 16,
               bottom: 16,
             ),
             ...destinations.where((ele) => ele.isPinned).map((ele) {
