@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
@@ -172,7 +173,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
                 return GestureDetector(
-                  child: PostItem(data: _posts[idx]),
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 640),
+                    child: PostItem(data: _posts[idx]),
+                  ).center(),
                   onTap: () {
                     GoRouter.of(context).pushNamed(
                       'postDetail',

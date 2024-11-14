@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_mini_editor.dart';
@@ -14,7 +15,12 @@ import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class PostCommentSliverList extends StatefulWidget {
   final int parentPostId;
-  const PostCommentSliverList({super.key, required this.parentPostId});
+  final double? maxWidth;
+  const PostCommentSliverList({
+    super.key,
+    required this.parentPostId,
+    this.maxWidth,
+  });
 
   @override
   State<PostCommentSliverList> createState() => PostCommentSliverListState();
@@ -88,7 +94,12 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
       onFetchData: _fetchPosts,
       itemBuilder: (context, idx) {
         return GestureDetector(
-          child: PostItem(data: _posts[idx]),
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: widget.maxWidth ?? double.infinity,
+            ),
+            child: PostItem(data: _posts[idx]),
+          ).center(),
           onTap: () {
             GoRouter.of(context).pushNamed(
               'postDetail',
@@ -121,6 +132,7 @@ class _PostCommentListPopupState extends State<PostCommentListPopup> {
 
   @override
   Widget build(BuildContext context) {
+    final ua = context.watch<UserProvider>();
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
     return Column(
@@ -139,25 +151,26 @@ class _PostCommentListPopupState extends State<PostCommentListPopup> {
         Expanded(
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 240,
-                  decoration: BoxDecoration(
-                    border: Border.symmetric(
-                      horizontal: BorderSide(
-                        color: Theme.of(context).dividerColor,
-                        width: 1 / devicePixelRatio,
+              if (ua.isAuthorized)
+                SliverToBoxAdapter(
+                  child: Container(
+                    height: 240,
+                    decoration: BoxDecoration(
+                      border: Border.symmetric(
+                        horizontal: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 1 / devicePixelRatio,
+                        ),
                       ),
                     ),
-                  ),
-                  child: PostMiniEditor(
-                    postReplyId: widget.postId,
-                    onPost: () {
-                      _childListKey.currentState!.refresh();
-                    },
+                    child: PostMiniEditor(
+                      postReplyId: widget.postId,
+                      onPost: () {
+                        _childListKey.currentState!.refresh();
+                      },
+                    ),
                   ),
                 ),
-              ),
               PostCommentSliverList(
                 key: _childListKey,
                 parentPostId: widget.postId,

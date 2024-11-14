@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
@@ -71,6 +72,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ua = context.watch<UserProvider>();
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
     return Scaffold(
@@ -107,10 +109,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
           if (_data != null)
             SliverToBoxAdapter(
-              child: PostItem(
-                data: _data!,
-                showComments: false,
-              ),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 640),
+                child: PostItem(
+                  data: _data!,
+                  showComments: false,
+                ),
+              ).center(),
             ),
           const SliverToBoxAdapter(child: Divider(height: 1)),
           if (_data != null)
@@ -126,7 +131,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 ],
               ).padding(horizontal: 20, vertical: 12),
             ),
-          if (_data != null)
+          if (_data != null && ua.isAuthorized)
             SliverToBoxAdapter(
               child: Container(
                 height: 240,
@@ -157,6 +162,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             PostCommentSliverList(
               key: _childListKey,
               parentPostId: _data!.id,
+              maxWidth: 640,
             ),
           SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
         ],
