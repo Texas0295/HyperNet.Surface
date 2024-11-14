@@ -62,11 +62,16 @@ class AppScaffold extends StatelessWidget {
       ),
     );
 
-    if (showDrawer) {
+    if (showDrawer && ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
+      final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
       return Row(
         children: [
           AppNavigationDrawer(),
-          VerticalDivider(width: 1, color: Theme.of(context).dividerColor),
+          VerticalDivider(
+            width: 1 / devicePixelRatio,
+            thickness: 1 / devicePixelRatio,
+          ),
           Expanded(child: innerWidget),
         ],
       );
