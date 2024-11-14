@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/widgets/connection_indicator.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
@@ -80,7 +81,12 @@ class AppRootScaffold extends StatelessWidget {
 
     return AppBackground(
       child: Scaffold(
-        body: innerWidget,
+        body: Column(
+          children: [
+            ConnectionIndicator(),
+            Expanded(child: innerWidget),
+          ],
+        ),
         drawer: !isExpandDrawer ? AppNavigationDrawer() : null,
       ),
     );

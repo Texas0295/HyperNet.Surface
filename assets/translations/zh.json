@@ -131,5 +131,7 @@
   "sensitiveContent": "敏感内容",
   "sensitiveContentCollapsed": "敏感内容已折叠。",
   "sensitiveContentDescription": "此内容已被标记，可能不适合所有人查看。",
-  "sensitiveContentReveal": "显示内容"
+  "sensitiveContentReveal": "显示内容",
+  "serverConnecting": "正在连接服务器…",
+  "serverDisconnected": "已与服务器断开连接"
 }

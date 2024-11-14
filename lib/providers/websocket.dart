@@ -53,6 +53,7 @@ class WebSocketProvider extends ChangeNotifier {
       conn = WebSocketChannel.connect(uri);
       await conn!.ready;
       log('[WebSocket] Connected to server!');
+      isConnected = true;
     } catch (err) {
       if (err is WebSocketChannelException) {
         log('Failed to connect to websocket: ${(err.inner as dynamic).message}');
