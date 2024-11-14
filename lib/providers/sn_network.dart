@@ -44,48 +44,11 @@ class SnNetworkProvider {
           RequestOptions options,
           RequestInterceptorHandler handler,
         ) async {
-          try {
-            var atk = await _storage.read(key: kAtkStoreKey);
-            if (atk != null) {
-              final atkParts = atk.split('.');
-              if (atkParts.length != 3) {
-                throw Exception('invalid format of access token');
-              }
-
-              var rawPayload =
-                  atkParts[1].replaceAll('-', '+').replaceAll('_', '/');
-              switch (rawPayload.length % 4) {
-                case 0:
-                  break;
-                case 2:
-                  rawPayload += '==';
-                  break;
-                case 3:
-                  rawPayload += '=';
-                  break;
-                default:
-                  throw Exception('illegal format of access token payload');
-              }
-
-              final b64 = utf8.fuse(base64Url);
-              final payload = b64.decode(rawPayload);
-              final exp = jsonDecode(payload)['exp'];
-              if (exp <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
-                log('Access token need refresh, doing it at ${DateTime.now()}');
-                atk = await refreshToken();
-              }
-
-              if (atk != null) {
-                options.headers['Authorization'] = 'Bearer $atk';
-              } else {
-                log('Access token refresh failed...');
-              }
-            }
-          } catch (err) {
-            log('Failed to authenticate user: $err');
-          } finally {
-            handler.next(options);
+          final atk = await getFreshAtk();
+          if (atk != null) {
+            options.headers['Authorization'] = 'Bearer $atk';
           }
+          return handler.next(options);
         },
       ),
     );
@@ -97,6 +60,50 @@ class SnNetworkProvider {
       client.options.baseUrl =
           _prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
     });
+  }
+
+  Future<String?> getFreshAtk() async {
+    try {
+      var atk = await _storage.read(key: kAtkStoreKey);
+      if (atk != null) {
+        final atkParts = atk.split('.');
+        if (atkParts.length != 3) {
+          throw Exception('invalid format of access token');
+        }
+
+        var rawPayload = atkParts[1].replaceAll('-', '+').replaceAll('_', '/');
+        switch (rawPayload.length % 4) {
+          case 0:
+            break;
+          case 2:
+            rawPayload += '==';
+            break;
+          case 3:
+            rawPayload += '=';
+            break;
+          default:
+            throw Exception('illegal format of access token payload');
+        }
+
+        final b64 = utf8.fuse(base64Url);
+        final payload = b64.decode(rawPayload);
+        final exp = jsonDecode(payload)['exp'];
+        if (exp <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+          log('Access token need refresh, doing it at ${DateTime.now()}');
+          atk = await refreshToken();
+        }
+
+        if (atk != null) {
+          return atk;
+        } else {
+          log('Access token refresh failed...');
+        }
+      }
+    } catch (err) {
+      log('Failed to authenticate user: $err');
+    }
+
+    return null;
   }
 
   String getAttachmentUrl(String ky) {

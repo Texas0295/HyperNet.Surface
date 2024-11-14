@@ -11,6 +11,7 @@ import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/providers/websocket.dart';
 import 'package:surface/router.dart';
 
 void main() async {
@@ -39,11 +40,15 @@ class SolianApp extends StatelessWidget {
         assetLoader: JsonAssetLoader(),
         child: MultiProvider(
           providers: [
+            // Display layer
+            ChangeNotifierProvider(create: (_) => ThemeProvider()),
+            ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
+
+            // Data layer
             Provider(create: (_) => SnNetworkProvider()),
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
-            ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
-            ChangeNotifierProvider(create: (_) => ThemeProvider()),
+            ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
           ],
           child: AppMainContent(),
         ),
@@ -63,7 +68,7 @@ class AppMainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<NavigationProvider>();
-    context.read<UserProvider>();
+    context.read<WebSocketProvider>();
 
     final th = context.watch<ThemeProvider>();
 

@@ -13,6 +13,8 @@ class UserProvider extends ChangeNotifier {
   late final SnNetworkProvider _sn;
   late final FlutterSecureStorage _storage = FlutterSecureStorage();
 
+  Future<String?> get atk => _storage.read(key: kAtkStoreKey);
+
   UserProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
 
