@@ -51,12 +51,12 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Solar Network').bold(),
-                Text('Solar Network 2.0α').fontSize(12).textColor(
+                Text('Canary Preview 2.0α').fontSize(12).textColor(
                     Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
               ],
             ).padding(
               horizontal: 32,
-              top: MediaQuery.of(context).padding.top > 16 ? 0 : 16,
+              top: MediaQuery.of(context).padding.top > 16 ? 8 : 16,
               bottom: 16,
             ),
             ...destinations.where((ele) => ele.isPinned).map((ele) {

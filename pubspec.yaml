@@ -58,7 +58,7 @@ dependencies:
   google_fonts: ^6.2.1
   path: ^1.9.0
   relative_time: ^5.0.0
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^9.2.2
   image_picker: ^1.1.2
   cross_file: ^0.3.4+2
   file_picker: ^8.1.3
