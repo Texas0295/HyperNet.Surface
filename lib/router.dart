@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:surface/screens/account.dart';
 import 'package:surface/screens/account/profile_edit.dart';
@@ -14,13 +15,13 @@ import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
 import 'package:surface/screens/settings.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 final _appRoutes = [
   ShellRoute(
-    builder: (context, state, child) => AppScaffold(
+    builder: (context, state, child) => AppPageScaffold(
       body: child,
-      showBottomNavigation: true,
       showAppBar: false,
     ),
     routes: [
@@ -37,6 +38,52 @@ final _appRoutes = [
         pageBuilder: (context, state) => NoTransitionPage(
           child: const ExploreScreen(),
         ),
+        routes: [
+          GoRoute(
+            path: '/post/write/:mode',
+            name: 'postEditor',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              child: PostEditorScreen(
+                mode: state.pathParameters['mode']!,
+                postEditId: int.tryParse(
+                  state.uri.queryParameters['editing'] ?? '',
+                ),
+                postReplyId: int.tryParse(
+                  state.uri.queryParameters['replying'] ?? '',
+                ),
+                postRepostId: int.tryParse(
+                  state.uri.queryParameters['reposting'] ?? '',
+                ),
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: AppBackground(isLessOptimization: true, child: child),
+                );
+              },
+            ),
+          ),
+          GoRoute(
+            path: '/post/:slug',
+            name: 'postDetail',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              child: PostDetailScreen(
+                slug: state.pathParameters['slug']!,
+                preload: state.extra as SnPost?,
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: AppBackground(isLessOptimization: true, child: child),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/account',
@@ -62,36 +109,7 @@ final _appRoutes = [
     ],
   ),
   ShellRoute(
-    builder: (context, state, child) => child,
-    routes: [
-      GoRoute(
-        path: '/post/write/:mode',
-        name: 'postEditor',
-        builder: (context, state) => PostEditorScreen(
-          mode: state.pathParameters['mode']!,
-          postEditId: int.tryParse(
-            state.uri.queryParameters['editing'] ?? '',
-          ),
-          postReplyId: int.tryParse(
-            state.uri.queryParameters['replying'] ?? '',
-          ),
-          postRepostId: int.tryParse(
-            state.uri.queryParameters['reposting'] ?? '',
-          ),
-        ),
-      ),
-      GoRoute(
-        path: '/post/:slug',
-        name: 'postDetail',
-        builder: (context, state) => PostDetailScreen(
-          slug: state.pathParameters['slug']!,
-          preload: state.extra as SnPost?,
-        ),
-      )
-    ],
-  ),
-  ShellRoute(
-    builder: (context, state, child) => AppScaffold(body: child),
+    builder: (context, state, child) => AppPageScaffold(body: child),
     routes: [
       GoRoute(
         path: '/auth/login',
@@ -128,7 +146,7 @@ final _appRoutes = [
     ],
   ),
   ShellRoute(
-    builder: (context, state, child) => AppScaffold(body: child),
+    builder: (context, state, child) => AppPageScaffold(body: child),
     routes: [
       GoRoute(
         path: '/settings',
@@ -140,5 +158,10 @@ final _appRoutes = [
 ];
 
 final appRouter = GoRouter(
-  routes: _appRoutes,
+  routes: [
+    ShellRoute(
+      routes: _appRoutes,
+      builder: (context, state, child) => AppRootScaffold(body: child),
+    ),
+  ],
 );

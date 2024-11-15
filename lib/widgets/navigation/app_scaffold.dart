@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/providers/navigation.dart';
 import 'package:surface/widgets/connection_indicator.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
@@ -9,12 +10,12 @@ import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
 import 'package:surface/widgets/navigation/app_drawer_navigation.dart';
 import 'package:surface/widgets/navigation/app_rail_navigation.dart';
 
-class AppScaffold extends StatelessWidget {
+class AppPageScaffold extends StatelessWidget {
   final String? title;
   final Widget? body;
   final bool showAppBar;
   final bool showBottomNavigation;
-  const AppScaffold({
+  const AppPageScaffold({
     super.key,
     this.title,
     this.body,
@@ -24,14 +25,12 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isShowBottomNavigation = (showBottomNavigation)
-        ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
-        : false;
-
     final state = GoRouter.maybeOf(context);
-    final autoTitle = state != null
-        ? 'screen${state.routerDelegate.currentConfiguration.last.route.name?.capitalize()}'
-        : 'screen';
+    final routeName =
+        state?.routerDelegate.currentConfiguration.last.route.name;
+
+    final autoTitle =
+        state != null ? 'screen${routeName?.capitalize()}' : 'screen';
 
     return Scaffold(
       appBar: showAppBar
@@ -40,8 +39,6 @@ class AppScaffold extends StatelessWidget {
             )
           : null,
       body: body,
-      bottomNavigationBar:
-          isShowBottomNavigation ? AppBottomNavigationBar() : null,
     );
   }
 }
@@ -57,6 +54,17 @@ class AppRootScaffold extends StatelessWidget {
     final isCollapseDrawer =
         ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
     final isExpandDrawer = ResponsiveBreakpoints.of(context).largerThan(TABLET);
+
+    final routeName = GoRouter.of(context)
+        .routerDelegate
+        .currentConfiguration
+        .last
+        .route
+        .name;
+    final isShowBottomNavigation =
+        NavigationProvider.kShowBottomNavScreen.contains(routeName)
+            ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
+            : false;
 
     final innerWidget = isCollapseDrawer
         ? body
@@ -88,6 +96,8 @@ class AppRootScaffold extends StatelessWidget {
           ],
         ),
         drawer: !isExpandDrawer ? AppNavigationDrawer() : null,
+        bottomNavigationBar:
+            isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),
     );
   }

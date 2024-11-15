@@ -24,6 +24,14 @@ class NavigationProvider extends ChangeNotifier {
 
   int? get currentIndex => _currentIndex;
 
+  static const List<String> kShowBottomNavScreen = [
+    'home',
+    'explore',
+    'account',
+    'album',
+    'chat',
+  ];
+
   static const List<AppNavDestination> kAllDestination = [
     AppNavDestination(
       icon: Icon(Symbols.home, weight: 400, opticalSize: 20),
