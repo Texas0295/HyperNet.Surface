@@ -27,27 +27,37 @@ final _appRoutes = [
       GoRoute(
         path: '/',
         name: 'home',
-        builder: (context, state) => const HomeScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const HomeScreen(),
+        ),
       ),
       GoRoute(
         path: '/posts',
         name: 'explore',
-        builder: (context, state) => const ExploreScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const ExploreScreen(),
+        ),
       ),
       GoRoute(
         path: '/account',
         name: 'account',
-        builder: (context, state) => const AccountScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const AccountScreen(),
+        ),
       ),
       GoRoute(
         path: '/chat',
         name: 'chat',
-        builder: (context, state) => const ChatScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const ChatScreen(),
+        ),
       ),
       GoRoute(
         path: '/album',
         name: 'album',
-        builder: (context, state) => const AlbumScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const AlbumScreen(),
+        ),
       ),
     ],
   ),
@@ -130,10 +140,5 @@ final _appRoutes = [
 ];
 
 final appRouter = GoRouter(
-  routes: [
-    ShellRoute(
-      builder: (context, state, child) => AppRootScaffold(body: child),
-      routes: _appRoutes,
-    ),
-  ],
+  routes: _appRoutes,
 );

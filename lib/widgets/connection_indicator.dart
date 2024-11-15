@@ -42,7 +42,7 @@ class ConnectionIndicator extends StatelessWidget {
         )
             .height(
                 (ws.isBusy || !ws.isConnected) && ua.isAuthorized
-                    ? MediaQuery.of(context).padding.top + 30
+                    ? MediaQuery.of(context).padding.top + 36
                     : 0,
                 animate: true)
             .animate(

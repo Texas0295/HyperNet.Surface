@@ -13,6 +13,7 @@ import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
 import 'package:surface/router.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +84,9 @@ class AppMainContent extends StatelessWidget {
         ...context.localizationDelegates,
       ],
       routerConfig: appRouter,
+      builder: (context, child) {
+        return AppRootScaffold(body: child ?? const SizedBox.shrink());
+      },
     );
   }
 }
