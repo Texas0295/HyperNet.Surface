@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/channel.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
-import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -17,36 +16,23 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  bool _isBusy = false;
+  bool _isBusy = true;
 
   List<SnChannel>? _channels;
-
-  Future<void> _fetchChannels({scope = 'global', direct = false}) async {
-    setState(() => _isBusy = true);
-
-    try {
-      final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.get(
-        '/cgi/im/channels/$scope/me/available',
-        queryParameters: {
-          'direct': direct,
-        },
-      );
-      _channels = List<SnChannel>.from(
-        resp.data?.map((e) => SnChannel.fromJson(e)) ?? [],
-      );
-    } catch (err) {
-      if (!mounted) return;
-      context.showErrorDialog(err);
-    } finally {
-      setState(() => _isBusy = false);
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    _fetchChannels();
+    final chan = context.read<ChatChannelProvider>();
+    chan.fetchChannels().listen((channels) {
+      if (mounted) setState(() => _channels = channels);
+    })
+      ..onError((_) {
+        setState(() => _isBusy = false);
+      })
+      ..onDone(() {
+        setState(() => _isBusy = false);
+      });
   }
 
   @override
@@ -71,7 +57,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 final channel = _channels![idx];
                 return ListTile(
                   title: Text(channel.name),
-                  subtitle: Text(channel.description),
+                  subtitle: Text(
+                    channel.description,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   leading: AccountImage(
                     content: null,

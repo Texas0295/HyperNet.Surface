@@ -20,22 +20,36 @@ SnChannel _$SnChannelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SnChannel {
+  @HiveField(0)
   int get id => throw _privateConstructorUsedError;
+  @HiveField(1)
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @HiveField(2)
   DateTime get updatedAt => throw _privateConstructorUsedError;
+  @HiveField(3)
   dynamic get deletedAt => throw _privateConstructorUsedError;
+  @HiveField(4)
   String get alias => throw _privateConstructorUsedError;
+  @HiveField(5)
   String get name => throw _privateConstructorUsedError;
+  @HiveField(6)
   String get description => throw _privateConstructorUsedError;
+  @HiveField(7)
   List<dynamic> get members => throw _privateConstructorUsedError;
   dynamic get messages => throw _privateConstructorUsedError;
   dynamic get calls => throw _privateConstructorUsedError;
+  @HiveField(8)
   int get type => throw _privateConstructorUsedError;
+  @HiveField(9)
   int get accountId => throw _privateConstructorUsedError;
-  bool get isPublic => throw _privateConstructorUsedError;
-  bool get isCommunity => throw _privateConstructorUsedError;
+  @HiveField(10)
   SnRealm? get realm => throw _privateConstructorUsedError;
+  @HiveField(11)
   int? get realmId => throw _privateConstructorUsedError;
+  @HiveField(12)
+  bool get isPublic => throw _privateConstructorUsedError;
+  @HiveField(13)
+  bool get isCommunity => throw _privateConstructorUsedError;
 
   /// Serializes this SnChannel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,22 +67,22 @@ abstract class $SnChannelCopyWith<$Res> {
       _$SnChannelCopyWithImpl<$Res, SnChannel>;
   @useResult
   $Res call(
-      {int id,
-      DateTime createdAt,
-      DateTime updatedAt,
-      dynamic deletedAt,
-      String alias,
-      String name,
-      String description,
-      List<dynamic> members,
+      {@HiveField(0) int id,
+      @HiveField(1) DateTime createdAt,
+      @HiveField(2) DateTime updatedAt,
+      @HiveField(3) dynamic deletedAt,
+      @HiveField(4) String alias,
+      @HiveField(5) String name,
+      @HiveField(6) String description,
+      @HiveField(7) List<dynamic> members,
       dynamic messages,
       dynamic calls,
-      int type,
-      int accountId,
-      bool isPublic,
-      bool isCommunity,
-      SnRealm? realm,
-      int? realmId});
+      @HiveField(8) int type,
+      @HiveField(9) int accountId,
+      @HiveField(10) SnRealm? realm,
+      @HiveField(11) int? realmId,
+      @HiveField(12) bool isPublic,
+      @HiveField(13) bool isCommunity});
 
   $SnRealmCopyWith<$Res>? get realm;
 }
@@ -100,10 +114,10 @@ class _$SnChannelCopyWithImpl<$Res, $Val extends SnChannel>
     Object? calls = freezed,
     Object? type = null,
     Object? accountId = null,
-    Object? isPublic = null,
-    Object? isCommunity = null,
     Object? realm = freezed,
     Object? realmId = freezed,
+    Object? isPublic = null,
+    Object? isCommunity = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -154,14 +168,6 @@ class _$SnChannelCopyWithImpl<$Res, $Val extends SnChannel>
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
               as int,
-      isPublic: null == isPublic
-          ? _value.isPublic
-          : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isCommunity: null == isCommunity
-          ? _value.isCommunity
-          : isCommunity // ignore: cast_nullable_to_non_nullable
-              as bool,
       realm: freezed == realm
           ? _value.realm
           : realm // ignore: cast_nullable_to_non_nullable
@@ -170,6 +176,14 @@ class _$SnChannelCopyWithImpl<$Res, $Val extends SnChannel>
           ? _value.realmId
           : realmId // ignore: cast_nullable_to_non_nullable
               as int?,
+      isPublic: null == isPublic
+          ? _value.isPublic
+          : isPublic // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isCommunity: null == isCommunity
+          ? _value.isCommunity
+          : isCommunity // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -197,22 +211,22 @@ abstract class _$$SnChannelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
-      DateTime createdAt,
-      DateTime updatedAt,
-      dynamic deletedAt,
-      String alias,
-      String name,
-      String description,
-      List<dynamic> members,
+      {@HiveField(0) int id,
+      @HiveField(1) DateTime createdAt,
+      @HiveField(2) DateTime updatedAt,
+      @HiveField(3) dynamic deletedAt,
+      @HiveField(4) String alias,
+      @HiveField(5) String name,
+      @HiveField(6) String description,
+      @HiveField(7) List<dynamic> members,
       dynamic messages,
       dynamic calls,
-      int type,
-      int accountId,
-      bool isPublic,
-      bool isCommunity,
-      SnRealm? realm,
-      int? realmId});
+      @HiveField(8) int type,
+      @HiveField(9) int accountId,
+      @HiveField(10) SnRealm? realm,
+      @HiveField(11) int? realmId,
+      @HiveField(12) bool isPublic,
+      @HiveField(13) bool isCommunity});
 
   @override
   $SnRealmCopyWith<$Res>? get realm;
@@ -243,10 +257,10 @@ class __$$SnChannelImplCopyWithImpl<$Res>
     Object? calls = freezed,
     Object? type = null,
     Object? accountId = null,
-    Object? isPublic = null,
-    Object? isCommunity = null,
     Object? realm = freezed,
     Object? realmId = freezed,
+    Object? isPublic = null,
+    Object? isCommunity = null,
   }) {
     return _then(_$SnChannelImpl(
       id: null == id
@@ -297,14 +311,6 @@ class __$$SnChannelImplCopyWithImpl<$Res>
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
               as int,
-      isPublic: null == isPublic
-          ? _value.isPublic
-          : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isCommunity: null == isCommunity
-          ? _value.isCommunity
-          : isCommunity // ignore: cast_nullable_to_non_nullable
-              as bool,
       realm: freezed == realm
           ? _value.realm
           : realm // ignore: cast_nullable_to_non_nullable
@@ -313,51 +319,69 @@ class __$$SnChannelImplCopyWithImpl<$Res>
           ? _value.realmId
           : realmId // ignore: cast_nullable_to_non_nullable
               as int?,
+      isPublic: null == isPublic
+          ? _value.isPublic
+          : isPublic // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isCommunity: null == isCommunity
+          ? _value.isCommunity
+          : isCommunity // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$SnChannelImpl implements _SnChannel {
+@HiveType(typeId: 2)
+class _$SnChannelImpl extends _SnChannel {
   const _$SnChannelImpl(
-      {required this.id,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.deletedAt,
-      required this.alias,
-      required this.name,
-      required this.description,
-      required final List<dynamic> members,
-      required this.messages,
-      required this.calls,
-      required this.type,
-      required this.accountId,
-      required this.isPublic,
-      required this.isCommunity,
-      required this.realm,
-      required this.realmId})
-      : _members = members;
+      {@HiveField(0) required this.id,
+      @HiveField(1) required this.createdAt,
+      @HiveField(2) required this.updatedAt,
+      @HiveField(3) required this.deletedAt,
+      @HiveField(4) required this.alias,
+      @HiveField(5) required this.name,
+      @HiveField(6) required this.description,
+      @HiveField(7) required final List<dynamic> members,
+      this.messages,
+      this.calls,
+      @HiveField(8) required this.type,
+      @HiveField(9) required this.accountId,
+      @HiveField(10) required this.realm,
+      @HiveField(11) required this.realmId,
+      @HiveField(12) required this.isPublic,
+      @HiveField(13) required this.isCommunity})
+      : _members = members,
+        super._();
 
   factory _$SnChannelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnChannelImplFromJson(json);
 
   @override
+  @HiveField(0)
   final int id;
   @override
+  @HiveField(1)
   final DateTime createdAt;
   @override
+  @HiveField(2)
   final DateTime updatedAt;
   @override
+  @HiveField(3)
   final dynamic deletedAt;
   @override
+  @HiveField(4)
   final String alias;
   @override
+  @HiveField(5)
   final String name;
   @override
+  @HiveField(6)
   final String description;
   final List<dynamic> _members;
   @override
+  @HiveField(7)
   List<dynamic> get members {
     if (_members is EqualUnmodifiableListView) return _members;
     // ignore: implicit_dynamic_type
@@ -369,21 +393,27 @@ class _$SnChannelImpl implements _SnChannel {
   @override
   final dynamic calls;
   @override
+  @HiveField(8)
   final int type;
   @override
+  @HiveField(9)
   final int accountId;
   @override
-  final bool isPublic;
-  @override
-  final bool isCommunity;
-  @override
+  @HiveField(10)
   final SnRealm? realm;
   @override
+  @HiveField(11)
   final int? realmId;
+  @override
+  @HiveField(12)
+  final bool isPublic;
+  @override
+  @HiveField(13)
+  final bool isCommunity;
 
   @override
   String toString() {
-    return 'SnChannel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, alias: $alias, name: $name, description: $description, members: $members, messages: $messages, calls: $calls, type: $type, accountId: $accountId, isPublic: $isPublic, isCommunity: $isCommunity, realm: $realm, realmId: $realmId)';
+    return 'SnChannel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, alias: $alias, name: $name, description: $description, members: $members, messages: $messages, calls: $calls, type: $type, accountId: $accountId, realm: $realm, realmId: $realmId, isPublic: $isPublic, isCommunity: $isCommunity)';
   }
 
   @override
@@ -407,12 +437,12 @@ class _$SnChannelImpl implements _SnChannel {
             (identical(other.type, type) || other.type == type) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
+            (identical(other.realm, realm) || other.realm == realm) &&
+            (identical(other.realmId, realmId) || other.realmId == realmId) &&
             (identical(other.isPublic, isPublic) ||
                 other.isPublic == isPublic) &&
             (identical(other.isCommunity, isCommunity) ||
-                other.isCommunity == isCommunity) &&
-            (identical(other.realm, realm) || other.realm == realm) &&
-            (identical(other.realmId, realmId) || other.realmId == realmId));
+                other.isCommunity == isCommunity));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -431,10 +461,10 @@ class _$SnChannelImpl implements _SnChannel {
       const DeepCollectionEquality().hash(calls),
       type,
       accountId,
-      isPublic,
-      isCommunity,
       realm,
-      realmId);
+      realmId,
+      isPublic,
+      isCommunity);
 
   /// Create a copy of SnChannel
   /// with the given fields replaced by the non-null parameter values.
@@ -452,60 +482,75 @@ class _$SnChannelImpl implements _SnChannel {
   }
 }
 
-abstract class _SnChannel implements SnChannel {
+abstract class _SnChannel extends SnChannel {
   const factory _SnChannel(
-      {required final int id,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
-      required final dynamic deletedAt,
-      required final String alias,
-      required final String name,
-      required final String description,
-      required final List<dynamic> members,
-      required final dynamic messages,
-      required final dynamic calls,
-      required final int type,
-      required final int accountId,
-      required final bool isPublic,
-      required final bool isCommunity,
-      required final SnRealm? realm,
-      required final int? realmId}) = _$SnChannelImpl;
+      {@HiveField(0) required final int id,
+      @HiveField(1) required final DateTime createdAt,
+      @HiveField(2) required final DateTime updatedAt,
+      @HiveField(3) required final dynamic deletedAt,
+      @HiveField(4) required final String alias,
+      @HiveField(5) required final String name,
+      @HiveField(6) required final String description,
+      @HiveField(7) required final List<dynamic> members,
+      final dynamic messages,
+      final dynamic calls,
+      @HiveField(8) required final int type,
+      @HiveField(9) required final int accountId,
+      @HiveField(10) required final SnRealm? realm,
+      @HiveField(11) required final int? realmId,
+      @HiveField(12) required final bool isPublic,
+      @HiveField(13) required final bool isCommunity}) = _$SnChannelImpl;
+  const _SnChannel._() : super._();
 
   factory _SnChannel.fromJson(Map<String, dynamic> json) =
       _$SnChannelImpl.fromJson;
 
   @override
+  @HiveField(0)
   int get id;
   @override
+  @HiveField(1)
   DateTime get createdAt;
   @override
+  @HiveField(2)
   DateTime get updatedAt;
   @override
+  @HiveField(3)
   dynamic get deletedAt;
   @override
+  @HiveField(4)
   String get alias;
   @override
+  @HiveField(5)
   String get name;
   @override
+  @HiveField(6)
   String get description;
   @override
+  @HiveField(7)
   List<dynamic> get members;
   @override
   dynamic get messages;
   @override
   dynamic get calls;
   @override
+  @HiveField(8)
   int get type;
   @override
+  @HiveField(9)
   int get accountId;
   @override
-  bool get isPublic;
-  @override
-  bool get isCommunity;
-  @override
+  @HiveField(10)
   SnRealm? get realm;
   @override
+  @HiveField(11)
   int? get realmId;
+  @override
+  @HiveField(12)
+  bool get isPublic;
+  @override
+  @HiveField(13)
+  bool get isCommunity;
 
   /// Create a copy of SnChannel
   /// with the given fields replaced by the non-null parameter values.

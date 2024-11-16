@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -14,12 +15,14 @@ import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
 import 'package:surface/router.dart';
+import 'package:surface/types/chat.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   await Hive.initFlutter();
+  Hive.registerAdapter(SnChannelImplAdapter());
 
   if (!kReleaseMode) {
     debugInvertOversizedImages = true;
@@ -52,6 +55,7 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
+            ChangeNotifierProvider(create: (ctx) => ChatChannelProvider(ctx)),
           ],
           child: AppMainContent(),
         ),
@@ -72,6 +76,7 @@ class AppMainContent extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<NavigationProvider>();
     context.read<WebSocketProvider>();
+    context.read<ChatChannelProvider>();
 
     final th = context.watch<ThemeProvider>();
 
