@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -27,10 +28,13 @@ class _ChatScreenState extends State<ChatScreen> {
     chan.fetchChannels().listen((channels) {
       if (mounted) setState(() => _channels = channels);
     })
-      ..onError((_) {
+      ..onError((err) {
+        if (!mounted) return;
+        context.showErrorDialog(err);
         setState(() => _isBusy = false);
       })
       ..onDone(() {
+        if (!mounted) return;
         setState(() => _isBusy = false);
       });
   }
@@ -67,6 +71,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     content: null,
                     fallbackWidget: const Icon(Symbols.chat, size: 20),
                   ),
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(
+                      'chatRoom',
+                      pathParameters: {
+                        'scope': channel.realm?.alias ?? 'global',
+                        'alias': channel.alias,
+                      },
+                    );
+                  },
                 );
               },
             ),

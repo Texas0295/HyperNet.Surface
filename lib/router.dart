@@ -10,6 +10,7 @@ import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/chat.dart';
 import 'package:surface/screens/chat/manage.dart';
+import 'package:surface/screens/chat/room.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
 import 'package:surface/screens/post/post_detail.dart';
@@ -102,6 +103,16 @@ final _appRoutes = [
           child: const ChatScreen(),
         ),
         routes: [
+          GoRoute(
+            path: '/chat/:scope/:alias',
+            name: 'chatRoom',
+            builder: (context, state) => AppBackground(
+              child: ChatRoomScreen(
+                scope: state.pathParameters['scope']!,
+                alias: state.pathParameters['alias']!,
+              ),
+            ),
+          ),
           GoRoute(
             path: '/chat/manage',
             name: 'chatManage',

@@ -20,24 +20,25 @@ SnAccount _$SnAccountFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SnAccount {
+  @HiveField(0)
   int get id => throw _privateConstructorUsedError;
-  int? get affiliatedId => throw _privateConstructorUsedError;
-  int? get affiliatedTo => throw _privateConstructorUsedError;
-  int? get automatedBy => throw _privateConstructorUsedError;
-  int? get automatedId => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get deletedAt => throw _privateConstructorUsedError;
+  DateTime? get confirmedAt => throw _privateConstructorUsedError;
+  List<SnAccountContact>? get contacts => throw _privateConstructorUsedError;
   String get avatar => throw _privateConstructorUsedError;
   String get banner => throw _privateConstructorUsedError;
-  DateTime? get confirmedAt => throw _privateConstructorUsedError;
-  List<SnAccountContact> get contacts => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime? get deletedAt => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get nick => throw _privateConstructorUsedError;
   Map<String, dynamic> get permNodes => throw _privateConstructorUsedError;
   SnAccountProfile? get profile => throw _privateConstructorUsedError;
   DateTime? get suspendedAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  int? get affiliatedId => throw _privateConstructorUsedError;
+  int? get affiliatedTo => throw _privateConstructorUsedError;
+  int? get automatedBy => throw _privateConstructorUsedError;
+  int? get automatedId => throw _privateConstructorUsedError;
 
   /// Serializes this SnAccount to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,24 +56,24 @@ abstract class $SnAccountCopyWith<$Res> {
       _$SnAccountCopyWithImpl<$Res, SnAccount>;
   @useResult
   $Res call(
-      {int id,
-      int? affiliatedId,
-      int? affiliatedTo,
-      int? automatedBy,
-      int? automatedId,
+      {@HiveField(0) int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      DateTime? confirmedAt,
+      List<SnAccountContact>? contacts,
       String avatar,
       String banner,
-      DateTime? confirmedAt,
-      List<SnAccountContact> contacts,
-      DateTime createdAt,
-      DateTime? deletedAt,
       String description,
       String name,
       String nick,
       Map<String, dynamic> permNodes,
       SnAccountProfile? profile,
       DateTime? suspendedAt,
-      DateTime updatedAt});
+      int? affiliatedId,
+      int? affiliatedTo,
+      int? automatedBy,
+      int? automatedId});
 
   $SnAccountProfileCopyWith<$Res>? get profile;
 }
@@ -93,45 +94,49 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
   @override
   $Res call({
     Object? id = null,
-    Object? affiliatedId = freezed,
-    Object? affiliatedTo = freezed,
-    Object? automatedBy = freezed,
-    Object? automatedId = freezed,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? confirmedAt = freezed,
+    Object? contacts = freezed,
     Object? avatar = null,
     Object? banner = null,
-    Object? confirmedAt = freezed,
-    Object? contacts = null,
-    Object? createdAt = null,
-    Object? deletedAt = freezed,
     Object? description = null,
     Object? name = null,
     Object? nick = null,
     Object? permNodes = null,
     Object? profile = freezed,
     Object? suspendedAt = freezed,
-    Object? updatedAt = null,
+    Object? affiliatedId = freezed,
+    Object? affiliatedTo = freezed,
+    Object? automatedBy = freezed,
+    Object? automatedId = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      affiliatedId: freezed == affiliatedId
-          ? _value.affiliatedId
-          : affiliatedId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      affiliatedTo: freezed == affiliatedTo
-          ? _value.affiliatedTo
-          : affiliatedTo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      automatedBy: freezed == automatedBy
-          ? _value.automatedBy
-          : automatedBy // ignore: cast_nullable_to_non_nullable
-              as int?,
-      automatedId: freezed == automatedId
-          ? _value.automatedId
-          : automatedId // ignore: cast_nullable_to_non_nullable
-              as int?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confirmedAt: freezed == confirmedAt
+          ? _value.confirmedAt
+          : confirmedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      contacts: freezed == contacts
+          ? _value.contacts
+          : contacts // ignore: cast_nullable_to_non_nullable
+              as List<SnAccountContact>?,
       avatar: null == avatar
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
@@ -140,22 +145,6 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
           ? _value.banner
           : banner // ignore: cast_nullable_to_non_nullable
               as String,
-      confirmedAt: freezed == confirmedAt
-          ? _value.confirmedAt
-          : confirmedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      contacts: null == contacts
-          ? _value.contacts
-          : contacts // ignore: cast_nullable_to_non_nullable
-              as List<SnAccountContact>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      deletedAt: freezed == deletedAt
-          ? _value.deletedAt
-          : deletedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -180,10 +169,22 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
           ? _value.suspendedAt
           : suspendedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      affiliatedId: freezed == affiliatedId
+          ? _value.affiliatedId
+          : affiliatedId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      affiliatedTo: freezed == affiliatedTo
+          ? _value.affiliatedTo
+          : affiliatedTo // ignore: cast_nullable_to_non_nullable
+              as int?,
+      automatedBy: freezed == automatedBy
+          ? _value.automatedBy
+          : automatedBy // ignore: cast_nullable_to_non_nullable
+              as int?,
+      automatedId: freezed == automatedId
+          ? _value.automatedId
+          : automatedId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -211,24 +212,24 @@ abstract class _$$SnAccountImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
-      int? affiliatedId,
-      int? affiliatedTo,
-      int? automatedBy,
-      int? automatedId,
+      {@HiveField(0) int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      DateTime? confirmedAt,
+      List<SnAccountContact>? contacts,
       String avatar,
       String banner,
-      DateTime? confirmedAt,
-      List<SnAccountContact> contacts,
-      DateTime createdAt,
-      DateTime? deletedAt,
       String description,
       String name,
       String nick,
       Map<String, dynamic> permNodes,
       SnAccountProfile? profile,
       DateTime? suspendedAt,
-      DateTime updatedAt});
+      int? affiliatedId,
+      int? affiliatedTo,
+      int? automatedBy,
+      int? automatedId});
 
   @override
   $SnAccountProfileCopyWith<$Res>? get profile;
@@ -248,45 +249,49 @@ class __$$SnAccountImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? affiliatedId = freezed,
-    Object? affiliatedTo = freezed,
-    Object? automatedBy = freezed,
-    Object? automatedId = freezed,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? confirmedAt = freezed,
+    Object? contacts = freezed,
     Object? avatar = null,
     Object? banner = null,
-    Object? confirmedAt = freezed,
-    Object? contacts = null,
-    Object? createdAt = null,
-    Object? deletedAt = freezed,
     Object? description = null,
     Object? name = null,
     Object? nick = null,
     Object? permNodes = null,
     Object? profile = freezed,
     Object? suspendedAt = freezed,
-    Object? updatedAt = null,
+    Object? affiliatedId = freezed,
+    Object? affiliatedTo = freezed,
+    Object? automatedBy = freezed,
+    Object? automatedId = freezed,
   }) {
     return _then(_$SnAccountImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      affiliatedId: freezed == affiliatedId
-          ? _value.affiliatedId
-          : affiliatedId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      affiliatedTo: freezed == affiliatedTo
-          ? _value.affiliatedTo
-          : affiliatedTo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      automatedBy: freezed == automatedBy
-          ? _value.automatedBy
-          : automatedBy // ignore: cast_nullable_to_non_nullable
-              as int?,
-      automatedId: freezed == automatedId
-          ? _value.automatedId
-          : automatedId // ignore: cast_nullable_to_non_nullable
-              as int?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confirmedAt: freezed == confirmedAt
+          ? _value.confirmedAt
+          : confirmedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      contacts: freezed == contacts
+          ? _value._contacts
+          : contacts // ignore: cast_nullable_to_non_nullable
+              as List<SnAccountContact>?,
       avatar: null == avatar
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
@@ -295,22 +300,6 @@ class __$$SnAccountImplCopyWithImpl<$Res>
           ? _value.banner
           : banner // ignore: cast_nullable_to_non_nullable
               as String,
-      confirmedAt: freezed == confirmedAt
-          ? _value.confirmedAt
-          : confirmedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      contacts: null == contacts
-          ? _value._contacts
-          : contacts // ignore: cast_nullable_to_non_nullable
-              as List<SnAccountContact>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      deletedAt: freezed == deletedAt
-          ? _value.deletedAt
-          : deletedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -335,70 +324,80 @@ class __$$SnAccountImplCopyWithImpl<$Res>
           ? _value.suspendedAt
           : suspendedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      affiliatedId: freezed == affiliatedId
+          ? _value.affiliatedId
+          : affiliatedId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      affiliatedTo: freezed == affiliatedTo
+          ? _value.affiliatedTo
+          : affiliatedTo // ignore: cast_nullable_to_non_nullable
+              as int?,
+      automatedBy: freezed == automatedBy
+          ? _value.automatedBy
+          : automatedBy // ignore: cast_nullable_to_non_nullable
+              as int?,
+      automatedId: freezed == automatedId
+          ? _value.automatedId
+          : automatedId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$SnAccountImpl implements _SnAccount {
+class _$SnAccountImpl extends _SnAccount {
   const _$SnAccountImpl(
-      {required this.id,
-      required this.affiliatedId,
-      required this.affiliatedTo,
-      required this.automatedBy,
-      required this.automatedId,
+      {@HiveField(0) required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.confirmedAt,
+      required final List<SnAccountContact>? contacts,
       required this.avatar,
       required this.banner,
-      required this.confirmedAt,
-      required final List<SnAccountContact> contacts,
-      required this.createdAt,
-      required this.deletedAt,
       required this.description,
       required this.name,
       required this.nick,
       required final Map<String, dynamic> permNodes,
       required this.profile,
       required this.suspendedAt,
-      required this.updatedAt})
+      required this.affiliatedId,
+      required this.affiliatedTo,
+      required this.automatedBy,
+      required this.automatedId})
       : _contacts = contacts,
-        _permNodes = permNodes;
+        _permNodes = permNodes,
+        super._();
 
   factory _$SnAccountImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnAccountImplFromJson(json);
 
   @override
+  @HiveField(0)
   final int id;
   @override
-  final int? affiliatedId;
+  final DateTime createdAt;
   @override
-  final int? affiliatedTo;
+  final DateTime updatedAt;
   @override
-  final int? automatedBy;
+  final DateTime? deletedAt;
   @override
-  final int? automatedId;
+  final DateTime? confirmedAt;
+  final List<SnAccountContact>? _contacts;
+  @override
+  List<SnAccountContact>? get contacts {
+    final value = _contacts;
+    if (value == null) return null;
+    if (_contacts is EqualUnmodifiableListView) return _contacts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String avatar;
   @override
   final String banner;
-  @override
-  final DateTime? confirmedAt;
-  final List<SnAccountContact> _contacts;
-  @override
-  List<SnAccountContact> get contacts {
-    if (_contacts is EqualUnmodifiableListView) return _contacts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_contacts);
-  }
-
-  @override
-  final DateTime createdAt;
-  @override
-  final DateTime? deletedAt;
   @override
   final String description;
   @override
@@ -418,11 +417,17 @@ class _$SnAccountImpl implements _SnAccount {
   @override
   final DateTime? suspendedAt;
   @override
-  final DateTime updatedAt;
+  final int? affiliatedId;
+  @override
+  final int? affiliatedTo;
+  @override
+  final int? automatedBy;
+  @override
+  final int? automatedId;
 
   @override
   String toString() {
-    return 'SnAccount(id: $id, affiliatedId: $affiliatedId, affiliatedTo: $affiliatedTo, automatedBy: $automatedBy, automatedId: $automatedId, avatar: $avatar, banner: $banner, confirmedAt: $confirmedAt, contacts: $contacts, createdAt: $createdAt, deletedAt: $deletedAt, description: $description, name: $name, nick: $nick, permNodes: $permNodes, profile: $profile, suspendedAt: $suspendedAt, updatedAt: $updatedAt)';
+    return 'SnAccount(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, confirmedAt: $confirmedAt, contacts: $contacts, avatar: $avatar, banner: $banner, description: $description, name: $name, nick: $nick, permNodes: $permNodes, profile: $profile, suspendedAt: $suspendedAt, affiliatedId: $affiliatedId, affiliatedTo: $affiliatedTo, automatedBy: $automatedBy, automatedId: $automatedId)';
   }
 
   @override
@@ -431,23 +436,17 @@ class _$SnAccountImpl implements _SnAccount {
         (other.runtimeType == runtimeType &&
             other is _$SnAccountImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.affiliatedId, affiliatedId) ||
-                other.affiliatedId == affiliatedId) &&
-            (identical(other.affiliatedTo, affiliatedTo) ||
-                other.affiliatedTo == affiliatedTo) &&
-            (identical(other.automatedBy, automatedBy) ||
-                other.automatedBy == automatedBy) &&
-            (identical(other.automatedId, automatedId) ||
-                other.automatedId == automatedId) &&
-            (identical(other.avatar, avatar) || other.avatar == avatar) &&
-            (identical(other.banner, banner) || other.banner == banner) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt) &&
             (identical(other.confirmedAt, confirmedAt) ||
                 other.confirmedAt == confirmedAt) &&
             const DeepCollectionEquality().equals(other._contacts, _contacts) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.deletedAt, deletedAt) ||
-                other.deletedAt == deletedAt) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
+            (identical(other.banner, banner) || other.banner == banner) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.name, name) || other.name == name) &&
@@ -457,8 +456,14 @@ class _$SnAccountImpl implements _SnAccount {
             (identical(other.profile, profile) || other.profile == profile) &&
             (identical(other.suspendedAt, suspendedAt) ||
                 other.suspendedAt == suspendedAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+            (identical(other.affiliatedId, affiliatedId) ||
+                other.affiliatedId == affiliatedId) &&
+            (identical(other.affiliatedTo, affiliatedTo) ||
+                other.affiliatedTo == affiliatedTo) &&
+            (identical(other.automatedBy, automatedBy) ||
+                other.automatedBy == automatedBy) &&
+            (identical(other.automatedId, automatedId) ||
+                other.automatedId == automatedId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -466,23 +471,23 @@ class _$SnAccountImpl implements _SnAccount {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      affiliatedId,
-      affiliatedTo,
-      automatedBy,
-      automatedId,
-      avatar,
-      banner,
+      createdAt,
+      updatedAt,
+      deletedAt,
       confirmedAt,
       const DeepCollectionEquality().hash(_contacts),
-      createdAt,
-      deletedAt,
+      avatar,
+      banner,
       description,
       name,
       nick,
       const DeepCollectionEquality().hash(_permNodes),
       profile,
       suspendedAt,
-      updatedAt);
+      affiliatedId,
+      affiliatedTo,
+      automatedBy,
+      automatedId);
 
   /// Create a copy of SnAccount
   /// with the given fields replaced by the non-null parameter values.
@@ -500,52 +505,48 @@ class _$SnAccountImpl implements _SnAccount {
   }
 }
 
-abstract class _SnAccount implements SnAccount {
+abstract class _SnAccount extends SnAccount {
   const factory _SnAccount(
-      {required final int id,
-      required final int? affiliatedId,
-      required final int? affiliatedTo,
-      required final int? automatedBy,
-      required final int? automatedId,
+      {@HiveField(0) required final int id,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
+      required final DateTime? deletedAt,
+      required final DateTime? confirmedAt,
+      required final List<SnAccountContact>? contacts,
       required final String avatar,
       required final String banner,
-      required final DateTime? confirmedAt,
-      required final List<SnAccountContact> contacts,
-      required final DateTime createdAt,
-      required final DateTime? deletedAt,
       required final String description,
       required final String name,
       required final String nick,
       required final Map<String, dynamic> permNodes,
       required final SnAccountProfile? profile,
       required final DateTime? suspendedAt,
-      required final DateTime updatedAt}) = _$SnAccountImpl;
+      required final int? affiliatedId,
+      required final int? affiliatedTo,
+      required final int? automatedBy,
+      required final int? automatedId}) = _$SnAccountImpl;
+  const _SnAccount._() : super._();
 
   factory _SnAccount.fromJson(Map<String, dynamic> json) =
       _$SnAccountImpl.fromJson;
 
   @override
+  @HiveField(0)
   int get id;
   @override
-  int? get affiliatedId;
+  DateTime get createdAt;
   @override
-  int? get affiliatedTo;
+  DateTime get updatedAt;
   @override
-  int? get automatedBy;
+  DateTime? get deletedAt;
   @override
-  int? get automatedId;
+  DateTime? get confirmedAt;
+  @override
+  List<SnAccountContact>? get contacts;
   @override
   String get avatar;
   @override
   String get banner;
-  @override
-  DateTime? get confirmedAt;
-  @override
-  List<SnAccountContact> get contacts;
-  @override
-  DateTime get createdAt;
-  @override
-  DateTime? get deletedAt;
   @override
   String get description;
   @override
@@ -559,7 +560,13 @@ abstract class _SnAccount implements SnAccount {
   @override
   DateTime? get suspendedAt;
   @override
-  DateTime get updatedAt;
+  int? get affiliatedId;
+  @override
+  int? get affiliatedTo;
+  @override
+  int? get automatedBy;
+  @override
+  int? get automatedId;
 
   /// Create a copy of SnAccount
   /// with the given fields replaced by the non-null parameter values.

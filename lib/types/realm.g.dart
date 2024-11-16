@@ -3,6 +3,80 @@
 part of 'realm.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class SnRealmImplAdapter extends TypeAdapter<_$SnRealmImpl> {
+  @override
+  final int typeId = 1;
+
+  @override
+  _$SnRealmImpl read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return _$SnRealmImpl(
+      id: fields[0] as int,
+      createdAt: fields[1] as DateTime,
+      updatedAt: fields[2] as DateTime,
+      deletedAt: fields[3] as DateTime?,
+      alias: fields[4] as String,
+      name: fields[5] as String,
+      description: fields[6] as String,
+      avatar: fields[7] as String?,
+      banner: fields[8] as String?,
+      accessPolicy: (fields[9] as Map?)?.cast<String, dynamic>(),
+      accountId: fields[10] as int,
+      isPublic: fields[11] as bool,
+      isCommunity: fields[12] as bool,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, _$SnRealmImpl obj) {
+    writer
+      ..writeByte(13)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.createdAt)
+      ..writeByte(2)
+      ..write(obj.updatedAt)
+      ..writeByte(3)
+      ..write(obj.deletedAt)
+      ..writeByte(4)
+      ..write(obj.alias)
+      ..writeByte(5)
+      ..write(obj.name)
+      ..writeByte(6)
+      ..write(obj.description)
+      ..writeByte(7)
+      ..write(obj.avatar)
+      ..writeByte(8)
+      ..write(obj.banner)
+      ..writeByte(10)
+      ..write(obj.accountId)
+      ..writeByte(11)
+      ..write(obj.isPublic)
+      ..writeByte(12)
+      ..write(obj.isCommunity)
+      ..writeByte(9)
+      ..write(obj.accessPolicy);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SnRealmImplAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
@@ -51,9 +125,9 @@ _$SnRealmImpl _$$SnRealmImplFromJson(Map<String, dynamic> json) =>
       avatar: json['avatar'] as String?,
       banner: json['banner'] as String?,
       accessPolicy: json['access_policy'] as Map<String, dynamic>?,
+      accountId: (json['account_id'] as num).toInt(),
       isPublic: json['is_public'] as bool,
       isCommunity: json['is_community'] as bool,
-      accountId: (json['account_id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$SnRealmImplToJson(_$SnRealmImpl instance) =>
@@ -69,7 +143,7 @@ Map<String, dynamic> _$$SnRealmImplToJson(_$SnRealmImpl instance) =>
       'avatar': instance.avatar,
       'banner': instance.banner,
       'access_policy': instance.accessPolicy,
+      'account_id': instance.accountId,
       'is_public': instance.isPublic,
       'is_community': instance.isCommunity,
-      'account_id': instance.accountId,
     };

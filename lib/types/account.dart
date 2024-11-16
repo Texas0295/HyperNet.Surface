@@ -1,29 +1,32 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 part 'account.freezed.dart';
 part 'account.g.dart';
 
 @freezed
 class SnAccount with _$SnAccount {
+  const SnAccount._();
+
   const factory SnAccount({
-    required int id,
-    required int? affiliatedId,
-    required int? affiliatedTo,
-    required int? automatedBy,
-    required int? automatedId,
+    @HiveField(0) required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required DateTime? confirmedAt,
+    required List<SnAccountContact>? contacts,
     required String avatar,
     required String banner,
-    required DateTime? confirmedAt,
-    required List<SnAccountContact> contacts,
-    required DateTime createdAt,
-    required DateTime? deletedAt,
     required String description,
     required String name,
     required String nick,
     required Map<String, dynamic> permNodes,
     required SnAccountProfile? profile,
     required DateTime? suspendedAt,
-    required DateTime updatedAt,
+    required int? affiliatedId,
+    required int? affiliatedTo,
+    required int? automatedBy,
+    required int? automatedId,
   }) = _SnAccount;
 
   factory SnAccount.fromJson(Map<String, Object?> json) =>

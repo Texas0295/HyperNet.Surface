@@ -12,10 +12,12 @@ import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
+import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
 import 'package:surface/router.dart';
 import 'package:surface/types/chat.dart';
+import 'package:surface/types/realm.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,9 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(SnChannelImplAdapter());
+  Hive.registerAdapter(SnRealmImplAdapter());
+  Hive.registerAdapter(SnChannelMemberImplAdapter());
+  Hive.registerAdapter(SnChatMessageImplAdapter());
 
   if (!kReleaseMode) {
     debugInvertOversizedImages = true;
@@ -53,6 +58,7 @@ class SolianApp extends StatelessWidget {
             // Data layer
             Provider(create: (_) => SnNetworkProvider()),
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
+            Provider(create: (ctx) => UserDirectoryProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => ChatChannelProvider(ctx)),

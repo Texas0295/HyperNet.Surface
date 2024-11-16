@@ -9,22 +9,19 @@ part of 'account.dart';
 _$SnAccountImpl _$$SnAccountImplFromJson(Map<String, dynamic> json) =>
     _$SnAccountImpl(
       id: (json['id'] as num).toInt(),
-      affiliatedId: (json['affiliated_id'] as num?)?.toInt(),
-      affiliatedTo: (json['affiliated_to'] as num?)?.toInt(),
-      automatedBy: (json['automated_by'] as num?)?.toInt(),
-      automatedId: (json['automated_id'] as num?)?.toInt(),
-      avatar: json['avatar'] as String,
-      banner: json['banner'] as String,
-      confirmedAt: json['confirmed_at'] == null
-          ? null
-          : DateTime.parse(json['confirmed_at'] as String),
-      contacts: (json['contacts'] as List<dynamic>)
-          .map((e) => SnAccountContact.fromJson(e as Map<String, dynamic>))
-          .toList(),
       createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
       deletedAt: json['deleted_at'] == null
           ? null
           : DateTime.parse(json['deleted_at'] as String),
+      confirmedAt: json['confirmed_at'] == null
+          ? null
+          : DateTime.parse(json['confirmed_at'] as String),
+      contacts: (json['contacts'] as List<dynamic>?)
+          ?.map((e) => SnAccountContact.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      avatar: json['avatar'] as String,
+      banner: json['banner'] as String,
       description: json['description'] as String,
       name: json['name'] as String,
       nick: json['nick'] as String,
@@ -35,29 +32,32 @@ _$SnAccountImpl _$$SnAccountImplFromJson(Map<String, dynamic> json) =>
       suspendedAt: json['suspended_at'] == null
           ? null
           : DateTime.parse(json['suspended_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      affiliatedId: (json['affiliated_id'] as num?)?.toInt(),
+      affiliatedTo: (json['affiliated_to'] as num?)?.toInt(),
+      automatedBy: (json['automated_by'] as num?)?.toInt(),
+      automatedId: (json['automated_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$SnAccountImplToJson(_$SnAccountImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'affiliated_id': instance.affiliatedId,
-      'affiliated_to': instance.affiliatedTo,
-      'automated_by': instance.automatedBy,
-      'automated_id': instance.automatedId,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'confirmed_at': instance.confirmedAt?.toIso8601String(),
+      'contacts': instance.contacts?.map((e) => e.toJson()).toList(),
       'avatar': instance.avatar,
       'banner': instance.banner,
-      'confirmed_at': instance.confirmedAt?.toIso8601String(),
-      'contacts': instance.contacts.map((e) => e.toJson()).toList(),
-      'created_at': instance.createdAt.toIso8601String(),
-      'deleted_at': instance.deletedAt?.toIso8601String(),
       'description': instance.description,
       'name': instance.name,
       'nick': instance.nick,
       'perm_nodes': instance.permNodes,
       'profile': instance.profile?.toJson(),
       'suspended_at': instance.suspendedAt?.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
+      'affiliated_id': instance.affiliatedId,
+      'affiliated_to': instance.affiliatedTo,
+      'automated_by': instance.automatedBy,
+      'automated_id': instance.automatedId,
     };
 
 _$SnAccountContactImpl _$$SnAccountContactImplFromJson(
