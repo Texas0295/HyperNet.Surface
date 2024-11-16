@@ -144,6 +144,8 @@
   "fieldChatAliasHint": "The unique channel alias within the site, used to represent the channel in URL, leave blank to auto generate. Should be URL-Safe.",
   "fieldChatName": "Name",
   "fieldChatDescription": "Description",
+  "fieldChatBelongToRealm": "Belongs to",
+  "fieldChatBelongToRealmUnset": "Unset Channel Belongs to Realm",
   "channelEditingNotice": "You are editing channel {}",
   "channelDeleted": "Chat channel {} has been deleted." ,
   "channelDelete": "Delete channel {}",

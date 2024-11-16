@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -9,6 +7,9 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/chat.dart';
+import 'package:surface/types/realm.dart';
+import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:uuid/uuid.dart';
@@ -28,15 +29,50 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  List<SnRealm>? _realms;
+  SnRealm? _belongToRealm;
+
+  Future<void> _fetchRealms() async {
+    setState(() => _isBusy = true);
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/id/realms/me/available');
+      _realms = List<SnRealm>.from(
+        resp.data?.map((e) => SnRealm.fromJson(e)) ?? [],
+      );
+    } catch (err) {
+      if (mounted) context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  SnChannel? _editingChannel;
+
+  Future<void> _fetchChannel() async {
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get(
+        '/cgi/im/channels/${widget.editingChannelAlias}',
+      );
+      _editingChannel = SnChannel.fromJson(resp.data);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
   Future<void> _performAction() async {
     final uuid = const Uuid();
     final sn = context.read<SnNetworkProvider>();
 
     setState(() => _isBusy = true);
 
-    // TODO Add realm support
-    // final scope = widget.realm != null ? widget.realm!.alias : 'global';
-    final scope = 'global';
+    final scope = _belongToRealm != null ? _belongToRealm!.alias : 'global';
     final payload = {
       'alias': _aliasController.text.isNotEmpty
           ? _aliasController.text.toLowerCase()
@@ -55,7 +91,6 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
           method: widget.editingChannelAlias != null ? 'PUT' : 'POST',
         ),
       );
-      log(jsonEncode(resp.data));
       // ignore: use_build_context_synchronously
       if (context.mounted) Navigator.pop(context, resp.data);
     } catch (err) {
@@ -64,6 +99,13 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
     }
 
     setState(() => _isBusy = false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.editingChannelAlias != null) _fetchChannel();
+    _fetchRealms();
   }
 
   @override
@@ -86,53 +128,164 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
         child: Column(
           children: [
             LoadingIndicator(isActive: _isBusy),
-            const Gap(24),
-            TextField(
-              controller: _aliasController,
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                labelText: 'fieldChatAlias'.tr(),
-                helperText: 'fieldChatAliasHint'.tr(),
-                helperMaxLines: 2,
+            if (_editingChannel != null)
+              MaterialBanner(
+                leading: const Icon(Icons.edit),
+                leadingPadding: const EdgeInsets.only(left: 10, right: 20),
+                dividerColor: Colors.transparent,
+                content: Text(
+                  'channelEditingNotice'
+                      .tr(args: ['#${_editingChannel!.alias}']),
+                ),
+                actions: [
+                  TextButton(
+                    child: Text('cancel').tr(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
-              onTapOutside: (_) =>
-                  FocusManager.instance.primaryFocus?.unfocus(),
-            ),
-            const Gap(4),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                labelText: 'fieldChatName'.tr(),
+            DropdownButtonHideUnderline(
+              child: DropdownButton2<SnRealm>(
+                isExpanded: true,
+                hint: Text(
+                  'fieldChatBelongToRealm'.tr(),
+                  style: TextStyle(
+                    color: Theme.of(context).hintColor,
+                  ),
+                ),
+                items: [
+                  ...(_realms?.map(
+                        (SnRealm item) => DropdownMenuItem<SnRealm>(
+                          value: item,
+                          child: Row(
+                            children: [
+                              AccountImage(
+                                content: item.avatar,
+                                radius: 16,
+                                fallbackWidget: const Icon(
+                                  Symbols.group,
+                                  size: 16,
+                                ),
+                              ),
+                              const Gap(12),
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(item.name).textStyle(Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!),
+                                    Text(
+                                      item.description,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ).textStyle(
+                                        Theme.of(context).textTheme.bodySmall!),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ) ??
+                      []),
+                  DropdownMenuItem<SnRealm>(
+                    value: null,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 16,
+                          backgroundColor: Colors.transparent,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onSurface,
+                          child: const Icon(Symbols.clear),
+                        ),
+                        const Gap(12),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('fieldChatBelongToRealmUnset')
+                                  .tr()
+                                  .textStyle(
+                                    Theme.of(context).textTheme.bodyMedium!,
+                                  ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                value: _belongToRealm,
+                onChanged: (SnRealm? value) {
+                  setState(() => _belongToRealm = value);
+                },
+                buttonStyleData: const ButtonStyleData(
+                  padding: EdgeInsets.only(right: 16),
+                  height: 60,
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 60,
+                ),
               ),
-              onTapOutside: (_) =>
-                  FocusManager.instance.primaryFocus?.unfocus(),
             ),
-            const Gap(4),
-            TextField(
-              controller: _descriptionController,
-              maxLines: null,
-              minLines: 3,
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                labelText: 'fieldChatDescription'.tr(),
-              ),
-              onTapOutside: (_) =>
-                  FocusManager.instance.primaryFocus?.unfocus(),
-            ),
+            const Divider(height: 1),
             const Gap(12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Column(
               children: [
-                ElevatedButton.icon(
-                  onPressed: _isBusy ? null : _performAction,
-                  icon: const Icon(Symbols.save),
-                  label: Text('apply').tr(),
+                TextField(
+                  controller: _aliasController,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldChatAlias'.tr(),
+                    helperText: 'fieldChatAliasHint'.tr(),
+                    helperMaxLines: 2,
+                  ),
+                  onTapOutside: (_) =>
+                      FocusManager.instance.primaryFocus?.unfocus(),
+                ),
+                const Gap(4),
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldChatName'.tr(),
+                  ),
+                  onTapOutside: (_) =>
+                      FocusManager.instance.primaryFocus?.unfocus(),
+                ),
+                const Gap(4),
+                TextField(
+                  controller: _descriptionController,
+                  maxLines: null,
+                  minLines: 3,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldChatDescription'.tr(),
+                  ),
+                  onTapOutside: (_) =>
+                      FocusManager.instance.primaryFocus?.unfocus(),
+                ),
+                const Gap(12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: _isBusy ? null : _performAction,
+                      icon: const Icon(Symbols.save),
+                      label: Text('apply').tr(),
+                    ),
+                  ],
                 ),
               ],
-            ),
+            ).padding(horizontal: 24),
           ],
-        ).padding(horizontal: 24),
+        ),
       ),
     );
   }
