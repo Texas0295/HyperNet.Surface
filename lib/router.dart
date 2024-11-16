@@ -9,10 +9,13 @@ import 'package:surface/screens/album.dart';
 import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/chat.dart';
+import 'package:surface/screens/chat/manage.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
 import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
+import 'package:surface/screens/realm.dart';
+import 'package:surface/screens/realm/manage.dart';
 import 'package:surface/screens/settings.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
@@ -98,6 +101,55 @@ final _appRoutes = [
         pageBuilder: (context, state) => NoTransitionPage(
           child: const ChatScreen(),
         ),
+        routes: [
+          GoRoute(
+            path: '/chat/manage',
+            name: 'chatManage',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              child: ChatManageScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: AppBackground(
+                    isLessOptimization: true,
+                    child: child,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/realm',
+        name: 'realm',
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const RealmScreen(),
+        ),
+        routes: [
+          GoRoute(
+            path: '/realm/manage',
+            name: 'realmManage',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              child: RealmManageScreen(
+                editingRealmAlias: state.uri.queryParameters['editing'],
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeThroughTransition(
+                  animation: animation,
+                  secondaryAnimation: secondaryAnimation,
+                  child: AppBackground(
+                    isLessOptimization: true,
+                    child: child,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/album',

@@ -148,20 +148,14 @@ class _AccountPublisherEditScreenState
         mimetype: 'image/png',
       );
 
-      if (!mounted) return;
-      final sn = context.read<SnNetworkProvider>();
-      await sn.client.put(
-        '/cgi/id/users/me/$place',
-        data: {'attachment': attachment.rid},
-      );
-
-      if (!mounted) return;
-      final ua = context.read<UserProvider>();
-      await ua.refreshUser();
-
-      if (!mounted) return;
-      context.showSnackbar('accountProfileEditApplied'.tr());
-      _syncWidget();
+      switch (place) {
+        case 'avatar':
+          _avatar = attachment.rid;
+          break;
+        case 'banner':
+          _banner = attachment.rid;
+          break;
+      }
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -286,7 +280,7 @@ class _AccountPublisherEditScreenState
               ],
             )
           ],
-        ).padding(horizontal: 16, vertical: 12),
+        ).padding(horizontal: 24, vertical: 12),
       ),
     );
   }

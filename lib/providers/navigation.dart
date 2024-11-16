@@ -44,25 +44,31 @@ class NavigationProvider extends ChangeNotifier {
       label: 'screenExplore',
     ),
     AppNavDestination(
+      icon: Icon(Symbols.chat, weight: 400, opticalSize: 20),
+      screen: 'chat',
+      label: 'screenChat',
+    ),
+    AppNavDestination(
       icon: Icon(Symbols.account_circle, weight: 400, opticalSize: 20),
       screen: 'account',
       label: 'screenAccount',
+    ),
+    AppNavDestination(
+      icon: Icon(Symbols.group, weight: 400, opticalSize: 20),
+      screen: 'realm',
+      label: 'screenRealm',
     ),
     AppNavDestination(
       icon: Icon(Symbols.album, weight: 400, opticalSize: 20),
       screen: 'album',
       label: 'screenAlbum',
     ),
-    AppNavDestination(
-      icon: Icon(Symbols.chat, weight: 400, opticalSize: 20),
-      screen: 'chat',
-      label: 'screenChat',
-    ),
   ];
   static const List<String> kDefaultPinnedDestination = [
     'home',
     'explore',
-    'account'
+    'chat',
+    'account',
   ];
 
   List<AppNavDestination> destinations = [];
