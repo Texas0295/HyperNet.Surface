@@ -157,5 +157,6 @@
   "realmEditingNotice": "You are editing realm {}",
   "realmDeleted": "Realm {} has been deleted.",
   "realmDelete": "Delete realm {}",
-  "realmDeleteDescription": "Are you sure you want to delete this realm? This operation is irreversible, all resources (posts, chat channels, publishers, etc) belonging to this realm will be permanently deleted. Be careful and think twice!"
+  "realmDeleteDescription": "Are you sure you want to delete this realm? This operation is irreversible, all resources (posts, chat channels, publishers, etc) belonging to this realm will be permanently deleted. Be careful and think twice!",
+  "fieldChatMessage": "Message in {}"
 }

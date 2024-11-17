@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -33,12 +34,12 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 72,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 56,
+          child: Row(
             children: [
               Expanded(
                 child: TextField(
@@ -46,7 +47,9 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
                   controller: _contentController,
                   decoration: InputDecoration(
                     isCollapsed: true,
-                    hintText: 'Type a message...',
+                    hintText: 'fieldChatMessage'.tr(args: [
+                      widget.controller.channel?.name ?? 'loading'.tr()
+                    ]),
                     border: InputBorder.none,
                   ),
                   onSubmitted: (_) {
@@ -68,9 +71,9 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
                 ),
               ),
             ],
-          ).padding(horizontal: 16, vertical: 12),
-        ],
-      ),
+          ),
+        ).padding(horizontal: 16),
+      ],
     );
   }
 }

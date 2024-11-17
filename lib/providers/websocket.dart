@@ -52,6 +52,7 @@ class WebSocketProvider extends ChangeNotifier {
     try {
       conn = WebSocketChannel.connect(uri);
       await conn!.ready;
+      listen();
       log('[WebSocket] Connected to server!');
       isConnected = true;
     } catch (err) {

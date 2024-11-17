@@ -9,7 +9,8 @@ import 'package:surface/widgets/markdown_content.dart';
 
 class ChatMessage extends StatelessWidget {
   final SnChatMessage data;
-  const ChatMessage({super.key, required this.data});
+  final bool isPending;
+  const ChatMessage({super.key, required this.data, this.isPending = false});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,6 @@ class ChatMessage extends StatelessWidget {
           ),
         )
       ],
-    );
+    ).opacity(isPending ? 0.5 : 1);
   }
 }

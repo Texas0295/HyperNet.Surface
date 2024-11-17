@@ -28,15 +28,15 @@ class SnNetworkProvider {
   SnNetworkProvider() {
     client = Dio();
 
-    client.interceptors.add(RetryInterceptor(
-      dio: client,
-      retries: 3,
-      retryDelays: const [
-        Duration(milliseconds: 300),
-        Duration(milliseconds: 1000),
-        Duration(milliseconds: 3000),
-      ],
-    ));
+    // client.interceptors.add(RetryInterceptor(
+    //   dio: client,
+    //   retries: 3,
+    //   retryDelays: const [
+    //     Duration(milliseconds: 300),
+    //     Duration(milliseconds: 1000),
+    //     Duration(milliseconds: 3000),
+    //   ],
+    // ));
 
     client.interceptors.add(
       InterceptorsWrapper(

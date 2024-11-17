@@ -75,6 +75,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               if (!_messageController.isPending)
                 Expanded(
                   child: InfiniteList(
+                    reverse: true,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
                     hasReachedMax: _messageController.isAllLoaded,
                     itemCount: _messageController.messages.length,
                     isLoading: _messageController.isLoading,
@@ -83,7 +88,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     },
                     itemBuilder: (context, idx) {
                       final message = _messageController.messages[idx];
-                      return ChatMessage(data: message);
+                      return ChatMessage(
+                        data: message,
+                        isPending: _messageController.unconfirmedMessages
+                            .contains(message.uuid),
+                      );
                     },
                   ),
                 ),

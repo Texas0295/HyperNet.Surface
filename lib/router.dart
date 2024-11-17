@@ -107,6 +107,7 @@ final _appRoutes = [
             path: '/chat/:scope/:alias',
             name: 'chatRoom',
             builder: (context, state) => AppBackground(
+              isLessOptimization: true,
               child: ChatRoomScreen(
                 scope: state.pathParameters['scope']!,
                 alias: state.pathParameters['alias']!,
