@@ -76,9 +76,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 Expanded(
                   child: InfiniteList(
                     reverse: true,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                      right: 12,
+                      top: 12,
                     ),
                     hasReachedMax: _messageController.isAllLoaded,
                     itemCount: _messageController.messages.length,
@@ -88,8 +89,32 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     },
                     itemBuilder: (context, idx) {
                       final message = _messageController.messages[idx];
+                      final nextMessage =
+                          idx < _messageController.messages.length - 1
+                              ? _messageController.messages[idx + 1]
+                              : null;
+                      final previousMessage =
+                          idx > 0 ? _messageController.messages[idx - 1] : null;
+
+                      final canMerge = nextMessage != null &&
+                          nextMessage.senderId == message.senderId &&
+                          message.createdAt
+                                  .difference(nextMessage.createdAt)
+                                  .inMinutes
+                                  .abs() <=
+                              3;
+                      final canMergePrevious = previousMessage != null &&
+                          previousMessage.senderId == message.senderId &&
+                          message.createdAt
+                                  .difference(previousMessage.createdAt)
+                                  .inMinutes
+                                  .abs() <=
+                              3;
+
                       return ChatMessage(
                         data: message,
+                        isMerged: canMerge,
+                        hasMerged: canMergePrevious,
                         isPending: _messageController.unconfirmedMessages
                             .contains(message.uuid),
                       );
