@@ -103,13 +103,15 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
 _$SnPostPreloadImpl _$$SnPostPreloadImplFromJson(Map<String, dynamic> json) =>
     _$SnPostPreloadImpl(
       attachments: (json['attachments'] as List<dynamic>?)
-          ?.map((e) => SnAttachment.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => e == null
+              ? null
+              : SnAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$$SnPostPreloadImplToJson(_$SnPostPreloadImpl instance) =>
     <String, dynamic>{
-      'attachments': instance.attachments?.map((e) => e.toJson()).toList(),
+      'attachments': instance.attachments?.map((e) => e?.toJson()).toList(),
     };
 
 _$SnBodyImpl _$$SnBodyImplFromJson(Map<String, dynamic> json) => _$SnBodyImpl(

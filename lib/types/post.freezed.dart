@@ -953,7 +953,7 @@ SnPostPreload _$SnPostPreloadFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SnPostPreload {
-  List<SnAttachment>? get attachments => throw _privateConstructorUsedError;
+  List<SnAttachment?>? get attachments => throw _privateConstructorUsedError;
 
   /// Serializes this SnPostPreload to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -971,7 +971,7 @@ abstract class $SnPostPreloadCopyWith<$Res> {
           SnPostPreload value, $Res Function(SnPostPreload) then) =
       _$SnPostPreloadCopyWithImpl<$Res, SnPostPreload>;
   @useResult
-  $Res call({List<SnAttachment>? attachments});
+  $Res call({List<SnAttachment?>? attachments});
 }
 
 /// @nodoc
@@ -995,7 +995,7 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
       attachments: freezed == attachments
           ? _value.attachments
           : attachments // ignore: cast_nullable_to_non_nullable
-              as List<SnAttachment>?,
+              as List<SnAttachment?>?,
     ) as $Val);
   }
 }
@@ -1008,7 +1008,7 @@ abstract class _$$SnPostPreloadImplCopyWith<$Res>
       __$$SnPostPreloadImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SnAttachment>? attachments});
+  $Res call({List<SnAttachment?>? attachments});
 }
 
 /// @nodoc
@@ -1030,7 +1030,7 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
       attachments: freezed == attachments
           ? _value._attachments
           : attachments // ignore: cast_nullable_to_non_nullable
-              as List<SnAttachment>?,
+              as List<SnAttachment?>?,
     ));
   }
 }
@@ -1038,15 +1038,15 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SnPostPreloadImpl implements _SnPostPreload {
-  const _$SnPostPreloadImpl({required final List<SnAttachment>? attachments})
+  const _$SnPostPreloadImpl({required final List<SnAttachment?>? attachments})
       : _attachments = attachments;
 
   factory _$SnPostPreloadImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnPostPreloadImplFromJson(json);
 
-  final List<SnAttachment>? _attachments;
+  final List<SnAttachment?>? _attachments;
   @override
-  List<SnAttachment>? get attachments {
+  List<SnAttachment?>? get attachments {
     final value = _attachments;
     if (value == null) return null;
     if (_attachments is EqualUnmodifiableListView) return _attachments;
@@ -1091,13 +1091,13 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
 
 abstract class _SnPostPreload implements SnPostPreload {
   const factory _SnPostPreload(
-      {required final List<SnAttachment>? attachments}) = _$SnPostPreloadImpl;
+      {required final List<SnAttachment?>? attachments}) = _$SnPostPreloadImpl;
 
   factory _SnPostPreload.fromJson(Map<String, dynamic> json) =
       _$SnPostPreloadImpl.fromJson;
 
   @override
-  List<SnAttachment>? get attachments;
+  List<SnAttachment?>? get attachments;
 
   /// Create a copy of SnPostPreload
   /// with the given fields replaced by the non-null parameter values.

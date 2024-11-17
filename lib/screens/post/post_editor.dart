@@ -80,7 +80,6 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     _writeController.addAttachments(
       result.map((e) => PostWriteMedia.fromFile(e)),
     );
-    setState(() {});
   }
 
   @override

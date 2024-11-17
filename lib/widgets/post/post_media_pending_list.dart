@@ -18,54 +18,22 @@ import 'package:surface/widgets/dialog.dart';
 
 class PostMediaPendingList extends StatelessWidget {
   final PostWriteController controller;
+
   const PostMediaPendingList({super.key, required this.controller});
 
-  void _cropImage(BuildContext context, int idx) async {
-    final media = controller.attachments[idx];
-    final result = (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
-        ? await showCupertinoImageCropper(
-            // ignore: use_build_context_synchronously
-            context,
-            // ignore: use_build_context_synchronously
-            imageProvider: media.getImageProvider(context)!,
-          )
-        : await showMaterialImageCropper(
-            // ignore: use_build_context_synchronously
-            context,
-            // ignore: use_build_context_synchronously
-            imageProvider: media.getImageProvider(context)!,
-          );
-
-    if (result == null) return;
-    if (!context.mounted) return;
-
+  Future<void> _handleUpdate(int idx, PostWriteMedia updatedMedia) async {
     controller.setIsBusy(true);
-
-    final rawBytes =
-        (await result.uiImage.toByteData(format: ImageByteFormat.png))!
-            .buffer
-            .asUint8List();
-    controller.setAttachmentAt(
-      idx,
-      PostWriteMedia.fromBytes(rawBytes, media.name, media.type),
-    );
-
-    controller.setIsBusy(false);
+    try {
+      controller.setAttachmentAt(idx, updatedMedia);
+    } finally {
+      controller.setIsBusy(false);
+    }
   }
 
-  void _deleteAttachment(BuildContext context, int idx) async {
-    final media = controller.attachments[idx];
-    if (media.attachment == null) return;
-
+  Future<void> _handleRemove(int idx) async {
     controller.setIsBusy(true);
-
     try {
-      final sn = context.read<SnNetworkProvider>();
-      await sn.client.delete('/cgi/uc/attachments/${media.attachment!.id}');
       controller.removeAttachmentAt(idx);
-    } catch (err) {
-      if (!context.mounted) return;
-      context.showErrorDialog(err);
     } finally {
       controller.setIsBusy(false);
     }
@@ -73,108 +41,180 @@ class PostMediaPendingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
-        return Container(
-          constraints: const BoxConstraints(maxHeight: 120),
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            separatorBuilder: (context, index) => const Gap(8),
-            itemCount: controller.attachments.length,
-            itemBuilder: (context, idx) {
-              final media = controller.attachments[idx];
-              return ContextMenuRegion(
-                contextMenu: ContextMenu(
-                  entries: [
-                    if (media.type == PostWriteMediaType.image &&
-                        media.attachment != null)
-                      MenuItem(
-                        label: 'preview'.tr(),
-                        icon: Symbols.preview,
-                        onSelected: () {
-                          context.pushTransparentRoute(
-                            AttachmentDetailPopup(data: media.attachment!),
-                            rootNavigator: true,
-                          );
-                        },
-                      ),
-                    if (media.type == PostWriteMediaType.image &&
-                        media.attachment == null)
-                      MenuItem(
-                        label: 'crop'.tr(),
-                        icon: Symbols.crop,
-                        onSelected: () => _cropImage(context, idx),
-                      ),
-                    if (media.attachment != null)
-                      MenuItem(
-                        label: 'delete'.tr(),
-                        icon: Symbols.delete,
-                        onSelected: controller.isBusy
-                            ? null
-                            : () => _deleteAttachment(context, idx),
-                      ),
-                    if (media.attachment == null)
-                      MenuItem(
-                        label: 'delete'.tr(),
-                        icon: Symbols.delete,
-                        onSelected: () {
-                          controller.removeAttachmentAt(idx);
-                        },
-                      )
-                    else
-                      MenuItem(
-                        label: 'unlink'.tr(),
-                        icon: Symbols.link_off,
-                        onSelected: () {
-                          controller.removeAttachmentAt(idx);
-                        },
-                      ),
-                  ],
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).dividerColor,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: switch (media.type) {
-                        PostWriteMediaType.image =>
-                          LayoutBuilder(builder: (context, constraints) {
-                            return Image(
-                              image: media.getImageProvider(
-                                context,
-                                width: (constraints.maxWidth * devicePixelRatio)
-                                    .round(),
-                                height:
-                                    (constraints.maxHeight * devicePixelRatio)
-                                        .round(),
-                              )!,
-                              fit: BoxFit.cover,
-                            );
-                          }),
-                        _ => Container(
-                            color: Theme.of(context).colorScheme.surface,
-                            child: const Icon(Symbols.docs).center(),
-                          ),
-                      },
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+        return PostMediaPendingListRaw(
+          attachments: controller.attachments,
+          isBusy: controller.isBusy,
+          onUpdate: (idx, updatedMedia) => _handleUpdate(idx, updatedMedia),
+          onRemove: (idx) => _handleRemove(idx),
+          onUpdateBusy: (state) => controller.setIsBusy(state),
         );
       },
+    );
+  }
+}
+
+class PostMediaPendingListRaw extends StatelessWidget {
+  final List<PostWriteMedia> attachments;
+  final bool isBusy;
+  final Future<void> Function(int idx, PostWriteMedia updatedMedia)? onUpdate;
+  final Future<void> Function(int idx)? onRemove;
+  final void Function(bool state)? onUpdateBusy;
+
+  const PostMediaPendingListRaw({
+    super.key,
+    required this.attachments,
+    required this.isBusy,
+    this.onUpdate,
+    this.onRemove,
+    this.onUpdateBusy,
+  });
+
+  Future<void> _cropImage(BuildContext context, int idx) async {
+    final media = attachments[idx];
+    final result = (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+        ? await showCupertinoImageCropper(
+            context,
+            imageProvider: media.getImageProvider(context)!,
+          )
+        : await showMaterialImageCropper(
+            context,
+            imageProvider: media.getImageProvider(context)!,
+          );
+
+    if (result == null) return;
+
+    final rawBytes =
+        (await result.uiImage.toByteData(format: ImageByteFormat.png))!
+            .buffer
+            .asUint8List();
+
+    if (onUpdate != null) {
+      final updatedMedia = PostWriteMedia.fromBytes(
+        rawBytes,
+        media.name,
+        media.type,
+      );
+      await onUpdate!(idx, updatedMedia);
+    }
+  }
+
+  Future<void> _deleteAttachment(BuildContext context, int idx) async {
+    final media = attachments[idx];
+    if (media.attachment == null) return;
+
+    try {
+      onUpdateBusy?.call(true);
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.delete('/cgi/uc/attachments/${media.attachment!.id}');
+      onRemove!(idx);
+    } catch (err) {
+      if (!context.mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      onUpdateBusy?.call(false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 120),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        separatorBuilder: (context, index) => const Gap(8),
+        itemCount: attachments.length,
+        itemBuilder: (context, idx) {
+          final media = attachments[idx];
+          return ContextMenuRegion(
+            contextMenu: ContextMenu(
+              entries: [
+                if (media.type == PostWriteMediaType.image &&
+                    media.attachment != null)
+                  MenuItem(
+                    label: 'preview'.tr(),
+                    icon: Symbols.preview,
+                    onSelected: () {
+                      context.pushTransparentRoute(
+                        AttachmentDetailPopup(data: media.attachment!),
+                        rootNavigator: true,
+                      );
+                    },
+                  ),
+                if (media.type == PostWriteMediaType.image &&
+                    media.attachment == null)
+                  MenuItem(
+                    label: 'crop'.tr(),
+                    icon: Symbols.crop,
+                    onSelected: () => _cropImage(context, idx),
+                  ),
+                if (media.attachment != null && onRemove != null)
+                  MenuItem(
+                    label: 'delete'.tr(),
+                    icon: Symbols.delete,
+                    onSelected:
+                        isBusy ? null : () => _deleteAttachment(context, idx),
+                  ),
+                if (media.attachment == null && onRemove != null)
+                  MenuItem(
+                    label: 'delete'.tr(),
+                    icon: Symbols.delete,
+                    onSelected: () {
+                      onRemove!(idx);
+                    },
+                  )
+                else if (onRemove != null)
+                  MenuItem(
+                    label: 'unlink'.tr(),
+                    icon: Symbols.link_off,
+                    onSelected: () {
+                      onRemove!(idx);
+                    },
+                  ),
+              ],
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: switch (media.type) {
+                    PostWriteMediaType.image =>
+                      LayoutBuilder(builder: (context, constraints) {
+                        return Image(
+                          image: media.getImageProvider(
+                            context,
+                            width: (constraints.maxWidth * devicePixelRatio)
+                                .round(),
+                            height: (constraints.maxHeight * devicePixelRatio)
+                                .round(),
+                          )!,
+                          fit: BoxFit.cover,
+                        );
+                      }),
+                    _ => Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        child: const Icon(Symbols.docs).center(),
+                      ),
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

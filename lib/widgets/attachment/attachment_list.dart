@@ -6,7 +6,7 @@ import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 
 class AttachmentList extends StatelessWidget {
-  final List<SnAttachment> data;
+  final List<SnAttachment?> data;
   final bool? bordered;
   final double? maxHeight;
   final EdgeInsets? listPadding;
@@ -46,7 +46,7 @@ class AttachmentList extends StatelessWidget {
               borderRadius: kDefaultRadius,
             ),
             child: AspectRatio(
-              aspectRatio: data[0].metadata['ratio']?.toDouble() ?? 1,
+              aspectRatio: data[0]?.metadata['ratio']?.toDouble() ?? 1,
               child: ClipRRect(
                 borderRadius: kDefaultRadius,
                 child: AttachmentItem(data: data[0], isExpandable: true),
@@ -62,7 +62,7 @@ class AttachmentList extends StatelessWidget {
           border: Border(top: borderSide, bottom: borderSide),
         ),
         child: AspectRatio(
-          aspectRatio: data[0].metadata['ratio']?.toDouble() ?? 1,
+          aspectRatio: data[0]?.metadata['ratio']?.toDouble() ?? 1,
           child: AttachmentItem(data: data[0], isExpandable: true),
         ),
       );
@@ -86,7 +86,7 @@ class AttachmentList extends StatelessWidget {
                     borderRadius: kDefaultRadius,
                   ),
                   child: AspectRatio(
-                    aspectRatio: data[idx].metadata['ratio']?.toDouble() ?? 1,
+                    aspectRatio: data[idx]?.metadata['ratio']?.toDouble() ?? 1,
                     child: ClipRRect(
                       borderRadius: kDefaultRadius,
                       child:

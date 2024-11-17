@@ -61,7 +61,8 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
         preload: SnPostPreload(
           attachments: attachments
               .where(
-                (ele) => out[i].body['attachments']?.contains(ele.rid) ?? false,
+                (ele) =>
+                    out[i].body['attachments']?.contains(ele?.rid) ?? false,
               )
               .toList(),
         ),

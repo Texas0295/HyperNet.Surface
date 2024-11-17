@@ -53,7 +53,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
         preload: SnPostPreload(
           attachments: attachments
               .where(
-                (ele) => out[i].body['attachments']?.contains(ele.rid) ?? false,
+                (ele) =>
+                    out[i].body['attachments']?.contains(ele?.rid) ?? false,
               )
               .toList(),
         ),

@@ -14,7 +14,7 @@ import 'package:surface/widgets/universal_image.dart';
 import 'package:uuid/uuid.dart';
 
 class AttachmentItem extends StatelessWidget {
-  final SnAttachment data;
+  final SnAttachment? data;
   final bool isExpandable;
   const AttachmentItem({
     super.key,
@@ -23,15 +23,19 @@ class AttachmentItem extends StatelessWidget {
   });
 
   Widget _buildContent(BuildContext context, String heroTag) {
-    final tp = data.mimetype.split('/').firstOrNull;
+    if (data == null) {
+      return const Icon(Symbols.cancel).center();
+    }
+
+    final tp = data!.mimetype.split('/').firstOrNull;
     final sn = context.read<SnNetworkProvider>();
     switch (tp) {
       case 'image':
         return Hero(
-          tag: 'attachment-${data.rid}-$heroTag',
+          tag: 'attachment-${data!.rid}-$heroTag',
           child: AutoResizeUniversalImage(
-            sn.getAttachmentUrl(data.rid),
-            key: Key('attachment-${data.rid}-$heroTag'),
+            sn.getAttachmentUrl(data!.rid),
+            key: Key('attachment-${data!.rid}-$heroTag'),
             fit: BoxFit.cover,
           ),
         );
@@ -45,7 +49,7 @@ class AttachmentItem extends StatelessWidget {
     final uuid = Uuid();
     final heroTag = uuid.v4();
 
-    if (data.isMature) {
+    if (data!.isMature) {
       return _AttachmentItemSensitiveBlur(
         child: _buildContent(context, heroTag),
       );
@@ -56,7 +60,7 @@ class AttachmentItem extends StatelessWidget {
         child: _buildContent(context, heroTag),
         onTap: () {
           context.pushTransparentRoute(
-            AttachmentDetailPopup(data: data, heroTag: heroTag),
+            AttachmentDetailPopup(data: data!, heroTag: heroTag),
             rootNavigator: true,
           );
         },

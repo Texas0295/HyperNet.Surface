@@ -1083,6 +1083,7 @@ mixin _$SnChatMessage {
   int get channelId => throw _privateConstructorUsedError;
   @HiveField(10)
   int get senderId => throw _privateConstructorUsedError;
+  SnChatMessagePreload? get preload => throw _privateConstructorUsedError;
 
   /// Serializes this SnChatMessage to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1111,10 +1112,12 @@ abstract class $SnChatMessageCopyWith<$Res> {
       @HiveField(7) SnChannel channel,
       @HiveField(8) SnChannelMember sender,
       @HiveField(9) int channelId,
-      @HiveField(10) int senderId});
+      @HiveField(10) int senderId,
+      SnChatMessagePreload? preload});
 
   $SnChannelCopyWith<$Res> get channel;
   $SnChannelMemberCopyWith<$Res> get sender;
+  $SnChatMessagePreloadCopyWith<$Res>? get preload;
 }
 
 /// @nodoc
@@ -1143,6 +1146,7 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
     Object? sender = null,
     Object? channelId = null,
     Object? senderId = null,
+    Object? preload = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -1189,6 +1193,10 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
               as int,
+      preload: freezed == preload
+          ? _value.preload
+          : preload // ignore: cast_nullable_to_non_nullable
+              as SnChatMessagePreload?,
     ) as $Val);
   }
 
@@ -1209,6 +1217,20 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
   $SnChannelMemberCopyWith<$Res> get sender {
     return $SnChannelMemberCopyWith<$Res>(_value.sender, (value) {
       return _then(_value.copyWith(sender: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SnChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnChatMessagePreloadCopyWith<$Res>? get preload {
+    if (_value.preload == null) {
+      return null;
+    }
+
+    return $SnChatMessagePreloadCopyWith<$Res>(_value.preload!, (value) {
+      return _then(_value.copyWith(preload: value) as $Val);
     });
   }
 }
@@ -1232,12 +1254,15 @@ abstract class _$$SnChatMessageImplCopyWith<$Res>
       @HiveField(7) SnChannel channel,
       @HiveField(8) SnChannelMember sender,
       @HiveField(9) int channelId,
-      @HiveField(10) int senderId});
+      @HiveField(10) int senderId,
+      SnChatMessagePreload? preload});
 
   @override
   $SnChannelCopyWith<$Res> get channel;
   @override
   $SnChannelMemberCopyWith<$Res> get sender;
+  @override
+  $SnChatMessagePreloadCopyWith<$Res>? get preload;
 }
 
 /// @nodoc
@@ -1264,6 +1289,7 @@ class __$$SnChatMessageImplCopyWithImpl<$Res>
     Object? sender = null,
     Object? channelId = null,
     Object? senderId = null,
+    Object? preload = freezed,
   }) {
     return _then(_$SnChatMessageImpl(
       id: null == id
@@ -1310,6 +1336,10 @@ class __$$SnChatMessageImplCopyWithImpl<$Res>
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
               as int,
+      preload: freezed == preload
+          ? _value.preload
+          : preload // ignore: cast_nullable_to_non_nullable
+              as SnChatMessagePreload?,
     ));
   }
 }
@@ -1329,7 +1359,8 @@ class _$SnChatMessageImpl extends _SnChatMessage {
       @HiveField(7) required this.channel,
       @HiveField(8) required this.sender,
       @HiveField(9) required this.channelId,
-      @HiveField(10) required this.senderId})
+      @HiveField(10) required this.senderId,
+      this.preload})
       : _body = body,
         super._();
 
@@ -1375,10 +1406,12 @@ class _$SnChatMessageImpl extends _SnChatMessage {
   @override
   @HiveField(10)
   final int senderId;
+  @override
+  final SnChatMessagePreload? preload;
 
   @override
   String toString() {
-    return 'SnChatMessage(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, uuid: $uuid, body: $body, type: $type, channel: $channel, sender: $sender, channelId: $channelId, senderId: $senderId)';
+    return 'SnChatMessage(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, uuid: $uuid, body: $body, type: $type, channel: $channel, sender: $sender, channelId: $channelId, senderId: $senderId, preload: $preload)';
   }
 
   @override
@@ -1401,7 +1434,8 @@ class _$SnChatMessageImpl extends _SnChatMessage {
             (identical(other.channelId, channelId) ||
                 other.channelId == channelId) &&
             (identical(other.senderId, senderId) ||
-                other.senderId == senderId));
+                other.senderId == senderId) &&
+            (identical(other.preload, preload) || other.preload == preload));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1418,7 +1452,8 @@ class _$SnChatMessageImpl extends _SnChatMessage {
       channel,
       sender,
       channelId,
-      senderId);
+      senderId,
+      preload);
 
   /// Create a copy of SnChatMessage
   /// with the given fields replaced by the non-null parameter values.
@@ -1448,7 +1483,8 @@ abstract class _SnChatMessage extends SnChatMessage {
       @HiveField(7) required final SnChannel channel,
       @HiveField(8) required final SnChannelMember sender,
       @HiveField(9) required final int channelId,
-      @HiveField(10) required final int senderId}) = _$SnChatMessageImpl;
+      @HiveField(10) required final int senderId,
+      final SnChatMessagePreload? preload}) = _$SnChatMessageImpl;
   const _SnChatMessage._() : super._();
 
   factory _SnChatMessage.fromJson(Map<String, dynamic> json) =
@@ -1487,6 +1523,8 @@ abstract class _SnChatMessage extends SnChatMessage {
   @override
   @HiveField(10)
   int get senderId;
+  @override
+  SnChatMessagePreload? get preload;
 
   /// Create a copy of SnChatMessage
   /// with the given fields replaced by the non-null parameter values.
@@ -1494,4 +1532,175 @@ abstract class _SnChatMessage extends SnChatMessage {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SnChatMessageImplCopyWith<_$SnChatMessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+SnChatMessagePreload _$SnChatMessagePreloadFromJson(Map<String, dynamic> json) {
+  return _SnChatMessagePreload.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnChatMessagePreload {
+  @HiveField(0)
+  List<SnAttachment?>? get attachments => throw _privateConstructorUsedError;
+
+  /// Serializes this SnChatMessagePreload to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnChatMessagePreload
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnChatMessagePreloadCopyWith<SnChatMessagePreload> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnChatMessagePreloadCopyWith<$Res> {
+  factory $SnChatMessagePreloadCopyWith(SnChatMessagePreload value,
+          $Res Function(SnChatMessagePreload) then) =
+      _$SnChatMessagePreloadCopyWithImpl<$Res, SnChatMessagePreload>;
+  @useResult
+  $Res call({@HiveField(0) List<SnAttachment?>? attachments});
+}
+
+/// @nodoc
+class _$SnChatMessagePreloadCopyWithImpl<$Res,
+        $Val extends SnChatMessagePreload>
+    implements $SnChatMessagePreloadCopyWith<$Res> {
+  _$SnChatMessagePreloadCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnChatMessagePreload
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? attachments = freezed,
+  }) {
+    return _then(_value.copyWith(
+      attachments: freezed == attachments
+          ? _value.attachments
+          : attachments // ignore: cast_nullable_to_non_nullable
+              as List<SnAttachment?>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnChatMessagePreloadImplCopyWith<$Res>
+    implements $SnChatMessagePreloadCopyWith<$Res> {
+  factory _$$SnChatMessagePreloadImplCopyWith(_$SnChatMessagePreloadImpl value,
+          $Res Function(_$SnChatMessagePreloadImpl) then) =
+      __$$SnChatMessagePreloadImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@HiveField(0) List<SnAttachment?>? attachments});
+}
+
+/// @nodoc
+class __$$SnChatMessagePreloadImplCopyWithImpl<$Res>
+    extends _$SnChatMessagePreloadCopyWithImpl<$Res, _$SnChatMessagePreloadImpl>
+    implements _$$SnChatMessagePreloadImplCopyWith<$Res> {
+  __$$SnChatMessagePreloadImplCopyWithImpl(_$SnChatMessagePreloadImpl _value,
+      $Res Function(_$SnChatMessagePreloadImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnChatMessagePreload
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? attachments = freezed,
+  }) {
+    return _then(_$SnChatMessagePreloadImpl(
+      attachments: freezed == attachments
+          ? _value._attachments
+          : attachments // ignore: cast_nullable_to_non_nullable
+              as List<SnAttachment?>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+@HiveType(typeId: 5)
+class _$SnChatMessagePreloadImpl extends _SnChatMessagePreload {
+  const _$SnChatMessagePreloadImpl(
+      {@HiveField(0) final List<SnAttachment?>? attachments})
+      : _attachments = attachments,
+        super._();
+
+  factory _$SnChatMessagePreloadImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnChatMessagePreloadImplFromJson(json);
+
+  final List<SnAttachment?>? _attachments;
+  @override
+  @HiveField(0)
+  List<SnAttachment?>? get attachments {
+    final value = _attachments;
+    if (value == null) return null;
+    if (_attachments is EqualUnmodifiableListView) return _attachments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'SnChatMessagePreload(attachments: $attachments)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnChatMessagePreloadImpl &&
+            const DeepCollectionEquality()
+                .equals(other._attachments, _attachments));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_attachments));
+
+  /// Create a copy of SnChatMessagePreload
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnChatMessagePreloadImplCopyWith<_$SnChatMessagePreloadImpl>
+      get copyWith =>
+          __$$SnChatMessagePreloadImplCopyWithImpl<_$SnChatMessagePreloadImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnChatMessagePreloadImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnChatMessagePreload extends SnChatMessagePreload {
+  const factory _SnChatMessagePreload(
+          {@HiveField(0) final List<SnAttachment?>? attachments}) =
+      _$SnChatMessagePreloadImpl;
+  const _SnChatMessagePreload._() : super._();
+
+  factory _SnChatMessagePreload.fromJson(Map<String, dynamic> json) =
+      _$SnChatMessagePreloadImpl.fromJson;
+
+  @override
+  @HiveField(0)
+  List<SnAttachment?>? get attachments;
+
+  /// Create a copy of SnChatMessagePreload
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnChatMessagePreloadImplCopyWith<_$SnChatMessagePreloadImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

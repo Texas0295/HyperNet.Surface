@@ -204,6 +204,41 @@ class SnChatMessageImplAdapter extends TypeAdapter<_$SnChatMessageImpl> {
           typeId == other.typeId;
 }
 
+class SnChatMessagePreloadImplAdapter
+    extends TypeAdapter<_$SnChatMessagePreloadImpl> {
+  @override
+  final int typeId = 5;
+
+  @override
+  _$SnChatMessagePreloadImpl read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return _$SnChatMessagePreloadImpl(
+      attachments: (fields[0] as List?)?.cast<SnAttachment?>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, _$SnChatMessagePreloadImpl obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.attachments);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SnChatMessagePreloadImplAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -309,6 +344,10 @@ _$SnChatMessageImpl _$$SnChatMessageImplFromJson(Map<String, dynamic> json) =>
       sender: SnChannelMember.fromJson(json['sender'] as Map<String, dynamic>),
       channelId: (json['channel_id'] as num).toInt(),
       senderId: (json['sender_id'] as num).toInt(),
+      preload: json['preload'] == null
+          ? null
+          : SnChatMessagePreload.fromJson(
+              json['preload'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$SnChatMessageImplToJson(_$SnChatMessageImpl instance) =>
@@ -324,4 +363,21 @@ Map<String, dynamic> _$$SnChatMessageImplToJson(_$SnChatMessageImpl instance) =>
       'sender': instance.sender.toJson(),
       'channel_id': instance.channelId,
       'sender_id': instance.senderId,
+      'preload': instance.preload?.toJson(),
+    };
+
+_$SnChatMessagePreloadImpl _$$SnChatMessagePreloadImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SnChatMessagePreloadImpl(
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => e == null
+              ? null
+              : SnAttachment.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$SnChatMessagePreloadImplToJson(
+        _$SnChatMessagePreloadImpl instance) =>
+    <String, dynamic>{
+      'attachments': instance.attachments?.map((e) => e?.toJson()).toList(),
     };

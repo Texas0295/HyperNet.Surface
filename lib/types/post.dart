@@ -53,7 +53,7 @@ class SnPost with _$SnPost {
 @freezed
 class SnPostPreload with _$SnPostPreload {
   const factory SnPostPreload({
-    required List<SnAttachment>? attachments,
+    required List<SnAttachment?>? attachments,
   }) = _SnPostPreload;
 
   factory SnPostPreload.fromJson(Map<String, Object?> json) =>

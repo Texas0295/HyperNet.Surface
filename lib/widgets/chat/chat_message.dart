@@ -6,6 +6,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/markdown_content.dart';
 
 class ChatMessage extends StatelessWidget {
@@ -62,6 +63,13 @@ class ChatMessage extends StatelessWidget {
                 MarkdownTextContent(
                   content: data.body['text'],
                   isAutoWarp: true,
+                ),
+              if (data.preload?.attachments?.isNotEmpty ?? false)
+                AttachmentList(
+                  data: data.preload!.attachments!,
+                  bordered: true,
+                  maxHeight: 520,
+                  listPadding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               if (!hasMerged) const Gap(8),
             ],

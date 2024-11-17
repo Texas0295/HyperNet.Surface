@@ -19,6 +19,14 @@ class SnAttachmentProvider {
     _sn = context.read<SnNetworkProvider>();
   }
 
+  void putCache(Iterable<SnAttachment> items, {bool noCheck = false}) {
+    for (final item in items) {
+      if ((item.isAnalyzed && item.isUploaded) || noCheck) {
+        _cache[item.rid] = item;
+      }
+    }
+  }
+
   Future<SnAttachment> getOne(String rid, {noCache = false}) async {
     if (!noCache && _cache.containsKey(rid)) {
       return _cache[rid]!;
@@ -26,37 +34,48 @@ class SnAttachmentProvider {
 
     final resp = await _sn.client.get('/cgi/uc/attachments/$rid/meta');
     final out = SnAttachment.fromJson(resp.data);
-    _cache[rid] = out;
+    if (out.isAnalyzed && out.isUploaded) {
+      _cache[rid] = out;
+    }
 
     return out;
   }
 
-  Future<List<SnAttachment>> getMultiple(List<String> rids,
+  Future<List<SnAttachment?>> getMultiple(List<String> rids,
       {noCache = false}) async {
-    final pendingFetch =
-        noCache ? rids : rids.where((rid) => !_cache.containsKey(rid)).toList();
+    final result = List<SnAttachment?>.filled(rids.length, null);
+    final Map<String, int> randomMapping = {};
+    for (int i = 0; i < rids.length; i++) {
+      final rid = rids[i];
+      if (noCache || !_cache.containsKey(rid)) {
+        randomMapping[rid] = i;
+      } else {
+        result[i] = _cache[rid]!;
+      }
+    }
+    final pendingFetch = randomMapping.keys;
 
-    if (pendingFetch.isEmpty) {
-      return rids.map((rid) => _cache[rid]!).toList();
+    if (pendingFetch.isNotEmpty) {
+      final resp = await _sn.client.get(
+        '/cgi/uc/attachments',
+        queryParameters: {
+          'take': pendingFetch.length,
+          'id': pendingFetch.join(','),
+        },
+      );
+      final out = resp.data['data']
+          .map((e) => e['id'] == 0 ? null : SnAttachment.fromJson(e))
+          .toList();
+
+      for (final item in out) {
+        if (item.isAnalyzed && item.isUploaded) {
+          _cache[item.rid] = item;
+        }
+        result[randomMapping[item.rid]!] = item;
+      }
     }
 
-    final resp = await _sn.client.get('/cgi/uc/attachments', queryParameters: {
-      'take': pendingFetch.length,
-      'id': pendingFetch.join(','),
-    });
-    final out = resp.data['data']
-        .where((e) => e['id'] != 0)
-        .map((e) => SnAttachment.fromJson(e))
-        .toList();
-
-    for (final item in out) {
-      _cache[item.rid] = item;
-    }
-
-    return rids
-        .where((rid) => _cache.containsKey(rid))
-        .map((rid) => _cache[rid]!)
-        .toList();
+    return result;
   }
 
   static Map<String, String> mimetypeOverrides = {

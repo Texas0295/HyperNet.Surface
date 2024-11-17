@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/websocket.dart';
@@ -17,6 +18,7 @@ class ChatMessageController extends ChangeNotifier {
   late final SnNetworkProvider _sn;
   late final UserDirectoryProvider _ud;
   late final WebSocketProvider _ws;
+  late final SnAttachmentProvider _attach;
 
   StreamSubscription? _wsSubscription;
 
@@ -24,6 +26,7 @@ class ChatMessageController extends ChangeNotifier {
     _sn = context.read<SnNetworkProvider>();
     _ud = context.read<UserDirectoryProvider>();
     _ws = context.read<WebSocketProvider>();
+    _attach = context.read<SnAttachmentProvider>();
   }
 
   bool isPending = true;
@@ -116,12 +119,28 @@ class ChatMessageController extends ChangeNotifier {
   }
 
   Future<void> _addUnconfirmedMessage(SnChatMessage message) async {
+    final attachmentRid = List<String>.from(
+      message.body['attachments']?.cast<String>() ?? [],
+    );
+    final attachments = await _attach.getMultiple(attachmentRid);
+    message = message.copyWith(
+      preload: SnChatMessagePreload(attachments: attachments),
+    );
+
     messages.insert(0, message);
     unconfirmedMessages.add(message.uuid);
     notifyListeners();
   }
 
   Future<void> _addMessage(SnChatMessage message) async {
+    final attachmentRid = List<String>.from(
+      message.body['attachments']?.cast<String>() ?? [],
+    );
+    final attachments = await _attach.getMultiple(attachmentRid);
+    message = message.copyWith(
+      preload: SnChatMessagePreload(attachments: attachments),
+    );
+
     final idx = messages.indexWhere((e) => e.uuid == message.uuid);
     if (idx != -1) {
       unconfirmedMessages.remove(message.uuid);
@@ -182,7 +201,8 @@ class ChatMessageController extends ChangeNotifier {
       'algorithm': 'plain',
       if (quoteId != null) 'quote_id': quoteId,
       if (relatedId != null) 'related_id': relatedId,
-      if (attachments != null) 'attachments': attachments,
+      if (attachments != null && attachments.isNotEmpty)
+        'attachments': attachments,
     };
 
     // Mock the message locally
@@ -257,25 +277,41 @@ class ChatMessageController extends ChangeNotifier {
     int offset, {
     bool forceLocal = false,
   }) async {
-    if (_box != null) {
-      // Try retrieve these messages from the local storage
-      if (_box!.length >= take + offset || forceLocal) {
-        return _box!.values.skip(offset).take(take).toList();
-      }
+    late List<SnChatMessage> out;
+    if (_box != null && (_box!.length >= take + offset || forceLocal)) {
+      out = _box!.values.skip(offset).take(take).toList();
+    } else {
+      final resp = await _sn.client.get(
+        '/cgi/im/channels/${channel!.keyPath}/events',
+        queryParameters: {
+          'take': take,
+          'offset': offset,
+        },
+      );
+      messageTotal = resp.data['count'] as int?;
+      out = List<SnChatMessage>.from(
+        resp.data['data']?.map((e) => SnChatMessage.fromJson(e)) ?? [],
+      );
+      _saveMessageToLocal(out);
     }
 
-    final resp = await _sn.client.get(
-      '/cgi/im/channels/${channel!.keyPath}/events',
-      queryParameters: {
-        'take': take,
-        'offset': offset,
-      },
+    // Preload attachments
+    final attachmentRid = List<String>.from(
+      out.expand((e) => (e.body['attachments'] as List<dynamic>?) ?? []),
     );
-    messageTotal = resp.data['count'] as int?;
-    final out = List<SnChatMessage>.from(
-      resp.data['data']?.map((e) => SnChatMessage.fromJson(e)) ?? [],
-    );
-    _saveMessageToLocal(out);
+    final attachments = await _attach.getMultiple(attachmentRid);
+    out = out.reversed
+        .map((ele) => ele.copyWith(
+              preload: SnChatMessagePreload(
+                attachments: attachments
+                    .where((e) =>
+                        (ele.body['attachments'] as List<dynamic>?)
+                            ?.contains(e) ??
+                        false)
+                    .toList(),
+              ),
+            ))
+        .toList();
 
     // Preload sender accounts
     await _ud.listAccount(out.map((ele) => ele.sender.accountId).toSet());

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:surface/types/account.dart';
+import 'package:surface/types/attachment.dart';
 import 'package:surface/types/realm.dart';
 
 part 'chat.freezed.dart';
@@ -79,8 +80,22 @@ class SnChatMessage with _$SnChatMessage {
     @HiveField(8) required SnChannelMember sender,
     @HiveField(9) required int channelId,
     @HiveField(10) required int senderId,
+    SnChatMessagePreload? preload,
   }) = _SnChatMessage;
 
   factory SnChatMessage.fromJson(Map<String, dynamic> json) =>
       _$SnChatMessageFromJson(json);
+}
+
+@freezed
+class SnChatMessagePreload with _$SnChatMessagePreload {
+  const SnChatMessagePreload._();
+
+  @HiveType(typeId: 5)
+  const factory SnChatMessagePreload({
+    @HiveField(0) List<SnAttachment?>? attachments,
+  }) = _SnChatMessagePreload;
+
+  factory SnChatMessagePreload.fromJson(Map<String, dynamic> json) =>
+      _$SnChatMessagePreloadFromJson(json);
 }
