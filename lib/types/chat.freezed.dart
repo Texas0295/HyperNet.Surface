@@ -1083,6 +1083,8 @@ mixin _$SnChatMessage {
   int get channelId => throw _privateConstructorUsedError;
   @HiveField(10)
   int get senderId => throw _privateConstructorUsedError;
+  @HiveField(11)
+  int? get quoteEventId => throw _privateConstructorUsedError;
   SnChatMessagePreload? get preload => throw _privateConstructorUsedError;
 
   /// Serializes this SnChatMessage to a JSON map.
@@ -1113,6 +1115,7 @@ abstract class $SnChatMessageCopyWith<$Res> {
       @HiveField(8) SnChannelMember sender,
       @HiveField(9) int channelId,
       @HiveField(10) int senderId,
+      @HiveField(11) int? quoteEventId,
       SnChatMessagePreload? preload});
 
   $SnChannelCopyWith<$Res> get channel;
@@ -1146,6 +1149,7 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
     Object? sender = null,
     Object? channelId = null,
     Object? senderId = null,
+    Object? quoteEventId = freezed,
     Object? preload = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1193,6 +1197,10 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
               as int,
+      quoteEventId: freezed == quoteEventId
+          ? _value.quoteEventId
+          : quoteEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
       preload: freezed == preload
           ? _value.preload
           : preload // ignore: cast_nullable_to_non_nullable
@@ -1255,6 +1263,7 @@ abstract class _$$SnChatMessageImplCopyWith<$Res>
       @HiveField(8) SnChannelMember sender,
       @HiveField(9) int channelId,
       @HiveField(10) int senderId,
+      @HiveField(11) int? quoteEventId,
       SnChatMessagePreload? preload});
 
   @override
@@ -1289,6 +1298,7 @@ class __$$SnChatMessageImplCopyWithImpl<$Res>
     Object? sender = null,
     Object? channelId = null,
     Object? senderId = null,
+    Object? quoteEventId = freezed,
     Object? preload = freezed,
   }) {
     return _then(_$SnChatMessageImpl(
@@ -1336,6 +1346,10 @@ class __$$SnChatMessageImplCopyWithImpl<$Res>
           ? _value.senderId
           : senderId // ignore: cast_nullable_to_non_nullable
               as int,
+      quoteEventId: freezed == quoteEventId
+          ? _value.quoteEventId
+          : quoteEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
       preload: freezed == preload
           ? _value.preload
           : preload // ignore: cast_nullable_to_non_nullable
@@ -1360,6 +1374,7 @@ class _$SnChatMessageImpl extends _SnChatMessage {
       @HiveField(8) required this.sender,
       @HiveField(9) required this.channelId,
       @HiveField(10) required this.senderId,
+      @HiveField(11) required this.quoteEventId,
       this.preload})
       : _body = body,
         super._();
@@ -1407,11 +1422,14 @@ class _$SnChatMessageImpl extends _SnChatMessage {
   @HiveField(10)
   final int senderId;
   @override
+  @HiveField(11)
+  final int? quoteEventId;
+  @override
   final SnChatMessagePreload? preload;
 
   @override
   String toString() {
-    return 'SnChatMessage(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, uuid: $uuid, body: $body, type: $type, channel: $channel, sender: $sender, channelId: $channelId, senderId: $senderId, preload: $preload)';
+    return 'SnChatMessage(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, uuid: $uuid, body: $body, type: $type, channel: $channel, sender: $sender, channelId: $channelId, senderId: $senderId, quoteEventId: $quoteEventId, preload: $preload)';
   }
 
   @override
@@ -1435,6 +1453,8 @@ class _$SnChatMessageImpl extends _SnChatMessage {
                 other.channelId == channelId) &&
             (identical(other.senderId, senderId) ||
                 other.senderId == senderId) &&
+            (identical(other.quoteEventId, quoteEventId) ||
+                other.quoteEventId == quoteEventId) &&
             (identical(other.preload, preload) || other.preload == preload));
   }
 
@@ -1453,6 +1473,7 @@ class _$SnChatMessageImpl extends _SnChatMessage {
       sender,
       channelId,
       senderId,
+      quoteEventId,
       preload);
 
   /// Create a copy of SnChatMessage
@@ -1484,6 +1505,7 @@ abstract class _SnChatMessage extends SnChatMessage {
       @HiveField(8) required final SnChannelMember sender,
       @HiveField(9) required final int channelId,
       @HiveField(10) required final int senderId,
+      @HiveField(11) required final int? quoteEventId,
       final SnChatMessagePreload? preload}) = _$SnChatMessageImpl;
   const _SnChatMessage._() : super._();
 
@@ -1523,6 +1545,9 @@ abstract class _SnChatMessage extends SnChatMessage {
   @override
   @HiveField(10)
   int get senderId;
+  @override
+  @HiveField(11)
+  int? get quoteEventId;
   @override
   SnChatMessagePreload? get preload;
 

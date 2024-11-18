@@ -120,8 +120,8 @@ class ChatMessageController extends ChangeNotifier {
 
   Future<void> _addUnconfirmedMessage(SnChatMessage message) async {
     SnChatMessage? quoteEvent;
-    if (message.body['quote_event'] != null) {
-      quoteEvent = await getMessage(message.body['quote_event'] as int);
+    if (message.quoteEventId != null) {
+      quoteEvent = await getMessage(message.quoteEventId as int);
     }
 
     final attachmentRid = List<String>.from(
@@ -142,8 +142,8 @@ class ChatMessageController extends ChangeNotifier {
 
   Future<void> _addMessage(SnChatMessage message) async {
     SnChatMessage? quoteEvent;
-    if (message.body['quote_event'] != null) {
-      quoteEvent = await getMessage(message.body['quote_event'] as int);
+    if (message.quoteEventId != null) {
+      quoteEvent = await getMessage(message.quoteEventId as int);
     }
 
     final attachmentRid = List<String>.from(
@@ -234,6 +234,7 @@ class ChatMessageController extends ChangeNotifier {
       channelId: channel!.id,
       sender: profile!,
       senderId: profile!.id,
+      quoteEventId: quoteId,
     );
     _addUnconfirmedMessage(message);
 
@@ -357,8 +358,8 @@ class ChatMessageController extends ChangeNotifier {
     for (var i = 0; i < out.length; i++) {
       // Preload related events (quoted)
       SnChatMessage? quoteEvent;
-      if (out[i].body['quote_event'] != null) {
-        quoteEvent = await getMessage(out[i].body['quote_event'] as int);
+      if (out[i].quoteEventId != null) {
+        quoteEvent = await getMessage(out[i].quoteEventId as int);
       }
 
       out[i] = out[i].copyWith(

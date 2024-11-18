@@ -80,6 +80,7 @@ class SnChatMessage with _$SnChatMessage {
     @HiveField(8) required SnChannelMember sender,
     @HiveField(9) required int channelId,
     @HiveField(10) required int senderId,
+    @HiveField(11) required int? quoteEventId,
     SnChatMessagePreload? preload,
   }) = _SnChatMessage;
 
