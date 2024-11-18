@@ -29,53 +29,59 @@ class ChatMessage extends StatelessWidget {
 
     final dateFormatter = DateFormat('MM/dd HH:mm');
 
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!isMerged)
-          AccountImage(
-            content: user?.avatar,
-          )
-        else
-          const Gap(40),
-        const Gap(8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (!isMerged)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      (data.sender.nick?.isNotEmpty ?? false)
-                          ? data.sender.nick!
-                          : user!.nick,
-                    ).bold(),
-                    const Gap(6),
-                    Text(
-                      dateFormatter.format(data.createdAt.toLocal()),
-                    ).fontSize(13),
-                  ],
-                ),
-              if (data.body['text'] != null)
-                MarkdownTextContent(
-                  content: data.body['text'],
-                  isAutoWarp: true,
-                ),
-              if (data.preload?.attachments?.isNotEmpty ?? false)
-                AttachmentList(
-                  data: data.preload!.attachments!,
-                  bordered: true,
-                  maxHeight: 520,
-                  listPadding: const EdgeInsets.symmetric(horizontal: 12),
-                ),
-              if (!hasMerged) const Gap(8),
-            ],
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!isMerged)
+              AccountImage(
+                content: user?.avatar,
+              )
+            else
+              const Gap(40),
+            const Gap(8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isMerged)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          (data.sender.nick?.isNotEmpty ?? false)
+                              ? data.sender.nick!
+                              : user!.nick,
+                        ).bold(),
+                        const Gap(6),
+                        Text(
+                          dateFormatter.format(data.createdAt.toLocal()),
+                        ).fontSize(13),
+                      ],
+                    ),
+                  if (data.body['text'] != null)
+                    MarkdownTextContent(
+                      content: data.body['text'],
+                      isAutoWarp: true,
+                    ),
+                ],
+              ),
+            )
+          ],
+        ).opacity(isPending ? 0.5 : 1),
+        if (data.preload?.attachments?.isNotEmpty ?? false)
+          AttachmentList(
+            data: data.preload!.attachments!,
+            bordered: true,
+            noGrow: true,
+            maxHeight: 520,
+            listPadding: const EdgeInsets.only(top: 8),
           ),
-        )
+        if (!hasMerged) const Gap(8),
       ],
-    ).opacity(isPending ? 0.5 : 1);
+    );
   }
 }

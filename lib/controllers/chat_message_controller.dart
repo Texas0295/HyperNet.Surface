@@ -279,7 +279,7 @@ class ChatMessageController extends ChangeNotifier {
   }) async {
     late List<SnChatMessage> out;
     if (_box != null && (_box!.length >= take + offset || forceLocal)) {
-      out = _box!.values.skip(offset).take(take).toList();
+      out = _box!.values.skip(offset).take(take).toList().reversed.toList();
     } else {
       final resp = await _sn.client.get(
         '/cgi/im/channels/${channel!.keyPath}/events',
@@ -300,18 +300,18 @@ class ChatMessageController extends ChangeNotifier {
       out.expand((e) => (e.body['attachments'] as List<dynamic>?) ?? []),
     );
     final attachments = await _attach.getMultiple(attachmentRid);
-    out = out.reversed
-        .map((ele) => ele.copyWith(
-              preload: SnChatMessagePreload(
-                attachments: attachments
-                    .where((e) =>
-                        (ele.body['attachments'] as List<dynamic>?)
-                            ?.contains(e) ??
-                        false)
-                    .toList(),
-              ),
-            ))
-        .toList();
+    for (var i = 0; i < out.length; i++) {
+      out[i] = out[i].copyWith(
+        preload: SnChatMessagePreload(
+          attachments: attachments
+              .where(
+                (ele) =>
+                    out[i].body['attachments']?.contains(ele?.rid) ?? false,
+              )
+              .toList(),
+        ),
+      );
+    }
 
     // Preload sender accounts
     await _ud.listAccount(out.map((ele) => ele.sender.accountId).toSet());

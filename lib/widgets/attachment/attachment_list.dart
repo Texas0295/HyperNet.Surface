@@ -7,13 +7,15 @@ import 'package:surface/widgets/attachment/attachment_item.dart';
 
 class AttachmentList extends StatelessWidget {
   final List<SnAttachment?> data;
-  final bool? bordered;
+  final bool bordered;
+  final bool noGrow;
   final double? maxHeight;
   final EdgeInsets? listPadding;
   const AttachmentList({
     super.key,
     required this.data,
-    this.bordered,
+    this.bordered = false,
+    this.noGrow = false,
     this.maxHeight,
     this.listPadding,
   });
@@ -23,7 +25,7 @@ class AttachmentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderSide = (bordered ?? false)
+    final borderSide = bordered
         ? BorderSide(width: 1, color: Theme.of(context).dividerColor)
         : BorderSide.none;
     final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
@@ -34,7 +36,7 @@ class AttachmentList extends StatelessWidget {
 
     if (data.isEmpty) return const SizedBox.shrink();
     if (data.length == 1) {
-      if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
+      if (ResponsiveBreakpoints.of(context).largerThan(MOBILE) || noGrow) {
         return Padding(
           // Single child list-like displaying
           padding: listPadding ?? EdgeInsets.zero,
