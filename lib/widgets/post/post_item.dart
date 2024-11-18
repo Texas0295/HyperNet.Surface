@@ -248,7 +248,7 @@ class _PostContentHeader extends StatelessWidget {
                   children: [
                     const Icon(Symbols.reply),
                     const Gap(16),
-                    Text('reply').tr(),
+                    Text('replyPost').tr(),
                   ],
                 ),
                 onTap: () {

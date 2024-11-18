@@ -118,9 +118,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         hasMerged: canMergePrevious,
                         isPending: _messageController.unconfirmedMessages
                             .contains(message.uuid),
-                        onReply: () {
-                          _inputGlobalKey.currentState?.setReply(message);
+                        onReply: (value) {
+                          _inputGlobalKey.currentState?.setReply(value);
                         },
+                        onEdit: (value) {},
+                        onDelete: (value) {},
                       );
                     },
                   ),

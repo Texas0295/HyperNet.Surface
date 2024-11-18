@@ -47,7 +47,8 @@
   "compress": "压缩",
   "report": "检举",
   "repost": "转帖",
-  "reply": "回贴",
+  "replyPost": "回贴",
+  "reply": "回复",
   "unset": "未设置",
   "untitled": "无题",
   "postDetail": "帖子详情",
@@ -158,5 +159,6 @@
   "realmDeleted": "领域 {} 已被删除" ,
   "realmDelete": "删除领域 {}",
   "realmDeleteDescription": "你确定要删除这个领域吗？该操作不可撤销，其隶属于该领域的所有资源（帖子、聊天频道、发布者、制品等）都将被永久删除。三思而后行！",
-  "fieldChatMessage": "在 {} 中发消息"
+  "fieldChatMessage": "在 {} 中发消息",
+  "eventResourceTag": "消息 {}"
 }

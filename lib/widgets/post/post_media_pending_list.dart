@@ -76,11 +76,15 @@ class PostMediaPendingListRaw extends StatelessWidget {
     final media = attachments[idx];
     final result = (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
         ? await showCupertinoImageCropper(
+            // ignore: use_build_context_synchronously
             context,
+            // ignore: use_build_context_synchronously
             imageProvider: media.getImageProvider(context)!,
           )
         : await showMaterialImageCropper(
+            // ignore: use_build_context_synchronously
             context,
+            // ignore: use_build_context_synchronously
             imageProvider: media.getImageProvider(context)!,
           );
 
