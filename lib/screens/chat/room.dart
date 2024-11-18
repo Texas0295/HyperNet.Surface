@@ -121,8 +121,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         onReply: (value) {
                           _inputGlobalKey.currentState?.setReply(value);
                         },
-                        onEdit: (value) {},
-                        onDelete: (value) {},
+                        onEdit: (value) {
+                          _inputGlobalKey.currentState?.setEdit(value);
+                        },
+                        onDelete: (value) {
+                          _inputGlobalKey.currentState?.deleteMessage(value);
+                        },
                       );
                     },
                   ),

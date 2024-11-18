@@ -25,13 +25,33 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   bool _isBusy = false;
   double? _progress;
 
-  SnChatMessage? _replyingMessage;
+  SnChatMessage? _replyingMessage, _editingMessage;
 
   final TextEditingController _contentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
   void setReply(SnChatMessage? value) {
     setState(() => _replyingMessage = value);
+  }
+
+  void setEdit(SnChatMessage? value) {
+    setState(() => _editingMessage = value);
+  }
+
+  Future<void> deleteMessage(SnChatMessage message) async {
+    final confirm = await context.showConfirmDialog(
+      'messageDelete'.tr(args: ['#${message.id}']),
+      'messageDeleteDescription'.tr(),
+    );
+    if (!confirm) return;
+
+    if (!mounted) return;
+    setState(() => _isBusy = true);
+
+    await widget.controller.deleteMessage(message);
+
+    if (!mounted) return;
+    setState(() => _isBusy = false);
   }
 
   Future<void> _sendMessage() async {
@@ -89,10 +109,13 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           .where((e) => e.attachment != null)
           .map((e) => e.attachment!.rid)
           .toList(),
+      relatedId: _editingMessage?.id,
       quoteId: _replyingMessage?.id,
+      editingMessage: _editingMessage,
     );
     _contentController.clear();
     _attachments.clear();
+    _editingMessage = null;
     _replyingMessage = null;
 
     setState(() => _isBusy = false);
@@ -183,6 +206,42 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                 : const SizedBox.shrink(),
           ),
         ).height(_replyingMessage != null ? 54 + 8 : 0, animate: true).animate(
+            const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
+        SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: _editingMessage != null
+                ? const EdgeInsets.only(top: 8)
+                : EdgeInsets.zero,
+            child: _editingMessage != null
+                ? MaterialBanner(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    leading: const Icon(Symbols.edit),
+                    content: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_editingMessage?.body['text'] != null)
+                            MarkdownTextContent(
+                              content: _editingMessage?.body['text'],
+                            ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('cancel'.tr()),
+                        onPressed: () {
+                          setState(() => _editingMessage = null);
+                        },
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ).height(_editingMessage != null ? 54 + 8 : 0, animate: true).animate(
             const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SizedBox(
           height: 56,

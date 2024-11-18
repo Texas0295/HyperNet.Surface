@@ -147,6 +147,18 @@ class ChatMessage extends StatelessWidget {
                           content: data.body['text'],
                           isAutoWarp: true,
                         ),
+                      if (data.type == 'messages.delete' &&
+                          data.relatedEventId != null)
+                        Row(
+                          children: [
+                            const Icon(Symbols.delete),
+                            const Gap(8),
+                            Text(
+                              'messageDeleted'
+                                  .tr(args: ['#${data.relatedEventId}']),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 )

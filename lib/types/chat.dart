@@ -74,13 +74,14 @@ class SnChatMessage with _$SnChatMessage {
     @HiveField(2) required DateTime updatedAt,
     @HiveField(3) required DateTime? deletedAt,
     @HiveField(4) required String uuid,
-    @HiveField(5) required Map<String, dynamic> body,
+    @HiveField(5) @Default({}) Map<String, dynamic> body,
     @HiveField(6) required String type,
     @HiveField(7) required SnChannel channel,
     @HiveField(8) required SnChannelMember sender,
     @HiveField(9) required int channelId,
     @HiveField(10) required int senderId,
     @HiveField(11) required int? quoteEventId,
+    @HiveField(12) required int? relatedEventId,
     SnChatMessagePreload? preload,
   }) = _SnChatMessage;
 

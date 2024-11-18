@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -176,9 +177,9 @@ class ChatMessageController extends ChangeNotifier {
 
     switch (message.type) {
       case 'messages.edit':
-        final body = message.body;
-        if (body['related_event'] != null) {
-          final idx = messages.indexWhere((x) => x.id == body['related_event']);
+        if (message.relatedEventId != null) {
+          final idx =
+              messages.indexWhere((x) => x.id == message.relatedEventId);
           if (idx != -1) {
             final newBody = message.body;
             newBody.remove('related_event');
@@ -186,17 +187,16 @@ class ChatMessageController extends ChangeNotifier {
               body: newBody,
               updatedAt: message.updatedAt,
             );
-            if (_box!.containsKey(body['related_event'])) {
-              await _box!.put(body['related_event'], messages[idx]);
+            if (_box!.containsKey(message.relatedEventId)) {
+              await _box!.put(message.relatedEventId, messages[idx]);
             }
           }
         }
       case 'messages.delete':
-        final body = message.body;
-        if (body['related_event'] != null) {
-          messages.removeWhere((x) => x.id == body['related_event']);
-          if (_box!.containsKey(body['related_event'])) {
-            await _box!.delete(body['related_event']);
+        if (message.relatedEventId != null) {
+          messages.removeWhere((x) => x.id == message.relatedEventId);
+          if (_box!.containsKey(message.relatedEventId)) {
+            await _box!.delete(message.relatedEventId);
           }
         }
     }
@@ -208,6 +208,7 @@ class ChatMessageController extends ChangeNotifier {
     int? quoteId,
     int? relatedId,
     List<String>? attachments,
+    SnChatMessage? editingMessage,
   }) async {
     if (channel == null) return;
     const uuid = Uuid();
@@ -216,7 +217,7 @@ class ChatMessageController extends ChangeNotifier {
       'text': content,
       'algorithm': 'plain',
       if (quoteId != null) 'quote_event': quoteId,
-      if (relatedId != null) 'quote_event': relatedId,
+      if (relatedId != null) 'related_event': relatedId,
       if (attachments != null && attachments.isNotEmpty)
         'attachments': attachments,
     };
@@ -235,21 +236,40 @@ class ChatMessageController extends ChangeNotifier {
       sender: profile!,
       senderId: profile!.id,
       quoteEventId: quoteId,
+      relatedEventId: relatedId,
     );
     _addUnconfirmedMessage(message);
 
     // Send to server
     try {
-      await _sn.client.post(
-        '/cgi/im/channels/${channel!.keyPath}/messages',
+      await _sn.client.request(
+        editingMessage != null
+            ? '/cgi/im/channels/${channel!.keyPath}/messages/${editingMessage.id}'
+            : '/cgi/im/channels/${channel!.keyPath}/messages',
         data: {
           'type': type,
           'uuid': nonce,
           'body': body,
         },
+        options: Options(
+          method: editingMessage != null ? 'PUT' : 'POST',
+        ),
       );
     } catch (err) {
-      print(err);
+      // ignore
+    }
+  }
+
+  Future<void> deleteMessage(SnChatMessage message) async {
+    if (message.channelId != channel?.id) return;
+
+    try {
+      await _sn.client.delete(
+        '/cgi/im/channels/${channel!.keyPath}/messages/${message.id}',
+      );
+      messages.removeWhere((x) => x.id == message.id);
+    } catch (err) {
+      // ignore
     }
   }
 
@@ -376,7 +396,11 @@ class ChatMessageController extends ChangeNotifier {
     }
 
     // Preload sender accounts
-    await _ud.listAccount(out.map((ele) => ele.sender.accountId).toSet());
+    final accountId = out
+        .where((ele) => ele.sender.accountId >= 0)
+        .map((ele) => ele.sender.accountId)
+        .toSet();
+    await _ud.listAccount(accountId);
 
     return out;
   }

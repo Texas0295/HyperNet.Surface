@@ -160,5 +160,8 @@
   "realmDelete": "删除领域 {}",
   "realmDeleteDescription": "你确定要删除这个领域吗？该操作不可撤销，其隶属于该领域的所有资源（帖子、聊天频道、发布者、制品等）都将被永久删除。三思而后行！",
   "fieldChatMessage": "在 {} 中发消息",
-  "eventResourceTag": "消息 {}"
+  "eventResourceTag": "消息 {}",
+  "messageDelete": "删除消息 {}",
+  "messageDeleteDescription": "你确定要删除这个消息吗？该操作不可撤销。同时您将留下一条删除消息的记录。",
+  "messageDeleted": "消息 {} 已被删除"
 }

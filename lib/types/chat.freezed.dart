@@ -1085,6 +1085,8 @@ mixin _$SnChatMessage {
   int get senderId => throw _privateConstructorUsedError;
   @HiveField(11)
   int? get quoteEventId => throw _privateConstructorUsedError;
+  @HiveField(12)
+  int? get relatedEventId => throw _privateConstructorUsedError;
   SnChatMessagePreload? get preload => throw _privateConstructorUsedError;
 
   /// Serializes this SnChatMessage to a JSON map.
@@ -1116,6 +1118,7 @@ abstract class $SnChatMessageCopyWith<$Res> {
       @HiveField(9) int channelId,
       @HiveField(10) int senderId,
       @HiveField(11) int? quoteEventId,
+      @HiveField(12) int? relatedEventId,
       SnChatMessagePreload? preload});
 
   $SnChannelCopyWith<$Res> get channel;
@@ -1150,6 +1153,7 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
     Object? channelId = null,
     Object? senderId = null,
     Object? quoteEventId = freezed,
+    Object? relatedEventId = freezed,
     Object? preload = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1200,6 +1204,10 @@ class _$SnChatMessageCopyWithImpl<$Res, $Val extends SnChatMessage>
       quoteEventId: freezed == quoteEventId
           ? _value.quoteEventId
           : quoteEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      relatedEventId: freezed == relatedEventId
+          ? _value.relatedEventId
+          : relatedEventId // ignore: cast_nullable_to_non_nullable
               as int?,
       preload: freezed == preload
           ? _value.preload
@@ -1264,6 +1272,7 @@ abstract class _$$SnChatMessageImplCopyWith<$Res>
       @HiveField(9) int channelId,
       @HiveField(10) int senderId,
       @HiveField(11) int? quoteEventId,
+      @HiveField(12) int? relatedEventId,
       SnChatMessagePreload? preload});
 
   @override
@@ -1299,6 +1308,7 @@ class __$$SnChatMessageImplCopyWithImpl<$Res>
     Object? channelId = null,
     Object? senderId = null,
     Object? quoteEventId = freezed,
+    Object? relatedEventId = freezed,
     Object? preload = freezed,
   }) {
     return _then(_$SnChatMessageImpl(
@@ -1350,6 +1360,10 @@ class __$$SnChatMessageImplCopyWithImpl<$Res>
           ? _value.quoteEventId
           : quoteEventId // ignore: cast_nullable_to_non_nullable
               as int?,
+      relatedEventId: freezed == relatedEventId
+          ? _value.relatedEventId
+          : relatedEventId // ignore: cast_nullable_to_non_nullable
+              as int?,
       preload: freezed == preload
           ? _value.preload
           : preload // ignore: cast_nullable_to_non_nullable
@@ -1368,13 +1382,14 @@ class _$SnChatMessageImpl extends _SnChatMessage {
       @HiveField(2) required this.updatedAt,
       @HiveField(3) required this.deletedAt,
       @HiveField(4) required this.uuid,
-      @HiveField(5) required final Map<String, dynamic> body,
+      @HiveField(5) final Map<String, dynamic> body = const {},
       @HiveField(6) required this.type,
       @HiveField(7) required this.channel,
       @HiveField(8) required this.sender,
       @HiveField(9) required this.channelId,
       @HiveField(10) required this.senderId,
       @HiveField(11) required this.quoteEventId,
+      @HiveField(12) required this.relatedEventId,
       this.preload})
       : _body = body,
         super._();
@@ -1399,6 +1414,7 @@ class _$SnChatMessageImpl extends _SnChatMessage {
   final String uuid;
   final Map<String, dynamic> _body;
   @override
+  @JsonKey()
   @HiveField(5)
   Map<String, dynamic> get body {
     if (_body is EqualUnmodifiableMapView) return _body;
@@ -1425,11 +1441,14 @@ class _$SnChatMessageImpl extends _SnChatMessage {
   @HiveField(11)
   final int? quoteEventId;
   @override
+  @HiveField(12)
+  final int? relatedEventId;
+  @override
   final SnChatMessagePreload? preload;
 
   @override
   String toString() {
-    return 'SnChatMessage(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, uuid: $uuid, body: $body, type: $type, channel: $channel, sender: $sender, channelId: $channelId, senderId: $senderId, quoteEventId: $quoteEventId, preload: $preload)';
+    return 'SnChatMessage(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, uuid: $uuid, body: $body, type: $type, channel: $channel, sender: $sender, channelId: $channelId, senderId: $senderId, quoteEventId: $quoteEventId, relatedEventId: $relatedEventId, preload: $preload)';
   }
 
   @override
@@ -1455,6 +1474,8 @@ class _$SnChatMessageImpl extends _SnChatMessage {
                 other.senderId == senderId) &&
             (identical(other.quoteEventId, quoteEventId) ||
                 other.quoteEventId == quoteEventId) &&
+            (identical(other.relatedEventId, relatedEventId) ||
+                other.relatedEventId == relatedEventId) &&
             (identical(other.preload, preload) || other.preload == preload));
   }
 
@@ -1474,6 +1495,7 @@ class _$SnChatMessageImpl extends _SnChatMessage {
       channelId,
       senderId,
       quoteEventId,
+      relatedEventId,
       preload);
 
   /// Create a copy of SnChatMessage
@@ -1499,13 +1521,14 @@ abstract class _SnChatMessage extends SnChatMessage {
       @HiveField(2) required final DateTime updatedAt,
       @HiveField(3) required final DateTime? deletedAt,
       @HiveField(4) required final String uuid,
-      @HiveField(5) required final Map<String, dynamic> body,
+      @HiveField(5) final Map<String, dynamic> body,
       @HiveField(6) required final String type,
       @HiveField(7) required final SnChannel channel,
       @HiveField(8) required final SnChannelMember sender,
       @HiveField(9) required final int channelId,
       @HiveField(10) required final int senderId,
       @HiveField(11) required final int? quoteEventId,
+      @HiveField(12) required final int? relatedEventId,
       final SnChatMessagePreload? preload}) = _$SnChatMessageImpl;
   const _SnChatMessage._() : super._();
 
@@ -1548,6 +1571,9 @@ abstract class _SnChatMessage extends SnChatMessage {
   @override
   @HiveField(11)
   int? get quoteEventId;
+  @override
+  @HiveField(12)
+  int? get relatedEventId;
   @override
   SnChatMessagePreload? get preload;
 

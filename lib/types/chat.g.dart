@@ -163,13 +163,14 @@ class SnChatMessageImplAdapter extends TypeAdapter<_$SnChatMessageImpl> {
       channelId: fields[9] as int,
       senderId: fields[10] as int,
       quoteEventId: fields[11] as int?,
+      relatedEventId: fields[12] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$SnChatMessageImpl obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -192,6 +193,8 @@ class SnChatMessageImplAdapter extends TypeAdapter<_$SnChatMessageImpl> {
       ..write(obj.senderId)
       ..writeByte(11)
       ..write(obj.quoteEventId)
+      ..writeByte(12)
+      ..write(obj.relatedEventId)
       ..writeByte(5)
       ..write(obj.body);
   }
@@ -306,13 +309,14 @@ _$SnChatMessageImpl _$$SnChatMessageImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['deleted_at'] as String),
       uuid: json['uuid'] as String,
-      body: json['body'] as Map<String, dynamic>,
+      body: json['body'] as Map<String, dynamic>? ?? const {},
       type: json['type'] as String,
       channel: SnChannel.fromJson(json['channel'] as Map<String, dynamic>),
       sender: SnChannelMember.fromJson(json['sender'] as Map<String, dynamic>),
       channelId: (json['channel_id'] as num).toInt(),
       senderId: (json['sender_id'] as num).toInt(),
       quoteEventId: (json['quote_event_id'] as num?)?.toInt(),
+      relatedEventId: (json['related_event_id'] as num?)?.toInt(),
       preload: json['preload'] == null
           ? null
           : SnChatMessagePreload.fromJson(
@@ -333,6 +337,7 @@ Map<String, dynamic> _$$SnChatMessageImplToJson(_$SnChatMessageImpl instance) =>
       'channel_id': instance.channelId,
       'sender_id': instance.senderId,
       'quote_event_id': instance.quoteEventId,
+      'related_event_id': instance.relatedEventId,
       'preload': instance.preload?.toJson(),
     };
 
