@@ -91,9 +91,9 @@ class SnChatMessage with _$SnChatMessage {
 class SnChatMessagePreload with _$SnChatMessagePreload {
   const SnChatMessagePreload._();
 
-  @HiveType(typeId: 5)
   const factory SnChatMessagePreload({
-    @HiveField(0) List<SnAttachment?>? attachments,
+    List<SnAttachment?>? attachments,
+    SnChatMessage? quoteEvent,
   }) = _SnChatMessagePreload;
 
   factory SnChatMessagePreload.fromJson(Map<String, dynamic> json) =>

@@ -8,7 +8,9 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_attachment.dart';
+import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 
 class ChatMessageInput extends StatefulWidget {
@@ -16,15 +18,21 @@ class ChatMessageInput extends StatefulWidget {
   const ChatMessageInput({super.key, required this.controller});
 
   @override
-  State<ChatMessageInput> createState() => _ChatMessageInputState();
+  State<ChatMessageInput> createState() => ChatMessageInputState();
 }
 
-class _ChatMessageInputState extends State<ChatMessageInput> {
+class ChatMessageInputState extends State<ChatMessageInput> {
   bool _isBusy = false;
   double? _progress;
 
+  SnChatMessage? _replyingMessage;
+
   final TextEditingController _contentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  void setReply(SnChatMessage? value) {
+    setState(() => _replyingMessage = value);
+  }
 
   Future<void> _sendMessage() async {
     if (_isBusy) return;
@@ -69,6 +77,7 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
 
     attach.putCache(
       _attachments.where((e) => e.attachment != null).map((e) => e.attachment!),
+      noCheck: true,
     );
 
     // Send the message
@@ -80,9 +89,11 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
           .where((e) => e.attachment != null)
           .map((e) => e.attachment!.rid)
           .toList(),
+      quoteId: _replyingMessage?.id,
     );
     _contentController.clear();
     _attachments.clear();
+    _replyingMessage = null;
 
     setState(() => _isBusy = false);
   }
@@ -134,10 +145,45 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
               setState(() => _attachments.removeAt(idx));
             },
             onUpdateBusy: (state) => setState(() => _isBusy = state),
-          ).height(_attachments.isNotEmpty ? 80 + 8 : 0, animate: true).animate(
-              const Duration(milliseconds: 300),
-              Curves.fastEaseInToSlowEaseOut),
-        ),
+          ),
+        ).height(_attachments.isNotEmpty ? 80 + 8 : 0, animate: true).animate(
+            const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
+        SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: _replyingMessage != null
+                ? const EdgeInsets.only(top: 8)
+                : EdgeInsets.zero,
+            child: _replyingMessage != null
+                ? MaterialBanner(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    leading: const Icon(Symbols.reply),
+                    content: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_replyingMessage?.body['text'] != null)
+                            MarkdownTextContent(
+                              content: _replyingMessage?.body['text'],
+                            ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('cancel'.tr()),
+                        onPressed: () {
+                          setState(() => _replyingMessage = null);
+                        },
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ).height(_replyingMessage != null ? 54 + 8 : 0, animate: true).animate(
+            const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SizedBox(
           height: 56,
           child: Row(

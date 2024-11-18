@@ -204,41 +204,6 @@ class SnChatMessageImplAdapter extends TypeAdapter<_$SnChatMessageImpl> {
           typeId == other.typeId;
 }
 
-class SnChatMessagePreloadImplAdapter
-    extends TypeAdapter<_$SnChatMessagePreloadImpl> {
-  @override
-  final int typeId = 5;
-
-  @override
-  _$SnChatMessagePreloadImpl read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return _$SnChatMessagePreloadImpl(
-      attachments: (fields[0] as List?)?.cast<SnAttachment?>(),
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, _$SnChatMessagePreloadImpl obj) {
-    writer
-      ..writeByte(1)
-      ..writeByte(0)
-      ..write(obj.attachments);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SnChatMessagePreloadImplAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -374,10 +339,14 @@ _$SnChatMessagePreloadImpl _$$SnChatMessagePreloadImplFromJson(
               ? null
               : SnAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
+      quoteEvent: json['quote_event'] == null
+          ? null
+          : SnChatMessage.fromJson(json['quote_event'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$SnChatMessagePreloadImplToJson(
         _$SnChatMessagePreloadImpl instance) =>
     <String, dynamic>{
       'attachments': instance.attachments?.map((e) => e?.toJson()).toList(),
+      'quote_event': instance.quoteEvent?.toJson(),
     };

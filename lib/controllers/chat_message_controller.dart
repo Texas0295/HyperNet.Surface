@@ -119,12 +119,20 @@ class ChatMessageController extends ChangeNotifier {
   }
 
   Future<void> _addUnconfirmedMessage(SnChatMessage message) async {
+    SnChatMessage? quoteEvent;
+    if (message.body['quote_event'] != null) {
+      quoteEvent = await getMessage(message.body['quote_event'] as int);
+    }
+
     final attachmentRid = List<String>.from(
       message.body['attachments']?.cast<String>() ?? [],
     );
     final attachments = await _attach.getMultiple(attachmentRid);
     message = message.copyWith(
-      preload: SnChatMessagePreload(attachments: attachments),
+      preload: SnChatMessagePreload(
+        quoteEvent: quoteEvent,
+        attachments: attachments,
+      ),
     );
 
     messages.insert(0, message);
@@ -133,12 +141,20 @@ class ChatMessageController extends ChangeNotifier {
   }
 
   Future<void> _addMessage(SnChatMessage message) async {
+    SnChatMessage? quoteEvent;
+    if (message.body['quote_event'] != null) {
+      quoteEvent = await getMessage(message.body['quote_event'] as int);
+    }
+
     final attachmentRid = List<String>.from(
       message.body['attachments']?.cast<String>() ?? [],
     );
     final attachments = await _attach.getMultiple(attachmentRid);
     message = message.copyWith(
-      preload: SnChatMessagePreload(attachments: attachments),
+      preload: SnChatMessagePreload(
+        quoteEvent: quoteEvent,
+        attachments: attachments,
+      ),
     );
 
     final idx = messages.indexWhere((e) => e.uuid == message.uuid);
@@ -199,8 +215,8 @@ class ChatMessageController extends ChangeNotifier {
     final body = {
       'text': content,
       'algorithm': 'plain',
-      if (quoteId != null) 'quote_id': quoteId,
-      if (relatedId != null) 'related_id': relatedId,
+      if (quoteId != null) 'quote_event': quoteId,
+      if (relatedId != null) 'quote_event': relatedId,
       if (attachments != null && attachments.isNotEmpty)
         'attachments': attachments,
     };
@@ -269,6 +285,42 @@ class ChatMessageController extends ChangeNotifier {
     }
   }
 
+  /// Get a single event from the current channel
+  /// If it was not found in local storage we will look it up in remote
+  Future<SnChatMessage?> getMessage(int id) async {
+    SnChatMessage? out;
+    if (_box != null && _box!.containsKey(id)) {
+      out = _box!.get(id);
+    }
+
+    if (out == null) {
+      try {
+        final resp = await _sn.client
+            .get('/cgi/im/channels/${channel!.keyPath}/events/$id');
+        out = SnChatMessage.fromJson(resp.data);
+        _saveMessageToLocal([out]);
+      } catch (_) {
+        // ignore, maybe not found
+      }
+    }
+
+    // Preload some related things if found
+    if (out != null) {
+      await _ud.listAccount([out.sender.accountId]);
+
+      final attachments = await _attach.getMultiple(
+        out.body['attachments']?.cast<String>() ?? [],
+      );
+      out = out.copyWith(
+        preload: SnChatMessagePreload(
+          attachments: attachments,
+        ),
+      );
+    }
+
+    return out;
+  }
+
   /// Get message from local storage first, then from the server.
   /// Will not check local storage is up to date with the server.
   /// If you need to do the sync, do the `checkUpdate` instead.
@@ -300,9 +352,18 @@ class ChatMessageController extends ChangeNotifier {
       out.expand((e) => (e.body['attachments'] as List<dynamic>?) ?? []),
     );
     final attachments = await _attach.getMultiple(attachmentRid);
+
+    // Putting preload back to data
     for (var i = 0; i < out.length; i++) {
+      // Preload related events (quoted)
+      SnChatMessage? quoteEvent;
+      if (out[i].body['quote_event'] != null) {
+        quoteEvent = await getMessage(out[i].body['quote_event'] as int);
+      }
+
       out[i] = out[i].copyWith(
         preload: SnChatMessagePreload(
+          quoteEvent: quoteEvent,
           attachments: attachments
               .where(
                 (ele) =>

@@ -25,6 +25,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   SnChannel? _channel;
 
+  final GlobalKey<ChatMessageInputState> _inputGlobalKey = GlobalKey();
   late final ChatMessageController _messageController;
 
   Future<void> _fetchChannel() async {
@@ -117,6 +118,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         hasMerged: canMergePrevious,
                         isPending: _messageController.unconfirmedMessages
                             .contains(message.uuid),
+                        onReply: () {
+                          _inputGlobalKey.currentState?.setReply(message);
+                        },
                       );
                     },
                   ),
@@ -124,8 +128,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               if (!_messageController.isPending)
                 Material(
                   elevation: 2,
-                  child: ChatMessageInput(controller: _messageController)
-                      .padding(bottom: MediaQuery.of(context).padding.bottom),
+                  child: ChatMessageInput(
+                    key: _inputGlobalKey,
+                    controller: _messageController,
+                  ).padding(bottom: MediaQuery.of(context).padding.bottom),
                 ),
             ],
           );

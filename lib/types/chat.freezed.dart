@@ -1540,8 +1540,8 @@ SnChatMessagePreload _$SnChatMessagePreloadFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SnChatMessagePreload {
-  @HiveField(0)
   List<SnAttachment?>? get attachments => throw _privateConstructorUsedError;
+  SnChatMessage? get quoteEvent => throw _privateConstructorUsedError;
 
   /// Serializes this SnChatMessagePreload to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1559,7 +1559,9 @@ abstract class $SnChatMessagePreloadCopyWith<$Res> {
           $Res Function(SnChatMessagePreload) then) =
       _$SnChatMessagePreloadCopyWithImpl<$Res, SnChatMessagePreload>;
   @useResult
-  $Res call({@HiveField(0) List<SnAttachment?>? attachments});
+  $Res call({List<SnAttachment?>? attachments, SnChatMessage? quoteEvent});
+
+  $SnChatMessageCopyWith<$Res>? get quoteEvent;
 }
 
 /// @nodoc
@@ -1579,13 +1581,32 @@ class _$SnChatMessagePreloadCopyWithImpl<$Res,
   @override
   $Res call({
     Object? attachments = freezed,
+    Object? quoteEvent = freezed,
   }) {
     return _then(_value.copyWith(
       attachments: freezed == attachments
           ? _value.attachments
           : attachments // ignore: cast_nullable_to_non_nullable
               as List<SnAttachment?>?,
+      quoteEvent: freezed == quoteEvent
+          ? _value.quoteEvent
+          : quoteEvent // ignore: cast_nullable_to_non_nullable
+              as SnChatMessage?,
     ) as $Val);
+  }
+
+  /// Create a copy of SnChatMessagePreload
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnChatMessageCopyWith<$Res>? get quoteEvent {
+    if (_value.quoteEvent == null) {
+      return null;
+    }
+
+    return $SnChatMessageCopyWith<$Res>(_value.quoteEvent!, (value) {
+      return _then(_value.copyWith(quoteEvent: value) as $Val);
+    });
   }
 }
 
@@ -1597,7 +1618,10 @@ abstract class _$$SnChatMessagePreloadImplCopyWith<$Res>
       __$$SnChatMessagePreloadImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@HiveField(0) List<SnAttachment?>? attachments});
+  $Res call({List<SnAttachment?>? attachments, SnChatMessage? quoteEvent});
+
+  @override
+  $SnChatMessageCopyWith<$Res>? get quoteEvent;
 }
 
 /// @nodoc
@@ -1614,22 +1638,26 @@ class __$$SnChatMessagePreloadImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? attachments = freezed,
+    Object? quoteEvent = freezed,
   }) {
     return _then(_$SnChatMessagePreloadImpl(
       attachments: freezed == attachments
           ? _value._attachments
           : attachments // ignore: cast_nullable_to_non_nullable
               as List<SnAttachment?>?,
+      quoteEvent: freezed == quoteEvent
+          ? _value.quoteEvent
+          : quoteEvent // ignore: cast_nullable_to_non_nullable
+              as SnChatMessage?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 5)
 class _$SnChatMessagePreloadImpl extends _SnChatMessagePreload {
   const _$SnChatMessagePreloadImpl(
-      {@HiveField(0) final List<SnAttachment?>? attachments})
+      {final List<SnAttachment?>? attachments, this.quoteEvent})
       : _attachments = attachments,
         super._();
 
@@ -1638,7 +1666,6 @@ class _$SnChatMessagePreloadImpl extends _SnChatMessagePreload {
 
   final List<SnAttachment?>? _attachments;
   @override
-  @HiveField(0)
   List<SnAttachment?>? get attachments {
     final value = _attachments;
     if (value == null) return null;
@@ -1648,8 +1675,11 @@ class _$SnChatMessagePreloadImpl extends _SnChatMessagePreload {
   }
 
   @override
+  final SnChatMessage? quoteEvent;
+
+  @override
   String toString() {
-    return 'SnChatMessagePreload(attachments: $attachments)';
+    return 'SnChatMessagePreload(attachments: $attachments, quoteEvent: $quoteEvent)';
   }
 
   @override
@@ -1658,13 +1688,15 @@ class _$SnChatMessagePreloadImpl extends _SnChatMessagePreload {
         (other.runtimeType == runtimeType &&
             other is _$SnChatMessagePreloadImpl &&
             const DeepCollectionEquality()
-                .equals(other._attachments, _attachments));
+                .equals(other._attachments, _attachments) &&
+            (identical(other.quoteEvent, quoteEvent) ||
+                other.quoteEvent == quoteEvent));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_attachments));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_attachments), quoteEvent);
 
   /// Create a copy of SnChatMessagePreload
   /// with the given fields replaced by the non-null parameter values.
@@ -1686,16 +1718,17 @@ class _$SnChatMessagePreloadImpl extends _SnChatMessagePreload {
 
 abstract class _SnChatMessagePreload extends SnChatMessagePreload {
   const factory _SnChatMessagePreload(
-          {@HiveField(0) final List<SnAttachment?>? attachments}) =
-      _$SnChatMessagePreloadImpl;
+      {final List<SnAttachment?>? attachments,
+      final SnChatMessage? quoteEvent}) = _$SnChatMessagePreloadImpl;
   const _SnChatMessagePreload._() : super._();
 
   factory _SnChatMessagePreload.fromJson(Map<String, dynamic> json) =
       _$SnChatMessagePreloadImpl.fromJson;
 
   @override
-  @HiveField(0)
   List<SnAttachment?>? get attachments;
+  @override
+  SnChatMessage? get quoteEvent;
 
   /// Create a copy of SnChatMessagePreload
   /// with the given fields replaced by the non-null parameter values.
