@@ -111,6 +111,10 @@ class ChatMessage extends StatelessWidget {
                                   ? data.sender.nick!
                                   : user!.nick,
                             ).bold(),
+                            if (data.updatedAt != data.createdAt)
+                              Text(
+                                'messageEditedHint'.tr(),
+                              ).fontSize(14).opacity(0.75).padding(left: 6),
                             const Gap(6),
                             Text(
                               dateFormatter.format(data.createdAt.toLocal()),
@@ -142,23 +146,33 @@ class ChatMessage extends StatelessWidget {
                             onDelete: onDelete,
                           ),
                         )).padding(bottom: 4, top: isMerged ? 4 : 2),
-                      if (data.body['text'] != null)
+                      if (data.type == 'messages.edit')
+                        Row(
+                          children: [
+                            const Icon(Symbols.edit, size: 20),
+                            const Gap(4),
+                            Text(
+                              'messageEdited'
+                                  .tr(args: ['#${data.relatedEventId}']),
+                            ),
+                          ],
+                        ).opacity(0.75)
+                      else if (data.body['text'] != null)
                         MarkdownTextContent(
                           content: data.body['text'],
                           isAutoWarp: true,
                         ),
-                      if (data.type == 'messages.delete' &&
-                          data.relatedEventId != null)
+                      if (data.type == 'messages.delete')
                         Row(
                           children: [
-                            const Icon(Symbols.delete),
-                            const Gap(8),
+                            const Icon(Symbols.delete, size: 20),
+                            const Gap(4),
                             Text(
                               'messageDeleted'
                                   .tr(args: ['#${data.relatedEventId}']),
                             ),
                           ],
-                        ),
+                        ).opacity(0.75),
                     ],
                   ),
                 )

@@ -98,6 +98,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                           idx > 0 ? _messageController.messages[idx - 1] : null;
 
                       final canMerge = nextMessage != null &&
+                          nextMessage.updatedAt == nextMessage.createdAt &&
                           nextMessage.senderId == message.senderId &&
                           message.createdAt
                                   .difference(nextMessage.createdAt)
@@ -105,6 +106,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                   .abs() <=
                               3;
                       final canMergePrevious = previousMessage != null &&
+                          message.updatedAt == message.createdAt &&
                           previousMessage.senderId == message.senderId &&
                           message.createdAt
                                   .difference(previousMessage.createdAt)

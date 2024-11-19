@@ -163,5 +163,7 @@
   "eventResourceTag": "消息 {}",
   "messageDelete": "删除消息 {}",
   "messageDeleteDescription": "你确定要删除这个消息吗？该操作不可撤销。同时您将留下一条删除消息的记录。",
-  "messageDeleted": "消息 {} 已被删除"
+  "messageDeleted": "消息 {} 已被删除",
+  "messageEdited": "消息 {} 已被编辑",
+  "messageEditedHint": "已编辑"
 }

@@ -163,5 +163,7 @@
   "eventResourceTag": "Event {}",
   "messageDelete": "Delete message {}",
   "messageDeleteDescription": "Are you sure you want to delete this message? This operation is irreversible. You will leave a record of the deleted message.",
-  "messageDeleted": "Message {} has been deleted"
+  "messageDeleted": "Message {} has been deleted",
+  "messageEdited": "Message {} has been edited",
+  "messageEditedHint": "Edited"
 }

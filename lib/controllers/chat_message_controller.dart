@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -295,7 +296,7 @@ class ChatMessageController extends ChangeNotifier {
       final countToFetch = math.min(resp.data['count'] as int, 100);
 
       for (int idx = 0; idx < countToFetch; idx += kSingleBatchLoadLimit) {
-        await getMessages(kSingleBatchLoadLimit, idx);
+        await getMessages(kSingleBatchLoadLimit, idx, forceRemote: true);
       }
     } catch (err) {
       rethrow;
@@ -349,10 +350,20 @@ class ChatMessageController extends ChangeNotifier {
     int take,
     int offset, {
     bool forceLocal = false,
+    bool forceRemote = false,
   }) async {
     late List<SnChatMessage> out;
-    if (_box != null && (_box!.length >= take + offset || forceLocal)) {
-      out = _box!.values.skip(offset).take(take).toList().reversed.toList();
+    if (_box != null &&
+        (_box!.length >= take + offset || forceLocal) &&
+        !forceRemote) {
+      out = _box!.keys
+          .toList()
+          .cast<int>()
+          .sorted((a, b) => b.compareTo(a))
+          .skip(offset)
+          .take(take)
+          .map((key) => _box!.get(key)!)
+          .toList();
     } else {
       final resp = await _sn.client.get(
         '/cgi/im/channels/${channel!.keyPath}/events',
