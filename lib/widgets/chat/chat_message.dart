@@ -40,7 +40,7 @@ class ChatMessage extends StatelessWidget {
     final ud = context.read<UserDirectoryProvider>();
     final user = ud.getAccountFromCache(data.sender.accountId);
 
-    final isOwner = ua.isAuthorized && data.sender.accountId == ua.user!.id;
+    final isOwner = ua.isAuthorized && data.sender.accountId == ua.user?.id;
 
     final dateFormatter = DateFormat('MM/dd HH:mm');
 
@@ -109,7 +109,7 @@ class ChatMessage extends StatelessWidget {
                             Text(
                               (data.sender.nick?.isNotEmpty ?? false)
                                   ? data.sender.nick!
-                                  : user!.nick,
+                                  : user?.nick ?? 'unknown',
                             ).bold(),
                             if (data.updatedAt != data.createdAt)
                               Text(

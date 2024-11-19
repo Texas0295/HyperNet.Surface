@@ -68,6 +68,7 @@ class SnAttachmentProvider {
           .toList();
 
       for (final item in out) {
+        if (item == null) continue;
         if (item.isAnalyzed && item.isUploaded) {
           _cache[item.rid] = item;
         }
