@@ -165,5 +165,11 @@
   "messageDeleteDescription": "你确定要删除这个消息吗？该操作不可撤销。同时您将留下一条删除消息的记录。",
   "messageDeleted": "消息 {} 已被删除",
   "messageEdited": "消息 {} 已被编辑",
-  "messageEditedHint": "已编辑"
+  "messageEditedHint": "已编辑",
+  "messageUnsupported": "不支持的消息 {}",
+  "messageFileHint": {
+    "zero": "没有附件",
+    "one": "{} 个附件",
+    "other": "{} 个附件"
+  }
 }

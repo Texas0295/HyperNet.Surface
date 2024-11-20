@@ -146,33 +146,10 @@ class ChatMessage extends StatelessWidget {
                             onDelete: onDelete,
                           ),
                         )).padding(bottom: 4, top: isMerged ? 4 : 2),
-                      if (data.type == 'messages.edit')
-                        Row(
-                          children: [
-                            const Icon(Symbols.edit, size: 20),
-                            const Gap(4),
-                            Text(
-                              'messageEdited'
-                                  .tr(args: ['#${data.relatedEventId}']),
-                            ),
-                          ],
-                        ).opacity(0.75)
-                      else if (data.body['text'] != null)
-                        MarkdownTextContent(
-                          content: data.body['text'],
-                          isAutoWarp: true,
-                        ),
-                      if (data.type == 'messages.delete')
-                        Row(
-                          children: [
-                            const Icon(Symbols.delete, size: 20),
-                            const Gap(4),
-                            Text(
-                              'messageDeleted'
-                                  .tr(args: ['#${data.relatedEventId}']),
-                            ),
-                          ],
-                        ).opacity(0.75),
+                      switch (data.type) {
+                        'messages.new' => _ChatMessageText(data: data),
+                        _ => _ChatMessageSystemNotify(data: data),
+                      },
                     ],
                   ),
                 )
@@ -191,5 +168,73 @@ class ChatMessage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _ChatMessageText extends StatelessWidget {
+  final SnChatMessage data;
+  const _ChatMessageText({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.body['text'] != null && data.body['text'].isNotEmpty) {
+      return MarkdownTextContent(
+        content: data.body['text'],
+        isAutoWarp: true,
+      );
+    } else if (data.body['attachments']?.isNotEmpty) {
+      return Row(
+        children: [
+          const Icon(Symbols.file_present, size: 20),
+          const Gap(4),
+          Text(
+            'messageFileHint'.plural(
+              data.body['attachments']!.length,
+            ),
+          ),
+        ],
+      ).opacity(0.75);
+    }
+
+    return const SizedBox.shrink();
+  }
+}
+
+class _ChatMessageSystemNotify extends StatelessWidget {
+  final SnChatMessage data;
+  const _ChatMessageSystemNotify({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    switch (data.type) {
+      case 'messages.edit':
+        return Row(
+          children: [
+            const Icon(Symbols.edit, size: 20),
+            const Gap(4),
+            Text(
+              'messageEdited'.tr(args: ['#${data.relatedEventId}']),
+            ),
+          ],
+        ).opacity(0.75);
+      case 'messages.delete':
+        return Row(
+          children: [
+            const Icon(Symbols.delete, size: 20),
+            const Gap(4),
+            Text(
+              'messageDeleted'.tr(args: ['#${data.relatedEventId}']),
+            ),
+          ],
+        ).opacity(0.75);
+      default:
+        return Row(
+          children: [
+            const Icon(Symbols.info, size: 20),
+            const Gap(4),
+            Text('messageUnsupported'.tr(args: [data.type])),
+          ],
+        ).opacity(0.75);
+    }
   }
 }
