@@ -1,12 +1,15 @@
 import 'package:croppy/croppy.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/sn_attachment.dart';
@@ -29,9 +32,19 @@ void main() async {
   Hive.registerAdapter(SnChannelMemberImplAdapter());
   Hive.registerAdapter(SnChatMessageImplAdapter());
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   if (!kReleaseMode) {
     debugInvertOversizedImages = true;
   }
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   runApp(const SolianApp());
 }
