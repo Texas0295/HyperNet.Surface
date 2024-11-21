@@ -30,7 +30,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
     final nav = context.watch<NavigationProvider>();
 
     final backgroundColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-        ? Theme.of(context).colorScheme.surface
+        ? Colors.transparent
         : null;
 
     return ListenableBuilder(
@@ -57,7 +57,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
             ).padding(
               horizontal: 32,
               top: MediaQuery.of(context).padding.top > 16 ? 8 : 16,
-              bottom: 16,
+              bottom: 8,
             ),
             ...destinations.where((ele) => ele.isPinned).map((ele) {
               return NavigationDrawerDestination(

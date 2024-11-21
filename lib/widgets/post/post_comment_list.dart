@@ -95,12 +95,10 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
       onFetchData: _fetchPosts,
       itemBuilder: (context, idx) {
         return GestureDetector(
-          child: Container(
-            constraints: BoxConstraints(
-              maxWidth: widget.maxWidth ?? double.infinity,
-            ),
-            child: PostItem(data: _posts[idx]),
-          ).center(),
+          child: PostItem(
+            data: _posts[idx],
+            maxWidth: widget.maxWidth,
+          ),
           onTap: () {
             GoRouter.of(context).pushNamed(
               'postDetail',

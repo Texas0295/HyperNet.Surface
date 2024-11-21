@@ -18,12 +18,14 @@ class PostItem extends StatelessWidget {
   final SnPost data;
   final bool showReactions;
   final bool showComments;
+  final double? maxWidth;
   final Function(SnPost data)? onChanged;
   const PostItem({
     super.key,
     required this.data,
     this.showReactions = true,
     this.showComments = true,
+    this.maxWidth,
     this.onChanged,
   });
 
@@ -34,14 +36,23 @@ class PostItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _PostContentHeader(data: data).padding(horizontal: 12, vertical: 8),
-        _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
-        if (data.repostTo != null)
-          _PostQuoteContent(child: data.repostTo!).padding(
-            horizontal: 12,
+        Container(
+          constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+          child: Column(
+            children: [
+              _PostContentHeader(data: data)
+                  .padding(horizontal: 12, vertical: 8),
+              _PostContentBody(data: data.body)
+                  .padding(horizontal: 16, bottom: 6),
+              if (data.repostTo != null)
+                _PostQuoteContent(child: data.repostTo!).padding(
+                  horizontal: 12,
+                ),
+            ],
           ),
+        ),
         if (data.preload?.attachments?.isNotEmpty ?? true)
           AttachmentList(
             data: data.preload!.attachments!,
@@ -49,12 +60,19 @@ class PostItem extends StatelessWidget {
             maxHeight: 520,
             listPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
-        _PostBottomAction(
-          data: data,
-          showComments: showComments,
-          showReactions: showReactions,
-          onChanged: _onChanged,
-        ).padding(left: 12, right: 18),
+        Container(
+          constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+          child: Column(
+            children: [
+              _PostBottomAction(
+                data: data,
+                showComments: showComments,
+                showReactions: showReactions,
+                onChanged: _onChanged,
+              ).padding(left: 12, right: 18),
+            ],
+          ),
+        ),
       ],
     );
   }
