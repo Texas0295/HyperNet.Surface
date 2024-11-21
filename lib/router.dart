@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:surface/screens/account.dart';
 import 'package:surface/screens/account/profile_edit.dart';
@@ -64,6 +65,7 @@ final _appRoutes = [
                 return FadeThroughTransition(
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
+                  fillColor: Colors.transparent,
                   child: AppBackground(isLessOptimization: true, child: child),
                 );
               },
@@ -82,6 +84,7 @@ final _appRoutes = [
                 return FadeThroughTransition(
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
+                  fillColor: Colors.transparent,
                   child: AppBackground(isLessOptimization: true, child: child),
                 );
               },
@@ -124,6 +127,7 @@ final _appRoutes = [
                 return FadeThroughTransition(
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
+                  fillColor: Colors.transparent,
                   child: AppBackground(
                     isLessOptimization: true,
                     child: child,
@@ -153,6 +157,7 @@ final _appRoutes = [
                 return FadeThroughTransition(
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
+                  fillColor: Colors.transparent,
                   child: AppBackground(
                     isLessOptimization: true,
                     child: child,

@@ -3,14 +3,17 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class AppBackground extends StatelessWidget {
   final Widget child;
   final bool isLessOptimization;
+  final bool isRoot;
   const AppBackground({
     super.key,
     required this.child,
     this.isLessOptimization = false,
+    this.isRoot = false,
   });
 
   Widget _buildWithBackgroundImage(
@@ -77,16 +80,24 @@ class AppBackground extends StatelessWidget {
         future:
             kIsWeb ? Future.value(null) : getApplicationDocumentsDirectory(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final path = '${snapshot.data!.path}/app_background_image';
-            final file = File(path);
-            if (file.existsSync()) {
-              return _buildWithBackgroundImage(context, file, child);
+          if (isRoot ||
+              ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)) {
+            if (snapshot.hasData) {
+              final path = '${snapshot.data!.path}/app_background_image';
+              final file = File(path);
+              if (file.existsSync()) {
+                return _buildWithBackgroundImage(context, file, child);
+              }
             }
           }
 
+          final backgroundColor =
+              ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                  ? Colors.transparent
+                  : Theme.of(context).colorScheme.surface;
+
           return Material(
-            color: Theme.of(context).colorScheme.surface,
+            color: backgroundColor,
             child: child,
           );
         },

@@ -74,8 +74,8 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             Provider(create: (ctx) => UserDirectoryProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
-            ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
+            ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => ChatChannelProvider(ctx)),
           ],
           child: AppMainContent(),
@@ -98,6 +98,7 @@ class AppMainContent extends StatelessWidget {
     context.read<NavigationProvider>();
     context.read<WebSocketProvider>();
     context.read<ChatChannelProvider>();
+    context.read<NotificationProvider>();
 
     final th = context.watch<ThemeProvider>();
 

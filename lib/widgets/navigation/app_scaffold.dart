@@ -88,6 +88,7 @@ class AppRootScaffold extends StatelessWidget {
           );
 
     return AppBackground(
+      isRoot: true,
       child: Scaffold(
         body: Column(
           children: [

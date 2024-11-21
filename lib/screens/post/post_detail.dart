@@ -109,13 +109,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
           if (_data != null)
             SliverToBoxAdapter(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 640),
-                child: PostItem(
-                  data: _data!,
-                  showComments: false,
-                ),
-              ).center(),
+              child: PostItem(
+                data: _data!,
+                maxWidth: 640,
+                showComments: false,
+              ),
             ),
           const SliverToBoxAdapter(child: Divider(height: 1)),
           if (_data != null)
