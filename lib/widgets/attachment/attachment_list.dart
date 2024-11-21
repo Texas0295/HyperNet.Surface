@@ -48,7 +48,12 @@ class AttachmentList extends StatelessWidget {
               borderRadius: kDefaultRadius,
             ),
             child: AspectRatio(
-              aspectRatio: data[0]?.metadata['ratio']?.toDouble() ?? 1,
+              aspectRatio: data[0]?.metadata['ratio']?.toDouble() ??
+                  switch (data[0]?.mimetype.split('/').firstOrNull) {
+                    'audio' => 16 / 9,
+                    'video' => 16 / 9,
+                    _ => 1,
+                  },
               child: ClipRRect(
                 borderRadius: kDefaultRadius,
                 child: AttachmentItem(data: data[0], isExpandable: true),
