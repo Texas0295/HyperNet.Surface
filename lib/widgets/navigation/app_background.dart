@@ -82,22 +82,24 @@ class AppBackground extends StatelessWidget {
         builder: (context, snapshot) {
           if (isRoot ||
               ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)) {
-            if (snapshot.hasData) {
+            if (snapshot.hasData && isRoot) {
               final path = '${snapshot.data!.path}/app_background_image';
               final file = File(path);
               if (file.existsSync()) {
                 return _buildWithBackgroundImage(context, file, child);
               }
+            } else {
+              return Material(
+                color: Theme.of(context).colorScheme.surface,
+                child: child,
+              );
             }
           }
 
-          final backgroundColor =
-              ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                  ? Colors.transparent
-                  : Theme.of(context).colorScheme.surface;
-
           return Material(
-            color: backgroundColor,
+            color: isRoot
+                ? Theme.of(context).colorScheme.surface
+                : Colors.transparent,
             child: child,
           );
         },
