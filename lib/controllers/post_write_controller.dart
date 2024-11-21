@@ -86,7 +86,10 @@ class PostWriteMedia {
     if (file != null) {
       return file!;
     } else if (raw != null) {
-      return XFile.fromData(raw!, name: name);
+      return XFile.fromData(
+        raw!,
+        name: name,
+      );
     }
     return null;
   }
@@ -256,6 +259,9 @@ class PostWriteController extends ChangeNotifier {
           media.name,
           'interactive',
           null,
+          mimetype: media.raw != null && media.type == PostWriteMediaType.image
+              ? 'image/png'
+              : null,
         );
 
         final item = await attach.chunkedUploadParts(

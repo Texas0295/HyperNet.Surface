@@ -11,6 +11,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   isar_flutter_libs
   media_kit_libs_windows_video
   media_kit_video
+  pasteboard
   screen_brightness_windows
   url_launcher_windows
 )

@@ -171,5 +171,8 @@
     "zero": "没有附件",
     "one": "{} 个附件",
     "other": "{} 个附件"
-  }
+  },
+  "addAttachmentFromAlbum": "从相册中添加附件",
+  "addAttachmentFromClipboard": "粘贴附件",
+  "attachmentPastedImage" : "粘贴的图片"
 }

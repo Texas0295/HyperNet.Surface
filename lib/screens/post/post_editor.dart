@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -80,6 +81,18 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     _writeController.addAttachments(
       result.map((e) => PostWriteMedia.fromFile(e)),
     );
+  }
+
+  void _pasteMedia() async {
+    final imageBytes = await Pasteboard.image;
+    if (imageBytes == null) return;
+    _writeController.addAttachments([
+      PostWriteMedia.fromBytes(
+        imageBytes,
+        'attachmentPastedImage'.tr(),
+        PostWriteMediaType.image,
+      ),
+    ]);
   }
 
   @override
@@ -369,15 +382,39 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               scrollDirection: Axis.vertical,
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: _writeController.isBusy
-                                        ? null
-                                        : _selectMedia,
+                                  PopupMenuButton(
                                     icon: Icon(
                                       Symbols.add_photo_alternate,
                                       color:
                                           Theme.of(context).colorScheme.primary,
                                     ),
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        child: Row(
+                                          children: [
+                                            const Icon(Symbols.photo_library),
+                                            const Gap(16),
+                                            Text('addAttachmentFromAlbum').tr(),
+                                          ],
+                                        ),
+                                        onTap: () {
+                                          _selectMedia();
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                        child: Row(
+                                          children: [
+                                            const Icon(Symbols.content_paste),
+                                            const Gap(16),
+                                            Text('addAttachmentFromClipboard')
+                                                .tr(),
+                                          ],
+                                        ),
+                                        onTap: () {
+                                          _pasteMedia();
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

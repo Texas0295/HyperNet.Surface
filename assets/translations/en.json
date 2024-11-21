@@ -171,5 +171,8 @@
     "zero": "No attachments",
     "one": "{} attachment",
     "other": "{} attachments"
-  }
+  },
+  "addAttachmentFromAlbum": "Add from album",
+  "addAttachmentFromClipboard": "Paste file",
+  "attachmentPastedImage": "Pasted Image"
 }

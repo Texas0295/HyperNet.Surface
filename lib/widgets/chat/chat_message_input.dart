@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
@@ -72,6 +73,9 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           media.name,
           'interactive',
           null,
+          mimetype: media.raw != null && media.type == PostWriteMediaType.image
+              ? 'image/png'
+              : null,
         );
 
         final item = await attach.chunkedUploadParts(
@@ -129,6 +133,19 @@ class ChatMessageInputState extends State<ChatMessageInput> {
     if (result.isEmpty) return;
     _attachments.addAll(
       result.map((e) => PostWriteMedia.fromFile(e)),
+    );
+    setState(() {});
+  }
+
+  void _pasteMedia() async {
+    final imageBytes = await Pasteboard.image;
+    if (imageBytes == null) return;
+    _attachments.add(
+      PostWriteMedia.fromBytes(
+        imageBytes,
+        'attachmentPastedImage'.tr(),
+        PostWriteMediaType.image,
+      ),
     );
     setState(() {});
   }
@@ -266,12 +283,37 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                 ),
               ),
               const Gap(8),
-              IconButton(
-                onPressed: _isBusy ? null : _selectMedia,
+              PopupMenuButton(
                 icon: Icon(
                   Symbols.add_photo_alternate,
                   color: Theme.of(context).colorScheme.primary,
                 ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        const Icon(Symbols.photo_library),
+                        const Gap(16),
+                        Text('addAttachmentFromAlbum').tr(),
+                      ],
+                    ),
+                    onTap: () {
+                      _selectMedia();
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        const Icon(Symbols.content_paste),
+                        const Gap(16),
+                        Text('addAttachmentFromClipboard').tr(),
+                      ],
+                    ),
+                    onTap: () {
+                      _pasteMedia();
+                    },
+                  ),
+                ],
               ),
               IconButton(
                 onPressed: _isBusy ? null : _sendMessage,

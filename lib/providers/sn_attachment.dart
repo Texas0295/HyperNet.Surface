@@ -130,8 +130,9 @@ class SnAttachmentProvider {
     int size,
     String filename,
     String pool,
-    Map<String, dynamic>? metadata,
-  ) async {
+    Map<String, dynamic>? metadata, {
+    String? mimetype,
+  }) async {
     final fileAlt = filename.contains('.')
         ? filename.substring(0, filename.lastIndexOf('.'))
         : filename;
@@ -139,8 +140,10 @@ class SnAttachmentProvider {
         filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 
     String? mimetypeOverride;
-    if (mimetypeOverrides.keys.contains(fileExt)) {
+    if (mimetype == null && mimetypeOverrides.keys.contains(fileExt)) {
       mimetypeOverride = mimetypeOverrides[fileExt];
+    } else {
+      mimetypeOverride = mimetype;
     }
 
     final resp = await _sn.client.post('/cgi/uc/attachments/multipart', data: {
