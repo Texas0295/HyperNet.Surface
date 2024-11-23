@@ -275,6 +275,8 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                     ]),
                     border: InputBorder.none,
                   ),
+                  onTapOutside: (_) =>
+                      FocusManager.instance.primaryFocus?.unfocus(),
                   onSubmitted: (_) {
                     if (_isBusy) return;
                     _sendMessage();

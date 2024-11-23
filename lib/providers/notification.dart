@@ -25,6 +25,7 @@ class NotificationProvider extends ChangeNotifier {
       if (!_ua.isAuthorized) return;
       log("Registering push notifications...");
       await registerPushNotifications();
+      log("Registered push notification subscriber successfully!");
     });
   }
 
@@ -54,7 +55,7 @@ class NotificationProvider extends ChangeNotifier {
     log('Device Push Token is $token');
 
     await _sn.client.post(
-      '/cgi/id/notifications/subscribe',
+      '/cgi/id/notifications/subscription',
       data: {
         'provider': provider,
         'device_token': token,
