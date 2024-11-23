@@ -48,7 +48,8 @@ final _appRoutes = [
           GoRoute(
             path: '/post/write/:mode',
             name: 'postEditor',
-            pageBuilder: (context, state) => CustomTransitionPage(
+            builder: (context, state) => AppBackground(
+              isLessOptimization: true,
               child: PostEditorScreen(
                 mode: state.pathParameters['mode']!,
                 postEditId: int.tryParse(
@@ -61,34 +62,17 @@ final _appRoutes = [
                   state.uri.queryParameters['reposting'] ?? '',
                 ),
               ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  fillColor: Colors.transparent,
-                  child: AppBackground(isLessOptimization: true, child: child),
-                );
-              },
             ),
           ),
           GoRoute(
             path: '/post/:slug',
             name: 'postDetail',
-            pageBuilder: (context, state) => CustomTransitionPage(
+            builder: (context, state) => AppBackground(
+              isLessOptimization: true,
               child: PostDetailScreen(
                 slug: state.pathParameters['slug']!,
                 preload: state.extra as SnPost?,
               ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  fillColor: Colors.transparent,
-                  child: AppBackground(isLessOptimization: true, child: child),
-                );
-              },
             ),
           ),
         ],

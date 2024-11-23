@@ -175,7 +175,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           padding: _attachments.isNotEmpty
               ? const EdgeInsets.only(top: 8)
               : EdgeInsets.zero,
-          child: PostMediaPendingListRaw(
+          child: PostMediaPendingList(
             attachments: _attachments,
             isBusy: _isBusy,
             onUpdate: (idx, updatedMedia) async {

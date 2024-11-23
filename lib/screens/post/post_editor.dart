@@ -354,7 +354,25 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               ),
               if (_writeController.attachments.isNotEmpty)
                 PostMediaPendingList(
-                  controller: _writeController,
+                  attachments: _writeController.attachments,
+                  isBusy: _writeController.isBusy,
+                  onUpdate: (int idx, PostWriteMedia updatedMedia) async {
+                    _writeController.setIsBusy(true);
+                    try {
+                      _writeController.setAttachmentAt(idx, updatedMedia);
+                    } finally {
+                      _writeController.setIsBusy(false);
+                    }
+                  },
+                  onRemove: (int idx) async {
+                    _writeController.setIsBusy(true);
+                    try {
+                      _writeController.removeAttachmentAt(idx);
+                    } finally {
+                      _writeController.setIsBusy(false);
+                    }
+                  },
+                  onUpdateBusy: (state) => _writeController.setIsBusy(state),
                 ).padding(bottom: 8),
               Material(
                 elevation: 2,

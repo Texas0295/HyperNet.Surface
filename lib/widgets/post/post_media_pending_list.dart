@@ -17,53 +17,13 @@ import 'package:surface/widgets/attachment/attachment_detail.dart';
 import 'package:surface/widgets/dialog.dart';
 
 class PostMediaPendingList extends StatelessWidget {
-  final PostWriteController controller;
-
-  const PostMediaPendingList({super.key, required this.controller});
-
-  Future<void> _handleUpdate(int idx, PostWriteMedia updatedMedia) async {
-    controller.setIsBusy(true);
-    try {
-      controller.setAttachmentAt(idx, updatedMedia);
-    } finally {
-      controller.setIsBusy(false);
-    }
-  }
-
-  Future<void> _handleRemove(int idx) async {
-    controller.setIsBusy(true);
-    try {
-      controller.removeAttachmentAt(idx);
-    } finally {
-      controller.setIsBusy(false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: controller,
-      builder: (context, _) {
-        return PostMediaPendingListRaw(
-          attachments: controller.attachments,
-          isBusy: controller.isBusy,
-          onUpdate: (idx, updatedMedia) => _handleUpdate(idx, updatedMedia),
-          onRemove: (idx) => _handleRemove(idx),
-          onUpdateBusy: (state) => controller.setIsBusy(state),
-        );
-      },
-    );
-  }
-}
-
-class PostMediaPendingListRaw extends StatelessWidget {
   final List<PostWriteMedia> attachments;
   final bool isBusy;
   final Future<void> Function(int idx, PostWriteMedia updatedMedia)? onUpdate;
   final Future<void> Function(int idx)? onRemove;
   final void Function(bool state)? onUpdateBusy;
 
-  const PostMediaPendingListRaw({
+  const PostMediaPendingList({
     super.key,
     required this.attachments,
     required this.isBusy,
@@ -122,6 +82,53 @@ class PostMediaPendingListRaw extends StatelessWidget {
     }
   }
 
+  ContextMenu _buildContextMenu(
+      BuildContext context, int idx, PostWriteMedia media) {
+    return ContextMenu(
+      entries: [
+        if (media.type == PostWriteMediaType.image && media.attachment != null)
+          MenuItem(
+            label: 'preview'.tr(),
+            icon: Symbols.preview,
+            onSelected: () {
+              context.pushTransparentRoute(
+                AttachmentDetailPopup(data: media.attachment!),
+                rootNavigator: true,
+              );
+            },
+          ),
+        if (media.type == PostWriteMediaType.image && media.attachment == null)
+          MenuItem(
+            label: 'crop'.tr(),
+            icon: Symbols.crop,
+            onSelected: () => _cropImage(context, idx),
+          ),
+        if (media.attachment != null && onRemove != null)
+          MenuItem(
+            label: 'delete'.tr(),
+            icon: Symbols.delete,
+            onSelected: isBusy ? null : () => _deleteAttachment(context, idx),
+          ),
+        if (media.attachment == null && onRemove != null)
+          MenuItem(
+            label: 'delete'.tr(),
+            icon: Symbols.delete,
+            onSelected: () {
+              onRemove!(idx);
+            },
+          )
+        else if (onRemove != null)
+          MenuItem(
+            label: 'unlink'.tr(),
+            icon: Symbols.link_off,
+            onSelected: () {
+              onRemove!(idx);
+            },
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
@@ -136,52 +143,7 @@ class PostMediaPendingListRaw extends StatelessWidget {
         itemBuilder: (context, idx) {
           final media = attachments[idx];
           return ContextMenuRegion(
-            contextMenu: ContextMenu(
-              entries: [
-                if (media.type == PostWriteMediaType.image &&
-                    media.attachment != null)
-                  MenuItem(
-                    label: 'preview'.tr(),
-                    icon: Symbols.preview,
-                    onSelected: () {
-                      context.pushTransparentRoute(
-                        AttachmentDetailPopup(data: media.attachment!),
-                        rootNavigator: true,
-                      );
-                    },
-                  ),
-                if (media.type == PostWriteMediaType.image &&
-                    media.attachment == null)
-                  MenuItem(
-                    label: 'crop'.tr(),
-                    icon: Symbols.crop,
-                    onSelected: () => _cropImage(context, idx),
-                  ),
-                if (media.attachment != null && onRemove != null)
-                  MenuItem(
-                    label: 'delete'.tr(),
-                    icon: Symbols.delete,
-                    onSelected:
-                        isBusy ? null : () => _deleteAttachment(context, idx),
-                  ),
-                if (media.attachment == null && onRemove != null)
-                  MenuItem(
-                    label: 'delete'.tr(),
-                    icon: Symbols.delete,
-                    onSelected: () {
-                      onRemove!(idx);
-                    },
-                  )
-                else if (onRemove != null)
-                  MenuItem(
-                    label: 'unlink'.tr(),
-                    icon: Symbols.link_off,
-                    onSelected: () {
-                      onRemove!(idx);
-                    },
-                  ),
-              ],
-            ),
+            contextMenu: _buildContextMenu(context, idx, media),
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
