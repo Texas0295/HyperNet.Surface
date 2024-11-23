@@ -80,7 +80,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         leading: BackButton(
           onPressed: () {
             if (GoRouter.of(context).canPop()) {
-              Navigator.pop(context);
+              GoRouter.of(context).pop(context);
+              return;
             }
             GoRouter.of(context).replaceNamed('explore');
           },

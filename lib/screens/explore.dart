@@ -164,6 +164,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
               title: Text('screenExplore').tr(),
               floating: true,
               snap: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Symbols.search),
+                  onPressed: () {
+                    GoRouter.of(context).pushNamed('postSearch');
+                  },
+                ),
+              ],
             ),
             SliverInfiniteList(
               itemCount: _posts.length,

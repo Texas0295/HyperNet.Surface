@@ -23,6 +23,7 @@
   "screenRealmManage": "Edit Realm",
   "screenRealmNew": "New Realm",
   "screenNotification": "Notification",
+  "screenPostSearch": "Search Posts",
   "dialogOkay": "Okay",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -195,5 +196,11 @@
     "one": "Marked {} notification as read.",
     "other": "Marked {} notifications as read."
   },
-  "notificationMarkOneReadPrompt": "Marked notification {} as read."
+  "notificationMarkOneReadPrompt": "Marked notification {} as read.",
+  "postSearchResult": {
+    "zero": "No results",
+    "one": "{} result",
+    "other": "{} results"
+  },
+  "postSearchTook": "Took {}"
 }

@@ -23,6 +23,7 @@
   "screenRealmManage": "编辑领域",
   "screenRealmNew": "新建领域",
   "screenNotification": "通知",
+  "screenPostSearch": "搜索帖子",
   "dialogOkay": "好的",
   "dialogCancel": "取消",
   "dialogConfirm": "确认",
@@ -195,5 +196,11 @@
     "one": "已将 {} 个通知标记为已读。",
     "other": "已将 {} 个通知标记为已读。"
   },
-  "notificationMarkOneReadPrompt": "已将通知 {} 标记为已读。"
+  "notificationMarkOneReadPrompt": "已将通知 {} 标记为已读。",
+  "postSearchResult": {
+    "zero": "没有搜索到结果",
+    "one": "搜索到 {} 个结果",
+    "other": "搜索到 {} 个结果"
+  },
+  "postSearchTook": "耗时 {}"
 }

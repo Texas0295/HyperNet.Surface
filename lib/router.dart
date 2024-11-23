@@ -17,6 +17,7 @@ import 'package:surface/screens/home.dart';
 import 'package:surface/screens/notification.dart';
 import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
+import 'package:surface/screens/post/post_search.dart';
 import 'package:surface/screens/realm.dart';
 import 'package:surface/screens/realm/manage.dart';
 import 'package:surface/screens/settings.dart';
@@ -65,10 +66,16 @@ final _appRoutes = [
             ),
           ),
           GoRoute(
+            path: '/post/search',
+            name: 'postSearch',
+            builder: (context, state) => const AppBackground(
+              child: PostSearchScreen(),
+            ),
+          ),
+          GoRoute(
             path: '/post/:slug',
             name: 'postDetail',
             builder: (context, state) => AppBackground(
-              isLessOptimization: true,
               child: PostDetailScreen(
                 slug: state.pathParameters['slug']!,
                 preload: state.extra as SnPost?,
