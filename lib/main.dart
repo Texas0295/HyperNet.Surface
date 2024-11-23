@@ -47,6 +47,8 @@ void main() async {
           'https://c218d44126d59d69301e730498494def@o4506965897117696.ingest.us.sentry.io/4508346768228352';
       options.tracesSampleRate = 1.0;
       options.profilesSampleRate = 1.0;
+      options.experimental.replay.sessionSampleRate = 1.0;
+      options.experimental.replay.onErrorSampleRate = 1.0;
     },
     appRunner: () => runApp(const SolianApp()),
   );
