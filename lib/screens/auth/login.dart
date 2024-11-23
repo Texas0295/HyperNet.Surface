@@ -151,7 +151,7 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
       });
       final atk = tokenResp.data['access_token'];
       final rtk = tokenResp.data['refresh_token'];
-      await sn.setTokenPair(atk, rtk);
+      sn.setTokenPair(atk, rtk);
       if (!mounted) return;
       final user = context.read<UserProvider>();
       final userinfo = await user.refreshUser();

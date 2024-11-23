@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surface/providers/adapters/sn_network_universal.dart';
+import 'package:synchronized/synchronized.dart';
 
 const kAtkStoreKey = 'nex_user_atk';
 const kRtkStoreKey = 'nex_user_rtk';
@@ -23,7 +24,6 @@ class SnNetworkProvider {
   late Dio client;
 
   late final SharedPreferences _prefs;
-  late final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   SnNetworkProvider() {
     client = Dio();
@@ -62,9 +62,19 @@ class SnNetworkProvider {
     });
   }
 
+  final tkLock = Lock();
+
+  Completer<String?>? _refreshCompleter;
+
   Future<String?> getFreshAtk() async {
+    if (_refreshCompleter != null) {
+      return await _refreshCompleter!.future;
+    } else {
+      _refreshCompleter = Completer<String?>();
+    }
+
     try {
-      var atk = await _storage.read(key: kAtkStoreKey);
+      var atk = _prefs.getString(kAtkStoreKey);
       if (atk != null) {
         final atkParts = atk.split('.');
         if (atkParts.length != 3) {
@@ -94,13 +104,18 @@ class SnNetworkProvider {
         }
 
         if (atk != null) {
+          _refreshCompleter!.complete(atk);
           return atk;
         } else {
           log('Access token refresh failed...');
+          _refreshCompleter!.complete(null);
         }
       }
     } catch (err) {
       log('Failed to authenticate user: $err');
+      _refreshCompleter!.completeError(err);
+    } finally {
+      _refreshCompleter = null;
     }
 
     return null;
@@ -111,22 +126,18 @@ class SnNetworkProvider {
     return '${client.options.baseUrl}/cgi/uc/attachments/$ky';
   }
 
-  Future<void> setTokenPair(String atk, String rtk) async {
-    await Future.wait([
-      _storage.write(key: kAtkStoreKey, value: atk),
-      _storage.write(key: kRtkStoreKey, value: rtk),
-    ]);
+  void setTokenPair(String atk, String rtk) {
+    _prefs.setString(kAtkStoreKey, atk);
+    _prefs.setString(kRtkStoreKey, rtk);
   }
 
-  Future<void> clearTokenPair() async {
-    await Future.wait([
-      _storage.delete(key: kAtkStoreKey),
-      _storage.delete(key: kRtkStoreKey),
-    ]);
+  void clearTokenPair() {
+    _prefs.remove(kAtkStoreKey);
+    _prefs.remove(kRtkStoreKey);
   }
 
   Future<String?> refreshToken() async {
-    final rtk = await _storage.read(key: kRtkStoreKey);
+    final rtk = _prefs.getString(kRtkStoreKey);
     if (rtk == null) return null;
 
     final dio = Dio();
@@ -139,7 +150,7 @@ class SnNetworkProvider {
 
     final atk = resp.data['access_token'];
     final nRtk = resp.data['refresh_token'];
-    await setTokenPair(atk, nRtk);
+    setTokenPair(atk, nRtk);
 
     return atk;
   }

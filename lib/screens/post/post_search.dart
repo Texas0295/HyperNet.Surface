@@ -74,6 +74,15 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
     if (mounted) setState(() => _isBusy = false);
   }
 
+  void _showAdvancedSearchTune() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Column(
+        children: [],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const labelShadows = <Shadow>[
@@ -87,11 +96,17 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('screenPostSearch').tr(),
+        actions: [
+          IconButton(
+            icon: const Icon(Symbols.tune),
+            onPressed: _showAdvancedSearchTune,
+          ),
+        ],
       ),
       body: Stack(
         children: [
           InfiniteList(
-            padding: const EdgeInsets.only(top: 96),
+            padding: const EdgeInsets.only(top: 100),
             itemCount: _posts.length,
             isLoading: _isBusy,
             hasReachedMax: _postCount != null && _posts.length >= _postCount!,
