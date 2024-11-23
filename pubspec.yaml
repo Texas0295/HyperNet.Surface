@@ -167,13 +167,13 @@ icons_launcher:
       image_path: "assets/icon/icon-light-radius.png"
       favicon_path: "assets/icon/icon-light-radius.png"
     macos:
-      enable: false
+      enable: true
       image_path: "assets/icon/icon-light-radius-mac.png"
     windows:
-      enable: false
+      enable: true
       image_path: "assets/icon/icon-light-radius.png"
     linux:
-      enable: false
+      enable: true
       image_path: "assets/icon/icon-light-radius.png"
 
 flutter_native_splash:
