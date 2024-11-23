@@ -81,8 +81,8 @@ class _RealmScreenState extends State<RealmScreen> {
         actions: [
           IconButton(
             icon: !_isCompactView
-                ? const Icon(Icons.view_list)
-                : const Icon(Icons.view_module),
+                ? const Icon(Symbols.view_list)
+                : const Icon(Symbols.view_module),
             onPressed: () {
               setState(() => _isCompactView = !_isCompactView);
             },

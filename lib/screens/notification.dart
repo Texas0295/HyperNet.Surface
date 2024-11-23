@@ -135,7 +135,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         title: Text('screenNotification').tr(),
         actions: [
           IconButton(
-            icon: const Icon(Icons.checklist),
+            icon: const Icon(Symbols.checklist),
             onPressed: _isSubmitting ? null : _markAllAsRead,
           ),
         ],

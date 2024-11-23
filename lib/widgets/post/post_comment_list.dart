@@ -98,6 +98,9 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
           child: PostItem(
             data: _posts[idx],
             maxWidth: widget.maxWidth,
+            onChanged: (data) {
+              setState(() => _posts[idx] = data);
+            },
           ),
           onTap: () {
             GoRouter.of(context).pushNamed(

@@ -104,10 +104,20 @@
   "postReact": "反应",
   "postPosted": "帖子已经发表。",
   "postReactions": "帖子的反应",
-  "postReactionPoints": {
-    "zero": "{} 点",
-    "one": "{} 点",
-    "other": "{} 点"
+  "postReactionUpvote": {
+    "zero": "0 个顶",
+    "one": "{} 个顶",
+    "other": "{} 个顶"
+  },
+  "postReactionDownvote": {
+    "zero": "0 个踩",
+    "one": "{} 个踩",
+    "other": "{} 个踩"
+  },
+  "postReactionSocialPoint": {
+    "zero": "无社会信用点变更",
+    "one": "{} 点社会信用点变更",
+    "other": "{} 点社会信用点变更"
   },
   "postReactCompleted": "反应已被添加。",
   "postReactUncompleted": "反应已被移除。",

@@ -106,9 +106,14 @@ class _PostBottomAction extends StatelessWidget {
                   children: [
                     Icon(Symbols.add_reaction, size: 20, color: iconColor),
                     const Gap(8),
-                    if (data.totalDownvote > 0 || data.totalUpvote > 0)
-                      Text('postReactionPoints').plural(
-                        data.totalUpvote - data.totalDownvote,
+                    if (data.totalUpvote > 0 &&
+                        data.totalUpvote >= data.totalDownvote)
+                      Text('postReactionUpvote').plural(
+                        data.totalUpvote,
+                      )
+                    else if (data.totalDownvote > 0)
+                      Text('postReactionDownvote').plural(
+                        data.totalDownvote,
                       )
                     else
                       Text('postReact').tr(),
@@ -119,12 +124,12 @@ class _PostBottomAction extends StatelessWidget {
                     context: context,
                     builder: (context) => PostReactionPopup(
                       data: data,
-                      onChanged: (value, isPositive, delta) {
+                      onChanged: (value, attr, delta) {
                         onChanged(data.copyWith(
-                          totalUpvote: isPositive
+                          totalUpvote: attr == 1
                               ? data.totalUpvote + delta
                               : data.totalUpvote,
-                          totalDownvote: !isPositive
+                          totalDownvote: attr == 2
                               ? data.totalDownvote + delta
                               : data.totalDownvote,
                           metric: data.metric.copyWith(reactionList: value),

@@ -104,10 +104,20 @@
   "postRepostingNotice": "You're about to repost a post that posted {}.",
   "postReact": "React",
   "postReactions": "Reactions of Post",
-  "postReactionPoints": {
-    "zero": "{} pt",
-    "one": "{} pt",
-    "other": "{} pts"
+  "postReactionUpvote": {
+    "zero": "0 upvote",
+    "one": "{} upvote",
+    "other": "{} upvotes"
+  },
+  "postReactionDownvote": {
+    "zero": "0 downvote",
+    "one": "{} downvote",
+    "other": "{} downvotes"
+  },
+  "postReactionSocialPoint": {
+    "zero": "0 point",
+    "one": "{} point",
+    "other": "{} points"
   },
   "postReactCompleted": "Reaction has been added.",
   "postReactUncompleted": "Reaction has been removed.",

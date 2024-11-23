@@ -130,7 +130,7 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
             LoadingIndicator(isActive: _isBusy),
             if (_editingChannel != null)
               MaterialBanner(
-                leading: const Icon(Icons.edit),
+                leading: const Icon(Symbols.edit),
                 leadingPadding: const EdgeInsets.only(left: 10, right: 20),
                 dividerColor: Colors.transparent,
                 content: Text(

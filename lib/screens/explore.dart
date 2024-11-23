@@ -173,7 +173,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
                 return GestureDetector(
-                  child: PostItem(data: _posts[idx], maxWidth: 640),
+                  child: PostItem(
+                    data: _posts[idx],
+                    maxWidth: 640,
+                    onChanged: (data) {
+                      setState(() => _posts[idx] = data);
+                    },
+                  ),
                   onTap: () {
                     GoRouter.of(context).pushNamed(
                       'postDetail',

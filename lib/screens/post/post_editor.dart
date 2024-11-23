@@ -292,7 +292,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                 ]),
                                 children: <Widget>[
                                   PostItem(
-                                      data: _writeController.repostingPost!)
+                                    data: _writeController.repostingPost!,
+                                  )
                                 ],
                               ),
                             ),

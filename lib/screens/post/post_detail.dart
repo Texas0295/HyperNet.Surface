@@ -113,6 +113,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 data: _data!,
                 maxWidth: 640,
                 showComments: false,
+                onChanged: (data) {
+                  setState(() => _data = data);
+                },
               ),
             ),
           const SliverToBoxAdapter(child: Divider(height: 1)),
@@ -144,7 +147,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 child: PostMiniEditor(
                   postReplyId: _data!.id,
                   onPost: () {
-                    _childListKey.currentState!.refresh();
                     setState(() {
                       _data = _data!.copyWith(
                         metric: _data!.metric.copyWith(
@@ -152,6 +154,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         ),
                       );
                     });
+                    _childListKey.currentState!.refresh();
                   },
                 ),
               ),

@@ -11,7 +11,7 @@ import 'package:surface/widgets/dialog.dart';
 
 class PostReactionPopup extends StatefulWidget {
   final SnPost data;
-  final Function(Map<String, int> value, bool isPositive, int delta)? onChanged;
+  final Function(Map<String, int> value, int attr, int delta)? onChanged;
   const PostReactionPopup({super.key, required this.data, this.onChanged});
 
   @override
@@ -43,7 +43,7 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
         if (widget.onChanged != null) {
           widget.onChanged!(
             _reactions,
-            kTemplateReactions[symbol]!.attitude == 1,
+            kTemplateReactions[symbol]!.attitude,
             1,
           );
         }
@@ -54,7 +54,7 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
         if (widget.onChanged != null) {
           widget.onChanged!(
             _reactions,
-            kTemplateReactions[symbol]!.attitude == 1,
+            kTemplateReactions[symbol]!.attitude,
             -1,
           );
         }
@@ -89,11 +89,36 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
                   .textStyle(Theme.of(context).textTheme.titleLarge!),
             ],
           ).padding(horizontal: 20, top: 16, bottom: 12),
+          Container(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            child: Row(
+              children: [
+                const Icon(Symbols.thumb_up, size: 16),
+                const Gap(8),
+                Text('postReactionUpvote').plural(widget.data.totalUpvote),
+                const Gap(24),
+                const Icon(Symbols.thumb_down, size: 16),
+                const Gap(8),
+                Text('postReactionDownvote').plural(widget.data.totalDownvote),
+                const Gap(24),
+                Icon(
+                  widget.data.totalUpvote >= widget.data.totalDownvote
+                      ? Symbols.trending_up
+                      : Symbols.trending_down,
+                  size: 16,
+                ),
+                const Gap(8),
+                Text('postReactionSocialPoint').plural(
+                  widget.data.totalUpvote - widget.data.totalDownvote,
+                ),
+              ],
+            ).padding(vertical: 8, horizontal: 24),
+          ),
           Expanded(
-            child: GridView.count(
+            child: GridView.extent(
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
-              crossAxisCount: 4,
+              maxCrossAxisExtent: 120,
               children: kTemplateReactions.entries.map((e) {
                 return InkWell(
                   onTap: () {

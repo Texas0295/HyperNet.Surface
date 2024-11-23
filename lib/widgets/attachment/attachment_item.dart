@@ -232,7 +232,7 @@ class _AttachmentItemContentVideoState
               )
             else
               const Center(
-                child: Icon(Icons.movie, size: 64),
+                child: Icon(Symbols.movie, size: 64),
               ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -397,7 +397,7 @@ class _AttachmentItemContentAudioState
               )
             else
               const Center(
-                child: Icon(Icons.radio, size: 64),
+                child: Icon(Symbols.radio, size: 64),
               ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -485,7 +485,7 @@ class _AttachmentItemContentAudioState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.audio_file, size: 32),
+              const Icon(Symbols.audio_file, size: 32),
               const Gap(8),
               Text(
                 widget.data.alt,
@@ -554,8 +554,8 @@ class _AttachmentItemContentAudioState
                   const Gap(16),
                   IconButton.filled(
                     icon: _isPlaying
-                        ? const Icon(Icons.pause)
-                        : const Icon(Icons.play_arrow),
+                        ? const Icon(Symbols.pause)
+                        : const Icon(Symbols.play_arrow),
                     onPressed: () {
                       _audioPlayer!.playOrPause();
                     },

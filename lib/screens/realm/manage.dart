@@ -191,7 +191,7 @@ class _RealmManageScreenState extends State<RealmManageScreen> {
             LoadingIndicator(isActive: _isBusy),
             if (_editingRealm != null)
               MaterialBanner(
-                leading: const Icon(Icons.edit),
+                leading: const Icon(Symbols.edit),
                 leadingPadding: const EdgeInsets.only(left: 10, right: 20),
                 dividerColor: Colors.transparent,
                 content: Text(
