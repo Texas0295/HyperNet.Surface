@@ -122,21 +122,25 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           const SliverToBoxAdapter(child: Divider(height: 1)),
           if (_data != null)
             SliverToBoxAdapter(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(Symbols.comment, size: 24),
-                  const Gap(16),
-                  Text('postCommentsDetailed')
-                      .plural(_data!.metric.replyCount)
-                      .textStyle(Theme.of(context).textTheme.titleLarge!),
-                ],
-              ).padding(horizontal: 20, vertical: 12),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 640),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Symbols.comment, size: 24),
+                    const Gap(16),
+                    Text('postCommentsDetailed')
+                        .plural(_data!.metric.replyCount)
+                        .textStyle(Theme.of(context).textTheme.titleLarge!),
+                  ],
+                ).padding(horizontal: 20, vertical: 12).center(),
+              ),
             ),
           if (_data != null && ua.isAuthorized)
             SliverToBoxAdapter(
               child: Container(
                 height: 240,
+                constraints: const BoxConstraints(maxWidth: 640),
                 decoration: BoxDecoration(
                   border: Border.symmetric(
                     horizontal: BorderSide(
@@ -158,7 +162,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     _childListKey.currentState!.refresh();
                   },
                 ),
-              ),
+              ).center(),
             ),
           if (_data != null)
             PostCommentSliverList(

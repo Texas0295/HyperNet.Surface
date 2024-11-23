@@ -4,6 +4,7 @@ import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
@@ -22,6 +23,7 @@ import 'package:surface/providers/websocket.dart';
 import 'package:surface/router.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/types/realm.dart';
+import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +42,9 @@ void main() async {
   if (!kReleaseMode) {
     debugInvertOversizedImages = true;
   }
+
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+  usePathUrlStrategy();
 
   await SentryFlutter.init(
     (options) {

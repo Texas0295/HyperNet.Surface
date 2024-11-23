@@ -5,7 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_linux
   flutter_udid
-  isar_flutter_libs
+  flutter_webrtc
   media_kit_libs_linux
   media_kit_video
   pasteboard

@@ -10,6 +10,7 @@ import 'package:surface/screens/album.dart';
 import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/chat.dart';
+import 'package:surface/screens/chat/call_room.dart';
 import 'package:surface/screens/chat/manage.dart';
 import 'package:surface/screens/chat/room.dart';
 import 'package:surface/screens/explore.dart';
@@ -47,7 +48,7 @@ final _appRoutes = [
         ),
         routes: [
           GoRoute(
-            path: '/post/write/:mode',
+            path: '/write/:mode',
             name: 'postEditor',
             builder: (context, state) => AppBackground(
               isLessOptimization: true,
@@ -66,14 +67,14 @@ final _appRoutes = [
             ),
           ),
           GoRoute(
-            path: '/post/search',
+            path: '/search',
             name: 'postSearch',
             builder: (context, state) => const AppBackground(
               child: PostSearchScreen(),
             ),
           ),
           GoRoute(
-            path: '/post/:slug',
+            path: '/:slug',
             name: 'postDetail',
             builder: (context, state) => AppBackground(
               child: PostDetailScreen(
@@ -99,7 +100,7 @@ final _appRoutes = [
         ),
         routes: [
           GoRoute(
-            path: '/chat/:scope/:alias',
+            path: '/:scope/:alias',
             name: 'chatRoom',
             builder: (context, state) => AppBackground(
               isLessOptimization: true,
@@ -110,7 +111,18 @@ final _appRoutes = [
             ),
           ),
           GoRoute(
-            path: '/chat/manage',
+            path: '/:scope/:alias/call',
+            name: 'chatCallRoom',
+            builder: (context, state) => AppBackground(
+              isLessOptimization: true,
+              child: CallRoomScreen(
+                scope: state.pathParameters['scope']!,
+                alias: state.pathParameters['alias']!,
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/manage',
             name: 'chatManage',
             pageBuilder: (context, state) => CustomTransitionPage(
               child: ChatManageScreen(),
@@ -138,7 +150,7 @@ final _appRoutes = [
         ),
         routes: [
           GoRoute(
-            path: '/realm/manage',
+            path: '/manage',
             name: 'realmManage',
             pageBuilder: (context, state) => CustomTransitionPage(
               child: RealmManageScreen(
