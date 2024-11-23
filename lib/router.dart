@@ -14,6 +14,7 @@ import 'package:surface/screens/chat/manage.dart';
 import 'package:surface/screens/chat/room.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/home.dart';
+import 'package:surface/screens/notification.dart';
 import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
 import 'package:surface/screens/realm.dart';
@@ -173,6 +174,13 @@ final _appRoutes = [
         name: 'album',
         pageBuilder: (context, state) => NoTransitionPage(
           child: const AlbumScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/notification',
+        name: 'notification',
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const NotificationScreen(),
         ),
       ),
     ],

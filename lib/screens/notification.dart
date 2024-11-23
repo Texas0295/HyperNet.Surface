@@ -1,0 +1,244 @@
+import 'dart:math' as math;
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
+import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/notification.dart';
+import 'package:surface/types/post.dart';
+import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/markdown_content.dart';
+import 'package:surface/widgets/post/post_item.dart';
+import 'package:very_good_infinite_list/very_good_infinite_list.dart';
+
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  bool _isBusy = false;
+  bool _isFirstLoading = true;
+  bool _isSubmitting = false;
+
+  final List<SnNotification> _notifications = List.empty(growable: true);
+  int? _totalCount;
+
+  static const Map<String, IconData> kNotificationTopicIcons = {
+    'passport.security.alert': Symbols.gpp_maybe,
+    'interactive.subscription': Symbols.subscriptions,
+    'interactive.feedback': Symbols.add_reaction,
+    'messaging.callStart': Symbols.call_received,
+  };
+
+  Future<void> _fetchNotifications() async {
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/id/notifications?take=10');
+      _totalCount = resp.data['count'];
+      _notifications.addAll(
+        resp.data['data']
+                ?.map((e) => SnNotification.fromJson(e))
+                .cast<SnNotification>() ??
+            [],
+      );
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      _isFirstLoading = false;
+      setState(() => _isBusy = false);
+    }
+  }
+
+  void _markAllAsRead() async {
+    if (_notifications.isEmpty) return;
+
+    final confirm = await context.showConfirmDialog(
+      'notificationMarkAllRead'.tr(),
+      'notificationMarkAllReadDescription'.tr(),
+    );
+    if (!confirm) return;
+
+    if (!mounted) return;
+    setState(() => _isSubmitting = true);
+
+    List<int> markList = List.empty(growable: true);
+    for (final element in _notifications) {
+      if (element.id <= 0) continue;
+      if (element.readAt != null) continue;
+      markList.add(element.id);
+    }
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.put('/cgi/id/notifications/read', data: {
+        'messages': markList,
+      });
+      _notifications.clear();
+      _fetchNotifications();
+
+      if (!mounted) return;
+      context.showSnackbar(
+        'notificationMarkAllReadPrompt'.plural(markList.length),
+      );
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isSubmitting = false);
+    }
+  }
+
+  void _markOneAsRead(SnNotification notification) async {
+    if (notification.readAt != null) return;
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.put('/cgi/id/notifications/read/${notification.id}');
+      _notifications.clear();
+      _fetchNotifications();
+
+      if (!mounted) return;
+      context.showSnackbar(
+        'notificationMarkOneReadPrompt'.tr(args: ['#${notification.id}']),
+      );
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isSubmitting = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotifications();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('screenNotification').tr(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.checklist),
+            onPressed: _isSubmitting ? null : _markAllAsRead,
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          LoadingIndicator(isActive: _isFirstLoading),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () {
+                _notifications.clear();
+                return _fetchNotifications();
+              },
+              child: InfiniteList(
+                padding: EdgeInsets.only(
+                  top: 16,
+                  bottom: math.max(MediaQuery.of(context).padding.bottom, 16),
+                ),
+                itemCount: _notifications.length,
+                onFetchData: () {
+                  _fetchNotifications();
+                },
+                isLoading: _isBusy,
+                hasReachedMax: _totalCount != null &&
+                    _notifications.length >= _totalCount!,
+                itemBuilder: (context, idx) {
+                  final nty = _notifications[idx];
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(kNotificationTopicIcons[nty.topic]),
+                      const Gap(16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (nty.readAt == null)
+                              StyledWidget(Badge(
+                                label: Text('notificationUnread').tr(),
+                              )).padding(bottom: 4),
+                            Text(
+                              nty.title,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            if (nty.subtitle != null)
+                              Text(
+                                nty.subtitle!,
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            if (nty.subtitle != null) const Gap(4),
+                            MarkdownTextContent(
+                              content: nty.body,
+                              isAutoWarp: true,
+                              isSelectable: true,
+                            ),
+                            if ([
+                                  'interactive.feedback',
+                                  'interactive.subscription'
+                                ].contains(nty.topic) &&
+                                nty.metadata['related_post'] != null)
+                              PostItem(
+                                data: SnPost.fromJson(
+                                  nty.metadata['related_post']!,
+                                ),
+                              ),
+                            const Gap(8),
+                            Row(
+                              children: [
+                                Text(
+                                  DateFormat('yy/MM/dd').format(nty.createdAt),
+                                ).fontSize(12),
+                                const Gap(4),
+                                Text(
+                                  '·',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                const Gap(4),
+                                Text(
+                                  RelativeTime(context).format(nty.createdAt),
+                                ).fontSize(12),
+                              ],
+                            ).opacity(0.75),
+                          ],
+                        ),
+                      ),
+                      const Gap(16),
+                      IconButton(
+                        icon: const Icon(Symbols.check),
+                        padding: EdgeInsets.all(0),
+                        visualDensity:
+                            const VisualDensity(horizontal: -4, vertical: -4),
+                        onPressed:
+                            _isSubmitting ? null : () => _markOneAsRead(nty),
+                      ),
+                    ],
+                  ).padding(horizontal: 16);
+                },
+                separatorBuilder: (_, __) => const Divider(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

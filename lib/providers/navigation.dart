@@ -63,6 +63,11 @@ class NavigationProvider extends ChangeNotifier {
       screen: 'album',
       label: 'screenAlbum',
     ),
+    AppNavDestination(
+      icon: Icon(Symbols.notifications, weight: 400, opticalSize: 20),
+      screen: 'notification',
+      label: 'screenNotification',
+    ),
   ];
   static const List<String> kDefaultPinnedDestination = [
     'home',

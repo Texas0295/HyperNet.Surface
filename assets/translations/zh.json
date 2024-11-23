@@ -22,6 +22,7 @@
   "screenRealm": "领域",
   "screenRealmManage": "编辑领域",
   "screenRealmNew": "新建领域",
+  "screenNotification": "通知",
   "dialogOkay": "好的",
   "dialogCancel": "取消",
   "dialogConfirm": "确认",
@@ -174,5 +175,15 @@
   },
   "addAttachmentFromAlbum": "从相册中添加附件",
   "addAttachmentFromClipboard": "粘贴附件",
-  "attachmentPastedImage" : "粘贴的图片"
+  "attachmentPastedImage" : "粘贴的图片",
+  "notificationUnread": "未读",
+  "notificationRead": "已读",
+  "notificationMarkAllRead": "已读所有通知",
+  "notificationMarkAllReadDescription": "您确定要将所有通知设置为已读吗？该操作不可撤销。",
+  "notificationMarkAllReadPrompt": {
+    "zero": "已将 0 个通知标记为已读。",
+    "one": "已将 {} 个通知标记为已读。",
+    "other": "已将 {} 个通知标记为已读。"
+  },
+  "notificationMarkOneReadPrompt": "已将通知 {} 标记为已读。"
 }

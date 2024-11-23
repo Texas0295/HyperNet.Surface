@@ -22,6 +22,7 @@
   "screenRealm": "Realm",
   "screenRealmManage": "Edit Realm",
   "screenRealmNew": "New Realm",
+  "screenNotification": "Notification",
   "dialogOkay": "Okay",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -174,5 +175,15 @@
   },
   "addAttachmentFromAlbum": "Add from album",
   "addAttachmentFromClipboard": "Paste file",
-  "attachmentPastedImage": "Pasted Image"
+  "attachmentPastedImage": "Pasted Image",
+  "notificationUnread": "未读",
+  "notificationRead": "已读",
+  "notificationMarkAllRead": "Mark all notifications as read",
+  "notificationMarkAllReadDescription": "Are you sure you want to mark all notifications as read? This operation is irreversible.",
+  "notificationMarkAllReadPrompt": {
+    "zero": "Marked 0 notification as read.",
+    "one": "Marked {} notification as read.",
+    "other": "Marked {} notifications as read."
+  },
+  "notificationMarkOneReadPrompt": "Marked notification {} as read."
 }

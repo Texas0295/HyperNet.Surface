@@ -29,7 +29,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
   Widget build(BuildContext context) {
     final nav = context.watch<NavigationProvider>();
 
-    final backgroundColor = ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+    final backgroundColor = ResponsiveBreakpoints.of(context).largerThan(TABLET)
         ? Colors.transparent
         : null;
 
