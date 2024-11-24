@@ -41,14 +41,23 @@ class PostItem extends StatelessWidget {
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _PostContentHeader(data: data)
                   .padding(horizontal: 12, vertical: 8),
+              if (data.body['title'] != null ||
+                  data.body['description'] != null)
+                _PostHeadline(data: data).padding(horizontal: 16, bottom: 8),
               _PostContentBody(data: data.body)
                   .padding(horizontal: 16, bottom: 6),
               if (data.repostTo != null)
                 _PostQuoteContent(child: data.repostTo!).padding(
                   horizontal: 12,
+                ),
+              if (data.body['content_truncated'] == true)
+                _PostTruncatedHint(data: data).padding(
+                  horizontal: 16,
+                  vertical: 4,
                 ),
             ],
           ),
@@ -69,7 +78,7 @@ class PostItem extends StatelessWidget {
                 showComments: showComments,
                 showReactions: showReactions,
                 onChanged: _onChanged,
-              ).padding(left: 12, right: 18),
+              ).padding(left: 8, right: 14),
             ],
           ),
         ),
@@ -170,6 +179,30 @@ class _PostBottomAction extends StatelessWidget {
           ).padding(horizontal: 8, vertical: 8),
           onTap: () {},
         ),
+      ],
+    );
+  }
+}
+
+class _PostHeadline extends StatelessWidget {
+  final SnPost data;
+  const _PostHeadline({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (data.body['title'] != null)
+          Text(
+            data.body['title'],
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        if (data.body['description'] != null)
+          Text(
+            data.body['description'],
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
       ],
     );
   }
@@ -349,5 +382,51 @@ class _PostQuoteContent extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PostTruncatedHint extends StatelessWidget {
+  final SnPost data;
+  const _PostTruncatedHint({super.key, required this.data});
+
+  static const int kHumanReadSpeed = 238;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        if (data.body['content_length'] != null)
+          Row(
+            children: [
+              const Icon(Symbols.timer, size: 20),
+              const Gap(4),
+              Text('postReadEstimate').tr(args: [
+                '${Duration(
+                  seconds: ((data.body['content_length'] as num).toDouble() /
+                          kHumanReadSpeed)
+                      .round(),
+                ).inSeconds}s',
+              ]),
+            ],
+          ).padding(right: 12),
+        if (data.body['content_length'] != null)
+          Row(
+            children: [
+              const Icon(Symbols.height, size: 20),
+              const Gap(4),
+              Text(
+                'postTotalLength'.plural(data.body['content_length']),
+              ).padding(right: 12)
+            ],
+          ),
+        Row(
+          children: [
+            const Icon(Symbols.unfold_more, size: 20),
+            const Gap(4),
+            Text('postReadMore').tr(),
+          ],
+        )
+      ],
+    ).opacity(0.75);
   }
 }

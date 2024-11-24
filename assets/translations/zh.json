@@ -55,6 +55,13 @@
   "untitled": "无题",
   "postDetail": "帖子详情",
   "postNoun": "帖子",
+  "postReadMore": "阅读更多",
+  "postReadEstimate": "预计花费 {} 阅读",
+  "postTotalLength": {
+    "zero": "没有内容",
+    "one": "总计 {} 字",
+    "other": "总计 {} 字"
+  },
   "fieldUsername": "用户名",
   "fieldNickname": "显示名",
   "fieldEmail": "电子邮箱地址",

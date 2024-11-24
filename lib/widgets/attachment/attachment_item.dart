@@ -109,35 +109,38 @@ class _AttachmentItemSensitiveBlurState
             child: Container(
               color: Colors.black.withOpacity(0.5),
               alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Symbols.visibility_off,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                  const Gap(8),
-                  Text('sensitiveContent')
-                      .tr()
-                      .fontSize(20)
-                      .textColor(Colors.white)
-                      .bold(),
-                  Text('sensitiveContentDescription')
-                      .tr()
-                      .fontSize(14)
-                      .textColor(Colors.white.withOpacity(0.8)),
-                  const Gap(16),
-                  InkWell(
-                    child: Text('sensitiveContentReveal')
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 280),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Symbols.visibility_off,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                    const Gap(8),
+                    Text('sensitiveContent')
                         .tr()
-                        .textColor(Colors.white),
-                    onTap: () {
-                      setState(() => _doesShow = !_doesShow);
-                    },
-                  ),
-                ],
-              ),
+                        .fontSize(20)
+                        .textColor(Colors.white)
+                        .bold(),
+                    Text('sensitiveContentDescription')
+                        .tr()
+                        .fontSize(14)
+                        .textColor(Colors.white.withOpacity(0.8)),
+                    const Gap(16),
+                    InkWell(
+                      child: Text('sensitiveContentReveal')
+                          .tr()
+                          .textColor(Colors.white),
+                      onTap: () {
+                        setState(() => _doesShow = !_doesShow);
+                      },
+                    ),
+                  ],
+                ),
+              ).center(),
             ),
           ),
         )

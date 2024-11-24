@@ -55,6 +55,13 @@
   "untitled": "Untitled",
   "postDetail": "Post detail",
   "postNoun": "Post",
+  "postReadMore": "Read more",
+  "postReadEstimate": "Est read time {}",
+  "postTotalLength": {
+    "zero": "No character",
+    "one": "{} character",
+    "other": "{} characters"
+  },
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",
