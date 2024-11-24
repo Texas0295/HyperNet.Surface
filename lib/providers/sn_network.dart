@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:surface/providers/adapters/sn_network_universal.dart';
 import 'package:synchronized/synchronized.dart';
 
 const kAtkStoreKey = 'nex_user_atk';
@@ -21,7 +20,7 @@ const kNetworkServerDirectory = [
 ];
 
 class SnNetworkProvider {
-  late Dio client;
+  late final Dio client;
 
   late final SharedPreferences _prefs;
 
@@ -52,8 +51,6 @@ class SnNetworkProvider {
         },
       ),
     );
-
-    client = addClientAdapter(client);
 
     SharedPreferences.getInstance().then((prefs) {
       _prefs = prefs;
