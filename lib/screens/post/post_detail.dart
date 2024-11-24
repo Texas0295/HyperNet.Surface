@@ -86,22 +86,28 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             GoRouter.of(context).replaceNamed('explore');
           },
         ),
-        flexibleSpace: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_data?.body['title'] != null)
-              Text(_data?.body['title'] ?? 'postNoun'.tr())
-                  .textStyle(Theme.of(context).textTheme.titleLarge!)
-                  .textColor(Colors.white),
-            if (_data?.body['title'] != null)
-              Text('postDetail'.tr())
-                  .textColor(Colors.white.withAlpha((255 * 0.9).round()))
-            else
-              Text('postDetail'.tr())
-                  .textStyle(Theme.of(context).textTheme.titleLarge!)
-                  .textColor(Colors.white),
-          ],
-        ).padding(top: math.max(MediaQuery.of(context).padding.top, 8)),
+        title: _data?.body['title'] != null
+            ? RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: _data?.body['title'] ?? 'postNoun'.tr(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Colors.white),
+                  ),
+                  const TextSpan(text: '\n'),
+                  TextSpan(
+                    text: 'postDetail'.tr(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white),
+                  ),
+                ]),
+              )
+            : Text('postDetail').tr(),
       ),
       body: CustomScrollView(
         slivers: [

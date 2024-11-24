@@ -36,6 +36,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   void setEdit(SnChatMessage? value) {
+    _contentController.text = value?.body['text'] ?? '';
     setState(() => _editingMessage = value);
   }
 

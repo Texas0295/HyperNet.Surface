@@ -138,6 +138,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     );
   }
 
+  bool _checkMessageMergeable(SnChatMessage? a, SnChatMessage? b) {
+    if (a == null || b == null) return false;
+    if (a.sender.accountId != b.sender.accountId) return false;
+    return a.createdAt.difference(b.createdAt).inMinutes <= 3;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -248,27 +254,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     },
                     itemBuilder: (context, idx) {
                       final message = _messageController.messages[idx];
-                      final nextMessage =
-                          idx < _messageController.messages.length - 1
-                              ? _messageController.messages[idx + 1]
-                              : null;
-                      final previousMessage =
-                          idx > 0 ? _messageController.messages[idx - 1] : null;
 
-                      final canMerge = nextMessage != null &&
-                          nextMessage.senderId == message.senderId &&
-                          message.createdAt
-                                  .difference(nextMessage.createdAt)
-                                  .inMinutes
-                                  .abs() <=
-                              3;
-                      final canMergePrevious = previousMessage != null &&
-                          previousMessage.senderId == message.senderId &&
-                          message.createdAt
-                                  .difference(previousMessage.createdAt)
-                                  .inMinutes
-                                  .abs() <=
-                              3;
+                      bool canMerge = false, canMergePrevious = false;
+                      if (idx > 0) {
+                        canMergePrevious = _checkMessageMergeable(
+                          _messageController.messages[idx - 1],
+                          _messageController.messages[idx],
+                        );
+                      }
+                      if (idx + 1 < _messageController.messages.length) {
+                        canMerge = _checkMessageMergeable(
+                          _messageController.messages[idx],
+                          _messageController.messages[idx + 1],
+                        );
+                      }
 
                       return ChatMessage(
                         data: message,

@@ -228,5 +228,7 @@
   "callVideoFlip": "Mirror video",
   "callSpeakerphoneToggle": "Toggle speakerphone",
   "callScreenOff": "Turn off screen share",
-  "callScreenOn": "Turn on screen share"
+  "callScreenOn": "Turn on screen share",
+  "callMessageEnded": "Call lasted {}",
+  "callMessageStarted": "Call started"
 }

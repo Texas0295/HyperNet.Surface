@@ -47,8 +47,10 @@ class ChatMessage extends StatelessWidget {
     return SwipeTo(
       key: Key('chat-message-${data.id}'),
       iconOnLeftSwipe: Symbols.reply,
+      iconOnRightSwipe: Symbols.edit,
       swipeSensitivity: 20,
       onLeftSwipe: onReply != null ? (_) => onReply!(data) : null,
+      onRightSwipe: onEdit != null ? (_) => onEdit!(data) : null,
       child: ContextMenuRegion(
         contextMenu: ContextMenu(
           entries: [
@@ -111,10 +113,6 @@ class ChatMessage extends StatelessWidget {
                                   ? data.sender.nick!
                                   : user?.nick ?? 'unknown',
                             ).bold(),
-                            if (data.updatedAt != data.createdAt)
-                              Text(
-                                'messageEditedHint'.tr(),
-                              ).fontSize(14).opacity(0.75).padding(left: 6),
                             const Gap(6),
                             Text(
                               dateFormatter.format(data.createdAt.toLocal()),
@@ -163,7 +161,10 @@ class ChatMessage extends StatelessWidget {
                 maxHeight: 520,
                 listPadding: const EdgeInsets.only(top: 8),
               ),
-            if (!hasMerged && !isCompact) const Gap(12),
+            if (!hasMerged && !isCompact)
+              const Gap(12)
+            else if (!isCompact)
+              const Gap(6),
           ],
         ),
       ),
@@ -178,9 +179,18 @@ class _ChatMessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.body['text'] != null && data.body['text'].isNotEmpty) {
-      return MarkdownTextContent(
-        content: data.body['text'],
-        isAutoWarp: true,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          MarkdownTextContent(
+            content: data.body['text'],
+            isAutoWarp: true,
+          ),
+          if (data.updatedAt != data.createdAt)
+            Text(
+              'messageEditedHint'.tr(),
+            ).fontSize(13).opacity(0.75),
+        ],
       );
     } else if (data.body['attachments']?.isNotEmpty) {
       return Row(
@@ -204,6 +214,14 @@ class _ChatMessageSystemNotify extends StatelessWidget {
   final SnChatMessage data;
   const _ChatMessageSystemNotify({super.key, required this.data});
 
+  String _formatDuration(Duration duration) {
+    String negativeSign = duration.isNegative ? '-' : '';
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60).abs());
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60).abs());
+    return '$negativeSign${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (data.type) {
@@ -224,6 +242,28 @@ class _ChatMessageSystemNotify extends StatelessWidget {
             const Gap(4),
             Text(
               'messageDeleted'.tr(args: ['#${data.relatedEventId}']),
+            ),
+          ],
+        ).opacity(0.75);
+      case 'calls.start':
+        return Row(
+          children: [
+            const Icon(Symbols.call, size: 20),
+            const Gap(4),
+            Text(
+              'callMessageStarted'.tr(),
+            ),
+          ],
+        ).opacity(0.75);
+      case 'calls.end':
+        return Row(
+          children: [
+            const Icon(Symbols.call_end, size: 20),
+            const Gap(4),
+            Text(
+              'callMessageEnded'.tr(args: [
+                _formatDuration(Duration(seconds: data.body['last'])),
+              ]),
             ),
           ],
         ).opacity(0.75);

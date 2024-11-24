@@ -35,7 +35,8 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
     return Stack(
       children: [
         Container(
-          color: Theme.of(context).colorScheme.surfaceContainer,
+          color:
+              Theme.of(context).colorScheme.surfaceContainer.withOpacity(0.75),
           child: call.focusTrack != null
               ? InteractiveParticipantWidget(
                   isFixedAvatar: false,
@@ -113,7 +114,10 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               child: InteractiveParticipantWidget(
-                color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                color: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHigh
+                    .withOpacity(0.75),
                 participant: track,
                 onTap: () {
                   if (track.participant.sid !=

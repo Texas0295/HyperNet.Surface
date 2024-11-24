@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:collection/collection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -129,18 +127,28 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 Navigator.pop(context);
               },
             ),
-            flexibleSpace: Column(
-              children: [
-                Text(_writeController.title.isNotEmpty
-                        ? _writeController.title
-                        : 'untitled'.tr())
-                    .textStyle(Theme.of(context).textTheme.titleLarge!)
-                    .textColor(Colors.white),
-                Text(PostWriteController.kTitleMap[widget.mode]!)
-                    .tr()
-                    .textColor(Colors.white.withAlpha((255 * 0.9).round())),
-              ],
-            ).padding(top: math.max(MediaQuery.of(context).padding.top, 8)),
+            title: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(children: [
+                TextSpan(
+                  text: _writeController.title.isNotEmpty
+                      ? _writeController.title
+                      : 'untitled'.tr(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.white),
+                ),
+                const TextSpan(text: '\n'),
+                TextSpan(
+                  text: PostWriteController.kTitleMap[widget.mode]!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.white),
+                ),
+              ]),
+            ),
             actions: [
               IconButton(
                 icon: const Icon(Symbols.tune),

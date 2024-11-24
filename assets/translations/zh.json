@@ -228,5 +228,7 @@
   "callVideoFlip": "镜像画面",
   "callSpeakerphoneToggle": "切换扬声器",
   "callScreenOff": "关闭屏幕共享",
-  "callScreenOn": "开启屏幕共享"
+  "callScreenOn": "开启屏幕共享",
+  "callMessageEnded": "通话持续了 {}",
+  "callMessageStarted": "通话开始了"
 }
