@@ -360,3 +360,36 @@ Map<String, dynamic> _$$SnChatMessagePreloadImplToJson(
       'attachments': instance.attachments?.map((e) => e?.toJson()).toList(),
       'quote_event': instance.quoteEvent?.toJson(),
     };
+
+_$SnChatCallImpl _$$SnChatCallImplFromJson(Map<String, dynamic> json) =>
+    _$SnChatCallImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      endedAt: json['ended_at'] == null
+          ? null
+          : DateTime.parse(json['ended_at'] as String),
+      externalId: json['external_id'] as String,
+      founderId: (json['founder_id'] as num).toInt(),
+      channelId: (json['channel_id'] as num).toInt(),
+      founder:
+          SnChannelMember.fromJson(json['founder'] as Map<String, dynamic>),
+      participants: json['participants'] as List<dynamic>? ?? const [],
+    );
+
+Map<String, dynamic> _$$SnChatCallImplToJson(_$SnChatCallImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'ended_at': instance.endedAt?.toIso8601String(),
+      'external_id': instance.externalId,
+      'founder_id': instance.founderId,
+      'channel_id': instance.channelId,
+      'founder': instance.founder.toJson(),
+      'participants': instance.participants,
+    };

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:livekit_client/livekit_client.dart';
 import 'package:surface/types/account.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/types/realm.dart';
@@ -100,4 +101,44 @@ class SnChatMessagePreload with _$SnChatMessagePreload {
 
   factory SnChatMessagePreload.fromJson(Map<String, dynamic> json) =>
       _$SnChatMessagePreloadFromJson(json);
+}
+
+@freezed
+class SnChatCall with _$SnChatCall {
+  const factory SnChatCall({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required DateTime? endedAt,
+    required String externalId,
+    required int founderId,
+    required int channelId,
+    required SnChannelMember founder,
+    @Default([]) List<dynamic> participants,
+  }) = _SnChatCall;
+
+  factory SnChatCall.fromJson(Map<String, dynamic> json) =>
+      _$SnChatCallFromJson(json);
+}
+
+// Call stuff
+
+enum ParticipantStatsType {
+  unknown,
+  localAudioSender,
+  localVideoSender,
+  remoteAudioReceiver,
+  remoteVideoReceiver,
+}
+
+class ParticipantTrack {
+  ParticipantTrack(
+      {required this.participant,
+      required this.videoTrack,
+      required this.isScreenShare});
+
+  VideoTrack? videoTrack;
+  Participant participant;
+  bool isScreenShare;
 }

@@ -290,7 +290,7 @@ class _AttachmentItemContentVideoState
                       ),
                     ),
                     const Icon(
-                      Icons.play_arrow,
+                      Symbols.play_arrow,
                       shadows: labelShadows,
                       color: Colors.white,
                     ).padding(bottom: 4, right: 8),
@@ -450,7 +450,7 @@ class _AttachmentItemContentAudioState
                       ),
                     ),
                     const Icon(
-                      Icons.play_arrow,
+                      Symbols.play_arrow,
                       shadows: labelShadows,
                       color: Colors.white,
                     ).padding(bottom: 4, right: 8),

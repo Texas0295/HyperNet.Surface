@@ -87,6 +87,7 @@ class _RealmScreenState extends State<RealmScreen> {
               setState(() => _isCompactView = !_isCompactView);
             },
           ),
+          const Gap(8),
         ],
       ),
       floatingActionButton: FloatingActionButton(

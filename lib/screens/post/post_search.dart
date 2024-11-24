@@ -101,6 +101,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
             icon: const Icon(Symbols.tune),
             onPressed: _showAdvancedSearchTune,
           ),
+          const Gap(8),
         ],
       ),
       body: Stack(

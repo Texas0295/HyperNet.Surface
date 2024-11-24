@@ -89,6 +89,8 @@ dependencies:
   sentry_flutter: ^8.10.1
   synchronized: ^3.3.0+3
   livekit_client: ^2.3.0
+  wakelock_plus: ^1.2.8
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

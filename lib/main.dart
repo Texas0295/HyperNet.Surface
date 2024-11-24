@@ -12,6 +12,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
+import 'package:surface/providers/chat_call.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/notification.dart';
 import 'package:surface/providers/sn_attachment.dart';
@@ -86,6 +87,7 @@ class SolianApp extends StatelessWidget {
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => ChatChannelProvider(ctx)),
+            ChangeNotifierProvider(create: (ctx) => ChatCallProvider(ctx)),
           ],
           child: AppMainContent(),
         ),

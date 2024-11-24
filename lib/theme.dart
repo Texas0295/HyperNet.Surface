@@ -39,6 +39,9 @@ Future<ThemeData> createAppTheme(
       opticalSize: 20,
       color: colorScheme.onSurface,
     ),
+    appBarTheme: AppBarTheme(
+      centerTitle: true,
+    ),
     scaffoldBackgroundColor: Colors.transparent,
   );
 }

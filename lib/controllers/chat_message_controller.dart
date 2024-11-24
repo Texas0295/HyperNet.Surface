@@ -74,18 +74,6 @@ class ChatMessageController extends ChangeNotifier {
           final payload = SnChatMessage.fromJson(event.payload!);
           _addMessage(payload);
           break;
-        case 'calls.new':
-          final payload = SnChatMessage.fromJson(event.payload!);
-          if (payload.channel.id == channel?.id) {
-            // TODO impl call
-          }
-          break;
-        case 'calls.end':
-          final payload = SnChatMessage.fromJson(event.payload!);
-          if (payload.channel.id == channel?.id) {
-            // TODO impl call
-          }
-          break;
         case 'status.typing':
           if (event.payload?['channel_id'] != channel?.id) break;
           final member = SnChannelMember.fromJson(event.payload!['member']);

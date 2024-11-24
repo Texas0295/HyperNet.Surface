@@ -1,12 +1,22 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
 import 'package:surface/providers/channel.dart';
+import 'package:surface/providers/chat_call.dart';
+import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/websocket.dart';
 import 'package:surface/types/chat.dart';
+import 'package:surface/widgets/chat/call/call_prejoin.dart';
 import 'package:surface/widgets/chat/chat_message.dart';
 import 'package:surface/widgets/chat/chat_message_input.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -24,11 +34,15 @@ class ChatRoomScreen extends StatefulWidget {
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   bool _isBusy = false;
+  bool _isCalling = false;
 
   SnChannel? _channel;
+  SnChatCall? _ongoingCall;
 
   final GlobalKey<ChatMessageInputState> _inputGlobalKey = GlobalKey();
   late final ChatMessageController _messageController;
+
+  StreamSubscription? _wsSubscription;
 
   Future<void> _fetchChannel() async {
     setState(() => _isBusy = true);
@@ -44,6 +58,87 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     }
   }
 
+  Future<void> _fetchOngoingCall() async {
+    setState(() => _isCalling = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get(
+        '/cgi/im/channels/${_messageController.channel!.keyPath}/calls/ongoing',
+        options: Options(
+          validateStatus: (status) => status != null && status < 500,
+        ),
+      );
+      if (resp.statusCode == 200) {
+        _ongoingCall = SnChatCall.fromJson(resp.data);
+      }
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isCalling = false);
+    }
+  }
+
+  Future<void> _makeCall() async {
+    setState(() => _isCalling = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.post(
+        '/cgi/im/channels/${_messageController.channel!.keyPath}/calls',
+        options: Options(
+          sendTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+        ),
+      );
+      log(jsonDecode(resp.data));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isCalling = false);
+    }
+  }
+
+  Future<void> _endCall() async {
+    setState(() => _isCalling = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.delete(
+        '/cgi/im/channels/${_messageController.channel!.keyPath}/calls/ongoing',
+      );
+      log(jsonDecode(resp.data));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isCalling = false);
+    }
+  }
+
+  Future<void> _onCallJoin() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) => ChatCallPrejoinPopup(
+        ongoingCall: _ongoingCall!,
+        channel: _channel!,
+        onJoin: _onCallResume,
+      ),
+    );
+  }
+
+  void _onCallResume() {
+    GoRouter.of(context).pushNamed(
+      'chatCallRoom',
+      pathParameters: {
+        'scope': _channel!.realm!.alias,
+        'alias': _channel!.alias,
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,30 +146,58 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     _fetchChannel().then((_) async {
       await _messageController.initialize(_channel!);
       await _messageController.checkUpdate();
+      await _fetchOngoingCall();
+    });
+
+    final ws = context.read<WebSocketProvider>();
+    _wsSubscription = ws.stream.stream.listen((event) {
+      switch (event.method) {
+        case 'calls.new':
+          final payload = SnChatCall.fromJson(event.payload!);
+          if (payload.channelId == _channel?.id) {
+            setState(() => _ongoingCall = payload);
+          }
+          break;
+        case 'calls.end':
+          final payload = SnChatCall.fromJson(event.payload!);
+          if (payload.channelId == _channel?.id) {
+            setState(() => _ongoingCall = null);
+          }
+          break;
+      }
     });
   }
 
   @override
   void dispose() {
+    _wsSubscription?.cancel();
+    _messageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final call = context.watch<ChatCallProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_channel?.name ?? 'loading'.tr()),
         actions: [
           IconButton(
-            onPressed: () {
-              GoRouter.of(context).pushNamed('chatCallRoom', pathParameters: {
-                'scope': widget.scope,
-                'alias': widget.alias,
-              });
-            },
-            icon: const Icon(Symbols.voice_chat),
+            icon: _ongoingCall == null
+                ? const Icon(Symbols.call)
+                : const Icon(Symbols.call_end),
+            onPressed: _isCalling
+                ? null
+                : _ongoingCall == null
+                    ? _makeCall
+                    : _endCall,
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Symbols.more_vert)),
+          IconButton(
+            icon: const Icon(Symbols.more_vert),
+            onPressed: () {},
+          ),
+          const Gap(8),
         ],
       ),
       body: ListenableBuilder(
@@ -83,6 +206,28 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           return Column(
             children: [
               LoadingIndicator(isActive: _isBusy),
+              SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: MaterialBanner(
+                  dividerColor: Colors.transparent,
+                  leading: const Icon(Symbols.call_received),
+                  content: Text('callOngoingNotice').tr().padding(top: 2),
+                  actions: [
+                    if (call.current == null)
+                      TextButton(
+                        onPressed: _onCallJoin,
+                        child: Text('callJoin').tr(),
+                      )
+                    else if (call.current?.channelId == _channel?.id)
+                      TextButton(
+                        onPressed: _onCallResume,
+                        child: Text('callResume').tr(),
+                      )
+                  ],
+                ),
+              ).height(_ongoingCall != null ? 54 : 0, animate: true).animate(
+                  const Duration(milliseconds: 300),
+                  Curves.fastLinearToSlowEaseIn),
               if (_messageController.isPending)
                 Expanded(
                   child: const CircularProgressIndicator().center(),
@@ -112,7 +257,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                           idx > 0 ? _messageController.messages[idx - 1] : null;
 
                       final canMerge = nextMessage != null &&
-                          nextMessage.updatedAt == nextMessage.createdAt &&
                           nextMessage.senderId == message.senderId &&
                           message.createdAt
                                   .difference(nextMessage.createdAt)
@@ -120,7 +264,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                   .abs() <=
                               3;
                       final canMergePrevious = previousMessage != null &&
-                          message.updatedAt == message.createdAt &&
                           previousMessage.senderId == message.senderId &&
                           message.createdAt
                                   .difference(previousMessage.createdAt)

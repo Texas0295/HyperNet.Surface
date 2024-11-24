@@ -26,6 +26,7 @@ class AccountScreen extends StatelessWidget {
               GoRouter.of(context).pushNamed('settings');
             },
           ),
+          const Gap(8),
         ],
       ),
       body: SingleChildScrollView(

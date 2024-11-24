@@ -146,6 +146,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 icon: const Icon(Symbols.tune),
                 onPressed: _writeController.isBusy ? null : _updateMeta,
               ),
+              const Gap(8),
             ],
           ),
           body: Column(

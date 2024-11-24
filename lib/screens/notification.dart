@@ -138,6 +138,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             icon: const Icon(Symbols.checklist),
             onPressed: _isSubmitting ? null : _markAllAsRead,
           ),
+          const Gap(8),
         ],
       ),
       body: Column(

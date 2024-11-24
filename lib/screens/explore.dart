@@ -171,6 +171,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     GoRouter.of(context).pushNamed('postSearch');
                   },
                 ),
+                const Gap(8),
               ],
             ),
             SliverInfiniteList(
