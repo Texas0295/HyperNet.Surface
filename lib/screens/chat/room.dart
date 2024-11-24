@@ -106,10 +106,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.delete(
+      await sn.client.delete(
         '/cgi/im/channels/${_messageController.channel!.keyPath}/calls/ongoing',
       );
-      log(jsonDecode(resp.data));
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

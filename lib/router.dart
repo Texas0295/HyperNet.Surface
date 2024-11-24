@@ -230,7 +230,9 @@ final _appRoutes = [
       GoRoute(
         path: '/settings',
         name: 'settings',
-        builder: (context, state) => const SettingsScreen(),
+        builder: (context, state) => const AppBackground(
+          child: SettingsScreen(),
+        ),
       ),
     ],
   ),
