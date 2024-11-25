@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:surface/providers/sn_attachment.dart';
-import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/post.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/post/post_item.dart';
@@ -37,39 +36,13 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
 
     setState(() => _isBusy = true);
 
-    final sn = context.read<SnNetworkProvider>();
-    final resp = await sn.client.get(
-      '/cgi/co/posts/${widget.parentPostId}/replies',
-      queryParameters: {
-        'take': 10,
-        'offset': _posts.length,
-      },
-    );
-    final List<SnPost> out =
-        List.from(resp.data['data']?.map((e) => SnPost.fromJson(e)) ?? []);
-
-    Set<String> rids = {};
-    for (var i = 0; i < out.length; i++) {
-      rids.addAll(out[i].body['attachments']?.cast<String>() ?? []);
-    }
+    final pt = context.read<SnPostContentProvider>();
+    final result = await pt.listPostReplies(widget.parentPostId);
+    final List<SnPost> out = result.$1;
 
     if (!mounted) return;
-    final attach = context.read<SnAttachmentProvider>();
-    final attachments = await attach.getMultiple(rids.toList());
-    for (var i = 0; i < out.length; i++) {
-      out[i] = out[i].copyWith(
-        preload: SnPostPreload(
-          attachments: attachments
-              .where(
-                (ele) =>
-                    out[i].body['attachments']?.contains(ele?.rid) ?? false,
-              )
-              .toList(),
-        ),
-      );
-    }
 
-    _postCount = resp.data['count'];
+    _postCount = result.$2;
     _posts.addAll(out);
 
     if (mounted) setState(() => _isBusy = false);

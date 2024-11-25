@@ -7,8 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:surface/providers/sn_attachment.dart';
-import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/post.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -39,19 +38,10 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     setState(() => _isBusy = true);
 
     try {
-      final sn = context.read<SnNetworkProvider>();
-      final attach = context.read<SnAttachmentProvider>();
-      final resp = await sn.client.get('/cgi/co/posts/${widget.slug}');
+      final pt = context.read<SnPostContentProvider>();
+      final post = await pt.getPost(widget.slug);
       if (!mounted) return;
-      final attachments = await attach.getMultiple(
-        resp.data['body']['attachments']?.cast<String>() ?? [],
-      );
-      if (!mounted) return;
-      _data = SnPost.fromJson(resp.data).copyWith(
-        preload: SnPostPreload(
-          attachments: attachments,
-        ),
-      );
+      _data = post;
     } catch (err) {
       context.showErrorDialog(err);
     } finally {

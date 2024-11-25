@@ -53,6 +53,7 @@ class SnPost with _$SnPost {
 @freezed
 class SnPostPreload with _$SnPostPreload {
   const factory SnPostPreload({
+    required SnAttachment? thumbnail,
     required List<SnAttachment?>? attachments,
   }) = _SnPostPreload;
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
+import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
@@ -180,53 +181,35 @@ class PostWriteController extends ChangeNotifier {
     int? reposting,
     int? replying,
   }) async {
-    final sn = context.read<SnNetworkProvider>();
-    final attach = context.read<SnAttachmentProvider>();
+    final pt = context.read<SnPostContentProvider>();
 
     isLoading = true;
     notifyListeners();
 
     try {
       if (editing != null) {
-        final resp = await sn.client.get('/cgi/co/posts/$editing');
-        final post = SnPost.fromJson(resp.data);
-        final alts = await attach
-            .getMultiple(post.body['attachments']?.cast<String>() ?? []);
+        final post = await pt.getPost(editing);
         publisher = post.publisher;
         titleController.text = post.body['title'] ?? '';
         descriptionController.text = post.body['description'] ?? '';
         contentController.text = post.body['content'] ?? '';
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
-        attachments.addAll(alts.map((ele) => PostWriteMedia(ele)));
-
-        editingPost = post.copyWith(
-          preload: SnPostPreload(
-            attachments: alts,
-          ),
+        attachments.addAll(
+          post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? [],
         );
+
+        editingPost = post;
       }
 
       if (replying != null) {
-        final resp = await sn.client.get('/cgi/co/posts/$replying');
-        final post = SnPost.fromJson(resp.data);
-        replyingPost = post.copyWith(
-          preload: SnPostPreload(
-            attachments: await attach
-                .getMultiple(post.body['attachments']?.cast<String>() ?? []),
-          ),
-        );
+        final post = await pt.getPost(replying);
+        replyingPost = post;
       }
 
       if (reposting != null) {
-        final resp = await sn.client.get('/cgi/co/posts/$reposting');
-        final post = SnPost.fromJson(resp.data);
-        repostingPost = post.copyWith(
-          preload: SnPostPreload(
-            attachments: await attach
-                .getMultiple(post.body['attachments']?.cast<String>() ?? []),
-          ),
-        );
+        final post = await pt.getPost(reposting);
+        replyingPost = post;
       }
     } catch (err) {
       if (!context.mounted) return;
