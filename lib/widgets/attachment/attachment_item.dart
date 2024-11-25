@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'dart:math' as math;
 
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -13,20 +12,21 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
-import 'package:surface/widgets/attachment/attachment_detail.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:uuid/uuid.dart';
 
 class AttachmentItem extends StatelessWidget {
   final SnAttachment? data;
-  final bool isExpandable;
+  final String? heroTag;
   const AttachmentItem({
     super.key,
     required this.data,
-    this.isExpandable = false,
+    required this.heroTag,
   });
 
-  Widget _buildContent(BuildContext context, String heroTag) {
+  Widget _buildContent(BuildContext context) {
+    final tag = heroTag ?? Uuid().v4();
+
     if (data == null) {
       return const Icon(Symbols.cancel).center();
     }
@@ -36,10 +36,10 @@ class AttachmentItem extends StatelessWidget {
     switch (tp) {
       case 'image':
         return Hero(
-          tag: 'attachment-${data!.rid}-$heroTag',
+          tag: 'attachment-${data!.rid}-$tag',
           child: AutoResizeUniversalImage(
             sn.getAttachmentUrl(data!.rid),
-            key: Key('attachment-${data!.rid}-$heroTag'),
+            key: Key('attachment-${data!.rid}-$tag'),
             fit: BoxFit.cover,
           ),
         );
@@ -60,28 +60,13 @@ class AttachmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final uuid = Uuid();
-    final heroTag = uuid.v4();
-
     if (data!.isMature) {
       return _AttachmentItemSensitiveBlur(
-        child: _buildContent(context, heroTag),
+        child: _buildContent(context),
       );
     }
 
-    if (isExpandable) {
-      return GestureDetector(
-        child: _buildContent(context, heroTag),
-        onTap: () {
-          context.pushTransparentRoute(
-            AttachmentDetailPopup(data: data!, heroTag: heroTag),
-            rootNavigator: true,
-          );
-        },
-      );
-    }
-
-    return _buildContent(context, heroTag);
+    return _buildContent(context);
   }
 }
 

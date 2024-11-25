@@ -92,7 +92,7 @@ class PostMediaPendingList extends StatelessWidget {
             icon: Symbols.preview,
             onSelected: () {
               context.pushTransparentRoute(
-                AttachmentDetailPopup(data: media.attachment!),
+                AttachmentZoomView(data: [media.attachment!]),
                 rootNavigator: true,
               );
             },
