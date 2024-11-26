@@ -18,6 +18,7 @@ class PostItem extends StatelessWidget {
   final SnPost data;
   final bool showReactions;
   final bool showComments;
+  final bool showMenu;
   final double? maxWidth;
   final Function(SnPost data)? onChanged;
   const PostItem({
@@ -25,6 +26,7 @@ class PostItem extends StatelessWidget {
     required this.data,
     this.showReactions = true,
     this.showComments = true,
+    this.showMenu = true,
     this.maxWidth,
     this.onChanged,
   });
@@ -43,7 +45,7 @@ class PostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _PostContentHeader(data: data)
+              _PostContentHeader(data: data, showMenu: showMenu)
                   .padding(horizontal: 12, vertical: 8),
               if (data.body['title'] != null ||
                   data.body['description'] != null)
@@ -62,7 +64,7 @@ class PostItem extends StatelessWidget {
             ],
           ),
         ),
-        if (data.preload?.attachments?.isNotEmpty ?? true)
+        if (data.preload?.attachments?.isNotEmpty ?? false)
           AttachmentList(
             data: data.preload!.attachments!,
             bordered: true,
@@ -107,70 +109,71 @@ class _PostBottomAction extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            if (showReactions)
-              InkWell(
-                child: Row(
-                  children: [
-                    Icon(Symbols.add_reaction, size: 20, color: iconColor),
-                    const Gap(8),
-                    if (data.totalUpvote > 0 &&
-                        data.totalUpvote >= data.totalDownvote)
-                      Text('postReactionUpvote').plural(
-                        data.totalUpvote,
-                      )
-                    else if (data.totalDownvote > 0)
-                      Text('postReactionDownvote').plural(
-                        data.totalDownvote,
-                      )
-                    else
-                      Text('postReact').tr(),
-                  ],
-                ).padding(horizontal: 8, vertical: 8),
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => PostReactionPopup(
-                      data: data,
-                      onChanged: (value, attr, delta) {
-                        onChanged(data.copyWith(
-                          totalUpvote: attr == 1
-                              ? data.totalUpvote + delta
-                              : data.totalUpvote,
-                          totalDownvote: attr == 2
-                              ? data.totalDownvote + delta
-                              : data.totalDownvote,
-                          metric: data.metric.copyWith(reactionList: value),
-                        ));
-                      },
-                    ),
-                  );
-                },
-              ),
-            if (showComments)
-              InkWell(
-                child: Row(
-                  children: [
-                    Icon(Symbols.comment, size: 20, color: iconColor),
-                    const Gap(8),
-                    Text('postComments').plural(data.metric.replyCount),
-                  ],
-                ).padding(horizontal: 8, vertical: 8),
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    builder: (context) => PostCommentListPopup(
-                      postId: data.id,
-                      commentCount: data.metric.replyCount,
-                    ),
-                  );
-                },
-              ),
-          ].expand((ele) => [ele, const Gap(8)]).toList()
-            ..removeLast(),
-        ),
+        if (showReactions || showComments)
+          Row(
+            children: [
+              if (showReactions)
+                InkWell(
+                  child: Row(
+                    children: [
+                      Icon(Symbols.add_reaction, size: 20, color: iconColor),
+                      const Gap(8),
+                      if (data.totalUpvote > 0 &&
+                          data.totalUpvote >= data.totalDownvote)
+                        Text('postReactionUpvote').plural(
+                          data.totalUpvote,
+                        )
+                      else if (data.totalDownvote > 0)
+                        Text('postReactionDownvote').plural(
+                          data.totalDownvote,
+                        )
+                      else
+                        Text('postReact').tr(),
+                    ],
+                  ).padding(horizontal: 8, vertical: 8),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => PostReactionPopup(
+                        data: data,
+                        onChanged: (value, attr, delta) {
+                          onChanged(data.copyWith(
+                            totalUpvote: attr == 1
+                                ? data.totalUpvote + delta
+                                : data.totalUpvote,
+                            totalDownvote: attr == 2
+                                ? data.totalDownvote + delta
+                                : data.totalDownvote,
+                            metric: data.metric.copyWith(reactionList: value),
+                          ));
+                        },
+                      ),
+                    );
+                  },
+                ),
+              if (showComments)
+                InkWell(
+                  child: Row(
+                    children: [
+                      Icon(Symbols.comment, size: 20, color: iconColor),
+                      const Gap(8),
+                      Text('postComments').plural(data.metric.replyCount),
+                    ],
+                  ).padding(horizontal: 8, vertical: 8),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      useRootNavigator: true,
+                      builder: (context) => PostCommentListPopup(
+                        postId: data.id,
+                        commentCount: data.metric.replyCount,
+                      ),
+                    );
+                  },
+                ),
+            ].expand((ele) => [ele, const Gap(8)]).toList()
+              ..removeLast(),
+          ),
         InkWell(
           child: Icon(
             Symbols.share,
@@ -211,11 +214,11 @@ class _PostHeadline extends StatelessWidget {
 class _PostContentHeader extends StatelessWidget {
   final SnPost data;
   final bool isCompact;
-  final bool showActions;
+  final bool showMenu;
   const _PostContentHeader({
     required this.data,
     this.isCompact = false,
-    this.showActions = true,
+    this.showMenu = true,
   });
 
   @override
@@ -264,7 +267,7 @@ class _PostContentHeader extends StatelessWidget {
               ],
             ),
           ),
-        if (showActions)
+        if (showMenu)
           PopupMenuButton(
             icon: const Icon(Symbols.more_horiz),
             style: const ButtonStyle(
@@ -376,7 +379,7 @@ class _PostQuoteContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
-          _PostContentHeader(data: child, isCompact: true, showActions: false)
+          _PostContentHeader(data: child, isCompact: true, showMenu: false)
               .padding(bottom: 4),
           _PostContentBody(data: child.body),
         ],

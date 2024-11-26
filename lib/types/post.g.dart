@@ -18,8 +18,8 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       language: json['language'] as String,
       alias: json['alias'] as String?,
       aliasPrefix: json['alias_prefix'] as String?,
-      tags: json['tags'] as List<dynamic>,
-      categories: json['categories'] as List<dynamic>,
+      tags: json['tags'] as List<dynamic>? ?? const [],
+      categories: json['categories'] as List<dynamic>? ?? const [],
       replies: (json['replies'] as List<dynamic>?)
           ?.map((e) => SnPost.fromJson(e as Map<String, dynamic>))
           .toList(),

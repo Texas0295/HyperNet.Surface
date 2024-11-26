@@ -583,8 +583,8 @@ class _$SnPostImpl extends _SnPost {
       required this.language,
       required this.alias,
       required this.aliasPrefix,
-      required final List<dynamic> tags,
-      required final List<dynamic> categories,
+      final List<dynamic> tags = const [],
+      final List<dynamic> categories = const [],
       required final List<SnPost>? replies,
       required this.replyId,
       required this.repostId,
@@ -642,6 +642,7 @@ class _$SnPostImpl extends _SnPost {
   final String? aliasPrefix;
   final List<dynamic> _tags;
   @override
+  @JsonKey()
   List<dynamic> get tags {
     if (_tags is EqualUnmodifiableListView) return _tags;
     // ignore: implicit_dynamic_type
@@ -650,6 +651,7 @@ class _$SnPostImpl extends _SnPost {
 
   final List<dynamic> _categories;
   @override
+  @JsonKey()
   List<dynamic> get categories {
     if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
@@ -850,8 +852,8 @@ abstract class _SnPost extends SnPost {
       required final String language,
       required final String? alias,
       required final String? aliasPrefix,
-      required final List<dynamic> tags,
-      required final List<dynamic> categories,
+      final List<dynamic> tags,
+      final List<dynamic> categories,
       required final List<SnPost>? replies,
       required final int? replyId,
       required final int? repostId,

@@ -197,11 +197,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   'interactive.subscription'
                                 ].contains(nty.topic) &&
                                 nty.metadata['related_post'] != null)
-                              PostItem(
-                                data: SnPost.fromJson(
-                                  nty.metadata['related_post']!,
+                              StyledWidget(Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                  border: Border.all(
+                                    color: Theme.of(context).dividerColor,
+                                    width: 1,
+                                  ),
                                 ),
-                              ),
+                                child: PostItem(
+                                  data: SnPost.fromJson(
+                                    nty.metadata['related_post']!,
+                                  ),
+                                  showComments: false,
+                                  showReactions: false,
+                                  showMenu: false,
+                                ),
+                              )).padding(top: 8),
                             const Gap(8),
                             Row(
                               children: [
