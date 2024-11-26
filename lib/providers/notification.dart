@@ -46,10 +46,10 @@ class NotificationProvider extends ChangeNotifier {
     }
 
     if (Platform.isIOS || Platform.isMacOS) {
-      provider = 'apple';
+      provider = 'apns';
       token = await FirebaseMessaging.instance.getAPNSToken();
     } else {
-      provider = 'firebase';
+      provider = 'fcm';
       token = await FirebaseMessaging.instance.getToken();
     }
     log('Device Push Token is $token');
