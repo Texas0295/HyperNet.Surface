@@ -61,6 +61,8 @@ class PostItem extends StatelessWidget {
                   horizontal: 16,
                   vertical: 4,
                 ),
+              if (data.tags.isNotEmpty)
+                _PostTagsList(data: data).padding(horizontal: 16, bottom: 6),
             ],
           ),
         ),
@@ -385,6 +387,32 @@ class _PostQuoteContent extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PostTagsList extends StatelessWidget {
+  final SnPost data;
+  const _PostTagsList({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      children: data.tags
+          .map(
+            (ele) => InkWell(
+              child: Text(
+                '#${ele.alias}',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
+              ).fontSize(13),
+              onTap: () {},
+            ),
+          )
+          .toList(),
+    ).opacity(0.8);
   }
 }
 

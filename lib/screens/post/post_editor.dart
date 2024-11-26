@@ -141,7 +141,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 ),
                 const TextSpan(text: '\n'),
                 TextSpan(
-                  text: PostWriteController.kTitleMap[widget.mode]!,
+                  text: PostWriteController.kTitleMap[widget.mode]!.tr(),
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall!

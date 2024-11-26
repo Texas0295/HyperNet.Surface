@@ -112,7 +112,7 @@ class SnPostContentProvider {
   Future<SnPost> getPost(dynamic id) async {
     final resp = await _sn.client.get('/cgi/co/posts/$id');
     final out = _preloadRelatedDataSingle(
-      SnPost.fromJson(resp.data['data']),
+      SnPost.fromJson(resp.data),
     );
     return out;
   }

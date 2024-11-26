@@ -172,6 +172,7 @@ class PostWriteController extends ChangeNotifier {
   SnPublisher? publisher;
   SnPost? editingPost, repostingPost, replyingPost;
 
+  List<String> tags = List.empty();
   List<PostWriteMedia> attachments = List.empty(growable: true);
   DateTime? publishedAt, publishedUntil;
 
@@ -195,6 +196,7 @@ class PostWriteController extends ChangeNotifier {
         contentController.text = post.body['content'] ?? '';
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
+        tags = List.from(post.tags.map((ele) => ele.alias));
         attachments.addAll(
           post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? [],
         );
@@ -290,6 +292,7 @@ class PostWriteController extends ChangeNotifier {
               .where((e) => e.attachment != null)
               .map((e) => e.attachment!.rid)
               .toList(),
+          'tags': tags.map((ele) => {'alias': ele}).toList(),
           if (publishedAt != null)
             'published_at': publishedAt!.toUtc().toIso8601String(),
           if (publishedUntil != null)
@@ -348,6 +351,11 @@ class PostWriteController extends ChangeNotifier {
 
   void setPublishedUntil(DateTime? value) {
     publishedUntil = value;
+    notifyListeners();
+  }
+
+  void setTags(List<String> value) {
+    tags = value;
     notifyListeners();
   }
 

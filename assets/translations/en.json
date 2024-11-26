@@ -103,6 +103,7 @@
   "fieldPostContent": "What happened?!",
   "fieldPostTitle": "Title",
   "fieldPostDescription": "Description",
+  "fieldPostTags": "Tags",
   "postPublish": "Publish",
   "postPosted": "Post has been posted.",
   "postPublishedAt": "Published At",

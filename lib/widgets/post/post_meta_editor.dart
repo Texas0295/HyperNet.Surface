@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
+import 'package:surface/widgets/post/post_tags_field.dart';
 
 class PostMetaEditor extends StatelessWidget {
   final PostWriteController controller;
@@ -69,6 +70,14 @@ class PostMetaEditor extends StatelessWidget {
                 onTapOutside: (_) =>
                     FocusManager.instance.primaryFocus?.unfocus(),
               ).padding(horizontal: 24),
+            const Gap(4),
+            PostTagsField(
+              initialTags: controller.tags,
+              labelText: 'fieldPostTags'.tr(),
+              onUpdate: (value) {
+                controller.setTags(value);
+              },
+            ).padding(horizontal: 24),
             const Gap(12),
             ListTile(
               leading: const Icon(Symbols.event_available),

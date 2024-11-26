@@ -18,7 +18,10 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
       language: json['language'] as String,
       alias: json['alias'] as String?,
       aliasPrefix: json['alias_prefix'] as String?,
-      tags: json['tags'] as List<dynamic>? ?? const [],
+      tags: (json['tags'] as List<dynamic>?)
+              ?.map((e) => SnPostTag.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       categories: json['categories'] as List<dynamic>? ?? const [],
       replies: (json['replies'] as List<dynamic>?)
           ?.map((e) => SnPost.fromJson(e as Map<String, dynamic>))
@@ -76,7 +79,7 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'language': instance.language,
       'alias': instance.alias,
       'alias_prefix': instance.aliasPrefix,
-      'tags': instance.tags,
+      'tags': instance.tags.map((e) => e.toJson()).toList(),
       'categories': instance.categories,
       'replies': instance.replies?.map((e) => e.toJson()).toList(),
       'reply_id': instance.replyId,
@@ -98,6 +101,30 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'publisher': instance.publisher.toJson(),
       'metric': instance.metric.toJson(),
       'preload': instance.preload?.toJson(),
+    };
+
+_$SnPostTagImpl _$$SnPostTagImplFromJson(Map<String, dynamic> json) =>
+    _$SnPostTagImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'],
+      alias: json['alias'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      posts: json['posts'],
+    );
+
+Map<String, dynamic> _$$SnPostTagImplToJson(_$SnPostTagImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt,
+      'alias': instance.alias,
+      'name': instance.name,
+      'description': instance.description,
+      'posts': instance.posts,
     };
 
 _$SnPostPreloadImpl _$$SnPostPreloadImplFromJson(Map<String, dynamic> json) =>
