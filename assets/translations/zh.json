@@ -269,5 +269,6 @@
   "dailyCheckNegativeHint5": "打游戏",
   "dailyCheckNegativeHint5Description": "关键时刻断网",
   "dailyCheckNegativeHint6": "出门",
-  "dailyCheckNegativeHint6Description": "忘带伞遇上大雨"
+  "dailyCheckNegativeHint6Description": "忘带伞遇上大雨",
+  "happyBirthday": "生日快乐，{}！"
 }

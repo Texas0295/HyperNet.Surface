@@ -267,5 +267,6 @@
   "dailyCheckNegativeHint5": "Gaming",
   "dailyCheckNegativeHint5Description": "Lost connection at a crucial moment",
   "dailyCheckNegativeHint6": "Going out",
-  "dailyCheckNegativeHint6Description": "Forgot your umbrella and got caught in the rain"
+  "dailyCheckNegativeHint6Description": "Forgot your umbrella and got caught in the rain",
+  "happyBirthday": "Happy birthday, {}!"
 }

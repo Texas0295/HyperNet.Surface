@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/check_in.dart';
 import 'package:surface/widgets/dialog.dart';
 
@@ -60,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(),
               ],
             ),
+            _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
             StaggeredGrid.count(
               crossAxisCount: 2,
               mainAxisSpacing: 8,
@@ -71,10 +73,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: card.child,
                 );
               }).toList(),
-            ).padding(all: 8),
+            ).padding(horizontal: 8),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _HomeDashSpecialDayWidget extends StatelessWidget {
+  const _HomeDashSpecialDayWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final ua = context.watch<UserProvider>();
+    final today = DateTime.now();
+    final birthday = ua.user?.profile?.birthday?.toLocal();
+    final isBirthday = birthday != null &&
+        birthday.day == today.day &&
+        birthday.month == today.month;
+    return Column(
+      children: [
+        if (isBirthday)
+          Card(
+            child: ListTile(
+              leading: Text('🎂').fontSize(24),
+              title: Text('happyBirthday').tr(args: [ua.user?.nick ?? 'user']),
+            ),
+          ).padding(bottom: 8),
+      ],
     );
   }
 }
