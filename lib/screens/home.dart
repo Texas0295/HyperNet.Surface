@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -90,6 +91,9 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
 
   SnCheckInRecord? _todayRecord;
 
+  static const int kSuggestionPositiveHintCount = 6;
+  static const int kSuggestionNegativeHintCount = 6;
+
   Future<void> _pullCheckIn() async {
     setState(() => _isBusy = true);
     try {
@@ -116,6 +120,64 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
     } finally {
       setState(() => _isBusy = false);
     }
+  }
+
+  Widget _buildDetailChunk(int index, bool positive) {
+    final prefix =
+        positive ? 'dailyCheckPositiveHint' : 'dailyCheckNegativeHint';
+    final mod =
+        positive ? kSuggestionPositiveHintCount : kSuggestionNegativeHintCount;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          prefix.tr(args: [
+            '$prefix${_todayRecord!.resultModifiers[index] % mod}'.tr()
+          ]),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
+        ).tr(),
+        Text(
+          '$prefix${_todayRecord!.resultModifiers[index] % kSuggestionPositiveHintCount}Description',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ).tr(),
+      ],
+    );
+  }
+
+  void _showCheckInDetail() {
+    showDialog(
+      useRootNavigator: true,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('dailyCheckDetailTitle'.tr(args: [
+            DateFormat('MM/dd').format(DateTime.now().toUtc()),
+          ])),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDetailChunk(0, true),
+              const Gap(8),
+              _buildDetailChunk(1, true),
+              const Gap(8),
+              _buildDetailChunk(2, false),
+              const Gap(8),
+              _buildDetailChunk(3, false),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('dialogDismiss').tr(),
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -169,7 +231,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
                         Text(
                           '+${_todayRecord!.resultExperience} EXP',
                           style: Theme.of(context).textTheme.bodyLarge,
-                        ).tr(),
+                        ),
                       ],
                     ),
             ),
@@ -201,7 +263,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
                           key: UniqueKey(),
                           tooltip: 'dailyCheckDetail'.tr(),
                           icon: const Icon(Symbols.help),
-                          onPressed: _isBusy ? null : _doCheckIn,
+                          onPressed: _showCheckInDetail,
                         ),
                 ),
               ),
