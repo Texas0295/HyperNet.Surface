@@ -238,5 +238,9 @@
   "callScreenOff": "Turn off screen share",
   "callScreenOn": "Turn on screen share",
   "callMessageEnded": "Call lasted {}",
-  "callMessageStarted": "Call started"
+  "callMessageStarted": "Call started",
+  "dailyCheckIn": "Check In",
+  "dailyCheckInNone": "You haven't checked in today",
+  "dailyCheckAction": "Check in right now!",
+  "dailyCheckDetail": "Can't understand the talisman? Master, help me understand it!"
 }

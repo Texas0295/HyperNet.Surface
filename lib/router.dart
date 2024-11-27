@@ -70,6 +70,7 @@ final _appRoutes = [
             path: '/search',
             name: 'postSearch',
             builder: (context, state) => const AppBackground(
+              isLessOptimization: true,
               child: PostSearchScreen(),
             ),
           ),

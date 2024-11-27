@@ -238,5 +238,9 @@
   "callScreenOff": "关闭屏幕共享",
   "callScreenOn": "开启屏幕共享",
   "callMessageEnded": "通话持续了 {}",
-  "callMessageStarted": "通话开始了"
+  "callMessageStarted": "通话开始了",
+  "dailyCheckIn": "每日签到",
+  "dailyCheckInNone": "今日尚未签到",
+  "dailyCheckAction": "现在签到",
+  "dailyCheckDetail": "看不懂符？大师帮我解惑！"
 }
