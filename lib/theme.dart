@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const kMaterialYouToggleStoreKey = 'app_theme_material_you';
@@ -43,7 +42,6 @@ Future<ThemeData> createAppTheme(
     appBarTheme: AppBarTheme(
       centerTitle: true,
     ),
-    textTheme: GoogleFonts.robotoTextTheme(),
     scaffoldBackgroundColor: Colors.transparent,
   );
 }

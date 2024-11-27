@@ -45,37 +45,50 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text("screenHome").tr(),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            MaterialBanner(
-              leading: const Icon(Symbols.construction),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('nextVersionAlert').tr().bold(),
-                  Text('nextVersionNotice').tr(),
-                ],
-              ).padding(vertical: 16),
-              actions: [
-                const SizedBox(),
-              ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Align(
+            alignment: constraints.maxWidth > 640
+                ? Alignment.center
+                : Alignment.topCenter,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 640),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: constraints.maxWidth > 640
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
+                  children: [
+                    if (constraints.maxWidth <= 640) const Gap(8),
+                    Card(
+                      child: ListTile(
+                        isThreeLine: true,
+                        leading: const Icon(Symbols.construction),
+                        title: Text('nextVersionAlert').tr(),
+                        subtitle: Text('nextVersionNotice').tr(),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                      ),
+                    ).padding(horizontal: 8),
+                    _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
+                    StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      children: kCards.map((card) {
+                        return StaggeredGridTile.count(
+                          crossAxisCellCount: card.cols,
+                          mainAxisCellCount: card.rows,
+                          child: card.child,
+                        );
+                      }).toList(),
+                    ).padding(horizontal: 8),
+                  ],
+                ),
+              ),
             ),
-            _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
-            StaggeredGrid.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              children: kCards.map((card) {
-                return StaggeredGridTile.count(
-                  crossAxisCellCount: card.cols,
-                  mainAxisCellCount: card.rows,
-                  child: card.child,
-                );
-              }).toList(),
-            ).padding(horizontal: 8),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -210,7 +223,11 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
   @override
   void initState() {
     super.initState();
-    _pullCheckIn();
+    final ua = context.read<UserProvider>();
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      if (!ua.isAuthorized) return;
+      await _pullCheckIn();
+    });
   }
 
   @override
