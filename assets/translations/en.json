@@ -211,6 +211,9 @@
     "other": "{} results"
   },
   "postSearchTook": "Took {}",
+  "postDelete": "Delete post {}",
+  "postDeleteDescription": "Are you sure you want to delete this post? This operation is irreversible.",
+  "postDeleted": "Post {} has been deleted.",
   "call" : "Call",
   "callOngoingNotice": "A call is ongoing",
   "callJoin": "Join",

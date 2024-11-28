@@ -5,10 +5,12 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
+import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
@@ -21,6 +23,7 @@ class PostItem extends StatelessWidget {
   final bool showMenu;
   final double? maxWidth;
   final Function(SnPost data)? onChanged;
+  final Function()? onDeleted;
   const PostItem({
     super.key,
     required this.data,
@@ -29,6 +32,7 @@ class PostItem extends StatelessWidget {
     this.showMenu = true,
     this.maxWidth,
     this.onChanged,
+    this.onDeleted,
   });
 
   void _onChanged(SnPost data) {
@@ -45,8 +49,13 @@ class PostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _PostContentHeader(data: data, showMenu: showMenu)
-                  .padding(horizontal: 12, vertical: 8),
+              _PostContentHeader(
+                data: data,
+                showMenu: showMenu,
+                onDeleted: () {
+                  if (onDeleted != null) onDeleted!();
+                },
+              ).padding(horizontal: 12, vertical: 8),
               if (data.body['title'] != null ||
                   data.body['description'] != null)
                 _PostHeadline(data: data).padding(horizontal: 16, bottom: 8),
@@ -217,11 +226,36 @@ class _PostContentHeader extends StatelessWidget {
   final SnPost data;
   final bool isCompact;
   final bool showMenu;
+  final Function onDeleted;
   const _PostContentHeader({
     required this.data,
     this.isCompact = false,
     this.showMenu = true,
+    required this.onDeleted,
   });
+
+  Future<void> _deletePost(BuildContext context) async {
+    final confirm = await context.showConfirmDialog(
+      'postDelete'.tr(args: ['#${data.id}']),
+      'postDeleteDescription'.tr(),
+    );
+
+    if (!confirm) return;
+    if (!context.mounted) return;
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.delete('/cgi/co/posts/${data.id}', queryParameters: {
+        'publisherId': data.publisherId,
+      });
+
+      if (!context.mounted) return;
+      context.showSnackbar('postDeleted'.tr(args: ['#${data.id}']));
+    } catch (err) {
+      if (!context.mounted) return;
+      context.showErrorDialog(err);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -302,6 +336,7 @@ class _PostContentHeader extends StatelessWidget {
                       Text('delete').tr(),
                     ],
                   ),
+                  onTap: () => _deletePost(context),
                 ),
               if (isAuthor) const PopupMenuDivider(),
               PopupMenuItem(
@@ -381,8 +416,12 @@ class _PostQuoteContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
-          _PostContentHeader(data: child, isCompact: true, showMenu: false)
-              .padding(bottom: 4),
+          _PostContentHeader(
+            data: child,
+            isCompact: true,
+            showMenu: false,
+            onDeleted: () {},
+          ).padding(bottom: 4),
           _PostContentBody(data: child.body),
         ],
       ),

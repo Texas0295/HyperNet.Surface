@@ -113,6 +113,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 onChanged: (data) {
                   setState(() => _data = data);
                 },
+                onDeleted: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
           const SliverToBoxAdapter(child: Divider(height: 1)),

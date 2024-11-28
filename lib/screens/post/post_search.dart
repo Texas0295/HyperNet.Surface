@@ -101,6 +101,10 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
                   onChanged: (data) {
                     setState(() => _posts[idx] = data);
                   },
+                  onDeleted: () {
+                    _posts.clear();
+                    _fetchPosts();
+                  },
                 ),
                 onTap: () {
                   GoRouter.of(context).pushNamed(

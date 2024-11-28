@@ -74,6 +74,10 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
             onChanged: (data) {
               setState(() => _posts[idx] = data);
             },
+            onDeleted: () {
+              _posts.clear();
+              _fetchPosts();
+            },
           ),
           onTap: () {
             GoRouter.of(context).pushNamed(
