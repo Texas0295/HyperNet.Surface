@@ -159,6 +159,8 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                       .fontSize(17)
                       .tr()
                       .padding(horizontal: 20, bottom: 4),
+                  // TODO add notify level modifier
+                  // TODO impl this
                   ListTile(
                     leading: AccountImage(
                       content:

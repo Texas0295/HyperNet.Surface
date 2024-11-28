@@ -95,7 +95,7 @@ class _AttachmentItemSensitiveBlurState
               color: Colors.black.withOpacity(0.5),
               alignment: Alignment.center,
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 280),
+                constraints: const BoxConstraints(maxWidth: 180),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -105,12 +105,15 @@ class _AttachmentItemSensitiveBlurState
                       size: 32,
                     ),
                     const Gap(8),
-                    Text('sensitiveContent')
+                    Text('sensitiveContent', textAlign: TextAlign.center)
                         .tr()
                         .fontSize(20)
                         .textColor(Colors.white)
                         .bold(),
-                    Text('sensitiveContentDescription')
+                    Text(
+                      'sensitiveContentDescription',
+                      textAlign: TextAlign.center,
+                    )
                         .tr()
                         .fontSize(14)
                         .textColor(Colors.white.withOpacity(0.8)),
