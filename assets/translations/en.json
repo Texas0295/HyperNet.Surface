@@ -244,6 +244,8 @@
   "dailyCheckAction": "Check in right now!",
   "dailyCheckDetail": "Can't understand the symbol? Master, help me understand it!",
   "dailyCheckDetailTitle": "{}'s fortune details",
+  "dailyCheckPositiveHint": "Good for {}",
+  "dailyCheckNegativeHint": "Bad for {}",
   "dailyCheckPositiveHint1": "Making friends",
   "dailyCheckPositiveHint1Description": "Friendship lasts forever",
   "dailyCheckPositiveHint2": "Drinking",

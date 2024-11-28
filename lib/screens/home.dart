@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
@@ -140,9 +142,6 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
       final sn = context.read<SnNetworkProvider>();
       final resp = await sn.client.get('/cgi/id/check-in/today');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
-    } catch (err) {
-      if (!mounted) return;
-      context.showErrorDialog(err);
     } finally {
       setState(() => _isBusy = false);
     }
@@ -167,20 +166,19 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
         positive ? 'dailyCheckPositiveHint' : 'dailyCheckNegativeHint';
     final mod =
         positive ? kSuggestionPositiveHintCount : kSuggestionNegativeHintCount;
+    final pos = math.max(1, _todayRecord!.resultModifiers[index] % mod);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          prefix.tr(args: [
-            '$prefix${_todayRecord!.resultModifiers[index] % mod}'.tr()
-          ]),
+          prefix.tr(args: ['$prefix$pos'.tr()]),
           style: Theme.of(context)
               .textTheme
               .titleMedium!
               .copyWith(fontWeight: FontWeight.bold),
         ).tr(),
         Text(
-          '$prefix${_todayRecord!.resultModifiers[index] % kSuggestionPositiveHintCount}Description',
+          '$prefix${pos}Description',
           style: Theme.of(context).textTheme.bodyMedium,
         ).tr(),
       ],
