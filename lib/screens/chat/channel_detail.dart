@@ -8,6 +8,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -86,6 +87,27 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
     }
   }
 
+  Future<void> _leaveChannel() async {
+    final confirm = await context.showConfirmDialog(
+      'channelLeave'.tr(args: [_channel!.name]),
+      'channelLeaveDescription'.tr(),
+    );
+    if (!confirm) return;
+    if (!mounted) return;
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.delete(
+        '/cgi/im/channels/${_channel!.realm?.alias ?? 'global'}/${_channel!.id}/members/me',
+      );
+      if (!mounted) return;
+      Navigator.pop(context, false);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -97,94 +119,112 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final ud = context.read<UserDirectoryProvider>();
+    final ua = context.read<UserProvider>();
+
+    final isOwned = ua.isAuthorized && _channel?.accountId == ua.user?.id;
+
     return Scaffold(
       appBar: AppBar(
         title: _channel != null ? Text(_channel!.name) : Text('loading').tr(),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LoadingIndicator(isActive: _isBusy),
-          const Gap(24),
-          if (_channel != null)
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LoadingIndicator(isActive: _isBusy),
+            const Gap(24),
+            if (_channel != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _channel!.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                    _channel!.description,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ).padding(horizontal: 24),
+            const Gap(16),
+            const Divider(),
+            const Gap(12),
+            if (_profile != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('channelDetailPersonalRegion')
+                      .bold()
+                      .fontSize(17)
+                      .tr()
+                      .padding(horizontal: 20, bottom: 4),
+                  ListTile(
+                    leading: AccountImage(
+                      content:
+                          ud.getAccountFromCache(_profile!.accountId)?.avatar,
+                      radius: 18,
+                    ),
+                    trailing: const Icon(Symbols.chevron_right),
+                    title: Text('channelEditProfile').tr(),
+                    subtitle: Text(
+                      (_profile?.nick?.isEmpty ?? true)
+                          ? ud.getAccountFromCache(_profile!.accountId)!.nick
+                          : _profile!.nick!,
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 20, right: 20),
+                    onTap: () {},
+                  ),
+                  if (!isOwned)
+                    ListTile(
+                      leading: const Icon(Symbols.exit_to_app),
+                      trailing: const Icon(Symbols.chevron_right),
+                      title: Text('channelActionLeave').tr(),
+                      subtitle: Text('channelActionLeaveDescription').tr(),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 24),
+                      onTap: _leaveChannel,
+                    ),
+                ],
+              ).padding(bottom: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _channel!.name,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  _channel!.description,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ).padding(horizontal: 24),
-          const Gap(16),
-          const Divider(),
-          if (_profile != null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('channelDetailPersonalRegion')
+                Text('channelDetailAdminRegion')
                     .bold()
                     .fontSize(17)
                     .tr()
                     .padding(horizontal: 20, bottom: 4),
                 ListTile(
-                  leading: AccountImage(
-                    content:
-                        ud.getAccountFromCache(_profile!.accountId)?.avatar,
-                    radius: 18,
-                  ),
+                  leading: const Icon(Symbols.edit),
                   trailing: const Icon(Symbols.chevron_right),
-                  title: Text('channelEditProfile').tr(),
-                  subtitle: Text(
-                    (_profile?.nick?.isEmpty ?? true)
-                        ? ud.getAccountFromCache(_profile!.accountId)!.nick
-                        : _profile!.nick!,
-                  ),
-                  contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                  onTap: () {},
+                  title: Text('channelEdit').tr(),
+                  subtitle: Text('channelEditDescription').tr(),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(
+                      'chatManage',
+                      queryParameters: {'editing': _channel!.keyPath},
+                    ).then((value) {
+                      if (value != null && context.mounted) {
+                        Navigator.pop(context, value);
+                      }
+                    });
+                  },
                 ),
+                if (isOwned)
+                  ListTile(
+                    leading: const Icon(Symbols.delete),
+                    trailing: const Icon(Symbols.chevron_right),
+                    title: Text('channelActionDelete').tr(),
+                    subtitle: Text('channelActionDeleteDescription').tr(),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    onTap: _deleteChannel,
+                  ),
               ],
-            ).padding(bottom: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('channelDetailAdminRegion')
-                  .bold()
-                  .fontSize(17)
-                  .tr()
-                  .padding(horizontal: 20, bottom: 4),
-              ListTile(
-                leading: const Icon(Symbols.edit),
-                trailing: const Icon(Symbols.chevron_right),
-                title: Text('channelEdit').tr(),
-                subtitle: Text('channelEditDescription').tr(),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                onTap: () {
-                  GoRouter.of(context).pushNamed(
-                    'chatManage',
-                    queryParameters: {'editing': _channel!.keyPath},
-                  ).then((value) {
-                    if (value != null && context.mounted) {
-                      Navigator.pop(context, value);
-                    }
-                  });
-                },
-              ),
-              ListTile(
-                leading: const Icon(Symbols.delete),
-                trailing: const Icon(Symbols.chevron_right),
-                title: Text('channelActionDelete').tr(),
-                subtitle: Text('channelActionDeleteDescription').tr(),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                onTap: _deleteChannel,
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
