@@ -58,6 +58,9 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
         '/cgi/im/channels/${widget.editingChannelAlias}',
       );
       _editingChannel = SnChannel.fromJson(resp.data);
+      _aliasController.text = _editingChannel!.alias;
+      _nameController.text = _editingChannel!.name;
+      _descriptionController.text = _editingChannel!.description;
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

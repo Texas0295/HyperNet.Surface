@@ -11,6 +11,7 @@ import 'package:surface/screens/auth/login.dart';
 import 'package:surface/screens/auth/register.dart';
 import 'package:surface/screens/chat.dart';
 import 'package:surface/screens/chat/call_room.dart';
+import 'package:surface/screens/chat/channel_detail.dart';
 import 'package:surface/screens/chat/manage.dart';
 import 'package:surface/screens/chat/room.dart';
 import 'package:surface/screens/explore.dart';
@@ -122,10 +123,22 @@ final _appRoutes = [
             ),
           ),
           GoRoute(
+            path: '/:scope/:alias/detail',
+            name: 'channelDetail',
+            builder: (context, state) => AppBackground(
+              child: ChannelDetailScreen(
+                scope: state.pathParameters['scope']!,
+                alias: state.pathParameters['alias']!,
+              ),
+            ),
+          ),
+          GoRoute(
             path: '/manage',
             name: 'chatManage',
             pageBuilder: (context, state) => CustomTransitionPage(
-              child: ChatManageScreen(),
+              child: ChatManageScreen(
+                editingChannelAlias: state.uri.queryParameters['editing'],
+              ),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 return FadeThroughTransition(

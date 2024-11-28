@@ -23,7 +23,6 @@ class SnChannel with _$SnChannel {
     @HiveField(6) required String description,
     @HiveField(7) required List<dynamic>? members,
     List<SnChatMessage>? messages,
-    dynamic calls,
     @HiveField(8) required int type,
     @HiveField(9) required int accountId,
     @HiveField(10) required SnRealm? realm,

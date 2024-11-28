@@ -212,10 +212,11 @@ class ChatMessageController extends ChangeNotifier {
     };
 
     // Mock the message locally
+    final createdAt = DateTime.now();
     final message = SnChatMessage(
       id: 0,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      createdAt: createdAt,
+      updatedAt: createdAt,
       deletedAt: null,
       uuid: nonce,
       body: body,

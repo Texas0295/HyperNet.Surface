@@ -200,7 +200,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           ),
           IconButton(
             icon: const Icon(Symbols.more_vert),
-            onPressed: () {},
+            onPressed: () {
+              GoRouter.of(context).pushNamed('channelDetail', pathParameters: {
+                'scope': widget.scope,
+                'alias': widget.alias,
+              }).then((value) {
+                if (value != null) {
+                  _fetchChannel();
+                }
+              });
+            },
           ),
           const Gap(8),
         ],
