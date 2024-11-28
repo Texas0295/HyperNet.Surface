@@ -177,6 +177,8 @@
   "channelEditProfile": "更改频道身份",
   "channelEdit": "编辑频道",
   "channelEditDescription": "更改频道基本信息，元数据等。",
+  "channelActionDelete": "删除频道",
+  "channelActionDeleteDescription": "删除整个频道，并且删除频道里的所有信息。",
   "fieldRealmAlias": "领域别名",
   "fieldRealmAliasHint": "全站范围内唯一的领域别名，用于在 URL 中表示该领域，留空则自动生成。应遵循 URL-Safe 的原则。",
   "fieldRealmName": "名称",

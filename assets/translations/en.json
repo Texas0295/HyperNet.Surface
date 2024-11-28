@@ -177,6 +177,8 @@
   "channelEditProfile": "Edit Channel Profile",
   "channelEdit": "Edit Channel",
   "channelEditDescription": "Change the basic information of the channel, metadata, etc.",
+  "channelActionDelete": "Delete Channel",
+  "channelActionDeleteDescription": "Delete the entire channel, and also delete messages in the channel.",
   "fieldRealmAlias": "Realm Alias",
   "fieldRealmAliasHint": "The unique realm alias within the site, used to represent the realm in URL, leave blank to auto generate. Should be URL-Safe.",
   "fieldRealmName": "Name",

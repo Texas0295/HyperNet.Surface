@@ -65,6 +65,27 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
     }
   }
 
+  Future<void> _deleteChannel() async {
+    final confirm = await context.showConfirmDialog(
+      'channelDelete'.tr(args: [_channel!.name]),
+      'channelDeleteDescription'.tr(),
+    );
+    if (!confirm) return;
+    if (!mounted) return;
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.delete(
+        '/cgi/im/channels/${_channel!.realm?.alias ?? 'global'}/${_channel!.id}',
+      );
+      if (!mounted) return;
+      Navigator.pop(context, false);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -119,8 +140,9 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                   trailing: const Icon(Symbols.chevron_right),
                   title: Text('channelEditProfile').tr(),
                   subtitle: Text(
-                    _profile?.nick ??
-                        ud.getAccountFromCache(_profile!.accountId)!.nick,
+                    (_profile?.nick?.isEmpty ?? true)
+                        ? ud.getAccountFromCache(_profile!.accountId)!.nick
+                        : _profile!.nick!,
                   ),
                   contentPadding: const EdgeInsets.only(left: 20, right: 20),
                   onTap: () {},
@@ -151,6 +173,14 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                     }
                   });
                 },
+              ),
+              ListTile(
+                leading: const Icon(Symbols.delete),
+                trailing: const Icon(Symbols.chevron_right),
+                title: Text('channelActionDelete').tr(),
+                subtitle: Text('channelActionDeleteDescription').tr(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                onTap: _deleteChannel,
               ),
             ],
           ),

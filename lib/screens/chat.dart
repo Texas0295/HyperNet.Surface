@@ -21,9 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<SnChannel>? _channels;
 
-  @override
-  void initState() {
-    super.initState();
+  void _refreshChannels() {
     final chan = context.read<ChatChannelProvider>();
     chan.fetchChannels().listen((channels) {
       if (mounted) setState(() => _channels = channels);
@@ -40,6 +38,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _refreshChannels();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -48,40 +52,47 @@ class _ChatScreenState extends State<ChatScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Symbols.chat_add_on),
         onPressed: () {
-          GoRouter.of(context).pushNamed('chatManage');
+          GoRouter.of(context).pushNamed('chatManage').then((value) {
+            if (value != null && context.mounted) _refreshChannels();
+          });
         },
       ),
       body: Column(
         children: [
           LoadingIndicator(isActive: _isBusy),
           Expanded(
-            child: ListView.builder(
-              itemCount: _channels?.length ?? 0,
-              itemBuilder: (context, idx) {
-                final channel = _channels![idx];
-                return ListTile(
-                  title: Text(channel.name),
-                  subtitle: Text(
-                    channel.description,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  leading: AccountImage(
-                    content: null,
-                    fallbackWidget: const Icon(Symbols.chat, size: 20),
-                  ),
-                  onTap: () {
-                    GoRouter.of(context).pushNamed(
-                      'chatRoom',
-                      pathParameters: {
-                        'scope': channel.realm?.alias ?? 'global',
-                        'alias': channel.alias,
-                      },
-                    );
-                  },
-                );
-              },
+            child: RefreshIndicator(
+              onRefresh: () => Future.sync(() => _refreshChannels()),
+              child: ListView.builder(
+                itemCount: _channels?.length ?? 0,
+                itemBuilder: (context, idx) {
+                  final channel = _channels![idx];
+                  return ListTile(
+                    title: Text(channel.name),
+                    subtitle: Text(
+                      channel.description,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    leading: AccountImage(
+                      content: null,
+                      fallbackWidget: const Icon(Symbols.chat, size: 20),
+                    ),
+                    onTap: () {
+                      GoRouter.of(context).pushNamed(
+                        'chatRoom',
+                        pathParameters: {
+                          'scope': channel.realm?.alias ?? 'global',
+                          'alias': channel.alias,
+                        },
+                      ).then((value) {
+                        if (value == true) _refreshChannels();
+                      });
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],

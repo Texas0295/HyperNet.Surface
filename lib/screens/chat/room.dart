@@ -205,7 +205,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 'scope': widget.scope,
                 'alias': widget.alias,
               }).then((value) {
-                if (value != null) {
+                if (value == false && context.mounted) {
+                  Navigator.pop(context, true);
+                } else if (value != null && context.mounted) {
                   _fetchChannel();
                 }
               });
