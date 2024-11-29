@@ -108,6 +108,20 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
     }
   }
 
+  void _showChannelProfileDetail() {
+    showDialog(
+      context: context,
+      builder: (context) => _ChannelProfileDetailDialog(
+        channel: _channel!,
+        current: _profile!,
+      ),
+    ).then((value) {
+      if (value != null && mounted) {
+        Navigator.pop(context, true);
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -160,7 +174,6 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                       .tr()
                       .padding(horizontal: 20, bottom: 4),
                   // TODO add notify level modifier
-                  // TODO impl this
                   ListTile(
                     leading: AccountImage(
                       content:
@@ -175,7 +188,7 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                           : _profile!.nick!,
                     ),
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                    onTap: () {},
+                    onTap: _showChannelProfileDetail,
                   ),
                   if (!isOwned)
                     ListTile(
@@ -228,6 +241,83 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ChannelProfileDetailDialog extends StatefulWidget {
+  final SnChannel channel;
+  final SnChannelMember current;
+  const _ChannelProfileDetailDialog({
+    required this.channel,
+    required this.current,
+  });
+
+  @override
+  State<_ChannelProfileDetailDialog> createState() =>
+      _ChannelProfileDetailDialogState();
+}
+
+class _ChannelProfileDetailDialogState
+    extends State<_ChannelProfileDetailDialog> {
+  bool _isBusy = false;
+
+  final TextEditingController _nickController = TextEditingController();
+
+  Future<void> _updateProfile() async {
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.put(
+        '/cgi/im/channels/${widget.channel.keyPath}/members/me',
+        data: {'nick': _nickController.text},
+      );
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nickController.text = widget.current.nick ?? '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('channelProfileEdit').tr(),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: _nickController,
+            decoration: InputDecoration(
+              labelText: 'fieldChannelProfileNick'.tr(),
+              helperText: 'fieldChannelProfileNickHint'.tr(),
+              helperMaxLines: 2,
+            ),
+            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isBusy ? null : () => Navigator.pop(context),
+          child: Text('dialogCancel').tr(),
+        ),
+        TextButton(
+          onPressed: _isBusy ? null : _updateProfile,
+          child: Text('apply').tr(),
+        ),
+      ],
     );
   }
 }
