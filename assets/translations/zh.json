@@ -261,6 +261,8 @@
   "dailyCheckDetailTitle": "{} 的运势详情",
   "dailyCheckPositiveHint": "宜 {}",
   "dailyCheckNegativeHint": "忌 {}",
+  "dailyCheckEverythingIsPositive": "诸事皆宜",
+  "dailyCheckEverythingIsNegative": "诸事不宜",
   "dailyCheckPositiveHint1": "交友",
   "dailyCheckPositiveHint1Description": "友谊地久天长",
   "dailyCheckPositiveHint2": "饮酒",

@@ -198,13 +198,42 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildDetailChunk(0, true),
+              if (_todayRecord?.resultTier != 0)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildDetailChunk(0, true),
+                    const Gap(8),
+                    _buildDetailChunk(1, true),
+                  ],
+                )
+              else
+                Text(
+                  'dailyCheckEverythingIsNegative',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ).tr(),
               const Gap(8),
-              _buildDetailChunk(1, true),
-              const Gap(8),
-              _buildDetailChunk(2, false),
-              const Gap(8),
-              _buildDetailChunk(3, false),
+              if (_todayRecord?.resultTier != 4)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildDetailChunk(2, false),
+                    const Gap(8),
+                    _buildDetailChunk(3, false),
+                  ],
+                )
+              else
+                Text(
+                  'dailyCheckEverythingIsPositive',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ).tr(),
             ],
           ),
           actions: [

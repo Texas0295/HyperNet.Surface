@@ -261,6 +261,8 @@
   "dailyCheckDetailTitle": "{}'s fortune details",
   "dailyCheckPositiveHint": "Good for {}",
   "dailyCheckNegativeHint": "Bad for {}",
+  "dailyCheckEverythingIsPositive": "Everything going to be awesome!",
+  "dailyCheckEverythingIsNegative": "Everything may be wrong...",
   "dailyCheckPositiveHint1": "Making friends",
   "dailyCheckPositiveHint1Description": "Friendship lasts forever",
   "dailyCheckPositiveHint2": "Drinking",
