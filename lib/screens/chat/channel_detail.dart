@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -55,6 +56,7 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
       final resp = await sn.client
           .get('/cgi/im/channels/${_channel!.keyPath}/members/me');
       _profile = SnChannelMember.fromJson(resp.data);
+      _notifyLevel = _profile!.notify;
       if (!mounted) return;
       final ud = context.read<UserDirectoryProvider>();
       await ud.getAccount(_profile!.accountId);
@@ -105,6 +107,37 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
+    }
+  }
+
+  int _notifyLevel = 0;
+  bool _isUpdatingNotifyLevel = false;
+
+  final kNotifyLevels = {
+    0: 'channelNotifyLevelAll'.tr(),
+    1: 'channelNotifyLevelMentioned'.tr(),
+    2: 'channelNotifyLevelNone'.tr(),
+  };
+
+  Future<void> _updateNotifyLevel(int value) async {
+    if (_isUpdatingNotifyLevel) return;
+
+    setState(() => _isUpdatingNotifyLevel = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.put(
+        '/cgi/im/channels/${_channel!.keyPath}/members/me/notify',
+        data: {'notify_level': value},
+      );
+      _notifyLevel = value;
+      if (!mounted) return;
+      context.showSnackbar('channelNotifyLevelApplied'.tr());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isUpdatingNotifyLevel = false);
     }
   }
 
@@ -173,7 +206,42 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                       .fontSize(17)
                       .tr()
                       .padding(horizontal: 20, bottom: 4),
-                  // TODO add notify level modifier
+                  ListTile(
+                    leading: const Icon(Symbols.notifications),
+                    trailing: DropdownButtonHideUnderline(
+                      child: DropdownButton2<int>(
+                        isExpanded: true,
+                        items: kNotifyLevels.entries
+                            .map((item) => DropdownMenuItem<int>(
+                                  enabled: !_isUpdatingNotifyLevel,
+                                  value: item.key,
+                                  child: Text(
+                                    item.value,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: _notifyLevel,
+                        onChanged: (int? value) {
+                          if (value == null) return;
+                          _updateNotifyLevel(value);
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.only(left: 16, right: 1),
+                          height: 40,
+                          width: 140,
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                        ),
+                      ),
+                    ),
+                    title: Text('channelNotifyLevel').tr(),
+                    subtitle: Text('channelNotifyLevelDescription').tr(),
+                    contentPadding: const EdgeInsets.only(left: 24, right: 20),
+                  ),
                   ListTile(
                     leading: AccountImage(
                       content:
