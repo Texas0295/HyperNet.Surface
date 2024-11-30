@@ -64,6 +64,11 @@ class NavigationProvider extends ChangeNotifier {
       label: 'screenAlbum',
     ),
     AppNavDestination(
+      icon: Icon(Symbols.diversity_4, weight: 400, opticalSize: 20),
+      screen: 'friend',
+      label: 'screenFriend',
+    ),
+    AppNavDestination(
       icon: Icon(Symbols.notifications, weight: 400, opticalSize: 20),
       screen: 'notification',
       label: 'screenNotification',

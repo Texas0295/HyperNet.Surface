@@ -16,6 +16,7 @@ import 'package:surface/providers/chat_call.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/notification.dart';
 import 'package:surface/providers/post.dart';
+import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
@@ -85,6 +86,7 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             Provider(create: (ctx) => SnPostContentProvider(ctx)),
             Provider(create: (ctx) => UserDirectoryProvider(ctx)),
+            Provider(create: (ctx) => SnRelationshipProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),

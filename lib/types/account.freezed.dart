@@ -1271,3 +1271,397 @@ abstract class _SnAccountProfile implements SnAccountProfile {
   _$$SnAccountProfileImplCopyWith<_$SnAccountProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+SnRelationship _$SnRelationshipFromJson(Map<String, dynamic> json) {
+  return _SnRelationship.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnRelationship {
+  int get id => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get deletedAt => throw _privateConstructorUsedError;
+  int get accountId => throw _privateConstructorUsedError;
+  int get relatedId => throw _privateConstructorUsedError;
+  SnAccount? get account => throw _privateConstructorUsedError;
+  SnAccount? get related => throw _privateConstructorUsedError;
+  int get status => throw _privateConstructorUsedError;
+  Map<String, dynamic> get permNodes => throw _privateConstructorUsedError;
+
+  /// Serializes this SnRelationship to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnRelationshipCopyWith<SnRelationship> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnRelationshipCopyWith<$Res> {
+  factory $SnRelationshipCopyWith(
+          SnRelationship value, $Res Function(SnRelationship) then) =
+      _$SnRelationshipCopyWithImpl<$Res, SnRelationship>;
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      int accountId,
+      int relatedId,
+      SnAccount? account,
+      SnAccount? related,
+      int status,
+      Map<String, dynamic> permNodes});
+
+  $SnAccountCopyWith<$Res>? get account;
+  $SnAccountCopyWith<$Res>? get related;
+}
+
+/// @nodoc
+class _$SnRelationshipCopyWithImpl<$Res, $Val extends SnRelationship>
+    implements $SnRelationshipCopyWith<$Res> {
+  _$SnRelationshipCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? accountId = null,
+    Object? relatedId = null,
+    Object? account = freezed,
+    Object? related = freezed,
+    Object? status = null,
+    Object? permNodes = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+      relatedId: null == relatedId
+          ? _value.relatedId
+          : relatedId // ignore: cast_nullable_to_non_nullable
+              as int,
+      account: freezed == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as SnAccount?,
+      related: freezed == related
+          ? _value.related
+          : related // ignore: cast_nullable_to_non_nullable
+              as SnAccount?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+      permNodes: null == permNodes
+          ? _value.permNodes
+          : permNodes // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ) as $Val);
+  }
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnAccountCopyWith<$Res>? get account {
+    if (_value.account == null) {
+      return null;
+    }
+
+    return $SnAccountCopyWith<$Res>(_value.account!, (value) {
+      return _then(_value.copyWith(account: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnAccountCopyWith<$Res>? get related {
+    if (_value.related == null) {
+      return null;
+    }
+
+    return $SnAccountCopyWith<$Res>(_value.related!, (value) {
+      return _then(_value.copyWith(related: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$SnRelationshipImplCopyWith<$Res>
+    implements $SnRelationshipCopyWith<$Res> {
+  factory _$$SnRelationshipImplCopyWith(_$SnRelationshipImpl value,
+          $Res Function(_$SnRelationshipImpl) then) =
+      __$$SnRelationshipImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      int accountId,
+      int relatedId,
+      SnAccount? account,
+      SnAccount? related,
+      int status,
+      Map<String, dynamic> permNodes});
+
+  @override
+  $SnAccountCopyWith<$Res>? get account;
+  @override
+  $SnAccountCopyWith<$Res>? get related;
+}
+
+/// @nodoc
+class __$$SnRelationshipImplCopyWithImpl<$Res>
+    extends _$SnRelationshipCopyWithImpl<$Res, _$SnRelationshipImpl>
+    implements _$$SnRelationshipImplCopyWith<$Res> {
+  __$$SnRelationshipImplCopyWithImpl(
+      _$SnRelationshipImpl _value, $Res Function(_$SnRelationshipImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? accountId = null,
+    Object? relatedId = null,
+    Object? account = freezed,
+    Object? related = freezed,
+    Object? status = null,
+    Object? permNodes = null,
+  }) {
+    return _then(_$SnRelationshipImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+      relatedId: null == relatedId
+          ? _value.relatedId
+          : relatedId // ignore: cast_nullable_to_non_nullable
+              as int,
+      account: freezed == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as SnAccount?,
+      related: freezed == related
+          ? _value.related
+          : related // ignore: cast_nullable_to_non_nullable
+              as SnAccount?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+      permNodes: null == permNodes
+          ? _value._permNodes
+          : permNodes // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnRelationshipImpl implements _SnRelationship {
+  const _$SnRelationshipImpl(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.accountId,
+      required this.relatedId,
+      required this.account,
+      required this.related,
+      required this.status,
+      final Map<String, dynamic> permNodes = const {}})
+      : _permNodes = permNodes;
+
+  factory _$SnRelationshipImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnRelationshipImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
+  final DateTime? deletedAt;
+  @override
+  final int accountId;
+  @override
+  final int relatedId;
+  @override
+  final SnAccount? account;
+  @override
+  final SnAccount? related;
+  @override
+  final int status;
+  final Map<String, dynamic> _permNodes;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get permNodes {
+    if (_permNodes is EqualUnmodifiableMapView) return _permNodes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_permNodes);
+  }
+
+  @override
+  String toString() {
+    return 'SnRelationship(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, accountId: $accountId, relatedId: $relatedId, account: $account, related: $related, status: $status, permNodes: $permNodes)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnRelationshipImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt) &&
+            (identical(other.accountId, accountId) ||
+                other.accountId == accountId) &&
+            (identical(other.relatedId, relatedId) ||
+                other.relatedId == relatedId) &&
+            (identical(other.account, account) || other.account == account) &&
+            (identical(other.related, related) || other.related == related) &&
+            (identical(other.status, status) || other.status == status) &&
+            const DeepCollectionEquality()
+                .equals(other._permNodes, _permNodes));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      createdAt,
+      updatedAt,
+      deletedAt,
+      accountId,
+      relatedId,
+      account,
+      related,
+      status,
+      const DeepCollectionEquality().hash(_permNodes));
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnRelationshipImplCopyWith<_$SnRelationshipImpl> get copyWith =>
+      __$$SnRelationshipImplCopyWithImpl<_$SnRelationshipImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnRelationshipImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnRelationship implements SnRelationship {
+  const factory _SnRelationship(
+      {required final int id,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
+      required final DateTime? deletedAt,
+      required final int accountId,
+      required final int relatedId,
+      required final SnAccount? account,
+      required final SnAccount? related,
+      required final int status,
+      final Map<String, dynamic> permNodes}) = _$SnRelationshipImpl;
+
+  factory _SnRelationship.fromJson(Map<String, dynamic> json) =
+      _$SnRelationshipImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  DateTime? get deletedAt;
+  @override
+  int get accountId;
+  @override
+  int get relatedId;
+  @override
+  SnAccount? get account;
+  @override
+  SnAccount? get related;
+  @override
+  int get status;
+  @override
+  Map<String, dynamic> get permNodes;
+
+  /// Create a copy of SnRelationship
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnRelationshipImplCopyWith<_$SnRelationshipImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

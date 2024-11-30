@@ -70,3 +70,22 @@ class SnAccountProfile with _$SnAccountProfile {
   factory SnAccountProfile.fromJson(Map<String, Object?> json) =>
       _$SnAccountProfileFromJson(json);
 }
+
+@freezed
+class SnRelationship with _$SnRelationship {
+  const factory SnRelationship({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required int accountId,
+    required int relatedId,
+    required SnAccount? account,
+    required SnAccount? related,
+    required int status,
+    @Default({}) Map<String, dynamic> permNodes,
+  }) = _SnRelationship;
+
+  factory SnRelationship.fromJson(Map<String, Object?> json) =>
+      _$SnRelationshipFromJson(json);
+}

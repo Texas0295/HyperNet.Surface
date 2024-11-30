@@ -227,7 +227,6 @@ _$SnChannelImpl _$$SnChannelImplFromJson(Map<String, dynamic> json) =>
       messages: (json['messages'] as List<dynamic>?)
           ?.map((e) => SnChatMessage.fromJson(e as Map<String, dynamic>))
           .toList(),
-      calls: json['calls'],
       type: (json['type'] as num).toInt(),
       accountId: (json['account_id'] as num).toInt(),
       realm: json['realm'] == null
@@ -249,7 +248,6 @@ Map<String, dynamic> _$$SnChannelImplToJson(_$SnChannelImpl instance) =>
       'description': instance.description,
       'members': instance.members,
       'messages': instance.messages?.map((e) => e.toJson()).toList(),
-      'calls': instance.calls,
       'type': instance.type,
       'account_id': instance.accountId,
       'realm': instance.realm?.toJson(),

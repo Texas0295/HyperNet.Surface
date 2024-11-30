@@ -24,6 +24,7 @@
   "screenRealmNew": "新建领域",
   "screenNotification": "通知",
   "screenPostSearch": "搜索帖子",
+  "screenFriend": "好友",
   "dialogOkay": "好的",
   "dialogCancel": "取消",
   "dialogConfirm": "确认",
@@ -35,6 +36,7 @@
   "errorRequestNotFound": "您正查找的资源无法被找到。",
   "errorRequestConnection": "网络连接错误，请检查您的网络状态或者检查我们的服务状态。",
   "errorRequestUnknown": "位置请求错误，您可能想将此对话框截图并发送给我们。",
+  "unknown": "未知",
   "loading": "加载中…",
   "prev": "上一步",
   "next": "下一步",
@@ -296,5 +298,31 @@
   "dailyCheckNegativeHint5Description": "关键时刻断网",
   "dailyCheckNegativeHint6": "出门",
   "dailyCheckNegativeHint6Description": "忘带伞遇上大雨",
-  "happyBirthday": "生日快乐，{}！"
+  "happyBirthday": "生日快乐，{}！",
+  "friendNew": "添加好友",
+  "friendRequests": "好友请求",
+  "friendRequestsDescription": {
+    "zero": "你没有好友请求",
+    "one": "你有 {} 个好友请求",
+    "other": "你有 {} 个好友请求"
+  },
+  "friendBlocklist": "屏蔽列表",
+  "friendBlocklistDescription": {
+    "zero": "你没有屏蔽任何人",
+    "one": "你屏蔽了 {} 个用户",
+    "other": "你屏蔽了 {} 个用户"
+  },
+  "friendStatusPending": "待处理",
+  "friendStatusWaiting": "等待中",
+  "friendStatusActive": "正活跃",
+  "friendStatusBlocked": "已屏蔽",
+  "friendRequestSent": "好友请求已发送。",
+  "fieldFriendRelatedName": "好友名 / 账户 ID",
+  "friendBlock": "屏蔽",
+  "friendUnblock": "解除屏蔽",
+  "friendDeleteAction": "遗忘",
+  "friendDelete": "遗忘跟 {} 的关系",
+  "friendDeleteDescription": "你确定要遗忘跟 {} 的关系吗？这个操作无法撤销。",
+  "friendRequestAccept": "接受",
+  "friendRequestDecline": "拒绝"
 }

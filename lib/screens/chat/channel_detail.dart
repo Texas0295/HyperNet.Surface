@@ -358,6 +358,12 @@ class _ChannelProfileDetailDialogState
   }
 
   @override
+  void dispose() {
+    _nickController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('channelProfileEdit').tr(),

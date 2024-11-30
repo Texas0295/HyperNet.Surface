@@ -15,6 +15,7 @@ import 'package:surface/screens/chat/channel_detail.dart';
 import 'package:surface/screens/chat/manage.dart';
 import 'package:surface/screens/chat/room.dart';
 import 'package:surface/screens/explore.dart';
+import 'package:surface/screens/friend.dart';
 import 'package:surface/screens/home.dart';
 import 'package:surface/screens/notification.dart';
 import 'package:surface/screens/post/post_detail.dart';
@@ -190,6 +191,13 @@ final _appRoutes = [
         name: 'album',
         pageBuilder: (context, state) => NoTransitionPage(
           child: const AlbumScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/friend',
+        name: 'friend',
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const FriendScreen(),
         ),
       ),
       GoRoute(

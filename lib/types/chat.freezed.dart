@@ -37,7 +37,6 @@ mixin _$SnChannel {
   @HiveField(7)
   List<dynamic>? get members => throw _privateConstructorUsedError;
   List<SnChatMessage>? get messages => throw _privateConstructorUsedError;
-  dynamic get calls => throw _privateConstructorUsedError;
   @HiveField(8)
   int get type => throw _privateConstructorUsedError;
   @HiveField(9)
@@ -76,7 +75,6 @@ abstract class $SnChannelCopyWith<$Res> {
       @HiveField(6) String description,
       @HiveField(7) List<dynamic>? members,
       List<SnChatMessage>? messages,
-      dynamic calls,
       @HiveField(8) int type,
       @HiveField(9) int accountId,
       @HiveField(10) SnRealm? realm,
@@ -111,7 +109,6 @@ class _$SnChannelCopyWithImpl<$Res, $Val extends SnChannel>
     Object? description = null,
     Object? members = freezed,
     Object? messages = freezed,
-    Object? calls = freezed,
     Object? type = null,
     Object? accountId = null,
     Object? realm = freezed,
@@ -156,10 +153,6 @@ class _$SnChannelCopyWithImpl<$Res, $Val extends SnChannel>
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<SnChatMessage>?,
-      calls: freezed == calls
-          ? _value.calls
-          : calls // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -220,7 +213,6 @@ abstract class _$$SnChannelImplCopyWith<$Res>
       @HiveField(6) String description,
       @HiveField(7) List<dynamic>? members,
       List<SnChatMessage>? messages,
-      dynamic calls,
       @HiveField(8) int type,
       @HiveField(9) int accountId,
       @HiveField(10) SnRealm? realm,
@@ -254,7 +246,6 @@ class __$$SnChannelImplCopyWithImpl<$Res>
     Object? description = null,
     Object? members = freezed,
     Object? messages = freezed,
-    Object? calls = freezed,
     Object? type = null,
     Object? accountId = null,
     Object? realm = freezed,
@@ -299,10 +290,6 @@ class __$$SnChannelImplCopyWithImpl<$Res>
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<SnChatMessage>?,
-      calls: freezed == calls
-          ? _value.calls
-          : calls // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -345,7 +332,6 @@ class _$SnChannelImpl extends _SnChannel {
       @HiveField(6) required this.description,
       @HiveField(7) required final List<dynamic>? members,
       final List<SnChatMessage>? messages,
-      this.calls,
       @HiveField(8) required this.type,
       @HiveField(9) required this.accountId,
       @HiveField(10) required this.realm,
@@ -402,8 +388,6 @@ class _$SnChannelImpl extends _SnChannel {
   }
 
   @override
-  final dynamic calls;
-  @override
   @HiveField(8)
   final int type;
   @override
@@ -424,7 +408,7 @@ class _$SnChannelImpl extends _SnChannel {
 
   @override
   String toString() {
-    return 'SnChannel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, alias: $alias, name: $name, description: $description, members: $members, messages: $messages, calls: $calls, type: $type, accountId: $accountId, realm: $realm, realmId: $realmId, isPublic: $isPublic, isCommunity: $isCommunity)';
+    return 'SnChannel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, alias: $alias, name: $name, description: $description, members: $members, messages: $messages, type: $type, accountId: $accountId, realm: $realm, realmId: $realmId, isPublic: $isPublic, isCommunity: $isCommunity)';
   }
 
   @override
@@ -444,7 +428,6 @@ class _$SnChannelImpl extends _SnChannel {
                 other.description == description) &&
             const DeepCollectionEquality().equals(other._members, _members) &&
             const DeepCollectionEquality().equals(other._messages, _messages) &&
-            const DeepCollectionEquality().equals(other.calls, calls) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
@@ -469,7 +452,6 @@ class _$SnChannelImpl extends _SnChannel {
       description,
       const DeepCollectionEquality().hash(_members),
       const DeepCollectionEquality().hash(_messages),
-      const DeepCollectionEquality().hash(calls),
       type,
       accountId,
       realm,
@@ -504,7 +486,6 @@ abstract class _SnChannel extends SnChannel {
       @HiveField(6) required final String description,
       @HiveField(7) required final List<dynamic>? members,
       final List<SnChatMessage>? messages,
-      final dynamic calls,
       @HiveField(8) required final int type,
       @HiveField(9) required final int accountId,
       @HiveField(10) required final SnRealm? realm,
@@ -542,8 +523,6 @@ abstract class _SnChannel extends SnChannel {
   List<dynamic>? get members;
   @override
   List<SnChatMessage>? get messages;
-  @override
-  dynamic get calls;
   @override
   @HiveField(8)
   int get type;

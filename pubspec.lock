@@ -670,10 +670,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_webrtc
-      sha256: fcaee6f28cc1221e804fcba16fbee6f20b0848af20fe11174a0f97c3b9833381
+      sha256: "4838217405c42cce422698eacc9c2e17089b9c05322be899c0a725107dcddbdc"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.2"
+    version: "0.12.3"
   freezed:
     dependency: "direct dev"
     description:
@@ -830,10 +830,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "8faba09ba361d4b246dc0a17cb4289b3324c2b9f6db7b3d457ee69106a86bd32"
+      sha256: fa8141602fde3f7e2f81dbf043613eb44dfa325fa0bcf93c0f142c9f7a2c193e
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+17"
+    version: "0.8.12+18"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -974,10 +974,10 @@ packages:
     dependency: "direct main"
     description:
       name: livekit_client
-      sha256: ad55045435fbf1a106e2da4c9a8d523755ce834db47f6d967beaa58228b21a05
+      sha256: "442c228f42a3b757e1a5e526b0816f2b0a93b34625ff29b2c9fb9503ce4e4f3e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.1"
   logging:
     dependency: transitive
     description:
@@ -1022,10 +1022,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_symbols_icons
-      sha256: "8a57be605b8bc3fd57005eb776ede61f569214e48834258fb02ab80c7034b82c"
+      sha256: a783133f87c58e10b1cc19797f7c3192ff9c2bab301c4ade90312d8f2aed01b2
       url: "https://pub.dev"
     source: hosted
-    version: "4.2800.0"
+    version: "4.2800.2"
   media_kit:
     dependency: "direct main"
     description:
@@ -1899,10 +1899,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
+      sha256: "8b338d4486ab3fbc0ba0db9f9b4f5239b6697fcee427939a40e720cbb9ee0a69"
       url: "https://pub.dev"
     source: hosted
-    version: "5.8.0"
+    version: "5.9.0"
   win32_registry:
     dependency: transitive
     description:

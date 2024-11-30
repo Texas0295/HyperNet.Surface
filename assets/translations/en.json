@@ -24,6 +24,7 @@
   "screenRealmNew": "New Realm",
   "screenNotification": "Notification",
   "screenPostSearch": "Search Posts",
+  "screenFriend": "Friends",
   "dialogOkay": "Okay",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -35,6 +36,7 @@
   "errorRequestNotFound": "The resource that you looking for is not found.",
   "errorRequestConnection": "Network connection error, please check your network or the service status.",
   "errorRequestUnknown": "Unknown request error, maybe you want to take screenshot and report it to us.",
+  "unknown": "Unknown",
   "prev": "Previous",
   "next": "Next",
   "edit": "Edit",
@@ -189,7 +191,7 @@
   "channelNotifyLevelAll": "All",
   "channelNotifyLevelMentioned": "Only Mentioned",
   "channelNotifyLevelNone": "Muted",
-  "channelNotifyLevelApplied": "Channel notify level has been applied.",
+  "channelNotifyLevelApplie": "Channel notify level has been applied.",
   "fieldChannelProfileNick": "In-Channel Display Name",
   "fieldChannelProfileNickHint": "The nickname to display in the channel, leave blank to use the account display name.",
   "fieldRealmAlias": "Realm Alias",
@@ -296,5 +298,31 @@
   "dailyCheckNegativeHint5Description": "Lost connection at a crucial moment",
   "dailyCheckNegativeHint6": "Going out",
   "dailyCheckNegativeHint6Description": "Forgot your umbrella and got caught in the rain",
-  "happyBirthday": "Happy birthday, {}!"
+  "happyBirthday": "Happy birthday, {}!",
+  "friendNew": "Add Friend",
+  "friendRequests": "Friend Requests",
+  "friendRequestsDescription": {
+    "zero": "You have no friend request",
+    "one": "You have {} friend request",
+    "other": "You have {} friend requests"
+  },
+  "friendBlocklist": "Blocklist",
+  "friendBlocklistDescription": {
+    "zero": "You blocked no one",
+    "one": "You blocked {} user",
+    "other": "You blocked {} users"
+  },
+  "friendStatusPending": "Pending",
+  "friendStatusWaiting": "Waiting",
+  "friendStatusActive": "Friend",
+  "friendStatusBlocked": "Blocked",
+  "friendRequestSent": "Friend request has been sent.",
+  "fieldFriendRelatedName": "Friend name / account ID",
+  "friendBlock": "Block",
+  "friendUnblock": "Unblock",
+  "friendDeleteAction": "Delete",
+  "friendDelete": "Delete relation with {}",
+  "friendDeleteDescription": "Are you sure you want to delete the relation with {}? This operation is irreversible.",
+  "friendRequestAccept": "Accept",
+  "friendRequestDecline": "Decline"
 }
