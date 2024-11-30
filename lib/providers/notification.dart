@@ -8,17 +8,14 @@ import 'package:flutter_udid/flutter_udid.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
-import 'package:surface/providers/websocket.dart';
 
 class NotificationProvider extends ChangeNotifier {
   late final SnNetworkProvider _sn;
   late final UserProvider _ua;
-  late final WebSocketProvider _ws;
 
   NotificationProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
     _ua = context.read<UserProvider>();
-    _ws = context.read<WebSocketProvider>();
 
     // Delay to wait user provider ready to use
     Future.delayed(const Duration(milliseconds: 3000), () async {

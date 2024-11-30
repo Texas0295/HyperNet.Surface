@@ -133,7 +133,7 @@ class _FriendScreenState extends State<FriendScreen> {
   void _showRequests() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => _FriendshipPopupWidget(relations: _requests),
+      builder: (context) => _FriendshipListWidget(relations: _requests),
     ).then((value) {
       if (value != null) {
         _fetchRequests();
@@ -145,7 +145,7 @@ class _FriendScreenState extends State<FriendScreen> {
   void _showBlocks() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => _FriendshipPopupWidget(relations: _blocks),
+      builder: (context) => _FriendshipListWidget(relations: _blocks),
     ).then((value) {
       if (value != null) {
         _fetchBlocks();
@@ -335,15 +335,15 @@ class _NewFriendWidgetState extends State<_NewFriendWidget> {
   }
 }
 
-class _FriendshipPopupWidget extends StatefulWidget {
+class _FriendshipListWidget extends StatefulWidget {
   final List<SnRelationship> relations;
-  const _FriendshipPopupWidget({super.key, required this.relations});
+  const _FriendshipListWidget({super.key, required this.relations});
 
   @override
-  State<_FriendshipPopupWidget> createState() => _FriendshipPopupWidgetState();
+  State<_FriendshipListWidget> createState() => _FriendshipListWidgetState();
 }
 
-class _FriendshipPopupWidgetState extends State<_FriendshipPopupWidget> {
+class _FriendshipListWidgetState extends State<_FriendshipListWidget> {
   bool _isBusy = false;
 
   Future<void> _acceptRequest(SnRelationship relation) async {

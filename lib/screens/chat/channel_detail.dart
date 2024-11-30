@@ -14,6 +14,7 @@ import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class ChannelDetailScreen extends StatefulWidget {
   final String scope;
@@ -155,6 +156,24 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
     });
   }
 
+  void _showMemberList() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => _ChannelMemberListWidget(
+        channel: _channel!,
+      ),
+    );
+  }
+
+  void _showMemberAdd() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => _NewChannelMemberWidget(
+        channel: _channel!,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -270,6 +289,32 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                     ),
                 ],
               ).padding(bottom: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('channelDetailMemberRegion')
+                    .bold()
+                    .fontSize(17)
+                    .tr()
+                    .padding(horizontal: 20, bottom: 4),
+                ListTile(
+                  leading: const Icon(Symbols.group),
+                  trailing: const Icon(Symbols.chevron_right),
+                  title: Text('channelMemberManage').tr(),
+                  subtitle: Text('channelMemberManageDescription').tr(),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  onTap: _showMemberList,
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.group_add),
+                  trailing: const Icon(Symbols.chevron_right),
+                  title: Text('channelMemberAdd').tr(),
+                  subtitle: Text('channelMemberAddDescription').tr(),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  onTap: _showMemberAdd,
+                ),
+              ],
+            ).padding(bottom: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -393,5 +438,222 @@ class _ChannelProfileDetailDialogState
         ),
       ],
     );
+  }
+}
+
+class _ChannelMemberListWidget extends StatefulWidget {
+  final SnChannel channel;
+  const _ChannelMemberListWidget({super.key, required this.channel});
+
+  @override
+  State<_ChannelMemberListWidget> createState() =>
+      _ChannelMemberListWidgetState();
+}
+
+class _ChannelMemberListWidgetState extends State<_ChannelMemberListWidget> {
+  bool _isBusy = false;
+
+  int? _totalCount;
+  final List<SnChannelMember> _members = List.empty(growable: true);
+
+  Future<void> _fetchMembers() async {
+    setState(() => _isBusy = true);
+
+    try {
+      final ud = context.read<UserDirectoryProvider>();
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get(
+          '/cgi/im/channels/${widget.channel.keyPath}/members',
+          queryParameters: {
+            'take': 10,
+            'offset': 0,
+          });
+      final out = List<SnChannelMember>.from(
+        resp.data['data']?.map((e) => SnChannelMember.fromJson(e)) ?? [],
+      );
+
+      _totalCount = resp.data['count'];
+      _members.addAll(out);
+
+      await ud.listAccount(out.map((ele) => ele.accountId).toSet());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  bool _isUpdating = false;
+
+  Future<void> _deleteMember(SnChannelMember member) async {
+    if (_isUpdating) return;
+
+    setState(() => _isUpdating = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.delete(
+        '/cgi/im/channels/${widget.channel.keyPath}/members/${member.id}',
+      );
+      if (!mounted) return;
+      _members.clear();
+      _fetchMembers();
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isUpdating = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchMembers();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ud = context.read<UserDirectoryProvider>();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(Symbols.group, size: 24),
+            const Gap(16),
+            Text('channelMemberManage')
+                .tr()
+                .textStyle(Theme.of(context).textTheme.titleLarge!),
+          ],
+        ).padding(horizontal: 20, top: 16, bottom: 12),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () {
+              _members.clear();
+              return _fetchMembers();
+            },
+            child: InfiniteList(
+              itemCount: _members.length,
+              hasReachedMax:
+                  _totalCount != null && _members.length >= _totalCount!,
+              isLoading: _isBusy,
+              onFetchData: _fetchMembers,
+              itemBuilder: (context, index) {
+                final member = _members[index];
+                return ListTile(
+                  contentPadding: const EdgeInsets.only(right: 24, left: 16),
+                  leading: AccountImage(
+                    content: ud.getAccountFromCache(member.accountId)?.avatar,
+                  ),
+                  title: Text(
+                    ud.getAccountFromCache(member.accountId)?.name ??
+                        'unknown'.tr(),
+                  ),
+                  subtitle: Text(member.nick ?? 'unknown'.tr()),
+                  trailing: SizedBox(
+                    height: 48,
+                    width: 120,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed:
+                              _isUpdating ? null : () => _deleteMember(member),
+                          icon: const Icon(Symbols.person_remove),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NewChannelMemberWidget extends StatefulWidget {
+  final SnChannel channel;
+  const _NewChannelMemberWidget({super.key, required this.channel});
+
+  @override
+  State<_NewChannelMemberWidget> createState() =>
+      _NewChannelMemberWidgetState();
+}
+
+class _NewChannelMemberWidgetState extends State<_NewChannelMemberWidget> {
+  bool _isBusy = false;
+
+  final TextEditingController _relatedController = TextEditingController();
+
+  Future<void> _performAction() async {
+    if (_relatedController.text.isEmpty) return;
+
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.post(
+        '/cgi/im/channels/${widget.channel.keyPath}/members',
+        data: {
+          'related': _relatedController.text,
+        },
+      );
+      if (!mounted) return;
+      Navigator.pop(context, true);
+      context.showSnackbar('channelMemberAdded'.tr());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _relatedController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StyledWidget(Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'channelMemberAdd',
+          style: Theme.of(context).textTheme.titleLarge,
+        ).tr(),
+        const Gap(12),
+        TextField(
+          controller: _relatedController,
+          readOnly: _isBusy,
+          autocorrect: false,
+          autofocus: true,
+          textCapitalization: TextCapitalization.none,
+          decoration: InputDecoration(
+            labelText: 'fieldMemberRelatedName'.tr(),
+            suffix: SizedBox(
+              height: 24,
+              child: IconButton(
+                onPressed: _isBusy ? null : () => _performAction(),
+                icon: Icon(Symbols.send),
+                visualDensity:
+                    const VisualDensity(horizontal: -4, vertical: -4),
+                padding: EdgeInsets.zero,
+              ),
+            ),
+          ),
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        )
+      ],
+    )).padding(all: 24);
   }
 }

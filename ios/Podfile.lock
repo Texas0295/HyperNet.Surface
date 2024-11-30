@@ -162,7 +162,7 @@ PODS:
     - GoogleUtilities/Privacy
   - image_picker_ios (0.0.1):
     - Flutter
-  - livekit_client (2.3.0):
+  - livekit_client (2.3.1):
     - Flutter
     - WebRTC-SDK (= 125.6422.05)
   - media_kit_libs_ios_video (1.0.4):
@@ -189,9 +189,9 @@ PODS:
   - SAMKeychain (1.5.3)
   - screen_brightness_ios (0.1.0):
     - Flutter
-  - SDWebImage (5.19.7):
-    - SDWebImage/Core (= 5.19.7)
-  - SDWebImage/Core (5.19.7)
+  - SDWebImage (5.20.0):
+    - SDWebImage/Core (= 5.20.0)
+  - SDWebImage/Core (5.20.0)
   - Sentry/HybridSDK (8.40.1)
   - sentry_flutter (8.10.1):
     - Flutter
@@ -346,7 +346,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
-  livekit_client: 5c31e13cd17dd0d545a074290c937dbdff1d809d
+  livekit_client: e5e1be9c3fedd51c63f3ec4b4d3c616e9744c92b
   media_kit_libs_ios_video: a5fe24bc7875ccd6378a0978c13185e1344651c1
   media_kit_native_event_loop: e6b2ab20cf0746eb1c33be961fcf79667304fa2a
   media_kit_video: 5da63f157170e5bf303bf85453b7ef6971218a2e
@@ -358,7 +358,7 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   screen_brightness_ios: 715ca807df953bf676d339f11464e438143ee625
-  SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
+  SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
   Sentry: e9215d7b17f7902692b4f8700e061e4f853e3521
   sentry_flutter: 927eed60d66951d1b0f1db37fe94ff5cb7c80231
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
@@ -371,4 +371,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d2bdaa1cc7915e14cf47235c34a21fcb07b00390
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
