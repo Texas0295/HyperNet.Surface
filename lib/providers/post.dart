@@ -66,11 +66,13 @@ class SnPostContentProvider {
   Future<(List<SnPost>, int)> listPosts({
     int take = 10,
     int offset = 0,
+    String? type,
     String? author,
   }) async {
     final resp = await _sn.client.get('/cgi/co/posts', queryParameters: {
       'take': take,
       'offset': offset,
+      if (type != null) 'type': type,
       if (author != null) 'author': author,
     });
     final List<SnPost> out = await _preloadRelatedDataInBatch(

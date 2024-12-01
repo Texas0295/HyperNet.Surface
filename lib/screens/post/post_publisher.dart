@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -29,8 +27,11 @@ class PostPublisherScreen extends StatefulWidget {
   State<PostPublisherScreen> createState() => _PostPublisherScreenState();
 }
 
-class _PostPublisherScreenState extends State<PostPublisherScreen> {
+class _PostPublisherScreenState extends State<PostPublisherScreen>
+    with SingleTickerProviderStateMixin {
   late final ScrollController _scrollController = ScrollController();
+  late final TabController _tabController =
+      TabController(length: 3, vsync: this);
 
   SnPublisher? _publisher;
   SnAccount? _account;
@@ -66,9 +67,8 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
       );
       if (!mounted) return;
       _subscription = SnSubscription.fromJson(resp.data);
-    } catch (err) {
-      if (!mounted) return;
-      context.showErrorDialog(err);
+    } catch (_) {
+      // ignore due to maybe 404
     } finally {
       setState(() => _isSubscribing = false);
     }
@@ -131,12 +131,19 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
 
   Future<void> _fetchPosts() async {
     if (_isBusy) return;
-    _isBusy = true;
+
+    setState(() => _isBusy = true);
+
     try {
       final pt = context.read<SnPostContentProvider>();
       final result = await pt.listPosts(
         offset: _posts.length,
         author: widget.name,
+        type: switch (_tabController.index) {
+          1 => 'story',
+          2 => 'article',
+          _ => null,
+        },
       );
       _postCount = result.$2;
       _posts.addAll(result.$1);
@@ -144,9 +151,13 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
       if (!mounted) return;
       context.showErrorDialog(err);
     } finally {
-      _isBusy = false;
-      setState(() {});
+      setState(() => _isBusy = false);
     }
+  }
+
+  void _updateFetchType() {
+    _posts.clear();
+    _fetchPosts();
   }
 
   @override
@@ -157,12 +168,15 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
       _fetchSubscription();
     });
     _scrollController.addListener(_updateAppBarBlur);
+    _tabController.addListener(_updateFetchType);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_updateAppBarBlur);
     _scrollController.dispose();
+    _tabController.removeListener(_updateFetchType);
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -182,317 +196,280 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
 
     final sn = context.read<SnNetworkProvider>();
 
-    // TODO fix loading on different type
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        body: NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: MultiSliver(
-                  children: [
-                    SliverAppBar(
-                      expandedHeight: _appBarHeight,
-                      title: _publisher == null
-                          ? Text('loading').tr()
-                          : RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(children: [
-                                TextSpan(
-                                  text: _publisher!.nick,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                        color: Colors.white,
-                                        shadows: labelShadows,
-                                      ),
-                                ),
-                                const TextSpan(text: '\n'),
-                                TextSpan(
-                                  text: '@${_publisher!.name}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        color: Colors.white,
-                                        shadows: labelShadows,
-                                      ),
-                                ),
-                              ]),
-                            ),
-                      pinned: true,
-                      flexibleSpace: _publisher != null
-                          ? Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                UniversalImage(
-                                  sn.getAttachmentUrl(_publisher!.banner),
-                                  fit: BoxFit.cover,
-                                  height: imageHeight,
-                                  width: _appBarWidth,
-                                  cacheHeight: imageHeight,
-                                  cacheWidth: _appBarWidth,
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  height:
-                                      56 + MediaQuery.of(context).padding.top,
-                                  child: ClipRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: _appBarBlur,
-                                        sigmaY: _appBarBlur,
-                                      ),
-                                      child: Container(
-                                        color: Colors.black.withOpacity(
-                                          clampDouble(
-                                              _appBarBlur * 0.1, 0, 0.5),
-                                        ),
+    return Scaffold(
+      body: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: MultiSliver(
+                children: [
+                  SliverAppBar(
+                    expandedHeight: _appBarHeight,
+                    title: _publisher == null
+                        ? Text('loading').tr()
+                        : RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: _publisher!.nick,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                      color: Colors.white,
+                                      shadows: labelShadows,
+                                    ),
+                              ),
+                              const TextSpan(text: '\n'),
+                              TextSpan(
+                                text: '@${_publisher!.name}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      color: Colors.white,
+                                      shadows: labelShadows,
+                                    ),
+                              ),
+                            ]),
+                          ),
+                    pinned: true,
+                    flexibleSpace: _publisher != null
+                        ? Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              UniversalImage(
+                                sn.getAttachmentUrl(_publisher!.banner),
+                                fit: BoxFit.cover,
+                                height: imageHeight,
+                                width: _appBarWidth,
+                                cacheHeight: imageHeight,
+                                cacheWidth: _appBarWidth,
+                              ),
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: 56 + MediaQuery.of(context).padding.top,
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                      sigmaX: _appBarBlur,
+                                      sigmaY: _appBarBlur,
+                                    ),
+                                    child: Container(
+                                      color: Colors.black.withOpacity(
+                                        clampDouble(_appBarBlur * 0.1, 0, 0.5),
                                       ),
                                     ),
                                   ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : null,
+                  ),
+                  if (_publisher != null)
+                    SliverToBoxAdapter(
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 640),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                AccountImage(
+                                  content: _publisher!.avatar,
+                                  radius: 28,
+                                ),
+                                const Gap(16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _publisher!.nick,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ).bold(),
+                                      Text('@${_publisher!.name}').fontSize(13),
+                                    ],
+                                  ),
+                                ),
+                                if (_subscription == null)
+                                  ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                      elevation: WidgetStatePropertyAll(0),
+                                    ),
+                                    onPressed: _isSubscribing
+                                        ? null
+                                        : _toggleSubscription,
+                                    label: Text('subscribe').tr(),
+                                    icon: const Icon(Symbols.add),
+                                  )
+                                else
+                                  OutlinedButton.icon(
+                                    style: ButtonStyle(
+                                      elevation: WidgetStatePropertyAll(0),
+                                    ),
+                                    onPressed: _isSubscribing
+                                        ? null
+                                        : _toggleSubscription,
+                                    label: Text('unsubscribe').tr(),
+                                    icon: const Icon(Symbols.remove),
+                                  ),
+                              ],
+                            ).padding(right: 8),
+                            const Gap(12),
+                            Text(_publisher!.description)
+                                .padding(horizontal: 8),
+                            const Gap(12),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(Symbols.calendar_add_on),
+                                    const Gap(8),
+                                    Text('publisherJoinedAt').tr(args: [
+                                      DateFormat('y/M/d')
+                                          .format(_publisher!.createdAt)
+                                    ]),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(Symbols.trending_up),
+                                    const Gap(8),
+                                    Text('publisherSocialPointTotal').plural(
+                                      _publisher!.totalUpvote -
+                                          _publisher!.totalDownvote,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(Symbols.tools_wrench),
+                                    const Gap(8),
+                                    InkWell(
+                                      child: Text('publisherRunBy').tr(args: [
+                                        '@${_account?.name ?? 'unknown'}',
+                                      ]),
+                                      onTap: () {},
+                                    ),
+                                    const Gap(8),
+                                    AccountImage(
+                                        content: _account?.avatar, radius: 8),
+                                  ],
                                 ),
                               ],
-                            )
-                          : null,
+                            ).padding(horizontal: 8),
+                          ],
+                        ).padding(all: 16),
+                      ).center(),
                     ),
-                    if (_publisher != null)
-                      SliverToBoxAdapter(
-                        child: Container(
-                          constraints: const BoxConstraints(maxWidth: 640),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  AccountImage(
-                                    content: _publisher!.avatar,
-                                    radius: 28,
-                                  ),
-                                  const Gap(16),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          _publisher!.nick,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ).bold(),
-                                        Text('@${_publisher!.name}')
-                                            .fontSize(13),
-                                      ],
-                                    ),
-                                  ),
-                                  if (_subscription == null)
-                                    ElevatedButton.icon(
-                                      style: ButtonStyle(
-                                        elevation: WidgetStatePropertyAll(0),
-                                      ),
-                                      onPressed: _isSubscribing
-                                          ? null
-                                          : _toggleSubscription,
-                                      label: Text('subscribe').tr(),
-                                      icon: const Icon(Symbols.add),
-                                    )
-                                  else
-                                    OutlinedButton.icon(
-                                      style: ButtonStyle(
-                                        elevation: WidgetStatePropertyAll(0),
-                                      ),
-                                      onPressed: _isSubscribing
-                                          ? null
-                                          : _toggleSubscription,
-                                      label: Text('unsubscribe').tr(),
-                                      icon: const Icon(Symbols.remove),
-                                    ),
-                                ],
-                              ).padding(right: 8),
-                              const Gap(12),
-                              Text(_publisher!.description)
-                                  .padding(horizontal: 8),
-                              const Gap(12),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(Symbols.calendar_add_on),
-                                      const Gap(8),
-                                      Text('publisherJoinedAt').tr(args: [
-                                        DateFormat('y/M/d')
-                                            .format(_publisher!.createdAt)
-                                      ]),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Symbols.trending_up),
-                                      const Gap(8),
-                                      Text('publisherSocialPointTotal').plural(
-                                        _publisher!.totalUpvote -
-                                            _publisher!.totalDownvote,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Symbols.tools_wrench),
-                                      const Gap(8),
-                                      InkWell(
-                                        child: Text('publisherRunBy').tr(args: [
-                                          '@${_account?.name ?? 'unknown'}',
-                                        ]),
-                                        onTap: () {},
-                                      ),
-                                      const Gap(8),
-                                      AccountImage(
-                                          content: _account?.avatar, radius: 8),
-                                    ],
-                                  ),
-                                ],
-                              ).padding(horizontal: 8),
-                            ],
-                          ).padding(all: 16),
-                        ).center(),
+                  SliverToBoxAdapter(child: const Divider(height: 1)),
+                  TabBar(
+                    controller: _tabController,
+                    tabs: [
+                      Tab(
+                        icon: Icon(
+                          Symbols.pages,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
-                    SliverToBoxAdapter(child: const Divider(height: 1)),
-                    TabBar(
-                      tabs: [
-                        Tab(
-                          icon: Icon(
-                            Symbols.pages,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                      Tab(
+                        icon: Icon(
+                          Symbols.sticky_note_2,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                        Tab(
-                          icon: Icon(
-                            Symbols.sticky_note_2,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                      ),
+                      Tab(
+                        icon: Icon(
+                          Symbols.article,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                        Tab(
-                          icon: Icon(
-                            Symbols.article,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SliverToBoxAdapter(child: const Divider(height: 1)),
-                    Gap(MediaQuery.of(context).padding.top),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  SliverToBoxAdapter(child: const Divider(height: 1)),
+                  Gap(MediaQuery.of(context).padding.top),
+                ],
               ),
-            ];
-          },
-          body: TabBarView(
-            children: [
-              InfiniteList(
-                itemCount: _posts.length,
-                isLoading: _isBusy,
-                hasReachedMax:
-                    _postCount != null && _posts.length >= _postCount!,
-                onFetchData: _fetchPosts,
-                itemBuilder: (context, idx) {
-                  return GestureDetector(
-                    child: PostItem(
-                      data: _posts[idx],
-                      maxWidth: 640,
-                      onChanged: (data) {
-                        setState(() => _posts[idx] = data);
-                      },
-                      onDeleted: () {
-                        _posts.clear();
-                        _fetchPosts();
-                      },
-                    ),
-                    onTap: () {
-                      GoRouter.of(context).pushNamed(
-                        'postDetail',
-                        pathParameters: {'slug': _posts[idx].id.toString()},
-                        extra: _posts[idx],
-                      );
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(height: 1),
-              ),
-              InfiniteList(
-                itemCount: _posts.where((e) => e.type == 'story').length,
-                isLoading: _isBusy,
-                hasReachedMax:
-                    _postCount != null && _posts.length >= _postCount!,
-                onFetchData: _fetchPosts,
-                itemBuilder: (context, idx) {
-                  return GestureDetector(
-                    child: PostItem(
-                      data:
-                          _posts.where((e) => e.type == 'story').elementAt(idx),
-                      maxWidth: 640,
-                      onChanged: (data) {
-                        setState(() => _posts[idx] = data);
-                      },
-                      onDeleted: () {
-                        _posts.clear();
-                        _fetchPosts();
-                      },
-                    ),
-                    onTap: () {
-                      GoRouter.of(context).pushNamed(
-                        'postDetail',
-                        pathParameters: {'slug': _posts[idx].id.toString()},
-                        extra: _posts[idx],
-                      );
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(height: 1),
-              ),
-              InfiniteList(
-                itemCount: _posts.where((e) => e.type == 'article').length,
-                isLoading: _isBusy,
-                hasReachedMax:
-                    _postCount != null && _posts.length >= _postCount!,
-                onFetchData: _fetchPosts,
-                itemBuilder: (context, idx) {
-                  return GestureDetector(
-                    child: PostItem(
-                      data: _posts
-                          .where((e) => e.type == 'article')
-                          .elementAt(idx),
-                      maxWidth: 640,
-                      onChanged: (data) {
-                        setState(() => _posts[idx] = data);
-                      },
-                      onDeleted: () {
-                        _posts.clear();
-                        _fetchPosts();
-                      },
-                    ),
-                    onTap: () {
-                      GoRouter.of(context).pushNamed(
-                        'postDetail',
-                        pathParameters: {'slug': _posts[idx].id.toString()},
-                        extra: _posts[idx],
-                      );
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(height: 1),
-              ),
-            ],
+            ),
+          ];
+        },
+        body: TabBarView(
+          controller: _tabController,
+          children: List.filled(
+            3,
+            _PublisherPostList(
+              isBusy: _isBusy,
+              postCount: _postCount,
+              posts: _posts,
+              fetchPosts: _fetchPosts,
+              onChanged: (idx, data) {
+                setState(() => _posts[idx] = data);
+              },
+              onDeleted: () {
+                _posts.clear();
+                _fetchPosts();
+              },
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PublisherPostList extends StatelessWidget {
+  final bool isBusy;
+  final int? postCount;
+  final List<SnPost> posts;
+  final void Function() fetchPosts;
+  final void Function(int index, SnPost data) onChanged;
+  final void Function() onDeleted;
+  const _PublisherPostList({
+    super.key,
+    required this.isBusy,
+    required this.postCount,
+    required this.posts,
+    required this.fetchPosts,
+    required this.onChanged,
+    required this.onDeleted,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InfiniteList(
+      itemCount: posts.length,
+      isLoading: isBusy,
+      hasReachedMax: postCount != null && posts.length >= postCount!,
+      onFetchData: fetchPosts,
+      itemBuilder: (context, idx) {
+        return GestureDetector(
+          child: PostItem(
+            data: posts[idx],
+            maxWidth: 640,
+            onChanged: (data) {
+              onChanged(idx, data);
+            },
+            onDeleted: onDeleted,
+          ),
+          onTap: () {
+            GoRouter.of(context).pushNamed(
+              'postDetail',
+              pathParameters: {'slug': posts[idx].id.toString()},
+              extra: posts[idx],
+            );
+          },
+        );
+      },
+      separatorBuilder: (context, index) => const Divider(height: 1),
     );
   }
 }
