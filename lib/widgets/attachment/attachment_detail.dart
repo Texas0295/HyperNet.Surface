@@ -41,6 +41,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
   void initState() {
     super.initState();
     _pageController.addListener(_updatePage);
+    Future.delayed(const Duration(milliseconds: 100), _updatePage);
   }
 
   @override
@@ -151,7 +152,9 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                 child: Builder(builder: (context) {
                   final ud = context.read<UserDirectoryProvider>();
                   final item = widget.data.elementAt(
-                    _pageController.page?.round() ?? 0,
+                    widget.data.length > 1
+                        ? _pageController.page?.round() ?? 0
+                        : 0,
                   );
                   final account = ud.getAccountFromCache(item.accountId);
 
