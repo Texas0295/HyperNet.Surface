@@ -207,7 +207,12 @@ class _RealmScreenState extends State<RealmScreen> {
                           ).padding(horizontal: 24, bottom: 14),
                         ],
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        GoRouter.of(context).pushNamed(
+                          'realmDetail',
+                          pathParameters: {'alias': realm.alias},
+                        );
+                      },
                     ),
                   );
                 },

@@ -23,6 +23,7 @@ import 'package:surface/screens/post/post_editor.dart';
 import 'package:surface/screens/post/post_search.dart';
 import 'package:surface/screens/realm.dart';
 import 'package:surface/screens/realm/manage.dart';
+import 'package:surface/screens/realm/realm_detail.dart';
 import 'package:surface/screens/settings.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
@@ -154,6 +155,13 @@ final _appRoutes = [
               },
             ),
           ),
+          GoRoute(
+            path: '/:alias',
+            name: 'realmDetail',
+            builder: (context, state) => AppBackground(
+              child: RealmDetailScreen(alias: state.pathParameters['alias']!),
+            ),
+          ),
         ],
       ),
       GoRoute(
@@ -215,33 +223,45 @@ final _appRoutes = [
       GoRoute(
         path: '/auth/login',
         name: 'authLogin',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const AppBackground(
+          child: LoginScreen(),
+        ),
       ),
       GoRoute(
         path: '/auth/register',
         name: 'authRegister',
-        builder: (context, state) => const RegisterScreen(),
+        builder: (context, state) => const AppBackground(
+          child: RegisterScreen(),
+        ),
       ),
       GoRoute(
         path: '/account/profile/edit',
         name: 'accountProfileEdit',
-        builder: (context, state) => const ProfileEditScreen(),
+        builder: (context, state) => const AppBackground(
+          child: ProfileEditScreen(),
+        ),
       ),
       GoRoute(
         path: '/account/publishers',
         name: 'accountPublishers',
-        builder: (context, state) => const PublisherScreen(),
+        builder: (context, state) => const AppBackground(
+          child: PublisherScreen(),
+        ),
       ),
       GoRoute(
         path: '/account/publishers/new',
         name: 'accountPublisherNew',
-        builder: (context, state) => const AccountPublisherNewScreen(),
+        builder: (context, state) => const AppBackground(
+          child: AccountPublisherNewScreen(),
+        ),
       ),
       GoRoute(
         path: '/account/publishers/edit/:name',
         name: 'accountPublisherEdit',
-        builder: (context, state) => AccountPublisherEditScreen(
-          name: state.pathParameters['name']!,
+        builder: (context, state) => AppBackground(
+          child: AccountPublisherEditScreen(
+            name: state.pathParameters['name']!,
+          ),
         ),
       ),
     ],
