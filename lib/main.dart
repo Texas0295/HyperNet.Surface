@@ -81,9 +81,9 @@ class SolianApp extends StatelessWidget {
 
             // Data layer
             Provider(create: (_) => SnNetworkProvider()),
+            Provider(create: (ctx) => UserDirectoryProvider(ctx)),
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             Provider(create: (ctx) => SnPostContentProvider(ctx)),
-            Provider(create: (ctx) => UserDirectoryProvider(ctx)),
             Provider(create: (ctx) => SnRelationshipProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),

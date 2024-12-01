@@ -351,5 +351,7 @@
   "friendRequestAccept": "Accept",
   "friendRequestDecline": "Decline",
   "subscribe": "Subscribe",
-  "unsubscribe": "Unsubscribe"
+  "unsubscribe": "Unsubscribe",
+  "attachmentUploadBy": "Upload by",
+  "attachmentShotOn": "Shot on {}"
 }

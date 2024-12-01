@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/post.dart';
 
 class SnPostContentProvider {
   late final SnNetworkProvider _sn;
+  late final UserDirectoryProvider _ud;
   late final SnAttachmentProvider _attach;
 
   SnPostContentProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
+    _ud = context.read<UserDirectoryProvider>();
     _attach = context.read<SnAttachmentProvider>();
   }
 
@@ -36,6 +39,13 @@ class SnPostContentProvider {
         ),
       );
     }
+
+    await _ud.listAccount(
+      attachments
+          .where((ele) => ele != null)
+          .map((ele) => ele!.accountId)
+          .toSet(),
+    );
 
     return out;
   }
