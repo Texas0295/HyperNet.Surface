@@ -89,12 +89,6 @@ class WebSocketProvider extends ChangeNotifier {
         final packet = WebSocketPackage.fromJson(jsonDecode(event));
         log('Websocket incoming message: ${packet.method} ${packet.message}');
         stream.sink.add(packet);
-        // TODO handle notification
-        // if (packet.method == 'notifications.new') {
-        //   final NotificationProvider nty = Get.find();
-        //   nty.notifications.add(Notification.fromJson(packet.payload!));
-        //   nty.notificationUnread.value++;
-        // }
       },
       onDone: () {
         isConnected = false;

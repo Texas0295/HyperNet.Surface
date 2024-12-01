@@ -63,10 +63,15 @@ class SnPostContentProvider {
     return out;
   }
 
-  Future<(List<SnPost>, int)> listPosts({int take = 10, int offset = 0}) async {
+  Future<(List<SnPost>, int)> listPosts({
+    int take = 10,
+    int offset = 0,
+    String? author,
+  }) async {
     final resp = await _sn.client.get('/cgi/co/posts', queryParameters: {
       'take': take,
       'offset': offset,
+      if (author != null) 'author': author,
     });
     final List<SnPost> out = await _preloadRelatedDataInBatch(
       List.from(resp.data['data']?.map((e) => SnPost.fromJson(e)) ?? []),

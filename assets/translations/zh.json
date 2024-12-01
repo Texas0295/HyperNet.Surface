@@ -102,7 +102,13 @@
   "publisherTotalUpvote": "总顶数",
   "publisherTotalDownvote": "总踩数",
   "publisherSocialPoint": "社会信用点",
-  "publisherJoinedAt": "加入于",
+  "publisherJoinedAt": "加入于 {}",
+  "publisherSocialPointTotal": {
+    "zero": "无社会信用点",
+    "one": "{} 点社会信用点",
+    "other": "{} 点社会信用点"
+  },
+  "publisherRunBy": "由 {} 管理",
   "fieldPublisherBelongToRealm": "所属领域",
   "fieldPublisherBelongToRealmUnset": "未设置发布者所属领域",
   "writePostTypeStory": "发动态",
@@ -343,5 +349,7 @@
   "friendDelete": "遗忘跟 {} 的关系",
   "friendDeleteDescription": "你确定要遗忘跟 {} 的关系吗？这个操作无法撤销。",
   "friendRequestAccept": "接受",
-  "friendRequestDecline": "拒绝"
+  "friendRequestDecline": "拒绝",
+  "subscribe": "订阅",
+  "unsubscribe": "取消订阅"
 }

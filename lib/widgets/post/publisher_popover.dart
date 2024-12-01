@@ -1,10 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/universal_image.dart';
 
 class PublisherPopoverCard extends StatelessWidget {
   final SnPublisher data;
@@ -12,10 +16,25 @@ class PublisherPopoverCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sn = context.read<SnNetworkProvider>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (data.banner.isNotEmpty)
+          Container(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            child: AspectRatio(
+              aspectRatio: 16 / 7,
+              child: AutoResizeUniversalImage(
+                sn.getAttachmentUrl(data.banner),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        // Top padding
+        Gap(16),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -35,14 +54,20 @@ class PublisherPopoverCard extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+                GoRouter.of(context).pushNamed(
+                  'postPublisher',
+                  pathParameters: {'name': data.name},
+                );
+              },
               icon: const Icon(Symbols.chevron_right),
               padding: EdgeInsets.zero,
               visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
             ),
             const Gap(8)
           ],
-        ),
+        ).padding(horizontal: 16),
         const Gap(16),
         Row(
           children: [
@@ -92,7 +117,9 @@ class PublisherPopoverCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        ).padding(horizontal: 16),
+        // Bottom padding
+        const Gap(16),
       ],
     );
   }

@@ -273,13 +273,14 @@ class _PostContentHeader extends StatelessWidget {
           ),
           onTap: () {
             showPopover(
+              backgroundColor: Theme.of(context).colorScheme.surface,
               context: context,
               transition: PopoverTransition.other,
               bodyBuilder: (context) => SizedBox(
                 width: 400,
                 child: PublisherPopoverCard(
                   data: data.publisher,
-                ).padding(horizontal: 16, vertical: 16),
+                ),
               ),
               direction: PopoverDirection.bottom,
               arrowHeight: 5,

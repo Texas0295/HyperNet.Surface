@@ -89,12 +89,15 @@ class AppBackground extends StatelessWidget {
                 return _buildWithBackgroundImage(context, file, child);
               }
             }
+
+            return Material(
+              color: Theme.of(context).colorScheme.surface,
+              child: child,
+            );
           }
 
           return Material(
-            color: isRoot
-                ? Theme.of(context).colorScheme.surface
-                : Colors.transparent,
+            color: Colors.transparent,
             child: child,
           );
         },

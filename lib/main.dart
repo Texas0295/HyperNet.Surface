@@ -43,7 +43,7 @@ void main() async {
   );
 
   if (!kReleaseMode) {
-    debugInvertOversizedImages = true;
+    // debugInvertOversizedImages = true;
   }
 
   GoRouter.optionURLReflectsImperativeAPIs = true;

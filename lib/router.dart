@@ -20,6 +20,7 @@ import 'package:surface/screens/home.dart';
 import 'package:surface/screens/notification.dart';
 import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
+import 'package:surface/screens/post/post_publisher.dart';
 import 'package:surface/screens/post/post_search.dart';
 import 'package:surface/screens/realm.dart';
 import 'package:surface/screens/realm/manage.dart';
@@ -75,6 +76,13 @@ final _appRoutes = [
             builder: (context, state) => const AppBackground(
               isLessOptimization: true,
               child: PostSearchScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/pub/:name',
+            name: 'postPublisher',
+            builder: (context, state) => AppBackground(
+              child: PostPublisherScreen(name: state.pathParameters['name']!),
             ),
           ),
           GoRoute(
