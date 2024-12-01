@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -15,6 +16,7 @@ import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_reaction.dart';
+import 'package:surface/widgets/post/publisher_popover.dart';
 
 class PostItem extends StatelessWidget {
   final SnPost data;
@@ -264,9 +266,27 @@ class _PostContentHeader extends StatelessWidget {
 
     return Row(
       children: [
-        AccountImage(
-          content: data.publisher.avatar,
-          radius: isCompact ? 12 : 20,
+        GestureDetector(
+          child: AccountImage(
+            content: data.publisher.avatar,
+            radius: isCompact ? 12 : 20,
+          ),
+          onTap: () {
+            showPopover(
+              context: context,
+              transition: PopoverTransition.other,
+              bodyBuilder: (context) => SizedBox(
+                width: 400,
+                child: PublisherPopoverCard(
+                  data: data.publisher,
+                ).padding(horizontal: 16, vertical: 16),
+              ),
+              direction: PopoverDirection.bottom,
+              arrowHeight: 5,
+              arrowWidth: 15,
+              arrowDxOffset: -190,
+            );
+          },
         ),
         Gap(isCompact ? 8 : 12),
         if (isCompact)
