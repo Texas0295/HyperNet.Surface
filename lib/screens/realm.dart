@@ -155,6 +155,12 @@ class _RealmScreenState extends State<RealmScreen> {
                           ),
                         ],
                       ),
+                      onTap: () {
+                        GoRouter.of(context).pushNamed(
+                          'realmDetail',
+                          pathParameters: {'alias': realm.alias},
+                        );
+                      },
                     );
                   }
 

@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -77,7 +79,12 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
             children: [
               _RealmDetailHomeWidget(realm: _realm),
               _RealmMemberListWidget(realm: _realm),
-              const Icon(Symbols.home).center(),
+              _RealmSettingsWidget(
+                realm: _realm,
+                onUpdate: () {
+                  _fetchRealm();
+                },
+              ),
             ],
           ),
         ),
@@ -324,5 +331,84 @@ class _NewRealmMemberWidgetState extends State<_NewRealmMemberWidget> {
         )
       ],
     )).padding(all: 24);
+  }
+}
+
+class _RealmSettingsWidget extends StatefulWidget {
+  final SnRealm? realm;
+  final Function() onUpdate;
+  const _RealmSettingsWidget(
+      {super.key, required this.realm, required this.onUpdate});
+
+  @override
+  State<_RealmSettingsWidget> createState() => _RealmSettingsWidgetState();
+}
+
+class _RealmSettingsWidgetState extends State<_RealmSettingsWidget> {
+  bool _isBusy = false;
+
+  Future<void> _deleteRealm() async {
+    final confirm = await context.showConfirmDialog(
+      'realmDelete'.tr(args: ['#${widget.realm!.alias}']),
+      'realmDeleteDescription'.tr(),
+    );
+    if (!confirm) return;
+
+    if (!mounted) return;
+    final sn = context.read<SnNetworkProvider>();
+
+    setState(() => _isBusy = true);
+
+    try {
+      await sn.client.delete('/cgi/id/realms/${widget.realm!.alias}');
+      if (!mounted) return;
+      Navigator.pop(context, true);
+      context.showSnackbar('realmDeleted'.tr(args: [
+        '#${widget.realm!.alias}',
+      ]));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ua = context.read<UserProvider>();
+
+    final isOwned = ua.isAuthorized && widget.realm?.accountId == ua.user?.id;
+
+    return Column(
+      children: [
+        ListTile(
+          leading: const Icon(Symbols.edit),
+          trailing: const Icon(Symbols.chevron_right),
+          title: Text('realmEdit').tr(),
+          subtitle: Text('realmEditDescription').tr(),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+          onTap: () {
+            GoRouter.of(context).pushNamed(
+              'realmManage',
+              queryParameters: {'editing': widget.realm!.alias},
+            ).then((value) {
+              if (value != null) {
+                widget.onUpdate();
+              }
+            });
+          },
+        ),
+        if (isOwned)
+          ListTile(
+            leading: const Icon(Symbols.delete),
+            trailing: const Icon(Symbols.chevron_right),
+            title: Text('realmActionDelete').tr(),
+            subtitle: Text('realmActionDeleteDescription').tr(),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            onTap: _isBusy ? null : _deleteRealm,
+          ),
+      ],
+    );
   }
 }
