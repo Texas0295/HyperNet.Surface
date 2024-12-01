@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -111,161 +112,310 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
   Widget build(BuildContext context) {
     final imageHeight = _appBarHeight + kToolbarHeight + 8;
 
+    const labelShadows = <Shadow>[
+      Shadow(
+        offset: Offset(1, 1),
+        blurRadius: 5.0,
+        color: Color.fromARGB(255, 0, 0, 0),
+      ),
+    ];
+
     final sn = context.read<SnNetworkProvider>();
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverAppBar(
-            expandedHeight: _appBarHeight,
-            title: Text(_publisher?.nick ?? 'loading'.tr()),
-            pinned: true,
-            flexibleSpace: _publisher != null
-                ? Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      UniversalImage(
-                        sn.getAttachmentUrl(_publisher!.banner),
-                        fit: BoxFit.cover,
-                        height: imageHeight,
-                        width: _appBarWidth,
-                        cacheHeight: imageHeight,
-                        cacheWidth: _appBarWidth,
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: 56 + MediaQuery.of(context).padding.top,
-                        child: ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(
-                              sigmaX: _appBarBlur,
-                              sigmaY: _appBarBlur,
-                            ),
-                            child: Container(
-                              color: Colors.black.withOpacity(
-                                clampDouble(_appBarBlur * 0.1, 0, 0.5),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : null,
-          ),
-          if (_publisher != null)
-            SliverToBoxAdapter(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 640),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+
+    // TODO fix loading on different type
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        body: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: MultiSliver(
                   children: [
-                    Row(
-                      children: [
-                        AccountImage(
-                          content: _publisher!.avatar,
-                          radius: 28,
-                        ),
-                        const Gap(16),
-                        Expanded(
+                    SliverAppBar(
+                      expandedHeight: _appBarHeight,
+                      title: _publisher == null
+                          ? Text('loading').tr()
+                          : RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: _publisher!.nick,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                        color: Colors.white,
+                                        shadows: labelShadows,
+                                      ),
+                                ),
+                                const TextSpan(text: '\n'),
+                                TextSpan(
+                                  text: '@${_publisher!.name}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                        color: Colors.white,
+                                        shadows: labelShadows,
+                                      ),
+                                ),
+                              ]),
+                            ),
+                      pinned: true,
+                      flexibleSpace: _publisher != null
+                          ? Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                UniversalImage(
+                                  sn.getAttachmentUrl(_publisher!.banner),
+                                  fit: BoxFit.cover,
+                                  height: imageHeight,
+                                  width: _appBarWidth,
+                                  cacheHeight: imageHeight,
+                                  cacheWidth: _appBarWidth,
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height:
+                                      56 + MediaQuery.of(context).padding.top,
+                                  child: ClipRect(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: _appBarBlur,
+                                        sigmaY: _appBarBlur,
+                                      ),
+                                      child: Container(
+                                        color: Colors.black.withOpacity(
+                                          clampDouble(
+                                              _appBarBlur * 0.1, 0, 0.5),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : null,
+                    ),
+                    if (_publisher != null)
+                      SliverToBoxAdapter(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 640),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                _publisher!.nick,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ).bold(),
-                              Text('@${_publisher!.name}').fontSize(13),
+                              Row(
+                                children: [
+                                  AccountImage(
+                                    content: _publisher!.avatar,
+                                    radius: 28,
+                                  ),
+                                  const Gap(16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _publisher!.nick,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ).bold(),
+                                        Text('@${_publisher!.name}')
+                                            .fontSize(13),
+                                      ],
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        elevation: WidgetStatePropertyAll(0)),
+                                    onPressed: () {},
+                                    child: Text('subscribe').tr(),
+                                  ),
+                                ],
+                              ).padding(right: 8),
+                              const Gap(12),
+                              Text(_publisher!.description)
+                                  .padding(horizontal: 8),
+                              const Gap(12),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Symbols.calendar_add_on),
+                                      const Gap(8),
+                                      Text('publisherJoinedAt').tr(args: [
+                                        DateFormat('y/M/d')
+                                            .format(_publisher!.createdAt)
+                                      ]),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Symbols.trending_up),
+                                      const Gap(8),
+                                      Text('publisherSocialPointTotal').plural(
+                                        _publisher!.totalUpvote -
+                                            _publisher!.totalDownvote,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Symbols.tools_wrench),
+                                      const Gap(8),
+                                      InkWell(
+                                        child: Text('publisherRunBy').tr(args: [
+                                          '@${_account?.name ?? 'unknown'}',
+                                        ]),
+                                        onTap: () {},
+                                      ),
+                                      const Gap(8),
+                                      AccountImage(
+                                          content: _account?.avatar, radius: 8),
+                                    ],
+                                  ),
+                                ],
+                              ).padding(horizontal: 8),
                             ],
+                          ).padding(all: 16),
+                        ).center(),
+                      ),
+                    SliverToBoxAdapter(child: const Divider(height: 1)),
+                    TabBar(
+                      tabs: [
+                        Tab(
+                          icon: Icon(
+                            Symbols.pages,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                        ElevatedButton(
-                          style:
-                              ButtonStyle(elevation: WidgetStatePropertyAll(0)),
-                          onPressed: () {},
-                          child: Text('subscribe').tr(),
+                        Tab(
+                          icon: Icon(
+                            Symbols.sticky_note_2,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        Tab(
+                          icon: Icon(
+                            Symbols.article,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                       ],
-                    ).padding(right: 8),
-                    const Gap(12),
-                    Text(_publisher!.description).padding(horizontal: 8),
-                    const Gap(12),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Symbols.calendar_add_on),
-                            const Gap(8),
-                            Text('publisherJoinedAt').tr(args: [
-                              DateFormat('y/M/d').format(_publisher!.createdAt)
-                            ]),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Symbols.trending_up),
-                            const Gap(8),
-                            Text('publisherSocialPointTotal').plural(
-                              _publisher!.totalUpvote -
-                                  _publisher!.totalDownvote,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Symbols.tools_wrench),
-                            const Gap(8),
-                            InkWell(
-                              child: Text('publisherRunBy').tr(args: [
-                                '@${_account?.name ?? 'unknown'}',
-                              ]),
-                              onTap: () {},
-                            ),
-                            const Gap(8),
-                            AccountImage(content: _account?.avatar, radius: 8),
-                          ],
-                        ),
-                      ],
-                    ).padding(horizontal: 8),
+                    ),
+                    SliverToBoxAdapter(child: const Divider(height: 1)),
+                    Gap(MediaQuery.of(context).padding.top),
                   ],
-                ).padding(all: 16),
-              ).center(),
-            ),
-          SliverToBoxAdapter(
-            child: const Divider(height: 1),
-          ),
-          SliverInfiniteList(
-            itemCount: _posts.length,
-            isLoading: _isBusy,
-            hasReachedMax: _postCount != null && _posts.length >= _postCount!,
-            onFetchData: _fetchPosts,
-            itemBuilder: (context, idx) {
-              return GestureDetector(
-                child: PostItem(
-                  data: _posts[idx],
-                  maxWidth: 640,
-                  onChanged: (data) {
-                    setState(() => _posts[idx] = data);
-                  },
-                  onDeleted: () {
-                    _posts.clear();
-                    _fetchPosts();
-                  },
                 ),
-                onTap: () {
-                  GoRouter.of(context).pushNamed(
-                    'postDetail',
-                    pathParameters: {'slug': _posts[idx].id.toString()},
-                    extra: _posts[idx],
+              ),
+            ];
+          },
+          body: TabBarView(
+            children: [
+              InfiniteList(
+                itemCount: _posts.length,
+                isLoading: _isBusy,
+                hasReachedMax:
+                    _postCount != null && _posts.length >= _postCount!,
+                onFetchData: _fetchPosts,
+                itemBuilder: (context, idx) {
+                  return GestureDetector(
+                    child: PostItem(
+                      data: _posts[idx],
+                      maxWidth: 640,
+                      onChanged: (data) {
+                        setState(() => _posts[idx] = data);
+                      },
+                      onDeleted: () {
+                        _posts.clear();
+                        _fetchPosts();
+                      },
+                    ),
+                    onTap: () {
+                      GoRouter.of(context).pushNamed(
+                        'postDetail',
+                        pathParameters: {'slug': _posts[idx].id.toString()},
+                        extra: _posts[idx],
+                      );
+                    },
                   );
                 },
-              );
-            },
-            separatorBuilder: (context, index) => const Divider(height: 1),
+                separatorBuilder: (context, index) => const Divider(height: 1),
+              ),
+              InfiniteList(
+                itemCount: _posts.where((e) => e.type == 'story').length,
+                isLoading: _isBusy,
+                hasReachedMax:
+                    _postCount != null && _posts.length >= _postCount!,
+                onFetchData: _fetchPosts,
+                itemBuilder: (context, idx) {
+                  return GestureDetector(
+                    child: PostItem(
+                      data:
+                          _posts.where((e) => e.type == 'story').elementAt(idx),
+                      maxWidth: 640,
+                      onChanged: (data) {
+                        setState(() => _posts[idx] = data);
+                      },
+                      onDeleted: () {
+                        _posts.clear();
+                        _fetchPosts();
+                      },
+                    ),
+                    onTap: () {
+                      GoRouter.of(context).pushNamed(
+                        'postDetail',
+                        pathParameters: {'slug': _posts[idx].id.toString()},
+                        extra: _posts[idx],
+                      );
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(height: 1),
+              ),
+              InfiniteList(
+                itemCount: _posts.where((e) => e.type == 'article').length,
+                isLoading: _isBusy,
+                hasReachedMax:
+                    _postCount != null && _posts.length >= _postCount!,
+                onFetchData: _fetchPosts,
+                itemBuilder: (context, idx) {
+                  return GestureDetector(
+                    child: PostItem(
+                      data: _posts
+                          .where((e) => e.type == 'article')
+                          .elementAt(idx),
+                      maxWidth: 640,
+                      onChanged: (data) {
+                        setState(() => _posts[idx] = data);
+                      },
+                      onDeleted: () {
+                        _posts.clear();
+                        _fetchPosts();
+                      },
+                    ),
+                    onTap: () {
+                      GoRouter.of(context).pushNamed(
+                        'postDetail',
+                        pathParameters: {'slug': _posts[idx].id.toString()},
+                        extra: _posts[idx],
+                      );
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(height: 1),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
