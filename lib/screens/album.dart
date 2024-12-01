@@ -116,7 +116,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
           ),
           if (_isBusy)
             SliverToBoxAdapter(
-              child: const CircularProgressIndicator().padding(all: 24),
+              child:
+                  const CircularProgressIndicator().padding(all: 24).center(),
             ),
         ],
       ),

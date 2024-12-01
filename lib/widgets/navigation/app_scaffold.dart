@@ -65,6 +65,9 @@ class AppRootScaffold extends StatelessWidget {
         NavigationProvider.kShowBottomNavScreen.contains(routeName)
             ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
             : false;
+    final isPopable = !NavigationProvider.kAllDestination
+        .map((ele) => ele.screen)
+        .contains(routeName);
 
     final innerWidget = isCollapseDrawer
         ? body
@@ -97,6 +100,7 @@ class AppRootScaffold extends StatelessWidget {
           ],
         ),
         drawer: !isExpandDrawer ? AppNavigationDrawer() : null,
+        drawerEdgeDragWidth: isPopable ? 0 : null,
         bottomNavigationBar:
             isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),
