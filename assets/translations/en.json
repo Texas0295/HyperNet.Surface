@@ -99,6 +99,8 @@
   "publishersNew": "New Publisher",
   "publisherNewSubtitle": "Create a new publisher identity.",
   "publisherSyncWithAccount": "Sync with account",
+  "fieldPublisherBelongToRealm": "Belongs to",
+  "fieldPublisherBelongToRealmUnset": "Unset Publisher Belongs to Realm",
   "writePostTypeStory": "Post a story",
   "writePostTypeArticle": "Write an article",
   "fieldPostPublisher": "Post publisher",

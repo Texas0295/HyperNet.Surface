@@ -267,11 +267,14 @@ class _AccountPublisherEditScreenState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton.icon(
-                  onPressed: _syncWithAccount,
-                  label: Text('publisherSyncWithAccount').tr(),
-                  icon: const Icon(Symbols.sync),
-                ),
+                if (_publisher?.type == 0)
+                  TextButton.icon(
+                    onPressed: _syncWithAccount,
+                    label: Text('publisherSyncWithAccount').tr(),
+                    icon: const Icon(Symbols.sync),
+                  )
+                else
+                  const SizedBox(),
                 ElevatedButton.icon(
                   onPressed: _isBusy ? null : _performAction,
                   label: Text('apply').tr(),
