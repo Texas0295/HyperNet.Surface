@@ -2326,3 +2326,263 @@ abstract class _SnPublisher implements SnPublisher {
   _$$SnPublisherImplCopyWith<_$SnPublisherImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+SnSubscription _$SnSubscriptionFromJson(Map<String, dynamic> json) {
+  return _SnSubscription.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnSubscription {
+  int get id => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get deletedAt => throw _privateConstructorUsedError;
+  int get followerId => throw _privateConstructorUsedError;
+  int get accountId => throw _privateConstructorUsedError;
+
+  /// Serializes this SnSubscription to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnSubscription
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnSubscriptionCopyWith<SnSubscription> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnSubscriptionCopyWith<$Res> {
+  factory $SnSubscriptionCopyWith(
+          SnSubscription value, $Res Function(SnSubscription) then) =
+      _$SnSubscriptionCopyWithImpl<$Res, SnSubscription>;
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      int followerId,
+      int accountId});
+}
+
+/// @nodoc
+class _$SnSubscriptionCopyWithImpl<$Res, $Val extends SnSubscription>
+    implements $SnSubscriptionCopyWith<$Res> {
+  _$SnSubscriptionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnSubscription
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? followerId = null,
+    Object? accountId = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      followerId: null == followerId
+          ? _value.followerId
+          : followerId // ignore: cast_nullable_to_non_nullable
+              as int,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnSubscriptionImplCopyWith<$Res>
+    implements $SnSubscriptionCopyWith<$Res> {
+  factory _$$SnSubscriptionImplCopyWith(_$SnSubscriptionImpl value,
+          $Res Function(_$SnSubscriptionImpl) then) =
+      __$$SnSubscriptionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      int followerId,
+      int accountId});
+}
+
+/// @nodoc
+class __$$SnSubscriptionImplCopyWithImpl<$Res>
+    extends _$SnSubscriptionCopyWithImpl<$Res, _$SnSubscriptionImpl>
+    implements _$$SnSubscriptionImplCopyWith<$Res> {
+  __$$SnSubscriptionImplCopyWithImpl(
+      _$SnSubscriptionImpl _value, $Res Function(_$SnSubscriptionImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnSubscription
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? followerId = null,
+    Object? accountId = null,
+  }) {
+    return _then(_$SnSubscriptionImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      followerId: null == followerId
+          ? _value.followerId
+          : followerId // ignore: cast_nullable_to_non_nullable
+              as int,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnSubscriptionImpl implements _SnSubscription {
+  const _$SnSubscriptionImpl(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.followerId,
+      required this.accountId});
+
+  factory _$SnSubscriptionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnSubscriptionImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
+  final DateTime? deletedAt;
+  @override
+  final int followerId;
+  @override
+  final int accountId;
+
+  @override
+  String toString() {
+    return 'SnSubscription(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, followerId: $followerId, accountId: $accountId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnSubscriptionImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt) &&
+            (identical(other.followerId, followerId) ||
+                other.followerId == followerId) &&
+            (identical(other.accountId, accountId) ||
+                other.accountId == accountId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, createdAt, updatedAt, deletedAt, followerId, accountId);
+
+  /// Create a copy of SnSubscription
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnSubscriptionImplCopyWith<_$SnSubscriptionImpl> get copyWith =>
+      __$$SnSubscriptionImplCopyWithImpl<_$SnSubscriptionImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnSubscriptionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnSubscription implements SnSubscription {
+  const factory _SnSubscription(
+      {required final int id,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
+      required final DateTime? deletedAt,
+      required final int followerId,
+      required final int accountId}) = _$SnSubscriptionImpl;
+
+  factory _SnSubscription.fromJson(Map<String, dynamic> json) =
+      _$SnSubscriptionImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  DateTime? get deletedAt;
+  @override
+  int get followerId;
+  @override
+  int get accountId;
+
+  /// Create a copy of SnSubscription
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnSubscriptionImplCopyWith<_$SnSubscriptionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

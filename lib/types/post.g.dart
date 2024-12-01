@@ -218,3 +218,26 @@ Map<String, dynamic> _$$SnPublisherImplToJson(_$SnPublisherImpl instance) =>
       'realm_id': instance.realmId,
       'account_id': instance.accountId,
     };
+
+_$SnSubscriptionImpl _$$SnSubscriptionImplFromJson(Map<String, dynamic> json) =>
+    _$SnSubscriptionImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      followerId: (json['follower_id'] as num).toInt(),
+      accountId: (json['account_id'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$SnSubscriptionImplToJson(
+        _$SnSubscriptionImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'follower_id': instance.followerId,
+      'account_id': instance.accountId,
+    };

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -51,6 +53,63 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
     }
   }
 
+  bool _isSubscribing = false;
+  SnSubscription? _subscription;
+
+  Future<void> _fetchSubscription() async {
+    try {
+      setState(() => _isSubscribing = true);
+
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get(
+        '/cgi/co/subscriptions/users/${_publisher!.id}',
+      );
+      if (!mounted) return;
+      _subscription = SnSubscription.fromJson(resp.data);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isSubscribing = false);
+    }
+  }
+
+  Future<void> _toggleSubscription() async {
+    if (_subscription == null) {
+      try {
+        setState(() => _isSubscribing = true);
+
+        final sn = context.read<SnNetworkProvider>();
+        final resp = await sn.client.post(
+          '/cgi/co/subscriptions/users/${_publisher!.id}',
+        );
+        if (!mounted) return;
+        _subscription = SnSubscription.fromJson(resp.data);
+      } catch (err) {
+        if (!mounted) return;
+        context.showErrorDialog(err);
+      } finally {
+        setState(() => _isSubscribing = false);
+      }
+    } else {
+      try {
+        setState(() => _isSubscribing = true);
+
+        final sn = context.read<SnNetworkProvider>();
+        await sn.client.delete(
+          '/cgi/co/subscriptions/users/${_publisher!.id}',
+        );
+        if (!mounted) return;
+        _subscription = null;
+      } catch (err) {
+        if (!mounted) return;
+        context.showErrorDialog(err);
+      } finally {
+        setState(() => _isSubscribing = false);
+      }
+    }
+  }
+
   double _appBarBlur = 0.0;
 
   late final _appBarWidth = MediaQuery.of(context).size.width;
@@ -95,6 +154,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
     super.initState();
     _fetchPublisher().then((_) {
       _fetchPosts();
+      _fetchSubscription();
     });
     _scrollController.addListener(_updateAppBarBlur);
   }
@@ -233,12 +293,28 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> {
                                       ],
                                     ),
                                   ),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                        elevation: WidgetStatePropertyAll(0)),
-                                    onPressed: () {},
-                                    child: Text('subscribe').tr(),
-                                  ),
+                                  if (_subscription == null)
+                                    ElevatedButton.icon(
+                                      style: ButtonStyle(
+                                        elevation: WidgetStatePropertyAll(0),
+                                      ),
+                                      onPressed: _isSubscribing
+                                          ? null
+                                          : _toggleSubscription,
+                                      label: Text('subscribe').tr(),
+                                      icon: const Icon(Symbols.add),
+                                    )
+                                  else
+                                    OutlinedButton.icon(
+                                      style: ButtonStyle(
+                                        elevation: WidgetStatePropertyAll(0),
+                                      ),
+                                      onPressed: _isSubscribing
+                                          ? null
+                                          : _toggleSubscription,
+                                      label: Text('unsubscribe').tr(),
+                                      icon: const Icon(Symbols.remove),
+                                    ),
                                 ],
                               ).padding(right: 8),
                               const Gap(12),

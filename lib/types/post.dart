@@ -125,3 +125,18 @@ class SnPublisher with _$SnPublisher {
   factory SnPublisher.fromJson(Map<String, Object?> json) =>
       _$SnPublisherFromJson(json);
 }
+
+@freezed
+class SnSubscription with _$SnSubscription {
+  const factory SnSubscription({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required int followerId,
+    required int accountId,
+  }) = _SnSubscription;
+
+  factory SnSubscription.fromJson(Map<String, Object?> json) =>
+      _$SnSubscriptionFromJson(json);
+}
