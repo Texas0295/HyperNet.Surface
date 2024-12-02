@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -396,7 +397,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                     ],
                   ),
                   SliverToBoxAdapter(child: const Divider(height: 1)),
-                  Gap(MediaQuery.of(context).padding.top),
+                  Gap(math.max(MediaQuery.of(context).padding.top, 50)),
                 ],
               ),
             ),

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -277,7 +279,7 @@ class _PostContentHeader extends StatelessWidget {
               context: context,
               transition: PopoverTransition.other,
               bodyBuilder: (context) => SizedBox(
-                width: 400,
+                width: math.min(400, MediaQuery.of(context).size.width - 10),
                 child: PublisherPopoverCard(
                   data: data.publisher,
                 ),
@@ -507,16 +509,9 @@ class _PostTruncatedHint extends StatelessWidget {
               const Gap(4),
               Text(
                 'postTotalLength'.plural(data.body['content_length']),
-              ).padding(right: 12)
+              )
             ],
           ),
-        Row(
-          children: [
-            const Icon(Symbols.unfold_more, size: 20),
-            const Gap(4),
-            Text('postReadMore').tr(),
-          ],
-        )
       ],
     ).opacity(0.75);
   }
