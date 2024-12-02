@@ -79,7 +79,7 @@ final _appRoutes = [
             ),
           ),
           GoRoute(
-            path: '/pub/:name',
+            path: '/publishers/:name',
             name: 'postPublisher',
             builder: (context, state) => AppBackground(
               child: PostPublisherScreen(name: state.pathParameters['name']!),

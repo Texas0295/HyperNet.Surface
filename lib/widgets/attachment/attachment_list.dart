@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +38,10 @@ class _AttachmentListState extends State<AttachmentList> {
     (_) => const Uuid().v4(),
   );
 
+  static const double kAttachmentMaxWidth = 640;
+
   @override
   Widget build(BuildContext context) {
-    final aspectRatio = widget.data[0]?.metadata['ratio']?.toDouble() ?? 1;
-
     return LayoutBuilder(
       builder: (context, layoutConstraints) {
         final borderSide = widget.bordered
@@ -48,98 +50,40 @@ class _AttachmentListState extends State<AttachmentList> {
         final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
         final constraints = BoxConstraints(
           minWidth: 80,
-          maxWidth: layoutConstraints.maxWidth - 20,
           maxHeight: widget.maxHeight ?? double.infinity,
+          maxWidth: layoutConstraints.maxWidth - 20,
         );
 
         if (widget.data.isEmpty) return const SizedBox.shrink();
         if (widget.data.length == 1) {
-          return AspectRatio(
-            aspectRatio: widget.data[0]?.metadata['ratio']?.toDouble() ??
-                switch (widget.data[0]?.mimetype.split('/').firstOrNull) {
-                  'audio' => 16 / 9,
-                  'video' => 16 / 9,
-                  _ => 1,
-                },
-            child: GestureDetector(
-              child: Builder(
-                builder: (context) {
-                  if (ResponsiveBreakpoints.of(context).largerThan(MOBILE) ||
-                      widget.noGrow) {
-                    return Padding(
-                      // Single child list-like displaying
-                      padding: widget.listPadding ?? EdgeInsets.zero,
-                      child: Container(
-                        constraints: constraints,
-                        decoration: BoxDecoration(
-                          color: backgroundColor,
-                          border: Border(top: borderSide, bottom: borderSide),
-                          borderRadius: AttachmentList.kDefaultRadius,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: AttachmentList.kDefaultRadius,
-                          child: AttachmentItem(
-                            data: widget.data[0],
-                            heroTag: heroTags[0],
-                          ),
-                        ),
-                      ),
-                    );
-                  }
+          final singleAspectRatio =
+              widget.data[0]?.metadata['ratio']?.toDouble() ??
+                  switch (widget.data[0]?.mimetype.split('/').firstOrNull) {
+                    'audio' => 16 / 9,
+                    'video' => 16 / 9,
+                    _ => 1,
+                  };
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      border: Border(top: borderSide, bottom: borderSide),
+          return Container(
+            constraints: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                ? constraints.copyWith(
+                    maxWidth: math.min(
+                      constraints.maxWidth,
+                      kAttachmentMaxWidth,
                     ),
-                    child: AttachmentItem(
-                      data: widget.data[0],
-                      heroTag: heroTags.first,
-                    ),
-                  );
-                },
-              ),
-              onTap: () {
-                context.pushTransparentRoute(
-                  AttachmentZoomView(
-                    data: widget.data.where((ele) => ele != null).cast(),
-                    initialIndex: 0,
-                    heroTags: heroTags,
-                  ),
-                  backgroundColor: Colors.black.withOpacity(0.7),
-                  rootNavigator: true,
-                );
-              },
-            ),
-          );
-        }
-
-        return AspectRatio(
-          aspectRatio: aspectRatio,
-          child: Container(
-            constraints: BoxConstraints(maxHeight: widget.maxHeight ?? 320),
-            child: ScrollConfiguration(
-              behavior: _AttachmentListScrollBehavior(),
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: widget.data.length,
-                itemBuilder: (context, idx) {
-                  return GestureDetector(
-                    onTap: () {
-                      context.pushTransparentRoute(
-                        AttachmentZoomView(
-                          data: widget.data.where((ele) => ele != null).cast(),
-                          initialIndex: idx,
-                          heroTags: heroTags,
-                        ),
-                        backgroundColor: Colors.black.withOpacity(0.7),
-                        rootNavigator: true,
-                      );
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                          constraints: constraints,
+                  )
+                : null,
+            child: AspectRatio(
+              aspectRatio: singleAspectRatio,
+              child: GestureDetector(
+                child: Builder(
+                  builder: (context) {
+                    if (ResponsiveBreakpoints.of(context).largerThan(MOBILE) ||
+                        widget.noGrow) {
+                      return Padding(
+                        // Single child list-like displaying
+                        padding: widget.listPadding ?? EdgeInsets.zero,
+                        child: Container(
                           decoration: BoxDecoration(
                             color: backgroundColor,
                             border: Border(top: borderSide, bottom: borderSide),
@@ -148,19 +92,100 @@ class _AttachmentListState extends State<AttachmentList> {
                           child: ClipRRect(
                             borderRadius: AttachmentList.kDefaultRadius,
                             child: AttachmentItem(
-                              data: widget.data[idx],
-                              heroTag: heroTags[idx],
+                              data: widget.data[0],
+                              heroTag: heroTags[0],
                             ),
                           ),
                         ),
-                        Positioned(
-                          right: 8,
-                          bottom: 12,
-                          child: Chip(
-                            label: Text('${idx + 1}/${widget.data.length}'),
-                          ),
+                      );
+                    }
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        border: Border(top: borderSide, bottom: borderSide),
+                      ),
+                      child: AttachmentItem(
+                        data: widget.data[0],
+                        heroTag: heroTags.first,
+                      ),
+                    );
+                  },
+                ),
+                onTap: () {
+                  context.pushTransparentRoute(
+                    AttachmentZoomView(
+                      data: widget.data.where((ele) => ele != null).cast(),
+                      initialIndex: 0,
+                      heroTags: heroTags,
+                    ),
+                    backgroundColor: Colors.black.withOpacity(0.7),
+                    rootNavigator: true,
+                  );
+                },
+              ),
+            ),
+          );
+        }
+
+        return AspectRatio(
+          aspectRatio: widget.data.firstOrNull?.metadata['ratio'] ?? 1,
+          child: Container(
+            constraints: BoxConstraints(maxHeight: constraints.maxHeight),
+            child: ScrollConfiguration(
+              behavior: _AttachmentListScrollBehavior(),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: widget.data.length,
+                itemBuilder: (context, idx) {
+                  return Container(
+                    constraints: constraints,
+                    child: AspectRatio(
+                      aspectRatio: widget.data[idx]?.metadata['ratio'] ?? 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          context.pushTransparentRoute(
+                            AttachmentZoomView(
+                              data: widget.data
+                                  .where((ele) => ele != null)
+                                  .cast(),
+                              initialIndex: idx,
+                              heroTags: heroTags,
+                            ),
+                            backgroundColor: Colors.black.withOpacity(0.7),
+                            rootNavigator: true,
+                          );
+                        },
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: backgroundColor,
+                                border: Border(
+                                  top: borderSide,
+                                  bottom: borderSide,
+                                ),
+                                borderRadius: AttachmentList.kDefaultRadius,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: AttachmentList.kDefaultRadius,
+                                child: AttachmentItem(
+                                  data: widget.data[idx],
+                                  heroTag: heroTags[idx],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 8,
+                              bottom: 8,
+                              child: Chip(
+                                label: Text('${idx + 1}/${widget.data.length}'),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   );
                 },

@@ -142,7 +142,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 16,
+            bottom: 16 + MediaQuery.of(context).padding.bottom,
             child: Material(
               color: Colors.transparent,
               child: Builder(builder: (context) {

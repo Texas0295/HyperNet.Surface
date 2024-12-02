@@ -83,7 +83,7 @@ class PostItem extends StatelessWidget {
           AttachmentList(
             data: data.preload!.attachments!,
             bordered: true,
-            maxHeight: 480,
+            maxHeight: 560,
             listPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
         Container(

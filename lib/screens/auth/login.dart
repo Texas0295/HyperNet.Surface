@@ -154,13 +154,9 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
       sn.setTokenPair(atk, rtk);
       if (!mounted) return;
       final user = context.read<UserProvider>();
-      final userinfo = await user.refreshUser();
-      context.showSnackbar('loginSuccess'.tr(args: [
-        '@${userinfo!.name} (${userinfo.nick})',
-      ]));
-      await Future.delayed(const Duration(milliseconds: 1850), () {
-        Navigator.pop(context);
-      });
+      await user.refreshUser();
+      if (!mounted) return;
+      Navigator.pop(context, true);
     } catch (err) {
       context.showErrorDialog(err);
       return;

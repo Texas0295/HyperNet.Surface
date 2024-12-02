@@ -157,7 +157,14 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
           leading: const Icon(Symbols.login),
           trailing: const Icon(Symbols.chevron_right),
           onTap: () {
-            GoRouter.of(context).pushNamed('authLogin');
+            GoRouter.of(context).pushNamed('authLogin').then((value) {
+              if (value == true && context.mounted) {
+                final ua = context.read<UserProvider>();
+                context.showSnackbar('loginSuccess'.tr(args: [
+                  '@${ua.user?.name} (${ua.user?.nick})',
+                ]));
+              }
+            });
           },
         ),
         ListTile(
