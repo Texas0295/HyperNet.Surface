@@ -353,5 +353,10 @@
   "subscribe": "订阅",
   "unsubscribe": "取消订阅",
   "attachmentUploadBy": "上传者",
-  "attachmentShotOn": "由 {} 拍摄"
+  "attachmentShotOn": "由 {} 拍摄",
+  "accountJoinedAt": "加入于 {}",
+  "accountBirthday": "出生于 {}",
+  "accountBadge": "徽章",
+  "badgeCompanyStaff": "索尔辛茨士大夫 · Staff",
+  "badgeSiteMigration": "Solar Network 原住民"
 }

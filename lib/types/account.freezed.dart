@@ -34,6 +34,7 @@ mixin _$SnAccount {
   String get nick => throw _privateConstructorUsedError;
   Map<String, dynamic> get permNodes => throw _privateConstructorUsedError;
   SnAccountProfile? get profile => throw _privateConstructorUsedError;
+  List<SnAccountBadge> get badges => throw _privateConstructorUsedError;
   DateTime? get suspendedAt => throw _privateConstructorUsedError;
   int? get affiliatedId => throw _privateConstructorUsedError;
   int? get affiliatedTo => throw _privateConstructorUsedError;
@@ -69,6 +70,7 @@ abstract class $SnAccountCopyWith<$Res> {
       String nick,
       Map<String, dynamic> permNodes,
       SnAccountProfile? profile,
+      List<SnAccountBadge> badges,
       DateTime? suspendedAt,
       int? affiliatedId,
       int? affiliatedTo,
@@ -106,6 +108,7 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
     Object? nick = null,
     Object? permNodes = null,
     Object? profile = freezed,
+    Object? badges = null,
     Object? suspendedAt = freezed,
     Object? affiliatedId = freezed,
     Object? affiliatedTo = freezed,
@@ -165,6 +168,10 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
               as SnAccountProfile?,
+      badges: null == badges
+          ? _value.badges
+          : badges // ignore: cast_nullable_to_non_nullable
+              as List<SnAccountBadge>,
       suspendedAt: freezed == suspendedAt
           ? _value.suspendedAt
           : suspendedAt // ignore: cast_nullable_to_non_nullable
@@ -225,6 +232,7 @@ abstract class _$$SnAccountImplCopyWith<$Res>
       String nick,
       Map<String, dynamic> permNodes,
       SnAccountProfile? profile,
+      List<SnAccountBadge> badges,
       DateTime? suspendedAt,
       int? affiliatedId,
       int? affiliatedTo,
@@ -261,6 +269,7 @@ class __$$SnAccountImplCopyWithImpl<$Res>
     Object? nick = null,
     Object? permNodes = null,
     Object? profile = freezed,
+    Object? badges = null,
     Object? suspendedAt = freezed,
     Object? affiliatedId = freezed,
     Object? affiliatedTo = freezed,
@@ -320,6 +329,10 @@ class __$$SnAccountImplCopyWithImpl<$Res>
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
               as SnAccountProfile?,
+      badges: null == badges
+          ? _value._badges
+          : badges // ignore: cast_nullable_to_non_nullable
+              as List<SnAccountBadge>,
       suspendedAt: freezed == suspendedAt
           ? _value.suspendedAt
           : suspendedAt // ignore: cast_nullable_to_non_nullable
@@ -361,6 +374,7 @@ class _$SnAccountImpl extends _SnAccount {
       required this.nick,
       required final Map<String, dynamic> permNodes,
       required this.profile,
+      final List<SnAccountBadge> badges = const [],
       required this.suspendedAt,
       required this.affiliatedId,
       required this.affiliatedTo,
@@ -368,6 +382,7 @@ class _$SnAccountImpl extends _SnAccount {
       required this.automatedId})
       : _contacts = contacts,
         _permNodes = permNodes,
+        _badges = badges,
         super._();
 
   factory _$SnAccountImpl.fromJson(Map<String, dynamic> json) =>
@@ -414,6 +429,15 @@ class _$SnAccountImpl extends _SnAccount {
 
   @override
   final SnAccountProfile? profile;
+  final List<SnAccountBadge> _badges;
+  @override
+  @JsonKey()
+  List<SnAccountBadge> get badges {
+    if (_badges is EqualUnmodifiableListView) return _badges;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_badges);
+  }
+
   @override
   final DateTime? suspendedAt;
   @override
@@ -427,7 +451,7 @@ class _$SnAccountImpl extends _SnAccount {
 
   @override
   String toString() {
-    return 'SnAccount(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, confirmedAt: $confirmedAt, contacts: $contacts, avatar: $avatar, banner: $banner, description: $description, name: $name, nick: $nick, permNodes: $permNodes, profile: $profile, suspendedAt: $suspendedAt, affiliatedId: $affiliatedId, affiliatedTo: $affiliatedTo, automatedBy: $automatedBy, automatedId: $automatedId)';
+    return 'SnAccount(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, confirmedAt: $confirmedAt, contacts: $contacts, avatar: $avatar, banner: $banner, description: $description, name: $name, nick: $nick, permNodes: $permNodes, profile: $profile, badges: $badges, suspendedAt: $suspendedAt, affiliatedId: $affiliatedId, affiliatedTo: $affiliatedTo, automatedBy: $automatedBy, automatedId: $automatedId)';
   }
 
   @override
@@ -454,6 +478,7 @@ class _$SnAccountImpl extends _SnAccount {
             const DeepCollectionEquality()
                 .equals(other._permNodes, _permNodes) &&
             (identical(other.profile, profile) || other.profile == profile) &&
+            const DeepCollectionEquality().equals(other._badges, _badges) &&
             (identical(other.suspendedAt, suspendedAt) ||
                 other.suspendedAt == suspendedAt) &&
             (identical(other.affiliatedId, affiliatedId) ||
@@ -468,26 +493,28 @@ class _$SnAccountImpl extends _SnAccount {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      createdAt,
-      updatedAt,
-      deletedAt,
-      confirmedAt,
-      const DeepCollectionEquality().hash(_contacts),
-      avatar,
-      banner,
-      description,
-      name,
-      nick,
-      const DeepCollectionEquality().hash(_permNodes),
-      profile,
-      suspendedAt,
-      affiliatedId,
-      affiliatedTo,
-      automatedBy,
-      automatedId);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        createdAt,
+        updatedAt,
+        deletedAt,
+        confirmedAt,
+        const DeepCollectionEquality().hash(_contacts),
+        avatar,
+        banner,
+        description,
+        name,
+        nick,
+        const DeepCollectionEquality().hash(_permNodes),
+        profile,
+        const DeepCollectionEquality().hash(_badges),
+        suspendedAt,
+        affiliatedId,
+        affiliatedTo,
+        automatedBy,
+        automatedId
+      ]);
 
   /// Create a copy of SnAccount
   /// with the given fields replaced by the non-null parameter values.
@@ -520,6 +547,7 @@ abstract class _SnAccount extends SnAccount {
       required final String nick,
       required final Map<String, dynamic> permNodes,
       required final SnAccountProfile? profile,
+      final List<SnAccountBadge> badges,
       required final DateTime? suspendedAt,
       required final int? affiliatedId,
       required final int? affiliatedTo,
@@ -557,6 +585,8 @@ abstract class _SnAccount extends SnAccount {
   Map<String, dynamic> get permNodes;
   @override
   SnAccountProfile? get profile;
+  @override
+  List<SnAccountBadge> get badges;
   @override
   DateTime? get suspendedAt;
   @override
@@ -1663,5 +1693,297 @@ abstract class _SnRelationship implements SnRelationship {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SnRelationshipImplCopyWith<_$SnRelationshipImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SnAccountBadge _$SnAccountBadgeFromJson(Map<String, dynamic> json) {
+  return _SnAccountBadge.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnAccountBadge {
+  int get id => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  dynamic get deletedAt => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  int get accountId => throw _privateConstructorUsedError;
+  Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
+
+  /// Serializes this SnAccountBadge to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnAccountBadge
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnAccountBadgeCopyWith<SnAccountBadge> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnAccountBadgeCopyWith<$Res> {
+  factory $SnAccountBadgeCopyWith(
+          SnAccountBadge value, $Res Function(SnAccountBadge) then) =
+      _$SnAccountBadgeCopyWithImpl<$Res, SnAccountBadge>;
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      dynamic deletedAt,
+      String type,
+      int accountId,
+      Map<String, dynamic> metadata});
+}
+
+/// @nodoc
+class _$SnAccountBadgeCopyWithImpl<$Res, $Val extends SnAccountBadge>
+    implements $SnAccountBadgeCopyWith<$Res> {
+  _$SnAccountBadgeCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnAccountBadge
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? type = null,
+    Object? accountId = null,
+    Object? metadata = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnAccountBadgeImplCopyWith<$Res>
+    implements $SnAccountBadgeCopyWith<$Res> {
+  factory _$$SnAccountBadgeImplCopyWith(_$SnAccountBadgeImpl value,
+          $Res Function(_$SnAccountBadgeImpl) then) =
+      __$$SnAccountBadgeImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      dynamic deletedAt,
+      String type,
+      int accountId,
+      Map<String, dynamic> metadata});
+}
+
+/// @nodoc
+class __$$SnAccountBadgeImplCopyWithImpl<$Res>
+    extends _$SnAccountBadgeCopyWithImpl<$Res, _$SnAccountBadgeImpl>
+    implements _$$SnAccountBadgeImplCopyWith<$Res> {
+  __$$SnAccountBadgeImplCopyWithImpl(
+      _$SnAccountBadgeImpl _value, $Res Function(_$SnAccountBadgeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnAccountBadge
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? type = null,
+    Object? accountId = null,
+    Object? metadata = null,
+  }) {
+    return _then(_$SnAccountBadgeImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+      metadata: null == metadata
+          ? _value._metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnAccountBadgeImpl implements _SnAccountBadge {
+  const _$SnAccountBadgeImpl(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.type,
+      required this.accountId,
+      final Map<String, dynamic> metadata = const {}})
+      : _metadata = metadata;
+
+  factory _$SnAccountBadgeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnAccountBadgeImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
+  final dynamic deletedAt;
+  @override
+  final String type;
+  @override
+  final int accountId;
+  final Map<String, dynamic> _metadata;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get metadata {
+    if (_metadata is EqualUnmodifiableMapView) return _metadata;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_metadata);
+  }
+
+  @override
+  String toString() {
+    return 'SnAccountBadge(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, accountId: $accountId, metadata: $metadata)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnAccountBadgeImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            const DeepCollectionEquality().equals(other.deletedAt, deletedAt) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.accountId, accountId) ||
+                other.accountId == accountId) &&
+            const DeepCollectionEquality().equals(other._metadata, _metadata));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      createdAt,
+      updatedAt,
+      const DeepCollectionEquality().hash(deletedAt),
+      type,
+      accountId,
+      const DeepCollectionEquality().hash(_metadata));
+
+  /// Create a copy of SnAccountBadge
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnAccountBadgeImplCopyWith<_$SnAccountBadgeImpl> get copyWith =>
+      __$$SnAccountBadgeImplCopyWithImpl<_$SnAccountBadgeImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnAccountBadgeImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnAccountBadge implements SnAccountBadge {
+  const factory _SnAccountBadge(
+      {required final int id,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
+      required final dynamic deletedAt,
+      required final String type,
+      required final int accountId,
+      final Map<String, dynamic> metadata}) = _$SnAccountBadgeImpl;
+
+  factory _SnAccountBadge.fromJson(Map<String, dynamic> json) =
+      _$SnAccountBadgeImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  dynamic get deletedAt;
+  @override
+  String get type;
+  @override
+  int get accountId;
+  @override
+  Map<String, dynamic> get metadata;
+
+  /// Create a copy of SnAccountBadge
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnAccountBadgeImplCopyWith<_$SnAccountBadgeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

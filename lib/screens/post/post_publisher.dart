@@ -359,7 +359,14 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                       child: Text('publisherRunBy').tr(args: [
                                         '@${_account?.name ?? 'unknown'}',
                                       ]),
-                                      onTap: () {},
+                                      onTap: () {
+                                        GoRouter.of(context).pushNamed(
+                                          'accountProfilePage',
+                                          pathParameters: {
+                                            'name': _account!.name,
+                                          },
+                                        );
+                                      },
                                     ),
                                     const Gap(8),
                                     AccountImage(

@@ -29,6 +29,10 @@ _$SnAccountImpl _$$SnAccountImplFromJson(Map<String, dynamic> json) =>
       profile: json['profile'] == null
           ? null
           : SnAccountProfile.fromJson(json['profile'] as Map<String, dynamic>),
+      badges: (json['badges'] as List<dynamic>?)
+              ?.map((e) => SnAccountBadge.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       suspendedAt: json['suspended_at'] == null
           ? null
           : DateTime.parse(json['suspended_at'] as String),
@@ -53,6 +57,7 @@ Map<String, dynamic> _$$SnAccountImplToJson(_$SnAccountImpl instance) =>
       'nick': instance.nick,
       'perm_nodes': instance.permNodes,
       'profile': instance.profile?.toJson(),
+      'badges': instance.badges.map((e) => e.toJson()).toList(),
       'suspended_at': instance.suspendedAt?.toIso8601String(),
       'affiliated_id': instance.affiliatedId,
       'affiliated_to': instance.affiliatedTo,
@@ -163,4 +168,27 @@ Map<String, dynamic> _$$SnRelationshipImplToJson(
       'related': instance.related?.toJson(),
       'status': instance.status,
       'perm_nodes': instance.permNodes,
+    };
+
+_$SnAccountBadgeImpl _$$SnAccountBadgeImplFromJson(Map<String, dynamic> json) =>
+    _$SnAccountBadgeImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'],
+      type: json['type'] as String,
+      accountId: (json['account_id'] as num).toInt(),
+      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
+    );
+
+Map<String, dynamic> _$$SnAccountBadgeImplToJson(
+        _$SnAccountBadgeImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt,
+      'type': instance.type,
+      'account_id': instance.accountId,
+      'metadata': instance.metadata,
     };

@@ -22,6 +22,7 @@ class SnAccount with _$SnAccount {
     required String nick,
     required Map<String, dynamic> permNodes,
     required SnAccountProfile? profile,
+    @Default([]) List<SnAccountBadge> badges,
     required DateTime? suspendedAt,
     required int? affiliatedId,
     required int? affiliatedTo,
@@ -88,4 +89,20 @@ class SnRelationship with _$SnRelationship {
 
   factory SnRelationship.fromJson(Map<String, Object?> json) =>
       _$SnRelationshipFromJson(json);
+}
+
+@freezed
+class SnAccountBadge with _$SnAccountBadge {
+  const factory SnAccountBadge({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required dynamic deletedAt,
+    required String type,
+    required int accountId,
+    @Default({}) Map<String, dynamic> metadata,
+  }) = _SnAccountBadge;
+
+  factory SnAccountBadge.fromJson(Map<String, Object?> json) =>
+      _$SnAccountBadgeFromJson(json);
 }

@@ -102,7 +102,7 @@
   "publisherTotalUpvote": "Upvote",
   "publisherTotalDownvote": "Downvote",
   "publisherSocialPoint": "Social Point",
-  "publisherJoinedAt": "Joined At {}",
+  "publisherJoinedAt": "Joined at {}",
   "publisherSocialPointTotal": {
     "zero": "No social point",
     "one": "{} social point",
@@ -353,5 +353,10 @@
   "subscribe": "Subscribe",
   "unsubscribe": "Unsubscribe",
   "attachmentUploadBy": "Upload by",
-  "attachmentShotOn": "Shot on {}"
+  "attachmentShotOn": "Shot on {}",
+  "accountJoinedAt": "Joined at {}",
+  "accountBirthday": "Born on {}",
+  "accountBadge": "Badge",
+  "badgeCompanyStaff": "Solsynth LLC Staff",
+  "badgeSiteMigration": "Solar Network Native"
 }
