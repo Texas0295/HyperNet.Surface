@@ -109,7 +109,7 @@ PODS:
     - SAMKeychain
   - flutter_webrtc (0.12.2):
     - Flutter
-    - WebRTC-SDK (= 125.6422.05)
+    - WebRTC-SDK (= 125.6422.06)
   - GoogleAppMeasurement (11.4.0):
     - GoogleAppMeasurement/AdIdSupport (= 11.4.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
@@ -164,7 +164,7 @@ PODS:
     - Flutter
   - livekit_client (2.3.1):
     - Flutter
-    - WebRTC-SDK (= 125.6422.05)
+    - WebRTC-SDK (= 125.6422.06)
   - media_kit_libs_ios_video (1.0.4):
     - Flutter
   - media_kit_native_event_loop (1.0.0):
@@ -210,7 +210,7 @@ PODS:
     - Flutter
   - wakelock_plus (0.0.1):
     - Flutter
-  - WebRTC-SDK (125.6422.05)
+  - WebRTC-SDK (125.6422.06)
 
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
@@ -341,12 +341,12 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_native_splash: e8a1e01082d97a8099d973f919f57904c925008a
   flutter_udid: a2482c67a61b9c806ef59dd82ed8d007f1b7ac04
-  flutter_webrtc: 043d1b47e9795158dd97dc84f1c152cd0e98b93b
+  flutter_webrtc: 1a53bd24f97bcfeff512f13699e721897f261563
   GoogleAppMeasurement: 987769c4ca6b968f2479fbcc9fe3ce34af454b8e
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
-  livekit_client: e5e1be9c3fedd51c63f3ec4b4d3c616e9744c92b
+  livekit_client: dbb906ef427fe96dde5854471c3dda0a50cc15f9
   media_kit_libs_ios_video: a5fe24bc7875ccd6378a0978c13185e1344651c1
   media_kit_native_event_loop: e6b2ab20cf0746eb1c33be961fcf79667304fa2a
   media_kit_video: 5da63f157170e5bf303bf85453b7ef6971218a2e
@@ -367,7 +367,7 @@ SPEC CHECKSUMS:
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   volume_controller: 531ddf792994285c9b17f9d8a7e4dcdd29b3eae9
   wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
-  WebRTC-SDK: 1990a1a595bd0b59c17485ce13ff17f575732c12
+  WebRTC-SDK: 79942c006ea64f6fb48d7da8a4786dfc820bc1db
 
 PODFILE CHECKSUM: d2bdaa1cc7915e14cf47235c34a21fcb07b00390
 

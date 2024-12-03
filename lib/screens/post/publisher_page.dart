@@ -404,30 +404,36 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                     ],
                   ),
                   SliverToBoxAdapter(child: const Divider(height: 1)),
-                  Gap(math.max(MediaQuery.of(context).padding.top, 50)),
                 ],
               ),
             ),
           ];
         },
-        body: TabBarView(
-          controller: _tabController,
-          children: List.filled(
-            3,
-            _PublisherPostList(
-              isBusy: _isBusy,
-              postCount: _postCount,
-              posts: _posts,
-              fetchPosts: _fetchPosts,
-              onChanged: (idx, data) {
-                setState(() => _posts[idx] = data);
-              },
-              onDeleted: () {
-                _posts.clear();
-                _fetchPosts();
-              },
+        body: Column(
+          children: [
+            Gap(math.max(MediaQuery.of(context).padding.top, 64)),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: List.filled(
+                  3,
+                  _PublisherPostList(
+                    isBusy: _isBusy,
+                    postCount: _postCount,
+                    posts: _posts,
+                    fetchPosts: _fetchPosts,
+                    onChanged: (idx, data) {
+                      setState(() => _posts[idx] = data);
+                    },
+                    onDeleted: () {
+                      _posts.clear();
+                      _fetchPosts();
+                    },
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -358,5 +358,9 @@
   "accountBirthday": "出生于 {}",
   "accountBadge": "徽章",
   "badgeCompanyStaff": "索尔辛茨士大夫 · Staff",
-  "badgeSiteMigration": "Solar Network 原住民"
+  "badgeSiteMigration": "Solar Network 原住民",
+  "accountStatus": "状态",
+  "accountStatusOnline": "在线",
+  "accountStatusOffline": "离线",
+  "accountStatusLastSeen": "最后一次在 {} 上线"
 }

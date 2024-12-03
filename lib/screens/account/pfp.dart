@@ -13,14 +13,16 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
 
-const Map<String, (String, IconData)> kBadgesMeta = {
+const Map<String, (String, IconData, Color)> kBadgesMeta = {
   'company.staff': (
     'badgeCompanyStaff',
     Symbols.tools_wrench,
+    Colors.teal,
   ),
   'site.migration': (
     'badgeSiteMigration',
     Symbols.flag,
+    Colors.orange,
   ),
 };
 
@@ -54,6 +56,22 @@ class _UserScreenState extends State<UserScreen>
     }
   }
 
+  SnAccountStatusInfo? _status;
+
+  Future<void> _fetchStatus() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/id/users/${widget.name}/status');
+      if (!mounted) return;
+      _status = SnAccountStatusInfo.fromJson(resp.data);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() {});
+    }
+  }
+
   double _appBarBlur = 0.0;
 
   late final _appBarWidth = MediaQuery.of(context).size.width;
@@ -71,7 +89,9 @@ class _UserScreenState extends State<UserScreen>
   @override
   void initState() {
     super.initState();
-    _fetchAccount().then((_) {});
+    _fetchAccount().then((_) {
+      _fetchStatus();
+    });
     _scrollController.addListener(_updateAppBarBlur);
   }
 
@@ -99,175 +119,208 @@ class _UserScreenState extends State<UserScreen>
     final sn = context.read<SnNetworkProvider>();
 
     return Scaffold(
-      body: NestedScrollView(
+      body: CustomScrollView(
         controller: _scrollController,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: _appBarHeight,
-              title: _account == null
-                  ? Text('loading').tr()
-                  : RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: _account!.nick,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    color: Colors.white,
-                                    shadows: labelShadows,
-                                  ),
-                        ),
-                        const TextSpan(text: '\n'),
-                        TextSpan(
-                          text: '@${_account!.name}',
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: Colors.white,
-                                    shadows: labelShadows,
-                                  ),
-                        ),
-                      ]),
-                    ),
-              pinned: true,
-              flexibleSpace: _account != null
-                  ? Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        UniversalImage(
-                          sn.getAttachmentUrl(_account!.banner),
-                          fit: BoxFit.cover,
-                          height: imageHeight,
-                          width: _appBarWidth,
-                          cacheHeight: imageHeight,
-                          cacheWidth: _appBarWidth,
-                        ),
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: 56 + MediaQuery.of(context).padding.top,
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: _appBarBlur,
-                                sigmaY: _appBarBlur,
-                              ),
-                              child: Container(
-                                color: Colors.black.withOpacity(
-                                  clampDouble(_appBarBlur * 0.1, 0, 0.5),
-                                ),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: _appBarHeight,
+            title: _account == null
+                ? Text('loading').tr()
+                : RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: _account!.nick,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Colors.white,
+                              shadows: labelShadows,
+                            ),
+                      ),
+                      const TextSpan(text: '\n'),
+                      TextSpan(
+                        text: '@${_account!.name}',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: Colors.white,
+                              shadows: labelShadows,
+                            ),
+                      ),
+                    ]),
+                  ),
+            pinned: true,
+            flexibleSpace: _account != null
+                ? Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      UniversalImage(
+                        sn.getAttachmentUrl(_account!.banner),
+                        fit: BoxFit.cover,
+                        height: imageHeight,
+                        width: _appBarWidth,
+                        cacheHeight: imageHeight,
+                        cacheWidth: _appBarWidth,
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: 56 + MediaQuery.of(context).padding.top,
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: _appBarBlur,
+                              sigmaY: _appBarBlur,
+                            ),
+                            child: Container(
+                              color: Colors.black.withOpacity(
+                                clampDouble(_appBarBlur * 0.1, 0, 0.5),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    )
-                  : null,
-            ),
-          ];
-        },
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    AccountImage(
-                      content: _account!.avatar,
-                      radius: 28,
-                    ),
-                    const Gap(16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _account!.nick,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ).bold(),
-                          Text('@${_account!.name}').fontSize(13),
-                        ],
                       ),
-                    ),
-                  ],
-                ).padding(right: 8),
-                const Gap(12),
-                Text(_account!.description).padding(horizontal: 8),
-                const Gap(12),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Symbols.calendar_add_on),
-                        const Gap(8),
-                        Text('publisherJoinedAt').tr(args: [
-                          DateFormat('y/M/d').format(_account!.createdAt)
-                        ]),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Symbols.cake),
-                        const Gap(8),
-                        Text('accountBirthday').tr(args: [
-                          _account!.profile?.birthday == null
-                              ? 'unknown'.tr()
-                              : DateFormat('M/d')
-                                  .format(_account!.profile!.birthday!)
-                        ]),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Symbols.identity_platform),
-                        const Gap(8),
-                        Text(
-                          '#${_account!.id.toString().padLeft(8, '0')}',
-                          style: GoogleFonts.robotoMono(),
-                        ).opacity(0.8),
-                      ],
-                    ),
-                  ],
-                ).padding(horizontal: 8),
-              ],
-            ).padding(all: 16),
-            const Divider(),
-            const Gap(12),
-            Text('accountBadge')
-                .bold()
-                .fontSize(17)
-                .tr()
-                .padding(horizontal: 20, bottom: 4),
-            SizedBox(
-              height: 64,
-              width: double.infinity,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                scrollDirection: Axis.horizontal,
+                    ],
+                  )
+                : null,
+          ),
+          if (_account != null)
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final badge in _account?.badges ?? [])
-                    SizedBox(
-                      width: 280,
-                      child: Card(
-                        child: ListTile(
-                          leading: Icon(
-                            kBadgesMeta[badge.type]?.$2 ??
-                                Symbols.question_mark,
-                          ),
-                          title: Text(
-                            kBadgesMeta[badge.type]?.$1 ?? 'unknown',
-                          ).tr(),
+                  Row(
+                    children: [
+                      AccountImage(
+                        content: _account!.avatar,
+                        radius: 28,
+                      ),
+                      const Gap(16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _account!.nick,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ).bold(),
+                            Text('@${_account!.name}').fontSize(13),
+                          ],
                         ),
                       ),
-                    ),
+                    ],
+                  ).padding(right: 8),
+                  const Gap(12),
+                  Text(_account!.description).padding(horizontal: 8),
+                  const Gap(4),
+                  Card(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Symbols.circle,
+                          fill: 1,
+                          size: 16,
+                          color: (_status?.isOnline ?? false)
+                              ? Colors.green
+                              : Colors.grey,
+                        ).padding(all: 4),
+                        const Gap(8),
+                        Text(
+                          _status != null
+                              ? _status!.isOnline
+                                  ? 'accountStatusOnline'.tr()
+                                  : 'accountStatusOffline'.tr()
+                              : 'loading'.tr(),
+                        ),
+                      ],
+                    ).padding(vertical: 8, horizontal: 12),
+                  ),
+                  const Gap(8),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Symbols.calendar_add_on),
+                          const Gap(8),
+                          Text('publisherJoinedAt').tr(args: [
+                            DateFormat('y/M/d').format(_account!.createdAt)
+                          ]),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(Symbols.cake),
+                          const Gap(8),
+                          Text('accountBirthday').tr(args: [
+                            _account!.profile?.birthday == null
+                                ? 'unknown'.tr()
+                                : DateFormat('M/d').format(
+                                    _account!.profile!.birthday!.toLocal(),
+                                  )
+                          ]),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(Symbols.identity_platform),
+                          const Gap(8),
+                          Text(
+                            '#${_account!.id.toString().padLeft(8, '0')}',
+                            style: GoogleFonts.robotoMono(),
+                          ).opacity(0.8),
+                        ],
+                      ),
+                    ],
+                  ).padding(horizontal: 8),
                 ],
-              ),
-            )
-          ],
-        ),
+              ).padding(all: 16),
+            ),
+          SliverToBoxAdapter(child: const Divider()),
+          const SliverGap(12),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('accountBadge')
+                    .bold()
+                    .fontSize(17)
+                    .tr()
+                    .padding(horizontal: 20, bottom: 4),
+                SizedBox(
+                  height: 80,
+                  width: double.infinity,
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      for (final badge in _account?.badges ?? [])
+                        SizedBox(
+                          width: 280,
+                          child: Card(
+                            child: ListTile(
+                              leading: Icon(
+                                kBadgesMeta[badge.type]?.$2 ??
+                                    Symbols.question_mark,
+                                color: kBadgesMeta[badge.type]?.$3,
+                                fill: 1,
+                              ),
+                              title: Text(
+                                kBadgesMeta[badge.type]?.$1 ?? 'unknown',
+                              ).tr(),
+                              subtitle: badge.metadata['title'] != null
+                                  ? Text(badge.metadata['title'])
+                                  : Text(
+                                      DateFormat('y/M/d')
+                                          .format(badge.createdAt),
+                                    ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

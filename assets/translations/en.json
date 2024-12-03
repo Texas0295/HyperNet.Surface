@@ -358,5 +358,9 @@
   "accountBirthday": "Born on {}",
   "accountBadge": "Badge",
   "badgeCompanyStaff": "Solsynth LLC Staff",
-  "badgeSiteMigration": "Solar Network Native"
+  "badgeSiteMigration": "Solar Network Native",
+  "accountStatus": "Status",
+  "accountStatusOnline": "Online",
+  "accountStatusOffline": "Offline",
+  "accountStatusLastSeen": "Last seen at {}"
 }

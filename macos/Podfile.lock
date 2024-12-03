@@ -75,7 +75,7 @@ PODS:
     - SAMKeychain
   - flutter_webrtc (0.12.2):
     - FlutterMacOS
-    - WebRTC-SDK (= 125.6422.05)
+    - WebRTC-SDK (= 125.6422.06)
   - FlutterMacOS (1.0.0)
   - GoogleAppMeasurement (11.4.0):
     - GoogleAppMeasurement/AdIdSupport (= 11.4.0)
@@ -129,7 +129,7 @@ PODS:
     - GoogleUtilities/Privacy
   - livekit_client (2.3.1):
     - FlutterMacOS
-    - WebRTC-SDK (= 125.6422.05)
+    - WebRTC-SDK (= 125.6422.06)
   - media_kit_libs_macos_video (1.0.4):
     - FlutterMacOS
   - media_kit_native_event_loop (1.0.0):
@@ -167,7 +167,7 @@ PODS:
     - FlutterMacOS
   - wakelock_plus (0.0.1):
     - FlutterMacOS
-  - WebRTC-SDK (125.6422.05)
+  - WebRTC-SDK (125.6422.06)
 
 DEPENDENCIES:
   - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin`)
@@ -278,12 +278,12 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 6ef4a1c7eb2a61ee1f74727d7f6ce2e72acf1414
   FirebaseMessaging: f8a160d99c2c2e5babbbcc90c4a3e15db036aee2
   flutter_udid: 6b2b89780c3dfeecf0047bdf93f622d6416b1c07
-  flutter_webrtc: 646bc8ab7ba7e45aae7279a371177e414cd5a326
+  flutter_webrtc: 53c9e1285ab32dfb58afb1e1471416a877e23d7a
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   GoogleAppMeasurement: 987769c4ca6b968f2479fbcc9fe3ce34af454b8e
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
-  livekit_client: 6ff0eb9b53ca4fbe0deb7e4b875f4ae9167702d2
+  livekit_client: 8838dc52cb95b452968efb84e87cad895c261d9d
   media_kit_libs_macos_video: b3e2bbec2eef97c285f2b1baa7963c67c753fb82
   media_kit_native_event_loop: 81fd5b45192b72f8b5b69eaf5b540f45777eb8d5
   media_kit_video: c75b07f14d59706c775778e4dd47dd027de8d1e5
@@ -300,7 +300,7 @@ SPEC CHECKSUMS:
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
   wakelock_plus: 4783562c9a43d209c458cb9b30692134af456269
-  WebRTC-SDK: 1990a1a595bd0b59c17485ce13ff17f575732c12
+  WebRTC-SDK: 79942c006ea64f6fb48d7da8a4786dfc820bc1db
 
 PODFILE CHECKSUM: c2e95c8c0fe03c5c57e438583cae4cc732296009
 

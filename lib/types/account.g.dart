@@ -192,3 +192,23 @@ Map<String, dynamic> _$$SnAccountBadgeImplToJson(
       'account_id': instance.accountId,
       'metadata': instance.metadata,
     };
+
+_$SnAccountStatusInfoImpl _$$SnAccountStatusInfoImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SnAccountStatusInfoImpl(
+      isDisturbable: json['is_disturbable'] as bool,
+      isOnline: json['is_online'] as bool,
+      lastSeenAt: json['last_seen_at'] == null
+          ? null
+          : DateTime.parse(json['last_seen_at'] as String),
+      status: json['status'],
+    );
+
+Map<String, dynamic> _$$SnAccountStatusInfoImplToJson(
+        _$SnAccountStatusInfoImpl instance) =>
+    <String, dynamic>{
+      'is_disturbable': instance.isDisturbable,
+      'is_online': instance.isOnline,
+      'last_seen_at': instance.lastSeenAt?.toIso8601String(),
+      'status': instance.status,
+    };

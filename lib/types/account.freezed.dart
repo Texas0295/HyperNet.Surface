@@ -1987,3 +1987,221 @@ abstract class _SnAccountBadge implements SnAccountBadge {
   _$$SnAccountBadgeImplCopyWith<_$SnAccountBadgeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+SnAccountStatusInfo _$SnAccountStatusInfoFromJson(Map<String, dynamic> json) {
+  return _SnAccountStatusInfo.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnAccountStatusInfo {
+  bool get isDisturbable => throw _privateConstructorUsedError;
+  bool get isOnline => throw _privateConstructorUsedError;
+  DateTime? get lastSeenAt => throw _privateConstructorUsedError;
+  dynamic get status => throw _privateConstructorUsedError;
+
+  /// Serializes this SnAccountStatusInfo to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnAccountStatusInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnAccountStatusInfoCopyWith<SnAccountStatusInfo> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnAccountStatusInfoCopyWith<$Res> {
+  factory $SnAccountStatusInfoCopyWith(
+          SnAccountStatusInfo value, $Res Function(SnAccountStatusInfo) then) =
+      _$SnAccountStatusInfoCopyWithImpl<$Res, SnAccountStatusInfo>;
+  @useResult
+  $Res call(
+      {bool isDisturbable,
+      bool isOnline,
+      DateTime? lastSeenAt,
+      dynamic status});
+}
+
+/// @nodoc
+class _$SnAccountStatusInfoCopyWithImpl<$Res, $Val extends SnAccountStatusInfo>
+    implements $SnAccountStatusInfoCopyWith<$Res> {
+  _$SnAccountStatusInfoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnAccountStatusInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isDisturbable = null,
+    Object? isOnline = null,
+    Object? lastSeenAt = freezed,
+    Object? status = freezed,
+  }) {
+    return _then(_value.copyWith(
+      isDisturbable: null == isDisturbable
+          ? _value.isDisturbable
+          : isDisturbable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isOnline: null == isOnline
+          ? _value.isOnline
+          : isOnline // ignore: cast_nullable_to_non_nullable
+              as bool,
+      lastSeenAt: freezed == lastSeenAt
+          ? _value.lastSeenAt
+          : lastSeenAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnAccountStatusInfoImplCopyWith<$Res>
+    implements $SnAccountStatusInfoCopyWith<$Res> {
+  factory _$$SnAccountStatusInfoImplCopyWith(_$SnAccountStatusInfoImpl value,
+          $Res Function(_$SnAccountStatusInfoImpl) then) =
+      __$$SnAccountStatusInfoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool isDisturbable,
+      bool isOnline,
+      DateTime? lastSeenAt,
+      dynamic status});
+}
+
+/// @nodoc
+class __$$SnAccountStatusInfoImplCopyWithImpl<$Res>
+    extends _$SnAccountStatusInfoCopyWithImpl<$Res, _$SnAccountStatusInfoImpl>
+    implements _$$SnAccountStatusInfoImplCopyWith<$Res> {
+  __$$SnAccountStatusInfoImplCopyWithImpl(_$SnAccountStatusInfoImpl _value,
+      $Res Function(_$SnAccountStatusInfoImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnAccountStatusInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? isDisturbable = null,
+    Object? isOnline = null,
+    Object? lastSeenAt = freezed,
+    Object? status = freezed,
+  }) {
+    return _then(_$SnAccountStatusInfoImpl(
+      isDisturbable: null == isDisturbable
+          ? _value.isDisturbable
+          : isDisturbable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isOnline: null == isOnline
+          ? _value.isOnline
+          : isOnline // ignore: cast_nullable_to_non_nullable
+              as bool,
+      lastSeenAt: freezed == lastSeenAt
+          ? _value.lastSeenAt
+          : lastSeenAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnAccountStatusInfoImpl implements _SnAccountStatusInfo {
+  const _$SnAccountStatusInfoImpl(
+      {required this.isDisturbable,
+      required this.isOnline,
+      required this.lastSeenAt,
+      required this.status});
+
+  factory _$SnAccountStatusInfoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnAccountStatusInfoImplFromJson(json);
+
+  @override
+  final bool isDisturbable;
+  @override
+  final bool isOnline;
+  @override
+  final DateTime? lastSeenAt;
+  @override
+  final dynamic status;
+
+  @override
+  String toString() {
+    return 'SnAccountStatusInfo(isDisturbable: $isDisturbable, isOnline: $isOnline, lastSeenAt: $lastSeenAt, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnAccountStatusInfoImpl &&
+            (identical(other.isDisturbable, isDisturbable) ||
+                other.isDisturbable == isDisturbable) &&
+            (identical(other.isOnline, isOnline) ||
+                other.isOnline == isOnline) &&
+            (identical(other.lastSeenAt, lastSeenAt) ||
+                other.lastSeenAt == lastSeenAt) &&
+            const DeepCollectionEquality().equals(other.status, status));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, isDisturbable, isOnline,
+      lastSeenAt, const DeepCollectionEquality().hash(status));
+
+  /// Create a copy of SnAccountStatusInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnAccountStatusInfoImplCopyWith<_$SnAccountStatusInfoImpl> get copyWith =>
+      __$$SnAccountStatusInfoImplCopyWithImpl<_$SnAccountStatusInfoImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnAccountStatusInfoImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnAccountStatusInfo implements SnAccountStatusInfo {
+  const factory _SnAccountStatusInfo(
+      {required final bool isDisturbable,
+      required final bool isOnline,
+      required final DateTime? lastSeenAt,
+      required final dynamic status}) = _$SnAccountStatusInfoImpl;
+
+  factory _SnAccountStatusInfo.fromJson(Map<String, dynamic> json) =
+      _$SnAccountStatusInfoImpl.fromJson;
+
+  @override
+  bool get isDisturbable;
+  @override
+  bool get isOnline;
+  @override
+  DateTime? get lastSeenAt;
+  @override
+  dynamic get status;
+
+  /// Create a copy of SnAccountStatusInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnAccountStatusInfoImplCopyWith<_$SnAccountStatusInfoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

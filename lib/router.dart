@@ -21,7 +21,7 @@ import 'package:surface/screens/home.dart';
 import 'package:surface/screens/notification.dart';
 import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
-import 'package:surface/screens/post/post_publisher.dart';
+import 'package:surface/screens/post/publisher_page.dart';
 import 'package:surface/screens/post/post_search.dart';
 import 'package:surface/screens/realm.dart';
 import 'package:surface/screens/realm/manage.dart';

@@ -106,3 +106,16 @@ class SnAccountBadge with _$SnAccountBadge {
   factory SnAccountBadge.fromJson(Map<String, Object?> json) =>
       _$SnAccountBadgeFromJson(json);
 }
+
+@freezed
+class SnAccountStatusInfo with _$SnAccountStatusInfo {
+  const factory SnAccountStatusInfo({
+    required bool isDisturbable,
+    required bool isOnline,
+    required DateTime? lastSeenAt,
+    required dynamic status,
+  }) = _SnAccountStatusInfo;
+
+  factory SnAccountStatusInfo.fromJson(Map<String, Object?> json) =>
+      _$SnAccountStatusInfoFromJson(json);
+}
