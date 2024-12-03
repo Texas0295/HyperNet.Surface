@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:surface/controllers/chat_message_controller.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/types/realm.dart';
 
@@ -9,11 +11,13 @@ class ChatChannelProvider extends ChangeNotifier {
   static const kChatChannelBoxName = 'nex_chat_channels';
 
   late final SnNetworkProvider _sn;
+  late final UserDirectoryProvider _ud;
 
   Box<SnChannel>? get _channelBox => Hive.box<SnChannel>(kChatChannelBoxName);
 
   ChatChannelProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
+    _ud = context.read<UserDirectoryProvider>();
     _initializeLocalData();
   }
 
@@ -111,6 +115,25 @@ class ChatChannelProvider extends ChangeNotifier {
     }
 
     yield result;
+  }
+
+  Future<List<SnChatMessage>> getLastMessages(
+    Iterable<SnChannel> channels,
+  ) async {
+    final result = List<SnChatMessage>.empty(growable: true);
+    for (final channel in channels) {
+      final channelBox = await Hive.openBox<SnChatMessage>(
+        '${ChatMessageController.kChatMessageBoxPrefix}${channel.id}',
+      );
+      final lastMessage = channelBox.isNotEmpty
+          ? channelBox.values
+              .reduce((a, b) => a.createdAt.isAfter(b.createdAt) ? a : b)
+          : null;
+      if (lastMessage != null) result.add(lastMessage);
+      channelBox.close();
+    }
+    await _ud.listAccount(result.map((ele) => ele.sender.accountId).toSet());
+    return result;
   }
 
   @override
