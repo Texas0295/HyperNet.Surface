@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:croppy/croppy.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
@@ -48,6 +51,15 @@ void main() async {
 
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
+
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    doWhenWindowReady(() {
+      appWindow.minSize = Size(480, 640);
+      appWindow.size = Size(1280, 720);
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+    });
+  }
 
   await SentryFlutter.init(
     (options) {

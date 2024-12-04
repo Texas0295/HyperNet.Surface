@@ -1,4 +1,6 @@
 PODS:
+  - bitsdojo_window_macos (0.0.1):
+    - FlutterMacOS
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -170,6 +172,7 @@ PODS:
   - WebRTC-SDK (125.6422.06)
 
 DEPENDENCIES:
+  - bitsdojo_window_macos (from `Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos`)
   - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin`)
   - croppy (from `Flutter/ephemeral/.symlinks/plugins/croppy/macos`)
   - cupertino_http (from `Flutter/ephemeral/.symlinks/plugins/cupertino_http/macos`)
@@ -213,6 +216,8 @@ SPEC REPOS:
     - WebRTC-SDK
 
 EXTERNAL SOURCES:
+  bitsdojo_window_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos
   connectivity_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin
   croppy:
@@ -263,6 +268,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/wakelock_plus/macos
 
 SPEC CHECKSUMS:
+  bitsdojo_window_macos: 44e3b8fe3dd463820e0321f6256c5b1c16bb6a00
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
   croppy: 25a638bd7d05411d8c697f481568f261037694fc
   cupertino_http: 1d506209e339211efa0764caa7b2de4bc55b6818

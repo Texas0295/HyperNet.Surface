@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -98,6 +102,12 @@ class AppRootScaffold extends StatelessWidget {
         key: globalRootScaffoldKey,
         body: Column(
           children: [
+            if (!kIsWeb &&
+                (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+              Container(
+                color: Theme.of(context).colorScheme.surface,
+                child: WindowTitleBarBox(child: MoveWindow()),
+              ),
             ConnectionIndicator(),
             Expanded(child: innerWidget),
           ],
