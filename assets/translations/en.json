@@ -64,6 +64,13 @@
     "one": "{} character",
     "other": "{} characters"
   },
+  "postVisibility": "Visibility",
+  "postVisibilityDescription": "Post visibility determines who can see this post.",
+  "postVisibilityAll": "Everyone",
+  "postVisibilityFriends": "Friends",
+  "postVisibilitySelected": "Selected User",
+  "postVisibilityFiltered": "Unselected User",
+  "postVisibilityNone": "Only Me",
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",

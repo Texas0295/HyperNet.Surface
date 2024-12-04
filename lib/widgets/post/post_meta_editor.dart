@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,14 @@ import 'package:surface/widgets/post/post_tags_field.dart';
 class PostMetaEditor extends StatelessWidget {
   final PostWriteController controller;
   const PostMetaEditor({super.key, required this.controller});
+
+  static Map<int, String> kPostVisibilityLevel = {
+    0: 'postVisibilityAll',
+    1: 'postVisibilityFriends',
+    2: 'postVisibilitySelected',
+    3: 'postVisibilityFiltered',
+    4: 'postVisibilityNone',
+  };
 
   Future<DateTime?> _selectDate(
     BuildContext context, {
@@ -79,6 +88,45 @@ class PostMetaEditor extends StatelessWidget {
               },
             ).padding(horizontal: 24),
             const Gap(12),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              leading: const Icon(Symbols.visibility),
+              title: Text('postVisibility').tr(),
+              subtitle: Text('postVisibilityDescription').tr(),
+              trailing: SizedBox(
+                width: 180,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<int>(
+                    isExpanded: true,
+                    items: kPostVisibilityLevel.entries
+                        .map(
+                          (entry) => DropdownMenuItem<int>(
+                            value: entry.key,
+                            child: Text(
+                              entry.value,
+                              style: const TextStyle(fontSize: 14),
+                            ).tr(),
+                          ),
+                        )
+                        .toList(),
+                    value: controller.visibility,
+                    onChanged: (int? value) {
+                      if (value != null) {
+                        controller.setVisibility(value);
+                      }
+                    },
+                    buttonStyleData: const ButtonStyleData(
+                      height: 40,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 8,
+                      ),
+                    ),
+                    menuItemStyleData: const MenuItemStyleData(height: 40),
+                  ),
+                ),
+              ),
+            ),
             ListTile(
               leading: const Icon(Symbols.event_available),
               title: Text('postPublishedAt').tr(),
