@@ -10,6 +10,8 @@ import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
 import 'package:surface/widgets/navigation/app_drawer_navigation.dart';
 import 'package:surface/widgets/navigation/app_rail_navigation.dart';
 
+final globalRootScaffoldKey = GlobalKey<ScaffoldState>();
+
 class AppPageScaffold extends StatelessWidget {
   final String? title;
   final Widget? body;
@@ -93,6 +95,7 @@ class AppRootScaffold extends StatelessWidget {
     return AppBackground(
       isRoot: true,
       child: Scaffold(
+        key: globalRootScaffoldKey,
         body: Column(
           children: [
             ConnectionIndicator(),

@@ -5,8 +5,10 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
@@ -137,6 +139,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
+              leading:
+                  ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
+                      ? DrawerButton(onPressed: () {
+                          globalRootScaffoldKey.currentState?.openDrawer();
+                        })
+                      : null,
               title: Text('screenExplore').tr(),
               floating: true,
               snap: true,

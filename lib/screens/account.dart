@@ -4,10 +4,12 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -18,6 +20,11 @@ class AccountScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
+            ? DrawerButton(onPressed: () {
+                globalRootScaffoldKey.currentState?.openDrawer();
+              })
+            : null,
         title: Text("screenAccount").tr(),
         actions: [
           IconButton(
