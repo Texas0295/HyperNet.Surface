@@ -158,11 +158,8 @@ icons_launcher:
   platforms:
     android:
       enable: true
-      image_path: "assets/icon/icon.png"
-      notification_image: "assets/icon/icon.png"
-      adaptive_background_color: "#ffffff"
-      adaptive_foreground_image: "assets/icon/icon.png"
-      adaptive_monochrome_image: "assets/icon/icon-dark.png"
+      image_path: "assets/icon/icon-w-padding.png"
+      notification_image: "assets/icon/icon-w-padding.png"
     ios:
       enable: true
       image_path: "assets/icon/icon-light.png"
