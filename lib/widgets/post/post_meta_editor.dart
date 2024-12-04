@@ -15,8 +15,8 @@ class PostMetaEditor extends StatelessWidget {
   static Map<int, String> kPostVisibilityLevel = {
     0: 'postVisibilityAll',
     1: 'postVisibilityFriends',
-    2: 'postVisibilitySelected',
-    3: 'postVisibilityFiltered',
+    // 2: 'postVisibilitySelected', TODO impl user selection
+    // 3: 'postVisibilityFiltered', TODO impl user filter selection
     4: 'postVisibilityNone',
   };
 
