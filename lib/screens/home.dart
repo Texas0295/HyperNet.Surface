@@ -6,14 +6,13 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/check_in.dart';
+import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
-import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class HomeScreenDashEntry {
   final String name;
@@ -47,11 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
-            ? DrawerButton(onPressed: () {
-                globalRootScaffoldKey.currentState?.openDrawer();
-              })
-            : null,
+        leading: AutoAppBarLeading(),
         title: Text("screenHome").tr(),
       ),
       body: LayoutBuilder(

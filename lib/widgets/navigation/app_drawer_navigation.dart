@@ -56,7 +56,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
               ],
             ).padding(
               horizontal: 32,
-              top: MediaQuery.of(context).padding.top > 16 ? 8 : 16,
+              top: MediaQuery.of(context).padding.top > 16 ? 8 : 24,
               bottom: 8,
             ),
             ...destinations.where((ele) => ele.isPinned).map((ele) {

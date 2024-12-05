@@ -8,6 +8,7 @@ import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/account.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 
@@ -166,6 +167,7 @@ class _FriendScreenState extends State<FriendScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: AutoAppBarLeading(),
         title: Text('screenFriend').tr(),
       ),
       floatingActionButton: FloatingActionButton(

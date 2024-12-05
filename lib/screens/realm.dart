@@ -8,6 +8,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -77,6 +78,7 @@ class _RealmScreenState extends State<RealmScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: AutoAppBarLeading(),
         title: Text('screenRealm').tr(),
         actions: [
           IconButton(

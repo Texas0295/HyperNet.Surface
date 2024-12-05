@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
-import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -67,11 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
-            ? DrawerButton(onPressed: () {
-                globalRootScaffoldKey.currentState?.openDrawer();
-              })
-            : null,
+        leading: AutoAppBarLeading(),
         title: Text('screenChat').tr(),
       ),
       floatingActionButton: FloatingActionButton(
