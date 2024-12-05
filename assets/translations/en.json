@@ -71,6 +71,13 @@
   "postVisibilitySelected": "Selected User",
   "postVisibilityFiltered": "Unselected User",
   "postVisibilityNone": "Only Me",
+  "postVisibleUsers": "Visible Users",
+  "postInvisibleUsers": "Invisible Users",
+  "postSelectedUsers": {
+    "zero": "No user",
+    "one": "{} user",
+    "other": "{} users"
+  },
   "fieldUsername": "Username",
   "fieldNickname": "Nickname",
   "fieldEmail": "Email address",
@@ -260,6 +267,7 @@
     "other": "Marked {} notifications as read."
   },
   "notificationMarkOneReadPrompt": "Marked notification {} as read.",
+  "search": "Search",
   "postSearchResult": {
     "zero": "No results",
     "one": "{} result",

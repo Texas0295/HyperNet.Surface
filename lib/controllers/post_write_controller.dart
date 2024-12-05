@@ -173,6 +173,8 @@ class PostWriteController extends ChangeNotifier {
   SnPost? editingPost, repostingPost, replyingPost;
 
   int visibility = 0;
+  List<int> visibleUsers = List.empty();
+  List<int> invisibleUsers = List.empty();
   List<String> tags = List.empty();
   List<PostWriteMedia> attachments = List.empty(growable: true);
   DateTime? publishedAt, publishedUntil;
@@ -197,6 +199,8 @@ class PostWriteController extends ChangeNotifier {
         contentController.text = post.body['content'] ?? '';
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
+        visibleUsers = List.from(post.visibleUsersList ?? []);
+        invisibleUsers = List.from(post.invisibleUsersList ?? []);
         visibility = post.visibility;
         tags = List.from(post.tags.map((ele) => ele.alias));
         attachments.addAll(
@@ -296,6 +300,8 @@ class PostWriteController extends ChangeNotifier {
               .toList(),
           'tags': tags.map((ele) => {'alias': ele}).toList(),
           'visibility': visibility,
+          'visible_users_list': visibleUsers,
+          'invisible_users_list': invisibleUsers,
           if (publishedAt != null)
             'published_at': publishedAt!.toUtc().toIso8601String(),
           if (publishedUntil != null)
@@ -364,6 +370,16 @@ class PostWriteController extends ChangeNotifier {
 
   void setVisibility(int value) {
     visibility = value;
+    notifyListeners();
+  }
+
+  void setVisibleUsers(List<int> value) {
+    visibleUsers = value;
+    notifyListeners();
+  }
+
+  void setInvisibleUsers(List<int> value) {
+    invisibleUsers = value;
     notifyListeners();
   }
 

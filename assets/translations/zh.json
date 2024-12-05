@@ -128,6 +128,13 @@
   "postVisibilitySelected": "选定的用户可见",
   "postVisibilityFiltered": "选定用户不可见",
   "postVisibilityNone": "仅自己可见",
+  "postVisibleUsers": "可见的用户",
+  "postInvisibleUsers": "不可见的用户",
+  "postSelectedUsers": {
+    "zero": "未选择用户",
+    "one": "选择了 {} 个用户",
+    "other": "选择了 {} 个用户"
+  },
   "postEditingNotice": "你正在修改由 {} 发布的帖子。",
   "postReplyingNotice": "你正在回复由 {} 发布的帖子。",
   "postRepostingNotice": "你正在转发由 {} 发布的帖子。",
@@ -260,6 +267,7 @@
     "other": "已将 {} 个通知标记为已读。"
   },
   "notificationMarkOneReadPrompt": "已将通知 {} 标记为已读。",
+  "search": "搜索",
   "postSearchResult": {
     "zero": "没有搜索到结果",
     "one": "搜索到 {} 个结果",

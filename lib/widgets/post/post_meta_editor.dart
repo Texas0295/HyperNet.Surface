@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
+import 'package:surface/widgets/account/account_select.dart';
 import 'package:surface/widgets/post/post_tags_field.dart';
 
 class PostMetaEditor extends StatelessWidget {
@@ -15,8 +16,8 @@ class PostMetaEditor extends StatelessWidget {
   static Map<int, String> kPostVisibilityLevel = {
     0: 'postVisibilityAll',
     1: 'postVisibilityFriends',
-    // 2: 'postVisibilitySelected', TODO impl user selection
-    // 3: 'postVisibilityFiltered', TODO impl user filter selection
+    2: 'postVisibilitySelected',
+    3: 'postVisibilityFiltered',
     4: 'postVisibilityNone',
   };
 
@@ -48,6 +49,32 @@ class PostMetaEditor extends StatelessWidget {
       ),
     );
     return picked;
+  }
+
+  void _selectVisibleUser(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => AccountSelect(
+        title: 'postVisibleUsers'.tr(),
+        initialSelection: controller.visibleUsers,
+        onMultipleSelect: (value) {
+          controller.setVisibleUsers(value.map((ele) => ele.id).toList());
+        },
+      ),
+    );
+  }
+
+  void _selectInvisibleUser(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => AccountSelect(
+        title: 'postInvisibleUsers'.tr(),
+        initialSelection: controller.invisibleUsers,
+        onMultipleSelect: (value) {
+          controller.setInvisibleUsers(value.map((ele) => ele.id).toList());
+        },
+      ),
+    );
   }
 
   @override
@@ -127,6 +154,30 @@ class PostMetaEditor extends StatelessWidget {
                 ),
               ),
             ),
+            if (controller.visibility == 2)
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                leading: Icon(Symbols.person),
+                trailing: Icon(Symbols.chevron_right),
+                title: Text('postVisibleUsers').tr(),
+                subtitle: Text('postSelectedUsers')
+                    .plural(controller.visibleUsers.length),
+                onTap: () {
+                  _selectVisibleUser(context);
+                },
+              ),
+            if (controller.visibility == 3)
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                leading: Icon(Symbols.person),
+                trailing: Icon(Symbols.chevron_right),
+                title: Text('postInvisibleUsers').tr(),
+                subtitle: Text('postSelectedUsers')
+                    .plural(controller.invisibleUsers.length),
+                onTap: () {
+                  _selectInvisibleUser(context);
+                },
+              ),
             ListTile(
               leading: const Icon(Symbols.event_available),
               title: Text('postPublishedAt').tr(),
