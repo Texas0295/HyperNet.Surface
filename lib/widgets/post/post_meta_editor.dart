@@ -9,17 +9,17 @@ import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/widgets/account/account_select.dart';
 import 'package:surface/widgets/post/post_tags_field.dart';
 
+const Map<int, String> kPostVisibilityLevel = {
+  0: 'postVisibilityAll',
+  1: 'postVisibilityFriends',
+  2: 'postVisibilitySelected',
+  3: 'postVisibilityFiltered',
+  4: 'postVisibilityNone',
+};
+
 class PostMetaEditor extends StatelessWidget {
   final PostWriteController controller;
   const PostMetaEditor({super.key, required this.controller});
-
-  static Map<int, String> kPostVisibilityLevel = {
-    0: 'postVisibilityAll',
-    1: 'postVisibilityFriends',
-    2: 'postVisibilitySelected',
-    3: 'postVisibilityFiltered',
-    4: 'postVisibilityNone',
-  };
 
   Future<DateTime?> _selectDate(
     BuildContext context, {

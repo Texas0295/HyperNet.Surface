@@ -17,6 +17,7 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
+import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/post/post_reaction.dart';
 import 'package:surface/widgets/post/publisher_popover.dart';
 
@@ -68,6 +69,11 @@ class PostItem extends StatelessWidget {
               if (data.repostTo != null)
                 _PostQuoteContent(child: data.repostTo!).padding(
                   horizontal: 12,
+                ),
+              if (data.visibility > 0)
+                _PostVisibilityHint(data: data).padding(
+                  horizontal: 16,
+                  vertical: 4,
                 ),
               if (data.body['content_truncated'] == true)
                 _PostTruncatedHint(data: data).padding(
@@ -478,6 +484,30 @@ class _PostTagsList extends StatelessWidget {
   }
 }
 
+class _PostVisibilityHint extends StatelessWidget {
+  final SnPost data;
+  const _PostVisibilityHint({super.key, required this.data});
+
+  static const List<IconData> kVisibilityIcons = [
+    Symbols.public,
+    Symbols.group,
+    Symbols.person_check,
+    Symbols.person_remove,
+    Symbols.lock,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(kVisibilityIcons[data.visibility], size: 20),
+        const Gap(4),
+        Text(kPostVisibilityLevel[data.visibility] ?? 'postVisibilityAll').tr(),
+      ],
+    ).opacity(0.75);
+  }
+}
+
 class _PostTruncatedHint extends StatelessWidget {
   final SnPost data;
   const _PostTruncatedHint({super.key, required this.data});
@@ -495,9 +525,9 @@ class _PostTruncatedHint extends StatelessWidget {
               const Gap(4),
               Text('postReadEstimate').tr(args: [
                 '${Duration(
-                  seconds: ((data.body['content_length'] as num).toDouble() /
-                          kHumanReadSpeed)
-                      .round(),
+                  seconds: (data.body['content_length'] as num).toDouble() *
+                      60 ~/
+                      kHumanReadSpeed,
                 ).inSeconds}s',
               ]),
             ],

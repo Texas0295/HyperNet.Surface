@@ -62,7 +62,8 @@ class _AttachmentListState extends State<AttachmentList> {
                     'audio' => 16 / 9,
                     'video' => 16 / 9,
                     _ => 1,
-                  };
+                  }
+                      .toDouble();
 
           return Container(
             constraints: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
