@@ -11,6 +11,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/types/reaction.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -127,6 +128,13 @@ class _PostBottomAction extends StatelessWidget {
     final iconColor = Theme.of(context).colorScheme.onSurface.withAlpha(
           (255 * 0.8).round(),
         );
+
+    final String? mostTypicalReaction = data.metric.reactionList.isNotEmpty
+        ? data.metric.reactionList.entries
+            .reduce((a, b) => a.value > b.value ? a : b)
+            .key
+        : null;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -137,7 +145,18 @@ class _PostBottomAction extends StatelessWidget {
                 InkWell(
                   child: Row(
                     children: [
-                      Icon(Symbols.add_reaction, size: 20, color: iconColor),
+                      if (mostTypicalReaction == null ||
+                          kTemplateReactions[mostTypicalReaction] == null)
+                        Icon(Symbols.add_reaction, size: 20, color: iconColor)
+                      else
+                        Text(
+                          kTemplateReactions[mostTypicalReaction]!.icon,
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.2,
+                            letterSpacing: 0,
+                          ),
+                        ),
                       const Gap(8),
                       if (data.totalUpvote > 0 &&
                           data.totalUpvote >= data.totalDownvote)
