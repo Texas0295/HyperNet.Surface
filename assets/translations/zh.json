@@ -383,5 +383,8 @@
   "accountStatusOnline": "在线",
   "accountStatusOffline": "离线",
   "accountStatusLastSeen": "最后一次在 {} 上线",
-  "postArticle": "Solar Network 上的文章"
+  "postArticle": "Solar Network 上的文章",
+  "articleWrittenAt": "发表于 {}",
+  "articleEditedAt": "编辑于 {}"
+
 }

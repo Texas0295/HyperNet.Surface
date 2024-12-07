@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
@@ -136,8 +137,14 @@ class PostItem extends StatelessWidget {
                 },
               ).padding(horizontal: 12, vertical: 8),
               if (data.body['title'] != null || data.body['description'] != null)
-                _PostHeadline(data: data).padding(horizontal: 16, bottom: 8),
-              _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
+                _PostHeadline(
+                  data: data,
+                  isEnlarge: data.type == 'article' && showFullPost,
+                ).padding(horizontal: 16, bottom: 8),
+              _PostContentBody(
+                data: data,
+                isEnlarge: data.type == 'article' && showFullPost,
+              ).padding(horizontal: 16, bottom: 6),
               if (data.repostTo != null)
                 _PostQuoteContent(child: data.repostTo!).padding(
                   horizontal: 12,
@@ -156,7 +163,7 @@ class PostItem extends StatelessWidget {
             ],
           ),
         ),
-        if (data.preload?.attachments?.isNotEmpty ?? false)
+        if ((data.preload?.attachments?.isNotEmpty ?? false) && data.type != 'article')
           AttachmentList(
             data: data.preload!.attachments!,
             bordered: true,
@@ -292,11 +299,82 @@ class _PostBottomAction extends StatelessWidget {
 
 class _PostHeadline extends StatelessWidget {
   final SnPost data;
+  final bool isEnlarge;
 
-  const _PostHeadline({super.key, required this.data});
+  const _PostHeadline({
+    super.key,
+    required this.data,
+    this.isEnlarge = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (isEnlarge) {
+      final sn = context.read<SnNetworkProvider>();
+      final textScaler = TextScaler.linear(1.5);
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (data.preload?.thumbnail != null)
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                  width: 1,
+                ),
+              ),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: AutoResizeUniversalImage(
+                    sn.getAttachmentUrl(data.preload!.thumbnail!.rid),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          if (data.body['title'] != null)
+            Text(
+              data.body['title'],
+              style: Theme.of(context).textTheme.titleMedium,
+              textScaler: TextScaler.linear(1.4),
+            ),
+          if (data.body['description'] != null)
+            Text(
+              data.body['description'],
+              style: Theme.of(context).textTheme.bodyMedium,
+              textScaler: TextScaler.linear(1.1),
+            ),
+          if (data.body['description'] != null) const Gap(8) else const Gap(4),
+          Row(
+            children: [
+              Text(
+                'articleWrittenAt'.tr(
+                  args: [DateFormat('y/M/d HH:mm').format(data.createdAt)],
+                ),
+                style: TextStyle(fontSize: 13),
+              ),
+              const Gap(8),
+              if (data.updatedAt != data.createdAt)
+                Text(
+                  'articleEditedAt'.tr(
+                    args: [DateFormat('y/M/d HH:mm').format(data.updatedAt)],
+                  ),
+                  style: TextStyle(fontSize: 13),
+                ),
+            ],
+          ).opacity(0.75),
+          const Gap(8),
+          const Divider(height: 1, thickness: 1),
+          const Gap(8),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -502,14 +580,22 @@ class _PostContentHeader extends StatelessWidget {
 }
 
 class _PostContentBody extends StatelessWidget {
-  final dynamic data;
+  final SnPost data;
+  final bool isEnlarge;
 
-  const _PostContentBody({this.data});
+  const _PostContentBody({
+    required this.data,
+    this.isEnlarge = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (data['content'] == null) return const SizedBox.shrink();
-    return MarkdownTextContent(content: data['content']);
+    if (data.body['content'] == null) return const SizedBox.shrink();
+    return MarkdownTextContent(
+      textScaler: isEnlarge ? TextScaler.linear(1.1) : null,
+      content: data.body['content'],
+      attachments: data.preload?.attachments,
+    );
   }
 }
 
@@ -537,7 +623,7 @@ class _PostQuoteContent extends StatelessWidget {
             showMenu: false,
             onDeleted: () {},
           ).padding(bottom: 4),
-          _PostContentBody(data: child.body),
+          _PostContentBody(data: child),
         ],
       ),
     );

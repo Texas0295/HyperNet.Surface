@@ -208,7 +208,11 @@ class PostMediaPendingList extends StatelessWidget {
                 ),
               ),
             ),
-          if (thumbnail != null) const VerticalDivider(width: 1).padding(horizontal: 8),
+          if (thumbnail != null)
+            const VerticalDivider(width: 1, thickness: 1).padding(
+              horizontal: 12,
+              vertical: 16,
+            ),
           Expanded(
             child: ListView.separated(
               scrollDirection: Axis.horizontal,

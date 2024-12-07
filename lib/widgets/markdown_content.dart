@@ -1,44 +1,48 @@
 import 'dart:ui';
 
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as markdown;
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/types/attachment.dart';
+import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 
-class MarkdownTextContent extends StatefulWidget {
+import 'attachment/attachment_detail.dart';
+
+class MarkdownTextContent extends StatelessWidget {
   final String content;
   final bool isSelectable;
-  final bool isLargeText;
   final bool isAutoWarp;
+  final TextScaler? textScaler;
+  final List<SnAttachment?>? attachments;
 
   const MarkdownTextContent({
     super.key,
     required this.content,
     this.isSelectable = false,
-    this.isLargeText = false,
     this.isAutoWarp = false,
+    this.textScaler,
+    this.attachments,
   });
 
-  @override
-  State<MarkdownTextContent> createState() => _MarkdownTextContentState();
-}
-
-class _MarkdownTextContentState extends State<MarkdownTextContent> {
   Widget _buildContent(BuildContext context) {
     return Markdown(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      data: widget.content,
+      data: content,
       padding: EdgeInsets.zero,
       styleSheet: MarkdownStyleSheet.fromTheme(
         Theme.of(context),
       ).copyWith(
-          textScaler: TextScaler.linear(widget.isLargeText ? 1.1 : 1),
+          textScaler: textScaler,
           blockquote: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -73,7 +77,7 @@ class _MarkdownTextContentState extends State<MarkdownTextContent> {
           ...markdown.ExtensionSet.gitHubFlavored.blockSyntaxes,
         ],
         <markdown.InlineSyntax>[
-          if (widget.isAutoWarp) markdown.LineBreakSyntax(),
+          if (isAutoWarp) markdown.LineBreakSyntax(),
           _UserNameCardInlineSyntax(),
           markdown.AutolinkSyntax(),
           markdown.AutolinkExtensionSyntax(),
@@ -85,7 +89,12 @@ class _MarkdownTextContentState extends State<MarkdownTextContent> {
       onTapLink: (text, href, title) async {
         if (href == null) return;
         if (href.startsWith('solink://')) {
-          // final segments = href.replaceFirst('solink://', '').split('/');
+          final uri = href.replaceFirst('solink://', '');
+          final segments = uri.split('/');
+          switch (segments[0]) {
+            default:
+              GoRouter.of(context).push(uri);
+          }
           return;
         }
 
@@ -99,7 +108,57 @@ class _MarkdownTextContentState extends State<MarkdownTextContent> {
         double? width, height;
         BoxFit? fit;
         if (url.startsWith('solink://')) {
-          // final segments = url.replaceFirst('solink://', '').split('/');
+          final segments = url.replaceFirst('solink://', '').split('/');
+          switch (segments[0]) {
+            case 'attachments':
+              final attachment = attachments?.firstWhere(
+                (ele) => ele?.rid == segments[1],
+                orElse: () => null,
+              );
+              if (attachment != null) {
+                const uuid = Uuid();
+                final heroTag = uuid.v4();
+                return GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      border: Border.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 1,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: AspectRatio(
+                        aspectRatio: attachment.metadata['ratio'] ??
+                            switch (attachment.mimetype.split('/').firstOrNull) {
+                              'audio' => 16 / 9,
+                              'video' => 16 / 9,
+                              _ => 1,
+                            }
+                                .toDouble(),
+                        child: AttachmentItem(
+                          data: attachment,
+                          heroTag: heroTag,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    context.pushTransparentRoute(
+                      AttachmentZoomView(
+                        data: [attachment],
+                        initialIndex: 0,
+                        heroTags: [heroTag],
+                      ),
+                      backgroundColor: Colors.black.withOpacity(0.7),
+                      rootNavigator: true,
+                    );
+                  },
+                );
+              }
+              break;
+          }
           return const SizedBox.shrink();
         }
         return UniversalImage(
@@ -114,7 +173,7 @@ class _MarkdownTextContentState extends State<MarkdownTextContent> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isSelectable) {
+    if (isSelectable) {
       return SelectionArea(child: _buildContent(context));
     }
     return _buildContent(context);
@@ -153,13 +212,11 @@ class _MarkdownTextCodeElement extends MarkdownElementBuilder {
       child: FutureBuilder(
         future: (() async {
           final docPath = '../../../';
-          final highlightingPath =
-              join(docPath, 'assets/highlighting', language);
+          final highlightingPath = join(docPath, 'assets/highlighting', language);
           await Highlighter.initialize([highlightingPath]);
           return Highlighter(
             language: highlightingPath,
-            theme: PlatformDispatcher.instance.platformBrightness ==
-                    Brightness.light
+            theme: PlatformDispatcher.instance.platformBrightness == Brightness.light
                 ? await HighlighterTheme.loadLightTheme()
                 : await HighlighterTheme.loadDarkTheme(),
           );

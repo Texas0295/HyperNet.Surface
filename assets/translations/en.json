@@ -383,5 +383,7 @@
   "accountStatusOnline": "Online",
   "accountStatusOffline": "Offline",
   "accountStatusLastSeen": "Last seen at {}",
-  "postArticle": "Article on the Solar Network"
+  "postArticle": "Article on the Solar Network",
+  "articleWrittenAt": "Written at {}",
+  "articleEditedAt": "Edited at {}"
 }

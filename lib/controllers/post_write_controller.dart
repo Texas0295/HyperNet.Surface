@@ -264,6 +264,7 @@ class PostWriteController extends ChangeNotifier {
 
     final item = await _uploadAttachment(context, media);
     attachments[idx] = PostWriteMedia(item);
+    isBusy = false;
 
     notifyListeners();
   }
@@ -395,6 +396,9 @@ class PostWriteController extends ChangeNotifier {
       attachments.add(thumbnail!);
       thumbnail = null;
     } else {
+      if (thumbnail != null) {
+        attachments.add(thumbnail!);
+      }
       thumbnail = attachments[idx];
       attachments.removeAt(idx);
     }
