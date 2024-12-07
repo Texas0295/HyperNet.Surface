@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/account.dart';
@@ -28,14 +29,14 @@ const Map<String, (String, IconData, Color)> kBadgesMeta = {
 
 class UserScreen extends StatefulWidget {
   final String name;
+
   const UserScreen({super.key, required this.name});
 
   @override
   State<UserScreen> createState() => _UserScreenState();
 }
 
-class _UserScreenState extends State<UserScreen>
-    with SingleTickerProviderStateMixin {
+class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateMixin {
   late final ScrollController _scrollController = ScrollController();
 
   SnAccount? _account;
@@ -75,14 +76,12 @@ class _UserScreenState extends State<UserScreen>
   double _appBarBlur = 0.0;
 
   late final _appBarWidth = MediaQuery.of(context).size.width;
-  late final _appBarHeight =
-      (_appBarWidth * kBannerAspectRatio).roundToDouble();
+  late final _appBarHeight = (_appBarWidth * kBannerAspectRatio).roundToDouble();
 
   void _updateAppBarBlur() {
     if (_scrollController.offset > _appBarHeight) return;
     setState(() {
-      _appBarBlur =
-          (_scrollController.offset / _appBarHeight * 10).clamp(0.0, 10.0);
+      _appBarBlur = (_scrollController.offset / _appBarHeight * 10).clamp(0.0, 10.0);
     });
   }
 
@@ -218,9 +217,7 @@ class _UserScreenState extends State<UserScreen>
                           Symbols.circle,
                           fill: 1,
                           size: 16,
-                          color: (_status?.isOnline ?? false)
-                              ? Colors.green
-                              : Colors.grey,
+                          color: (_status?.isOnline ?? false) ? Colors.green : Colors.grey,
                         ).padding(all: 4),
                         const Gap(8),
                         Text(
@@ -230,9 +227,47 @@ class _UserScreenState extends State<UserScreen>
                                   : 'accountStatusOffline'.tr()
                               : 'loading'.tr(),
                         ),
+                        if (_status != null && !_status!.isOnline && _status!.lastSeenAt != null)
+                          Text(
+                            'accountStatusLastSeen'.tr(args: [
+                              _status!.lastSeenAt != null
+                                  ? RelativeTime(context).format(
+                                      _status!.lastSeenAt!.toLocal(),
+                                    )
+                                  : 'unknown',
+                            ]),
+                          ).padding(left: 6).opacity(0.75),
                       ],
                     ).padding(vertical: 8, horizontal: 12),
                   ),
+                  const Gap(8),
+                  Wrap(
+                    children: _account!.badges
+                        .map(
+                          (ele) => Tooltip(
+                            richMessage: TextSpan(
+                              children: [
+                                TextSpan(text: kBadgesMeta[ele.type]?.$1.tr() ?? 'unknown'.tr()),
+                                if (ele.metadata['title'] != null)
+                                  TextSpan(
+                                    text: '\n${ele.metadata['title']}',
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                TextSpan(text: '\n'),
+                                TextSpan(
+                                  text: DateFormat.yMEd().format(ele.createdAt),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              kBadgesMeta[ele.type]?.$2 ?? Symbols.question_mark,
+                              color: kBadgesMeta[ele.type]?.$3,
+                              fill: 1,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ).padding(horizontal: 8),
                   const Gap(8),
                   Column(
                     children: [
@@ -240,9 +275,7 @@ class _UserScreenState extends State<UserScreen>
                         children: [
                           const Icon(Symbols.calendar_add_on),
                           const Gap(8),
-                          Text('publisherJoinedAt').tr(args: [
-                            DateFormat('y/M/d').format(_account!.createdAt)
-                          ]),
+                          Text('publisherJoinedAt').tr(args: [DateFormat('y/M/d').format(_account!.createdAt)]),
                         ],
                       ),
                       Row(
@@ -279,11 +312,7 @@ class _UserScreenState extends State<UserScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('accountBadge')
-                    .bold()
-                    .fontSize(17)
-                    .tr()
-                    .padding(horizontal: 20, bottom: 4),
+                Text('accountBadge').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
                 SizedBox(
                   height: 80,
                   width: double.infinity,
@@ -297,8 +326,7 @@ class _UserScreenState extends State<UserScreen>
                           child: Card(
                             child: ListTile(
                               leading: Icon(
-                                kBadgesMeta[badge.type]?.$2 ??
-                                    Symbols.question_mark,
+                                kBadgesMeta[badge.type]?.$2 ?? Symbols.question_mark,
                                 color: kBadgesMeta[badge.type]?.$3,
                                 fill: 1,
                               ),
@@ -308,8 +336,7 @@ class _UserScreenState extends State<UserScreen>
                               subtitle: badge.metadata['title'] != null
                                   ? Text(badge.metadata['title'])
                                   : Text(
-                                      DateFormat('y/M/d')
-                                          .format(badge.createdAt),
+                                      DateFormat('y/M/d').format(badge.createdAt),
                                     ),
                             ),
                           ),

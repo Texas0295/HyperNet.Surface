@@ -73,7 +73,6 @@ class MarkdownTextContent extends StatelessWidget {
       extensionSet: markdown.ExtensionSet(
         <markdown.BlockSyntax>[
           markdown.CodeBlockSyntax(),
-          ...markdown.ExtensionSet.commonMark.blockSyntaxes,
           ...markdown.ExtensionSet.gitHubFlavored.blockSyntaxes,
         ],
         <markdown.InlineSyntax>[
@@ -82,7 +81,6 @@ class MarkdownTextContent extends StatelessWidget {
           markdown.AutolinkSyntax(),
           markdown.AutolinkExtensionSyntax(),
           markdown.CodeSyntax(),
-          ...markdown.ExtensionSet.commonMark.inlineSyntaxes,
           ...markdown.ExtensionSet.gitHubFlavored.inlineSyntaxes
         ],
       ),
@@ -93,7 +91,7 @@ class MarkdownTextContent extends StatelessWidget {
           final segments = uri.split('/');
           switch (segments[0]) {
             default:
-              GoRouter.of(context).push(uri);
+              GoRouter.of(context).push('/$uri');
           }
           return;
         }
@@ -188,7 +186,7 @@ class _UserNameCardInlineSyntax extends markdown.InlineSyntax {
     final alias = match[0]!;
     final anchor = markdown.Element.text('a', alias)
       ..attributes['href'] = Uri.encodeFull(
-        'solink://users/${alias.substring(1)}',
+        'solink://account/${alias.substring(1)}',
       );
     parser.addNode(anchor);
 
