@@ -396,5 +396,9 @@
   "abuseReportResource": "资源位置 / ID",
   "abuseReportReason": "检举原因",
   "abuseReportSubmitted": "检举已提交，感谢你的贡献。",
-  "submit": "提交"
+  "submit": "提交",
+  "accountDeletion": "删除帐户",
+  "accountDeletionDescription": "你确定要删除这个帐户吗？该操作不可撤销，其隶属于该帐户的所有资源（帖子、聊天频道、发布者、制品等）都将被永久删除。三思而后行！",
+  "accountDeletionActionDescription": "删除你的 Solarpass 帐户。",
+  "accountDeletionSubmitted": "帐户删除申请已发出，你可以检查你的收件箱并根据邮件内的指示完成删除操作。"
 }

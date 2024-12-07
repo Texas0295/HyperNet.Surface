@@ -761,7 +761,7 @@ class _PostAbuseReportDialogState extends State<_PostAbuseReportDialog> {
     setState(() => _isBusy = true);
     try {
       final sn = context.read<SnNetworkProvider>();
-      await sn.client.request(
+      await sn.client.post(
         '/cgi/id/reports/abuse',
         data: {
           'resource': 'post:${widget.data.id}',

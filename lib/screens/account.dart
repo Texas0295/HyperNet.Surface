@@ -33,9 +33,7 @@ class AccountScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: ua.isAuthorized
-            ? _AuthorizedAccountScreen()
-            : _UnauthorizedAccountScreen(),
+        child: ua.isAuthorized ? _AuthorizedAccountScreen() : _UnauthorizedAccountScreen(),
       ),
     );
   }
@@ -71,15 +69,12 @@ class _AuthorizedAccountScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text(ua.user!.nick)
-                          .textStyle(Theme.of(context).textTheme.titleLarge!),
+                      Text(ua.user!.nick).textStyle(Theme.of(context).textTheme.titleLarge!),
                       const Gap(4),
-                      Text('@${ua.user!.name}')
-                          .textStyle(Theme.of(context).textTheme.bodySmall!),
+                      Text('@${ua.user!.name}').textStyle(Theme.of(context).textTheme.bodySmall!),
                     ],
                   ),
-                  Text(ua.user!.description)
-                      .textStyle(Theme.of(context).textTheme.bodyMedium!),
+                  Text(ua.user!.description).textStyle(Theme.of(context).textTheme.bodyMedium!),
                 ],
               ),
             );
@@ -139,6 +134,33 @@ class _AuthorizedAccountScreen extends StatelessWidget {
             });
           },
         ),
+        ListTile(
+          title: Text('accountDeletion'.tr()),
+          subtitle: Text('accountDeletionActionDescription'.tr()),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+          leading: const Icon(Symbols.person_cancel),
+          trailing: const Icon(Symbols.chevron_right),
+          onTap: () {
+            context
+                .showConfirmDialog(
+              'accountDeletion'.tr(),
+              'accountDeletionDescription'.tr(),
+            )
+                .then((value) {
+              if (!value || !context.mounted) return;
+              final sn = context.read<SnNetworkProvider>();
+              sn.client.post('/cgi/id/users/me/deletion').then((value) {
+                if (context.mounted) {
+                  context.showSnackbar('accountDeletionSubmitted'.tr());
+                }
+              }).catchError((err) {
+                if (context.mounted) {
+                  context.showErrorDialog(err);
+                }
+              });
+            });
+          },
+        ),
       ],
     );
   }
@@ -162,9 +184,7 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
                   child: Icon(Symbols.waving_hand, size: 28),
                 ),
                 const Gap(8),
-                Text('accountIntroTitle')
-                    .tr()
-                    .textStyle(Theme.of(context).textTheme.titleLarge!),
+                Text('accountIntroTitle').tr().textStyle(Theme.of(context).textTheme.titleLarge!),
                 Text('accountIntroSubtitle').tr(),
               ],
             ).padding(all: 20),
@@ -226,7 +246,7 @@ class _AbuseReportDialogState extends State<_AbuseReportDialog> {
     setState(() => _isBusy = true);
     try {
       final sn = context.read<SnNetworkProvider>();
-      await sn.client.request(
+      await sn.client.post(
         '/cgi/id/reports/abuse',
         data: {
           'resource': _resourceController.text,

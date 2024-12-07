@@ -396,5 +396,9 @@
   "abuseReportResource": "Resource Location / ID",
   "abuseReportReason": "Reason",
   "abuseReportSubmitted": "Report submitted, thank you for your contribution.",
-  "submit": "Submit"
+  "submit": "Submit",
+  "accountDeletion": "Delete Account",
+  "accountDeletionDescription": "Are you sure you want to delete this account? This operation is irreversible, all resources (posts, chat channels, publishers, etc) belonging to this account will be permanently deleted. Be careful and think twice!",
+  "accountDeletionActionDescription": "Delete your Solarpass account.",
+  "accountDeletionSubmitted": "Account deletion request has been sent, you can check your inbox and follow the instructions in the email to complete the deletion operation."
 }
