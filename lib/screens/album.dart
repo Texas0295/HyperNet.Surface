@@ -7,7 +7,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
-import 'package:surface/widgets/attachment/attachment_detail.dart';
+import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:uuid/uuid.dart';

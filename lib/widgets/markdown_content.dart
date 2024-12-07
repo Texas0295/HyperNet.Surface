@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
-import 'attachment/attachment_detail.dart';
+import 'attachment/attachment_zoom.dart';
 
 class MarkdownTextContent extends StatelessWidget {
   final String content;

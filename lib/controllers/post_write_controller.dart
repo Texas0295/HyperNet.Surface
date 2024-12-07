@@ -220,7 +220,7 @@ class PostWriteController extends ChangeNotifier {
 
       if (reposting != null) {
         final post = await pt.getPost(reposting);
-        replyingPost = post;
+        repostingPost = post;
       }
     } catch (err) {
       if (!context.mounted) return;

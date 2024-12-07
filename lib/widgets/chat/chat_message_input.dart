@@ -16,6 +16,7 @@ import 'package:surface/widgets/post/post_media_pending_list.dart';
 
 class ChatMessageInput extends StatefulWidget {
   final ChatMessageController controller;
+
   const ChatMessageInput({super.key, required this.controller});
 
   @override
@@ -74,9 +75,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           media.name,
           'interactive',
           null,
-          mimetype: media.raw != null && media.type == PostWriteMediaType.image
-              ? 'image/png'
-              : null,
+          mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
         );
 
         final item = await attach.chunkedUploadParts(
@@ -110,10 +109,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
     widget.controller.sendMessage(
       'messages.new',
       _contentController.text,
-      attachments: _attachments
-          .where((e) => e.attachment != null)
-          .map((e) => e.attachment!.rid)
-          .toList(),
+      attachments: _attachments.where((e) => e.attachment != null).map((e) => e.attachment!.rid).toList(),
       relatedId: _editingMessage?.id,
       quoteId: _replyingMessage?.id,
       editingMessage: _editingMessage,
@@ -167,15 +163,12 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: _progress),
             duration: Duration(milliseconds: 300),
-            builder: (context, value, _) =>
-                LinearProgressIndicator(value: value, minHeight: 2),
+            builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 2),
           )
         else if (_isBusy)
           const LinearProgressIndicator(value: null, minHeight: 2),
         Padding(
-          padding: _attachments.isNotEmpty
-              ? const EdgeInsets.only(top: 8)
-              : EdgeInsets.zero,
+          padding: _attachments.isNotEmpty ? const EdgeInsets.only(top: 8) : EdgeInsets.zero,
           child: PostMediaPendingList(
             attachments: _attachments,
             isBusy: _isBusy,
@@ -187,18 +180,18 @@ class ChatMessageInputState extends State<ChatMessageInput> {
             },
             onUpdateBusy: (state) => setState(() => _isBusy = state),
           ),
-        ).height(_attachments.isNotEmpty ? 80 + 8 : 0, animate: true).animate(
-            const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
+        )
+            .height(_attachments.isNotEmpty ? 80 + 8 : 0, animate: true)
+            .animate(const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
           child: Padding(
-            padding: _replyingMessage != null
-                ? const EdgeInsets.only(top: 8)
-                : EdgeInsets.zero,
+            padding: _replyingMessage != null ? const EdgeInsets.only(top: 8) : EdgeInsets.zero,
             child: _replyingMessage != null
                 ? MaterialBanner(
                     padding: const EdgeInsets.only(left: 16.0),
                     leading: const Icon(Symbols.reply),
+                    backgroundColor: Colors.transparent,
                     content: SingleChildScrollView(
                       physics: const NeverScrollableScrollPhysics(),
                       child: Column(
@@ -223,18 +216,18 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   )
                 : const SizedBox.shrink(),
           ),
-        ).height(_replyingMessage != null ? 54 + 8 : 0, animate: true).animate(
-            const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
+        )
+            .height(_replyingMessage != null ? 54 + 8 : 0, animate: true)
+            .animate(const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
           child: Padding(
-            padding: _editingMessage != null
-                ? const EdgeInsets.only(top: 8)
-                : EdgeInsets.zero,
+            padding: _editingMessage != null ? const EdgeInsets.only(top: 8) : EdgeInsets.zero,
             child: _editingMessage != null
                 ? MaterialBanner(
                     padding: const EdgeInsets.only(left: 16.0),
                     leading: const Icon(Symbols.edit),
+                    backgroundColor: Colors.transparent,
                     content: SingleChildScrollView(
                       physics: const NeverScrollableScrollPhysics(),
                       child: Column(
@@ -259,8 +252,9 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   )
                 : const SizedBox.shrink(),
           ),
-        ).height(_editingMessage != null ? 54 + 8 : 0, animate: true).animate(
-            const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
+        )
+            .height(_editingMessage != null ? 54 + 8 : 0, animate: true)
+            .animate(const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SizedBox(
           height: 56,
           child: Row(
@@ -271,13 +265,10 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   controller: _contentController,
                   decoration: InputDecoration(
                     isCollapsed: true,
-                    hintText: 'fieldChatMessage'.tr(args: [
-                      widget.controller.channel?.name ?? 'loading'.tr()
-                    ]),
+                    hintText: 'fieldChatMessage'.tr(args: [widget.controller.channel?.name ?? 'loading'.tr()]),
                     border: InputBorder.none,
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   onSubmitted: (_) {
                     if (_isBusy) return;
                     _sendMessage();

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/types/attachment.dart';
-import 'package:surface/widgets/attachment/attachment_detail.dart';
+import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:uuid/uuid.dart';
 

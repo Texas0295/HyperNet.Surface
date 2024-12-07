@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_network.dart';
-import 'package:surface/widgets/attachment/attachment_detail.dart';
+import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/dialog.dart';
 
 class PostMediaPendingList extends StatelessWidget {
