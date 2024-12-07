@@ -95,6 +95,7 @@ dependencies:
   popover: ^0.3.1
   sliver_tools: ^0.2.12
   bitsdojo_window: ^0.1.6
+  gal: ^2.3.0
 
 dev_dependencies:
   flutter_test:

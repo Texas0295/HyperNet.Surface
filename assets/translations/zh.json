@@ -385,6 +385,7 @@
   "accountStatusLastSeen": "最后一次在 {} 上线",
   "postArticle": "Solar Network 上的文章",
   "articleWrittenAt": "发表于 {}",
-  "articleEditedAt": "编辑于 {}"
-
+  "articleEditedAt": "编辑于 {}",
+  "attachmentSaved": "已保存到相册",
+  "openInAlbum": "在相册中打开"
 }

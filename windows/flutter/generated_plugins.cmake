@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   flutter_udid
   flutter_webrtc
+  gal
   livekit_client
   media_kit_libs_windows_video
   media_kit_video

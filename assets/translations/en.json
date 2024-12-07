@@ -385,5 +385,7 @@
   "accountStatusLastSeen": "Last seen at {}",
   "postArticle": "Article on the Solar Network",
   "articleWrittenAt": "Written at {}",
-  "articleEditedAt": "Edited at {}"
+  "articleEditedAt": "Edited at {}",
+  "attachmentSaved": "Saved to album",
+  "openInAlbum": "Open in album"
 }

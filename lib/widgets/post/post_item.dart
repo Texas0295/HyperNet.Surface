@@ -311,8 +311,6 @@ class _PostHeadline extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isEnlarge) {
       final sn = context.read<SnNetworkProvider>();
-      final textScaler = TextScaler.linear(1.5);
-
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
