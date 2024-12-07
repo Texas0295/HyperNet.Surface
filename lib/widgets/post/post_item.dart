@@ -577,7 +577,7 @@ class _PostContentHeader extends StatelessWidget {
                     ),
                   ).then((value) {
                     if (value == true && context.mounted) {
-                      context.showSnackbar('postAbuseReportSubmitted'.tr());
+                      context.showSnackbar('abuseReportSubmitted'.tr());
                     }
                   });
                 },
@@ -793,7 +793,7 @@ class _PostAbuseReportDialogState extends State<_PostAbuseReportDialog> {
             maxLength: null,
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
-              labelText: 'postAbuseReportReason'.tr(),
+              labelText: 'abuseReportReason'.tr(),
             ),
             onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           ),

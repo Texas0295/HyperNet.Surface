@@ -390,7 +390,11 @@
   "openInAlbum": "Open in album",
   "postAbuseReport": "Report Post",
   "postAbuseReportDescription": "Report posts that violate our user agreement and community guidelines to help us improve the content on Solar Network. Please describe how this post violates the relevant rules. Do not include any sensitive information. We will process your report within 24 hours.",
-  "postAbuseReportReason": "Reason",
-  "postAbuseReportSubmitted": "Report submitted, thank you for your contribution.",
+  "abuseReport": "Abuse Report",
+  "abuseReportDescription": "Report any resources that violate our user agreement and community guidelines to help us improve the content on Solar Network. Please describe the location of the resource (provide resource ID as best as possible) and how this violates the relevant rules. Do not include any sensitive information. We will process your report within 24 hours.",
+  "abuseReportActionDescription": "Report abuse usage behavior.",
+  "abuseReportResource": "Resource Location / ID",
+  "abuseReportReason": "Reason",
+  "abuseReportSubmitted": "Report submitted, thank you for your contribution.",
   "submit": "Submit"
 }

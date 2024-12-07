@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
@@ -105,6 +106,23 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           },
         ),
         ListTile(
+          title: Text('abuseReport').tr(),
+          subtitle: Text('abuseReportActionDescription').tr(),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+          leading: const Icon(Symbols.flag),
+          trailing: const Icon(Symbols.chevron_right),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => _AbuseReportDialog(),
+            ).then((value) {
+              if (value == true && context.mounted) {
+                context.showSnackbar('abuseReportSubmitted'.tr());
+              }
+            });
+          },
+        ),
+        ListTile(
           title: Text('accountLogout').tr(),
           subtitle: Text('accountLogoutSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -178,6 +196,92 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
           onTap: () {
             GoRouter.of(context).pushNamed('authRegister');
           },
+        ),
+      ],
+    );
+  }
+}
+
+class _AbuseReportDialog extends StatefulWidget {
+  const _AbuseReportDialog({super.key});
+
+  @override
+  State<_AbuseReportDialog> createState() => _AbuseReportDialogState();
+}
+
+class _AbuseReportDialogState extends State<_AbuseReportDialog> {
+  bool _isBusy = false;
+
+  final _resourceController = TextEditingController();
+  final _reasonController = TextEditingController();
+
+  @override
+  dispose() {
+    _resourceController.dispose();
+    _reasonController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _performAction() async {
+    setState(() => _isBusy = true);
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.request(
+        '/cgi/id/reports/abuse',
+        data: {
+          'resource': _resourceController.text,
+          'reason': _reasonController.text,
+        },
+      );
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('abuseReport'.tr()),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('abuseReportDescription'.tr()),
+          const Gap(12),
+          TextField(
+            controller: _resourceController,
+            maxLength: null,
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: 'abuseReportResource'.tr(),
+            ),
+            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          ),
+          const Gap(4),
+          TextField(
+            controller: _reasonController,
+            maxLength: null,
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: 'abuseReportReason'.tr(),
+            ),
+            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isBusy ? null : () => Navigator.pop(context),
+          child: Text('dialogDismiss').tr(),
+        ),
+        TextButton(
+          onPressed: _isBusy ? null : _performAction,
+          child: Text('submit').tr(),
         ),
       ],
     );
