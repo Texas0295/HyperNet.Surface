@@ -105,7 +105,14 @@ class AppRootScaffold extends StatelessWidget {
             if (!kIsWeb &&
                 (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
               Container(
-                color: Theme.of(context).colorScheme.surface,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                      width: 1 / devicePixelRatio,
+                    ),
+                  ),
+                ),
                 child: WindowTitleBarBox(child: MoveWindow()),
               ),
             ConnectionIndicator(),
