@@ -569,6 +569,18 @@ class _PostContentHeader extends StatelessWidget {
                     Text('report').tr(),
                   ],
                 ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => _PostAbuseReportDialog(
+                      data: data,
+                    ),
+                  ).then((value) {
+                    if (value == true && context.mounted) {
+                      context.showSnackbar('postAbuseReportSubmitted'.tr());
+                    }
+                  });
+                },
               ),
             ],
           ),
@@ -722,5 +734,81 @@ class _PostTruncatedHint extends StatelessWidget {
           ),
       ],
     ).opacity(0.75);
+  }
+}
+
+class _PostAbuseReportDialog extends StatefulWidget {
+  final SnPost data;
+
+  const _PostAbuseReportDialog({super.key, required this.data});
+
+  @override
+  State<_PostAbuseReportDialog> createState() => _PostAbuseReportDialogState();
+}
+
+class _PostAbuseReportDialogState extends State<_PostAbuseReportDialog> {
+  bool _isBusy = false;
+
+  final _reasonController = TextEditingController();
+
+  @override
+  dispose() {
+    _reasonController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _performAction() async {
+    setState(() => _isBusy = true);
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.request(
+        '/cgi/id/reports/abuse',
+        data: {
+          'resource': 'post:${widget.data.id}',
+          'reason': _reasonController.text,
+        },
+      );
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('postAbuseReport'.tr()),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('postAbuseReportDescription'.tr()),
+          const Gap(12),
+          TextField(
+            controller: _reasonController,
+            maxLength: null,
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: 'postAbuseReportReason'.tr(),
+            ),
+            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isBusy ? null : () => Navigator.pop(context),
+          child: Text('dialogDismiss').tr(),
+        ),
+        TextButton(
+          onPressed: _isBusy ? null : _performAction,
+          child: Text('submit').tr(),
+        ),
+      ],
+    );
   }
 }

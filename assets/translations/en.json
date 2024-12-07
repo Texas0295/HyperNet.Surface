@@ -387,5 +387,10 @@
   "articleWrittenAt": "Written at {}",
   "articleEditedAt": "Edited at {}",
   "attachmentSaved": "Saved to album",
-  "openInAlbum": "Open in album"
+  "openInAlbum": "Open in album",
+  "postAbuseReport": "Report Post",
+  "postAbuseReportDescription": "Report posts that violate our user agreement and community guidelines to help us improve the content on Solar Network. Please describe how this post violates the relevant rules. Do not include any sensitive information. We will process your report within 24 hours.",
+  "postAbuseReportReason": "Reason",
+  "postAbuseReportSubmitted": "Report submitted, thank you for your contribution.",
+  "submit": "Submit"
 }
