@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
@@ -148,6 +147,7 @@ class PostItem extends StatelessWidget {
               if (data.repostTo != null)
                 _PostQuoteContent(child: data.repostTo!).padding(
                   horizontal: 12,
+                  bottom: data.preload?.attachments?.isNotEmpty ?? false ? 12 : 0,
                 ),
               if (data.visibility > 0)
                 _PostVisibilityHint(data: data).padding(
@@ -606,26 +606,33 @@ class _PostQuoteContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        border: Border.all(
-          color: Theme.of(context).dividerColor,
-          width: 1,
+    return GestureDetector(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+            width: 1,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          children: [
+            _PostContentHeader(
+              data: child,
+              isCompact: true,
+              showMenu: false,
+              onDeleted: () {},
+            ).padding(bottom: 4),
+            _PostContentBody(data: child),
+          ],
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        children: [
-          _PostContentHeader(
-            data: child,
-            isCompact: true,
-            showMenu: false,
-            onDeleted: () {},
-          ).padding(bottom: 4),
-          _PostContentBody(data: child),
-        ],
-      ),
+      onTap: () {
+        GoRouter.of(context).pushNamed('postDetail', pathParameters: {
+          'slug': child.id.toString(),
+        });
+      },
     );
   }
 }

@@ -206,7 +206,7 @@ class PostWriteController extends ChangeNotifier {
         tags = List.from(post.tags.map((ele) => ele.alias));
         attachments.addAll(post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? []);
 
-        if (post.preload?.thumbnail != null) {
+        if (post.preload?.thumbnail != null && (post.preload?.thumbnail?.rid.isNotEmpty ?? false)) {
           thumbnail = PostWriteMedia(post.preload!.thumbnail);
         }
 
