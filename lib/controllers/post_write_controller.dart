@@ -28,6 +28,8 @@ class PostWriteMedia {
   final XFile? file;
   final Uint8List? raw;
 
+  PostWriteMedia? thumbnail;
+
   PostWriteMedia(this.attachment, {this.file, this.raw}) {
     name = attachment!.name;
 
@@ -67,8 +69,7 @@ class PostWriteMedia {
     }
   }
 
-  PostWriteMedia.fromBytes(this.raw, this.name, this.type,
-      {this.attachment, this.file});
+  PostWriteMedia.fromBytes(this.raw, this.name, this.type, {this.attachment, this.file});
 
   bool get isEmpty => attachment == null && file == null && raw == null;
 
@@ -102,8 +103,7 @@ class PostWriteMedia {
   }) {
     if (attachment != null) {
       final sn = context.read<SnNetworkProvider>();
-      final ImageProvider provider =
-          UniversalImage.provider(sn.getAttachmentUrl(attachment!.rid));
+      final ImageProvider provider = UniversalImage.provider(sn.getAttachmentUrl(attachment!.rid));
       if (width != null && height != null) {
         return ResizeImage(
           provider,
@@ -114,8 +114,7 @@ class PostWriteMedia {
       }
       return provider;
     } else if (file != null) {
-      final ImageProvider provider =
-          kIsWeb ? NetworkImage(file!.path) : FileImage(File(file!.path));
+      final ImageProvider provider = kIsWeb ? NetworkImage(file!.path) : FileImage(File(file!.path));
       if (width != null && height != null) {
         return ResizeImage(
           provider,
@@ -162,9 +161,10 @@ class PostWriteController extends ChangeNotifier {
   String mode = kTitleMap.keys.first;
 
   String get title => titleController.text;
+
   String get description => descriptionController.text;
-  bool get isRelatedNull =>
-      ![editingPost, repostingPost, replyingPost].any((ele) => ele != null);
+
+  bool get isRelatedNull => ![editingPost, repostingPost, replyingPost].any((ele) => ele != null);
 
   bool isLoading = false, isBusy = false;
   double? progress;
@@ -176,6 +176,7 @@ class PostWriteController extends ChangeNotifier {
   List<int> visibleUsers = List.empty();
   List<int> invisibleUsers = List.empty();
   List<String> tags = List.empty();
+  PostWriteMedia? thumbnail;
   List<PostWriteMedia> attachments = List.empty(growable: true);
   DateTime? publishedAt, publishedUntil;
 
@@ -203,9 +204,11 @@ class PostWriteController extends ChangeNotifier {
         invisibleUsers = List.from(post.invisibleUsersList ?? []);
         visibility = post.visibility;
         tags = List.from(post.tags.map((ele) => ele.alias));
-        attachments.addAll(
-          post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? [],
-        );
+        attachments.addAll(post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? []);
+
+        if (post.preload?.thumbnail != null) {
+          thumbnail = PostWriteMedia(post.preload!.thumbnail);
+        }
 
         editingPost = post;
       }
@@ -228,6 +231,43 @@ class PostWriteController extends ChangeNotifier {
     }
   }
 
+  Future<SnAttachment> _uploadAttachment(BuildContext context, PostWriteMedia media) async {
+    final attach = context.read<SnAttachmentProvider>();
+
+    final place = await attach.chunkedUploadInitialize(
+      (await media.length())!,
+      media.name,
+      'interactive',
+      null,
+      mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
+    );
+
+    final item = await attach.chunkedUploadParts(
+      media.toFile()!,
+      place.$1,
+      place.$2,
+      onProgress: (progress) {
+        progress = progress;
+        notifyListeners();
+      },
+    );
+
+    return item;
+  }
+
+  Future<void> uploadSingleAttachment(BuildContext context, int idx) async {
+    if (isBusy) return;
+
+    final media = idx == -1 ? thumbnail! : attachments[idx];
+    isBusy = true;
+    notifyListeners();
+
+    final item = await _uploadAttachment(context, media);
+    attachments[idx] = PostWriteMedia(item);
+
+    notifyListeners();
+  }
+
   Future<void> post(BuildContext context) async {
     if (isBusy || publisher == null) return;
 
@@ -240,6 +280,11 @@ class PostWriteController extends ChangeNotifier {
 
     // Uploading attachments
     try {
+      if (thumbnail != null && thumbnail!.attachment == null) {
+        final thumb = await _uploadAttachment(context, thumbnail!);
+        thumbnail = PostWriteMedia(thumb);
+      }
+
       for (int i = 0; i < attachments.length; i++) {
         final media = attachments[i];
         if (media.attachment != null) continue; // Already uploaded, skip
@@ -250,9 +295,7 @@ class PostWriteController extends ChangeNotifier {
           media.name,
           'interactive',
           null,
-          mimetype: media.raw != null && media.type == PostWriteMediaType.image
-              ? 'image/png'
-              : null,
+          mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
         );
 
         final item = await attach.chunkedUploadParts(
@@ -261,8 +304,7 @@ class PostWriteController extends ChangeNotifier {
           place.$2,
           onProgress: (progress) {
             // Calculate overall progress for attachments
-            progress = ((i + progress) / attachments.length) *
-                kAttachmentProgressWeight;
+            progress = ((i + progress) / attachments.length) * kAttachmentProgressWeight;
             notifyListeners();
           },
         );
@@ -292,32 +334,24 @@ class PostWriteController extends ChangeNotifier {
           'publisher': publisher!.id,
           'content': contentController.text,
           if (titleController.text.isNotEmpty) 'title': titleController.text,
-          if (descriptionController.text.isNotEmpty)
-            'description': descriptionController.text,
-          'attachments': attachments
-              .where((e) => e.attachment != null)
-              .map((e) => e.attachment!.rid)
-              .toList(),
+          if (descriptionController.text.isNotEmpty) 'description': descriptionController.text,
+          if (thumbnail != null && thumbnail!.attachment != null) 'thumbnail': thumbnail!.attachment!.rid,
+          'attachments': attachments.where((e) => e.attachment != null).map((e) => e.attachment!.rid).toList(),
           'tags': tags.map((ele) => {'alias': ele}).toList(),
           'visibility': visibility,
           'visible_users_list': visibleUsers,
           'invisible_users_list': invisibleUsers,
-          if (publishedAt != null)
-            'published_at': publishedAt!.toUtc().toIso8601String(),
-          if (publishedUntil != null)
-            'published_until': publishedAt!.toUtc().toIso8601String(),
+          if (publishedAt != null) 'published_at': publishedAt!.toUtc().toIso8601String(),
+          if (publishedUntil != null) 'published_until': publishedAt!.toUtc().toIso8601String(),
           if (replyingPost != null) 'reply_to': replyingPost!.id,
           if (repostingPost != null) 'repost_to': repostingPost!.id,
         },
         onSendProgress: (count, total) {
-          progress =
-              baseProgressVal + (count / total) * (kPostingProgressWeight / 2);
+          progress = baseProgressVal + (count / total) * (kPostingProgressWeight / 2);
           notifyListeners();
         },
         onReceiveProgress: (count, total) {
-          progress = baseProgressVal +
-              (kPostingProgressWeight / 2) +
-              (count / total) * (kPostingProgressWeight / 2);
+          progress = baseProgressVal + (kPostingProgressWeight / 2) + (count / total) * (kPostingProgressWeight / 2);
           notifyListeners();
         },
         options: Options(
@@ -339,12 +373,31 @@ class PostWriteController extends ChangeNotifier {
   }
 
   void setAttachmentAt(int idx, PostWriteMedia item) {
-    attachments[idx] = item;
+    if (idx == -1) {
+      thumbnail = item;
+    } else {
+      attachments[idx] = item;
+    }
     notifyListeners();
   }
 
   void removeAttachmentAt(int idx) {
-    attachments.removeAt(idx);
+    if (idx == -1) {
+      thumbnail = null;
+    } else {
+      attachments.removeAt(idx);
+    }
+    notifyListeners();
+  }
+
+  void setThumbnail(int? idx) {
+    if (idx == null) {
+      attachments.add(thumbnail!);
+      thumbnail = null;
+    } else {
+      thumbnail = attachments[idx];
+      attachments.removeAt(idx);
+    }
     notifyListeners();
   }
 
@@ -383,8 +436,18 @@ class PostWriteController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setProgress(double? value) {
+    progress = value;
+    notifyListeners();
+  }
+
   void setIsBusy(bool value) {
     isBusy = value;
+    notifyListeners();
+  }
+
+  void setMode(String value) {
+    mode = value;
     notifyListeners();
   }
 

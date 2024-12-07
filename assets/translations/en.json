@@ -257,8 +257,13 @@
   "addAttachmentFromAlbum": "Add from album",
   "addAttachmentFromClipboard": "Paste file",
   "attachmentPastedImage": "Pasted Image",
-  "notificationUnread": "未读",
-  "notificationRead": "已读",
+  "attachmentInsertLink": "Insert Link",
+  "attachmentSetAsPostThumbnail": "Set as post thumbnail",
+  "attachmentUnsetAsPostThumbnail": "Unset as post thumbnail",
+  "attachmentSetThumbnail": "Set thumbnail",
+  "attachmentUpload": "Upload",
+  "notificationUnread": "Unread",
+  "notificationRead": "Read",
   "notificationMarkAllRead": "Mark all notifications as read",
   "notificationMarkAllReadDescription": "Are you sure you want to mark all notifications as read? This operation is irreversible.",
   "notificationMarkAllReadPrompt": {
@@ -377,5 +382,6 @@
   "accountStatus": "Status",
   "accountStatusOnline": "Online",
   "accountStatusOffline": "Offline",
-  "accountStatusLastSeen": "Last seen at {}"
+  "accountStatusLastSeen": "Last seen at {}",
+  "postArticle": "Article on the Solar Network"
 }

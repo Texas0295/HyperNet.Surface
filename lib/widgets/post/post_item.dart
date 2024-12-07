@@ -21,21 +21,25 @@ import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/post/post_reaction.dart';
 import 'package:surface/widgets/post/publisher_popover.dart';
+import 'package:surface/widgets/universal_image.dart';
 
 class PostItem extends StatelessWidget {
   final SnPost data;
   final bool showReactions;
   final bool showComments;
   final bool showMenu;
+  final bool showFullPost;
   final double? maxWidth;
   final Function(SnPost data)? onChanged;
   final Function()? onDeleted;
+
   const PostItem({
     super.key,
     required this.data,
     this.showReactions = true,
     this.showComments = true,
     this.showMenu = true,
+    this.showFullPost = false,
     this.maxWidth,
     this.onChanged,
     this.onDeleted,
@@ -47,6 +51,75 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sn = context.read<SnNetworkProvider>();
+
+    // Article headline preview
+    if (!showFullPost && data.type == 'article') {
+      return Container(
+        constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _PostContentHeader(
+              data: data,
+              onDeleted: () {
+                if (onDeleted != null) {}
+              },
+            ).padding(horizontal: 12, top: 8, bottom: 4),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 4, left: 12, right: 12),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (data.preload?.thumbnail != null)
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
+                        ),
+                        child: AutoResizeUniversalImage(
+                          sn.getAttachmentUrl(data.preload!.thumbnail!.rid),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  const Gap(8),
+                  _PostHeadline(data: data).padding(horizontal: 14),
+                  const Gap(4),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (data.visibility > 0) _PostVisibilityHint(data: data),
+                      _PostTruncatedHint(data: data),
+                    ],
+                  ).padding(horizontal: 12),
+                  const Gap(8),
+                ],
+              ),
+            ),
+            Text('postArticle').tr().fontSize(13).opacity(0.75).padding(horizontal: 24, bottom: 8),
+            if (data.tags.isNotEmpty) _PostTagsList(data: data).padding(horizontal: 16, bottom: 6),
+            _PostBottomAction(
+              data: data,
+              showComments: showComments,
+              showReactions: showReactions,
+              onChanged: _onChanged,
+            ).padding(left: 8, right: 14),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -62,11 +135,9 @@ class PostItem extends StatelessWidget {
                   if (onDeleted != null) onDeleted!();
                 },
               ).padding(horizontal: 12, vertical: 8),
-              if (data.body['title'] != null ||
-                  data.body['description'] != null)
+              if (data.body['title'] != null || data.body['description'] != null)
                 _PostHeadline(data: data).padding(horizontal: 16, bottom: 8),
-              _PostContentBody(data: data.body)
-                  .padding(horizontal: 16, bottom: 6),
+              _PostContentBody(data: data.body).padding(horizontal: 16, bottom: 6),
               if (data.repostTo != null)
                 _PostQuoteContent(child: data.repostTo!).padding(
                   horizontal: 12,
@@ -81,8 +152,7 @@ class PostItem extends StatelessWidget {
                   horizontal: 16,
                   vertical: 4,
                 ),
-              if (data.tags.isNotEmpty)
-                _PostTagsList(data: data).padding(horizontal: 16, bottom: 6),
+              if (data.tags.isNotEmpty) _PostTagsList(data: data).padding(horizontal: 16, bottom: 6),
             ],
           ),
         ),
@@ -116,6 +186,7 @@ class _PostBottomAction extends StatelessWidget {
   final bool showComments;
   final bool showReactions;
   final Function(SnPost data) onChanged;
+
   const _PostBottomAction({
     required this.data,
     required this.showComments,
@@ -130,9 +201,7 @@ class _PostBottomAction extends StatelessWidget {
         );
 
     final String? mostTypicalReaction = data.metric.reactionList.isNotEmpty
-        ? data.metric.reactionList.entries
-            .reduce((a, b) => a.value > b.value ? a : b)
-            .key
+        ? data.metric.reactionList.entries.reduce((a, b) => a.value > b.value ? a : b).key
         : null;
 
     return Row(
@@ -145,8 +214,7 @@ class _PostBottomAction extends StatelessWidget {
                 InkWell(
                   child: Row(
                     children: [
-                      if (mostTypicalReaction == null ||
-                          kTemplateReactions[mostTypicalReaction] == null)
+                      if (mostTypicalReaction == null || kTemplateReactions[mostTypicalReaction] == null)
                         Icon(Symbols.add_reaction, size: 20, color: iconColor)
                       else
                         Text(
@@ -158,8 +226,7 @@ class _PostBottomAction extends StatelessWidget {
                           ),
                         ),
                       const Gap(8),
-                      if (data.totalUpvote > 0 &&
-                          data.totalUpvote >= data.totalDownvote)
+                      if (data.totalUpvote > 0 && data.totalUpvote >= data.totalDownvote)
                         Text('postReactionUpvote').plural(
                           data.totalUpvote,
                         )
@@ -178,12 +245,8 @@ class _PostBottomAction extends StatelessWidget {
                         data: data,
                         onChanged: (value, attr, delta) {
                           onChanged(data.copyWith(
-                            totalUpvote: attr == 1
-                                ? data.totalUpvote + delta
-                                : data.totalUpvote,
-                            totalDownvote: attr == 2
-                                ? data.totalDownvote + delta
-                                : data.totalDownvote,
+                            totalUpvote: attr == 1 ? data.totalUpvote + delta : data.totalUpvote,
+                            totalDownvote: attr == 2 ? data.totalDownvote + delta : data.totalDownvote,
                             metric: data.metric.copyWith(reactionList: value),
                           ));
                         },
@@ -229,6 +292,7 @@ class _PostBottomAction extends StatelessWidget {
 
 class _PostHeadline extends StatelessWidget {
   final SnPost data;
+
   const _PostHeadline({super.key, required this.data});
 
   @override
@@ -256,6 +320,7 @@ class _PostContentHeader extends StatelessWidget {
   final bool isCompact;
   final bool showMenu;
   final Function onDeleted;
+
   const _PostContentHeader({
     required this.data,
     this.isCompact = false,
@@ -438,6 +503,7 @@ class _PostContentHeader extends StatelessWidget {
 
 class _PostContentBody extends StatelessWidget {
   final dynamic data;
+
   const _PostContentBody({this.data});
 
   @override
@@ -449,6 +515,7 @@ class _PostContentBody extends StatelessWidget {
 
 class _PostQuoteContent extends StatelessWidget {
   final SnPost child;
+
   const _PostQuoteContent({super.key, required this.child});
 
   @override
@@ -479,6 +546,7 @@ class _PostQuoteContent extends StatelessWidget {
 
 class _PostTagsList extends StatelessWidget {
   final SnPost data;
+
   const _PostTagsList({super.key, required this.data});
 
   @override
@@ -505,6 +573,7 @@ class _PostTagsList extends StatelessWidget {
 
 class _PostVisibilityHint extends StatelessWidget {
   final SnPost data;
+
   const _PostVisibilityHint({super.key, required this.data});
 
   static const List<IconData> kVisibilityIcons = [
@@ -529,6 +598,7 @@ class _PostVisibilityHint extends StatelessWidget {
 
 class _PostTruncatedHint extends StatelessWidget {
   final SnPost data;
+
   const _PostTruncatedHint({super.key, required this.data});
 
   static const int kHumanReadSpeed = 238;
@@ -544,13 +614,11 @@ class _PostTruncatedHint extends StatelessWidget {
               const Gap(4),
               Text('postReadEstimate').tr(args: [
                 '${Duration(
-                  seconds: (data.body['content_length'] as num).toDouble() *
-                      60 ~/
-                      kHumanReadSpeed,
+                  seconds: (data.body['content_length'] as num).toDouble() * 60 ~/ kHumanReadSpeed,
                 ).inSeconds}s',
               ]),
             ],
-          ).padding(right: 12),
+          ).padding(right: 8),
         if (data.body['content_length'] != null)
           Row(
             children: [

@@ -94,8 +94,8 @@ class PostMetaEditor extends StatelessWidget {
               onTapOutside: (_) =>
                   FocusManager.instance.primaryFocus?.unfocus(),
             ).padding(horizontal: 24),
-            if (controller.mode == 'article') const Gap(4),
-            if (controller.mode == 'article')
+            if (controller.mode == 'articles') const Gap(4),
+            if (controller.mode == 'articles')
               TextField(
                 controller: controller.descriptionController,
                 maxLines: null,

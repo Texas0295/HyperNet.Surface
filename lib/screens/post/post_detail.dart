@@ -110,6 +110,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 data: _data!,
                 maxWidth: 640,
                 showComments: false,
+                showFullPost: true,
                 onChanged: (data) {
                   setState(() => _data = data);
                 },

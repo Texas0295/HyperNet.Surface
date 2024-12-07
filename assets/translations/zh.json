@@ -257,6 +257,11 @@
   "addAttachmentFromAlbum": "从相册中添加附件",
   "addAttachmentFromClipboard": "粘贴附件",
   "attachmentPastedImage": "粘贴的图片",
+  "attachmentInsertLink": "插入连接",
+  "attachmentSetAsPostThumbnail": "设置为帖子缩略图",
+  "attachmentUnsetAsPostThumbnail": "取消设置为帖子缩略图",
+  "attachmentSetThumbnail": "设置缩略图",
+  "attachmentUpload": "上传",
   "notificationUnread": "未读",
   "notificationRead": "已读",
   "notificationMarkAllRead": "已读所有通知",
@@ -377,5 +382,6 @@
   "accountStatus": "状态",
   "accountStatusOnline": "在线",
   "accountStatusOffline": "离线",
-  "accountStatusLastSeen": "最后一次在 {} 上线"
+  "accountStatusLastSeen": "最后一次在 {} 上线",
+  "postArticle": "Solar Network 上的文章"
 }

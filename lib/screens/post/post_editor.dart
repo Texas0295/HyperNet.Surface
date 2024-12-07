@@ -25,6 +25,7 @@ class PostEditorScreen extends StatefulWidget {
   final int? postEditId;
   final int? postReplyId;
   final int? postRepostId;
+
   const PostEditorScreen({
     super.key,
     required this.mode,
@@ -41,6 +42,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   final PostWriteController _writeController = PostWriteController();
 
   bool _isFetching = false;
+
   bool get _isLoading => _isFetching || _writeController.isLoading;
 
   List<SnPublisher>? _publishers;
@@ -105,6 +107,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     if (!PostWriteController.kTitleMap.keys.contains(widget.mode)) {
       context.showErrorDialog('Unknown post type');
       Navigator.pop(context);
+    } else {
+      _writeController.setMode(widget.mode);
     }
     _fetchPublishers();
     _writeController.fetchRelatedPost(
@@ -131,21 +135,13 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               textAlign: TextAlign.center,
               text: TextSpan(children: [
                 TextSpan(
-                  text: _writeController.title.isNotEmpty
-                      ? _writeController.title
-                      : 'untitled'.tr(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.white),
+                  text: _writeController.title.isNotEmpty ? _writeController.title : 'untitled'.tr(),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
                 ),
                 const TextSpan(text: '\n'),
                 TextSpan(
                   text: PostWriteController.kTitleMap[widget.mode]!.tr(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
                 ),
               ]),
             ),
@@ -181,17 +177,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(item.nick).textStyle(
-                                          Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!),
+                                      Text(item.nick).textStyle(Theme.of(context).textTheme.bodyMedium!),
                                       Text('@${item.name}')
-                                          .textStyle(Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!)
+                                          .textStyle(Theme.of(context).textTheme.bodySmall!)
                                           .fontSize(12),
                                     ],
                                   ),
@@ -208,8 +198,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           CircleAvatar(
                             radius: 16,
                             backgroundColor: Colors.transparent,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onSurface,
+                            foregroundColor: Theme.of(context).colorScheme.onSurface,
                             child: const Icon(Symbols.add),
                           ),
                           const Gap(8),
@@ -218,8 +207,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('publishersNew').tr().textStyle(
-                                    Theme.of(context).textTheme.bodyMedium!),
+                                Text('publishersNew').tr().textStyle(Theme.of(context).textTheme.bodyMedium!),
                               ],
                             ),
                           ),
@@ -230,9 +218,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                   value: _writeController.publisher,
                   onChanged: (SnPublisher? value) {
                     if (value == null) {
-                      GoRouter.of(context)
-                          .pushNamed('accountPublisherNew')
-                          .then((value) {
+                      GoRouter.of(context).pushNamed('accountPublisherNew').then((value) {
                         if (value == true) {
                           _publishers = null;
                           _fetchPublishers();
@@ -267,16 +253,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               ),
                               child: ExpansionTile(
                                 minTileHeight: 48,
-                                leading:
-                                    const Icon(Symbols.reply).padding(left: 4),
+                                leading: const Icon(Symbols.reply).padding(left: 4),
                                 title: Text('postReplyingNotice')
                                     .fontSize(15)
-                                    .tr(args: [
-                                  '@${_writeController.replyingPost!.publisher.name}'
-                                ]),
-                                children: <Widget>[
-                                  PostItem(data: _writeController.replyingPost!)
-                                ],
+                                    .tr(args: ['@${_writeController.replyingPost!.publisher.name}']),
+                                children: <Widget>[PostItem(data: _writeController.replyingPost!)],
                               ),
                             ),
                             const Divider(height: 1),
@@ -292,13 +273,10 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               ),
                               child: ExpansionTile(
                                 minTileHeight: 48,
-                                leading: const Icon(Symbols.forward)
-                                    .padding(left: 4),
+                                leading: const Icon(Symbols.forward).padding(left: 4),
                                 title: Text('postRepostingNotice')
                                     .fontSize(15)
-                                    .tr(args: [
-                                  '@${_writeController.repostingPost!.publisher.name}'
-                                ]),
+                                    .tr(args: ['@${_writeController.repostingPost!.publisher.name}']),
                                 children: <Widget>[
                                   PostItem(
                                     data: _writeController.repostingPost!,
@@ -319,16 +297,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               ),
                               child: ExpansionTile(
                                 minTileHeight: 48,
-                                leading: const Icon(Symbols.edit_note)
-                                    .padding(left: 4),
+                                leading: const Icon(Symbols.edit_note).padding(left: 4),
                                 title: Text('postEditingNotice')
                                     .fontSize(15)
-                                    .tr(args: [
-                                  '@${_writeController.editingPost!.publisher.name}'
-                                ]),
-                                children: <Widget>[
-                                  PostItem(data: _writeController.editingPost!)
-                                ],
+                                    .tr(args: ['@${_writeController.editingPost!.publisher.name}']),
+                                children: <Widget>[PostItem(data: _writeController.editingPost!)],
                               ),
                             ),
                             const Divider(height: 1),
@@ -347,14 +320,12 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           ),
                           border: InputBorder.none,
                         ),
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
+                        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                       ),
                     ]
                         .expandIndexed(
                           (idx, ele) => [
-                            if (idx != 0 || _writeController.isRelatedNull)
-                              const Gap(8),
+                            if (idx != 0 || _writeController.isRelatedNull) const Gap(8),
                             ele,
                           ],
                         )
@@ -362,10 +333,21 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                   ),
                 ),
               ),
-              if (_writeController.attachments.isNotEmpty)
+              if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
                 PostMediaPendingList(
+                  thumbnail: _writeController.thumbnail,
                   attachments: _writeController.attachments,
                   isBusy: _writeController.isBusy,
+                  onUpload: (int idx) async {
+                    await _writeController.uploadSingleAttachment(context, idx);
+                  },
+                  onPostSetThumbnail: (int? idx) {
+                    _writeController.setThumbnail(idx);
+                  },
+                  onInsertLink: (int idx) async {
+                    _writeController.contentController.text +=
+                        '\n![](solink://attachments/${_writeController.attachments[idx].attachment!.rid})';
+                  },
                   onUpdate: (int idx, PostWriteMedia updatedMedia) async {
                     _writeController.setIsBusy(true);
                     try {
@@ -390,13 +372,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LoadingIndicator(isActive: _isLoading),
-                    if (_writeController.isBusy &&
-                        _writeController.progress != null)
+                    if (_writeController.isBusy && _writeController.progress != null)
                       TweenAnimationBuilder<double>(
                         tween: Tween(begin: 0, end: _writeController.progress),
                         duration: Duration(milliseconds: 300),
-                        builder: (context, value, _) =>
-                            LinearProgressIndicator(value: value, minHeight: 2),
+                        builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 2),
                       )
                     else if (_writeController.isBusy)
                       const LinearProgressIndicator(value: null, minHeight: 2),
@@ -413,8 +393,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                   PopupMenuButton(
                                     icon: Icon(
                                       Symbols.add_photo_alternate,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                     itemBuilder: (context) => [
                                       PopupMenuItem(
@@ -434,8 +413,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                           children: [
                                             const Icon(Symbols.content_paste),
                                             const Gap(16),
-                                            Text('addAttachmentFromClipboard')
-                                                .tr(),
+                                            Text('addAttachmentFromClipboard').tr(),
                                           ],
                                         ),
                                         onTap: () {
@@ -450,8 +428,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           ),
                         ),
                         TextButton.icon(
-                          onPressed: (_writeController.isBusy ||
-                                  _writeController.publisher == null)
+                          onPressed: (_writeController.isBusy || _writeController.publisher == null)
                               ? null
                               : () {
                                   _writeController.post(context).then((_) {

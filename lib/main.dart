@@ -45,10 +45,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (!kReleaseMode) {
-    // debugInvertOversizedImages = true;
-  }
-
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
 

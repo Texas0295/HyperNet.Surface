@@ -17,18 +17,26 @@ import 'package:surface/widgets/attachment/attachment_detail.dart';
 import 'package:surface/widgets/dialog.dart';
 
 class PostMediaPendingList extends StatelessWidget {
+  final PostWriteMedia? thumbnail;
   final List<PostWriteMedia> attachments;
   final bool isBusy;
   final Future<void> Function(int idx, PostWriteMedia updatedMedia)? onUpdate;
   final Future<void> Function(int idx)? onRemove;
+  final Future<void> Function(int idx)? onUpload;
+  final void Function(int? idx)? onPostSetThumbnail;
+  final void Function(int idx)? onInsertLink;
   final void Function(bool state)? onUpdateBusy;
 
   const PostMediaPendingList({
     super.key,
+    this.thumbnail,
     required this.attachments,
     required this.isBusy,
     this.onUpdate,
     this.onRemove,
+    this.onUpload,
+    this.onPostSetThumbnail,
+    this.onInsertLink,
     this.onUpdateBusy,
   });
 
@@ -50,10 +58,7 @@ class PostMediaPendingList extends StatelessWidget {
 
     if (result == null) return;
 
-    final rawBytes =
-        (await result.uiImage.toByteData(format: ImageByteFormat.png))!
-            .buffer
-            .asUint8List();
+    final rawBytes = (await result.uiImage.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List();
 
     if (onUpdate != null) {
       final updatedMedia = PostWriteMedia.fromBytes(
@@ -66,7 +71,7 @@ class PostMediaPendingList extends StatelessWidget {
   }
 
   Future<void> _deleteAttachment(BuildContext context, int idx) async {
-    final media = attachments[idx];
+    final media = idx == -1 ? thumbnail! : attachments[idx];
     if (media.attachment == null) return;
 
     try {
@@ -82,10 +87,40 @@ class PostMediaPendingList extends StatelessWidget {
     }
   }
 
-  ContextMenu _buildContextMenu(
-      BuildContext context, int idx, PostWriteMedia media) {
+  ContextMenu _buildContextMenu(BuildContext context, int idx, PostWriteMedia media) {
     return ContextMenu(
       entries: [
+        if (media.attachment == null && onUpload != null)
+          MenuItem(
+              label: 'attachmentUpload'.tr(),
+              icon: Symbols.upload,
+              onSelected: () {
+                onUpload!(idx);
+              }),
+        if (media.attachment != null && onPostSetThumbnail != null && idx != -1)
+          MenuItem(
+            label: 'attachmentSetAsPostThumbnail'.tr(),
+            icon: Symbols.gallery_thumbnail,
+            onSelected: () {
+              onPostSetThumbnail!(idx);
+            },
+          )
+        else if (media.attachment != null && onPostSetThumbnail != null)
+          MenuItem(
+            label: 'attachmentUnsetAsPostThumbnail'.tr(),
+            icon: Symbols.cancel,
+            onSelected: () {
+              onPostSetThumbnail!(null);
+            },
+          ),
+        if (media.attachment != null && onInsertLink != null)
+          MenuItem(
+            label: 'attachmentInsertLink'.tr(),
+            icon: Symbols.add_link,
+            onSelected: () {
+              onInsertLink!(idx);
+            },
+          ),
         if (media.type == PostWriteMediaType.image && media.attachment != null)
           MenuItem(
             label: 'preview'.tr(),
@@ -135,51 +170,91 @@ class PostMediaPendingList extends StatelessWidget {
 
     return Container(
       constraints: const BoxConstraints(maxHeight: 120),
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        separatorBuilder: (context, index) => const Gap(8),
-        itemCount: attachments.length,
-        itemBuilder: (context, idx) {
-          final media = attachments[idx];
-          return ContextMenuRegion(
-            contextMenu: _buildContextMenu(context, idx, media),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                  width: 1,
+      child: Row(
+        children: [
+          const Gap(8),
+          if (thumbnail != null)
+            ContextMenuRegion(
+              contextMenu: _buildContextMenu(context, -1, thumbnail!),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: switch (media.type) {
-                    PostWriteMediaType.image =>
-                      LayoutBuilder(builder: (context, constraints) {
-                        return Image(
-                          image: media.getImageProvider(
-                            context,
-                            width: (constraints.maxWidth * devicePixelRatio)
-                                .round(),
-                            height: (constraints.maxHeight * devicePixelRatio)
-                                .round(),
-                          )!,
-                          fit: BoxFit.cover,
-                        );
-                      }),
-                    _ => Container(
-                        color: Theme.of(context).colorScheme.surface,
-                        child: const Icon(Symbols.docs).center(),
-                      ),
-                  },
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: switch (thumbnail!.type) {
+                      PostWriteMediaType.image => LayoutBuilder(builder: (context, constraints) {
+                          return Image(
+                            image: thumbnail!.getImageProvider(
+                              context,
+                              width: (constraints.maxWidth * devicePixelRatio).round(),
+                              height: (constraints.maxHeight * devicePixelRatio).round(),
+                            )!,
+                            fit: BoxFit.cover,
+                          );
+                        }),
+                      _ => Container(
+                          color: Theme.of(context).colorScheme.surface,
+                          child: const Icon(Symbols.docs).center(),
+                        ),
+                    },
+                  ),
                 ),
               ),
             ),
-          );
-        },
+          if (thumbnail != null) const VerticalDivider(width: 1).padding(horizontal: 8),
+          Expanded(
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(right: 8),
+              separatorBuilder: (context, index) => const Gap(8),
+              itemCount: attachments.length,
+              itemBuilder: (context, idx) {
+                final media = attachments[idx];
+                return ContextMenuRegion(
+                  contextMenu: _buildContextMenu(context, idx, media),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: switch (media.type) {
+                          PostWriteMediaType.image => LayoutBuilder(builder: (context, constraints) {
+                              return Image(
+                                image: media.getImageProvider(
+                                  context,
+                                  width: (constraints.maxWidth * devicePixelRatio).round(),
+                                  height: (constraints.maxHeight * devicePixelRatio).round(),
+                                )!,
+                                fit: BoxFit.cover,
+                              );
+                            }),
+                          _ => Container(
+                              color: Theme.of(context).colorScheme.surface,
+                              child: const Icon(Symbols.docs).center(),
+                            ),
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
