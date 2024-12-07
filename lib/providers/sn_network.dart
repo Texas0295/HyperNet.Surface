@@ -10,12 +10,11 @@ import 'package:synchronized/synchronized.dart';
 const kAtkStoreKey = 'nex_user_atk';
 const kRtkStoreKey = 'nex_user_rtk';
 
-const kNetworkServerDefault = 'https://api.sn-next.solsynth.dev';
+const kNetworkServerDefault = 'https://api.sn.solsynth.dev';
 const kNetworkServerStoreKey = 'app_server_url';
 
 const kNetworkServerDirectory = [
-  ('SN Preview', 'https://api.sn-next.solsynth.dev'),
-  ('SN Stable', 'https://api.sn.solsynth.dev'),
+  ('Solar Network', 'https://api.sn.solsynth.dev'),
   ('Local', 'http://localhost:8001'),
 ];
 
