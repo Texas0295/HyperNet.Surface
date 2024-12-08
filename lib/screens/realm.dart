@@ -13,6 +13,9 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/universal_image.dart';
 
+import '../providers/userinfo.dart';
+import '../widgets/unauthorized_hint.dart';
+
 class RealmScreen extends StatefulWidget {
   const RealmScreen({super.key});
 
@@ -27,6 +30,9 @@ class _RealmScreenState extends State<RealmScreen> {
   List<SnRealm>? _realms;
 
   Future<void> _fetchRealms() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     setState(() => _isBusy = true);
     try {
       final sn = context.read<SnNetworkProvider>();
@@ -75,6 +81,19 @@ class _RealmScreenState extends State<RealmScreen> {
   @override
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
+    final ua = context.read<UserProvider>();
+
+    if (!ua.isAuthorized) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: AutoAppBarLeading(),
+          title: Text('screenRealm').tr(),
+        ),
+        body: Center(
+          child: UnauthorizedHint(),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

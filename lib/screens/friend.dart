@@ -12,6 +12,9 @@ import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 
+import '../providers/userinfo.dart';
+import '../widgets/unauthorized_hint.dart';
+
 const kFriendStatus = {
   0: 'friendStatusPending',
   1: 'friendStatusActive',
@@ -34,6 +37,9 @@ class _FriendScreenState extends State<FriendScreen> {
   List<SnRelationship> _blocks = List.empty();
 
   Future<void> _fetchRelations() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     setState(() => _isBusy = true);
 
     try {
@@ -51,6 +57,9 @@ class _FriendScreenState extends State<FriendScreen> {
   }
 
   Future<void> _fetchRequests() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     setState(() => _isBusy = true);
 
     try {
@@ -68,6 +77,9 @@ class _FriendScreenState extends State<FriendScreen> {
   }
 
   Future<void> _fetchBlocks() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     setState(() => _isBusy = true);
 
     try {
@@ -165,6 +177,20 @@ class _FriendScreenState extends State<FriendScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ua = context.read<UserProvider>();
+
+    if (!ua.isAuthorized) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: AutoAppBarLeading(),
+          title: Text('screenFriend').tr(),
+        ),
+        body: Center(
+          child: UnauthorizedHint(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),

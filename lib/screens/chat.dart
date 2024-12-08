@@ -13,6 +13,7 @@ import 'package:surface/widgets/account/account_select.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/unauthorized_hint.dart';
 import 'package:uuid/uuid.dart';
 
 import '../providers/sn_network.dart';
@@ -34,6 +35,12 @@ class _ChatScreenState extends State<ChatScreen> {
   Map<int, SnChatMessage>? _lastMessages;
 
   void _refreshChannels() {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) {
+      setState(() => _isBusy = false);
+      return;
+    }
+
     final chan = context.read<ChatChannelProvider>();
     chan.fetchChannels().listen((channels) async {
       final lastMessages = await chan.getLastMessages(channels);
@@ -111,6 +118,18 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     final ud = context.read<UserDirectoryProvider>();
     final ua = context.read<UserProvider>();
+
+    if (!ua.isAuthorized) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: AutoAppBarLeading(),
+          title: Text('screenChat').tr(),
+        ),
+        body: Center(
+          child: UnauthorizedHint(),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

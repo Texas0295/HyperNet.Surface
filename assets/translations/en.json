@@ -415,5 +415,7 @@
   "channelDirectMessageDescription": "Direct Message with {}",
   "fieldCannotBeEmpty": "This field cannot be empty.",
   "termAcceptLink": "View terms",
-  "termAcceptNextWithAgree": "By clicking the \"Next\", it means you agree to our terms and its updates."
+  "termAcceptNextWithAgree": "By clicking the \"Next\", it means you agree to our terms and its updates.",
+  "unauthorized": "Unauthorized",
+  "unauthorizedDescription": "Login to explore the entire Solar Network."
 }

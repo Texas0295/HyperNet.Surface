@@ -17,6 +17,9 @@ import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
+import '../providers/userinfo.dart';
+import '../widgets/unauthorized_hint.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -40,6 +43,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   };
 
   Future<void> _fetchNotifications() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     setState(() => _isBusy = true);
 
     try {
@@ -62,6 +68,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   void _markAllAsRead() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     if (_notifications.isEmpty) return;
 
     final confirm = await context.showConfirmDialog(
@@ -101,6 +110,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   void _markOneAsRead(SnNotification notification) async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) return;
+
     if (notification.readAt != null) return;
 
     setState(() => _isSubmitting = true);
@@ -131,6 +143,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ua = context.read<UserProvider>();
+
+    if (!ua.isAuthorized) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: AutoAppBarLeading(),
+          title: Text('screenNotification').tr(),
+        ),
+        body: Center(
+          child: UnauthorizedHint(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
