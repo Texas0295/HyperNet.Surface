@@ -104,15 +104,7 @@ final _appRoutes = [
         pageBuilder: (context, state) => NoTransitionPage(
           child: const AccountScreen(),
         ),
-        routes: [
-          GoRoute(
-            path: '/:name',
-            name: 'accountProfilePage',
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: UserScreen(name: state.pathParameters['name']!),
-            ),
-          ),
-        ],
+        routes: [],
       ),
       GoRoute(
         path: '/chat',
@@ -159,8 +151,7 @@ final _appRoutes = [
               child: ChatManageScreen(
                 editingChannelAlias: state.uri.queryParameters['editing'],
               ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeThroughTransition(
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
@@ -196,8 +187,7 @@ final _appRoutes = [
               child: RealmManageScreen(
                 editingRealmAlias: state.uri.queryParameters['editing'],
               ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeThroughTransition(
                   animation: animation,
                   secondaryAnimation: secondaryAnimation,
@@ -283,6 +273,13 @@ final _appRoutes = [
         ),
       ),
     ],
+  ),
+  GoRoute(
+    path: '/account/:name',
+    name: 'accountProfilePage',
+    pageBuilder: (context, state) => NoTransitionPage(
+      child: UserScreen(name: state.pathParameters['name']!),
+    ),
   ),
   ShellRoute(
     builder: (context, state, child) => AppPageScaffold(body: child),

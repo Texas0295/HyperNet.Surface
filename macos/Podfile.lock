@@ -22,14 +22,14 @@ PODS:
   - Firebase/Messaging (11.4.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.4.0)
-  - firebase_analytics (11.3.5):
+  - firebase_analytics (11.3.6):
     - Firebase/Analytics (= 11.4.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_core (3.8.0):
+  - firebase_core (3.8.1):
     - Firebase/CoreOnly (~> 11.4.0)
     - FlutterMacOS
-  - firebase_messaging (15.1.5):
+  - firebase_messaging (15.1.6):
     - Firebase/CoreOnly (~> 11.4.0)
     - Firebase/Messaging (~> 11.4.0)
     - firebase_core
@@ -79,6 +79,9 @@ PODS:
     - FlutterMacOS
     - WebRTC-SDK (= 125.6422.06)
   - FlutterMacOS (1.0.0)
+  - gal (1.0.0):
+    - Flutter
+    - FlutterMacOS
   - GoogleAppMeasurement (11.4.0):
     - GoogleAppMeasurement/AdIdSupport (= 11.4.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
@@ -184,6 +187,7 @@ DEPENDENCIES:
   - flutter_udid (from `Flutter/ephemeral/.symlinks/plugins/flutter_udid/macos`)
   - flutter_webrtc (from `Flutter/ephemeral/.symlinks/plugins/flutter_webrtc/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - gal (from `Flutter/ephemeral/.symlinks/plugins/gal/darwin`)
   - livekit_client (from `Flutter/ephemeral/.symlinks/plugins/livekit_client/macos`)
   - media_kit_libs_macos_video (from `Flutter/ephemeral/.symlinks/plugins/media_kit_libs_macos_video/macos`)
   - media_kit_native_event_loop (from `Flutter/ephemeral/.symlinks/plugins/media_kit_native_event_loop/macos`)
@@ -240,6 +244,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_webrtc/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
+  gal:
+    :path: Flutter/ephemeral/.symlinks/plugins/gal/darwin
   livekit_client:
     :path: Flutter/ephemeral/.symlinks/plugins/livekit_client/macos
   media_kit_libs_macos_video:
@@ -275,9 +281,9 @@ SPEC CHECKSUMS:
   device_info_plus: 1b14eed9bf95428983aed283a8d51cce3d8c4215
   file_selector_macos: cc3858c981fe6889f364731200d6232dac1d812d
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
-  firebase_analytics: 0b7c895f240587bbc77ed28144c1a599dd4523ff
-  firebase_core: d95c4a2225d7b6ed46bc31fb2a6f421fc7c8285b
-  firebase_messaging: 821b4f05a071d54d6ed826923a48c9101b93d443
+  firebase_analytics: a80b3d6645f2f12d626fde928b61dae12e5ea2ef
+  firebase_core: e4a35c426636a2cce00a5163df7ba69bfd0cca57
+  firebase_messaging: 61f678060b69a7ae1013e3a939ec8e1c56ef6fcf
   FirebaseAnalytics: 3feef9ae8733c567866342a1000691baaa7cad49
   FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
   FirebaseCoreInternal: f47dd28ae7782e6a4738aad3106071a8fe0af604
@@ -286,6 +292,7 @@ SPEC CHECKSUMS:
   flutter_udid: 6b2b89780c3dfeecf0047bdf93f622d6416b1c07
   flutter_webrtc: 53c9e1285ab32dfb58afb1e1471416a877e23d7a
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  gal: 61e868295d28fe67ffa297fae6dacebf56fd53e1
   GoogleAppMeasurement: 987769c4ca6b968f2479fbcc9fe3ce34af454b8e
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
