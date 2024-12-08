@@ -1,12 +1,15 @@
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -201,6 +204,15 @@ class _PostBottomAction extends StatelessWidget {
     required this.onChanged,
   });
 
+  void _doShare() {
+    final url = 'https://solsynth.dev/posts/${data.id}';
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      Share.shareUri(Uri.parse(url));
+    } else {
+      Share.share(url);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).colorScheme.onSurface.withAlpha(
@@ -285,12 +297,12 @@ class _PostBottomAction extends StatelessWidget {
               ..removeLast(),
           ),
         InkWell(
+          onTap: _doShare,
           child: Icon(
             Symbols.share,
             size: 20,
             color: iconColor,
           ).padding(horizontal: 8, vertical: 8),
-          onTap: () {},
         ),
       ],
     );
