@@ -413,5 +413,7 @@
   "channelNewChannel": "新建频道",
   "channelNewDirectMessage": "发起私信",
   "channelDirectMessageDescription": "与 {} 的私聊",
-  "fieldCannotBeEmpty": "此字段不能为空。"
+  "fieldCannotBeEmpty": "此字段不能为空。",
+  "termAcceptLink": "浏览条款",
+  "termAcceptNextWithAgree": "点击 “下一步”，即表示你同意我们的各项条款，包括其之后的更新。"
 }

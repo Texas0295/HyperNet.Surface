@@ -413,5 +413,7 @@
   "channelNewChannel": "New Channel",
   "channelNewDirectMessage": "New Direct Message",
   "channelDirectMessageDescription": "Direct Message with {}",
-  "fieldCannotBeEmpty": "This field cannot be empty."
+  "fieldCannotBeEmpty": "This field cannot be empty.",
+  "termAcceptLink": "View terms",
+  "termAcceptNextWithAgree": "By clicking the \"Next\", it means you agree to our terms and its updates."
 }

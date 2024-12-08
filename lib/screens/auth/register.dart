@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -169,6 +170,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const Gap(16),
             Align(
               alignment: Alignment.centerRight,
+              child: StyledWidget(
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 290),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'termAcceptNextWithAgree'.tr(),
+                        textAlign: TextAlign.end,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha((255 * 0.75).round()),
+                        ),
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('termAcceptLink'.tr()),
+                              const Gap(4),
+                              const Icon(Symbols.launch, size: 14),
+                            ],
+                          ),
+                          onTap: () {
+                            launchUrlString('https://solsynth.dev/terms');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ).padding(horizontal: 16),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () => _performAction(context),
                 child: Row(
@@ -179,7 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
