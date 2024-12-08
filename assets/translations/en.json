@@ -2,6 +2,7 @@
   "nextVersionAlert": "Heavy Development Alert",
   "nextVersionNotice": "You are using Solian 2.0 Preview, which is the first version of Solian 2.0. The current stable branch (sn.solsynth.dev) is 1.4. This version is still under heavy development, some features may not be stable, and not all features are supported. You can roll back to 1.4.X version via TestFlight, or continue to experience the new version (sn-next.solsynth.dev).",
   "screen": "Screen",
+  "screenAbout": "About",
   "screenHome": "Home",
   "screenExplore": "Explore",
   "screenAccount": "Account",
@@ -188,6 +189,9 @@
   "settingsNetworkServerPreset": "Present HyperNet Server",
   "settingsNetworkServerPresetDescription": "You can choose one of our preset HyperNet server addresses from the list on the right.",
   "settingsNetworkServerSaved": "Server address saved.",
+  "settingsMisc": "Misc",
+  "settingsMiscAbout": "About",
+  "settingsMiscAboutDescription": "View the version information of Solian.",
   "sensitiveContent": "Sensitive Content",
   "sensitiveContentCollapsed": "Sensitive content has been collapsed.",
   "sensitiveContentDescription": "This content has been marked as sensitive, and may not be suitable for all viewers.",
@@ -417,5 +421,8 @@
   "termAcceptLink": "View terms",
   "termAcceptNextWithAgree": "By clicking the \"Next\", it means you agree to our terms and its updates.",
   "unauthorized": "Unauthorized",
-  "unauthorizedDescription": "Login to explore the entire Solar Network."
+  "unauthorizedDescription": "Login to explore the entire Solar Network.",
+  "serviceStatus": "Service Status",
+  "termRelated": "Related Terms",
+  "appDetails": "App Details"
 }

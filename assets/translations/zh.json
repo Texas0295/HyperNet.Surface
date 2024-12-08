@@ -2,6 +2,7 @@
   "nextVersionAlert": "高强度开发提示",
   "nextVersionNotice": "您正在使用的是 Solian 2.0 的抢先体验版本，目前稳定分支（sn.solsynth.dev）版本为 1.4。该版本还在持续的开发中，部分功能可能不稳定，也并非所有功能都支持了。您可以通过 TestFlight 回滚到 1.4.X 或者继续体验新版本（sn-next.solsynth.dev）。",
   "screen": "页面",
+  "screenAbout": "关于",
   "screenHome": "首页",
   "screenExplore": "探索",
   "screenAccount": "您",
@@ -188,6 +189,9 @@
   "settingsNetworkServerPreset": "预设的 HyperNet 服务器",
   "settingsNetworkServerPresetDescription": "你可以在旁边的列表中选择我们提供的预设 HyperNet 服务器地址。",
   "settingsNetworkServerSaved": "服务器地址已保存。",
+  "settingsMisc": "杂项",
+  "settingsMiscAbout": "关于",
+  "settingsMiscAboutDescription": "查看 Solian 的版本信息。",
   "sensitiveContent": "敏感内容",
   "sensitiveContentCollapsed": "敏感内容已折叠。",
   "sensitiveContentDescription": "此内容已被标记，可能不适合所有人查看。",
@@ -417,5 +421,8 @@
   "termAcceptLink": "浏览条款",
   "termAcceptNextWithAgree": "点击 “下一步”，即表示你同意我们的各项条款，包括其之后的更新。",
   "unauthorized": "未登陆",
-  "unauthorizedDescription": "登陆以探索整个 Solar Network。"
+  "unauthorizedDescription": "登陆以探索整个 Solar Network。",
+  "serviceStatus": "服务状态",
+  "termRelated": "相关条款",
+  "appDetails": "应用程序详情"
 }

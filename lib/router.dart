@@ -29,6 +29,7 @@ import 'package:surface/screens/realm/manage.dart';
 import 'package:surface/screens/realm/realm_detail.dart';
 import 'package:surface/screens/settings.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/widgets/about.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
@@ -297,6 +298,18 @@ final _appRoutes = [
         name: 'settings',
         builder: (context, state) => const AppBackground(
           child: SettingsScreen(),
+        ),
+      ),
+    ],
+  ),
+  ShellRoute(
+    builder: (context, state, child) => AppPageScaffold(body: child),
+    routes: [
+      GoRoute(
+        path: '/about',
+        name: 'about',
+        builder: (context, state) => const AppBackground(
+          child: AboutScreen(),
         ),
       ),
     ],

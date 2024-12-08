@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,8 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         _prefs = prefs;
-        _serverUrlController.text =
-            prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
+        _serverUrlController.text = prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
       });
     });
   }
@@ -65,11 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('settingsAppearance')
-                    .bold()
-                    .fontSize(17)
-                    .tr()
-                    .padding(horizontal: 20, bottom: 4),
+                Text('settingsAppearance').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
                 if (!kIsWeb)
                   ListTile(
                     title: Text('settingsBackgroundImage').tr(),
@@ -78,20 +74,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     leading: const Icon(Symbols.image),
                     trailing: const Icon(Symbols.chevron_right),
                     onTap: () async {
-                      final image = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
+                      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
                       if (image == null) return;
 
-                      await File(image.path)
-                          .copy('$_docBasepath/app_background_image');
+                      await File(image.path).copy('$_docBasepath/app_background_image');
 
                       setState(() {});
                     },
                   ),
                 if (!kIsWeb)
                   FutureBuilder<bool>(
-                      future:
-                          File('$_docBasepath/app_background_image').exists(),
+                      future: File('$_docBasepath/app_background_image').exists(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || !snapshot.data!) {
                           return const SizedBox.shrink();
@@ -99,16 +92,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                         return ListTile(
                           title: Text('settingsBackgroundImageClear').tr(),
-                          subtitle:
-                              Text('settingsBackgroundImageClearDescription')
-                                  .tr(),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24),
+                          subtitle: Text('settingsBackgroundImageClearDescription').tr(),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                           leading: const Icon(Symbols.texture),
                           trailing: const Icon(Symbols.chevron_right),
                           onTap: () {
-                            File('$_docBasepath/app_background_image')
-                                .deleteSync();
+                            File('$_docBasepath/app_background_image').deleteSync();
                             setState(() {});
                           },
                         );
@@ -136,11 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('settingsNetwork')
-                    .bold()
-                    .fontSize(17)
-                    .tr()
-                    .padding(horizontal: 20, bottom: 4),
+                Text('settingsNetwork').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
                 TextField(
                   controller: _serverUrlController,
                   decoration: InputDecoration(
@@ -161,8 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ).padding(horizontal: 16, top: 8, bottom: 4),
                 ListTile(
                   title: Text('settingsNetworkServerPreset').tr(),
@@ -174,9 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       isExpanded: true,
                       items: [
                         ...kNetworkServerDirectory,
-                        if (!kNetworkServerDirectory
-                            .map((ele) => ele.$2)
-                            .contains(_serverUrlController.text))
+                        if (!kNetworkServerDirectory.map((ele) => ele.$2).contains(_serverUrlController.text))
                           ('Custom', _serverUrlController.text),
                       ]
                           .map(
@@ -188,8 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(item.$1).fontSize(14),
-                                  Text(item.$2, overflow: TextOverflow.ellipsis)
-                                      .fontSize(11)
+                                  Text(item.$2, overflow: TextOverflow.ellipsis).fontSize(11)
                                 ],
                               ),
                             ),
@@ -228,6 +209,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _prefs?.remove(kNetworkServerStoreKey);
                     context.showSnackbar('settingsNetworkServerSaved'.tr());
                     setState(() {});
+                  },
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('settingsMisc').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
+                ListTile(
+                  title: Text('settingsMiscAbout').tr(),
+                  subtitle: Text('settingsMiscAboutDescription').tr(),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  leading: const Icon(Symbols.info),
+                  trailing: const Icon(Symbols.chevron_right),
+                  onTap: () async {
+                    GoRouter.of(context).pushNamed('about');
                   },
                 ),
               ],
