@@ -27,8 +27,18 @@ class NotificationProvider extends ChangeNotifier {
   }
 
   Future<void> registerPushNotifications() async {
-    if (kIsWeb) return;
+    if (kIsWeb || Platform.isWindows || Platform.isLinux) return;
     if (!_ua.isAuthorized) return;
+
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
 
     late final String? token;
     late final String provider;
