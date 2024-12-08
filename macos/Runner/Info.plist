@@ -37,7 +37,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Grant access to Photo Library will allow Solian upload photo or video for your post.</string>
 	<key>CFBundleDisplayName</key>
-	<string>Solian</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Grant access to Photo Library will allow Solian download photo to album for you.</string>
 </dict>
