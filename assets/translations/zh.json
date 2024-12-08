@@ -69,8 +69,12 @@
   "fieldNickname": "显示名",
   "fieldEmail": "电子邮箱地址",
   "fieldPassword": "密码",
+  "fieldUsernameAlphanumOnly": "用户名只能包含英文大小写字母和数字。",
+  "fieldUsernameLengthLimit": "用户名必须在 {} 和 {} 之间。",
   "fieldUsernameCannotEditHint": "用户名在创建后无法修改",
   "fieldUsernameLookupHint": "支持用户名、电话号码或邮箱地址",
+  "fieldNicknameLengthLimit": "昵称必须在 {} 和 {} 之间。",
+  "fieldEmailAddressMustBeValid": "电子邮箱地址必须是一个电子邮箱地址。",
   "fieldFirstName": "名",
   "fieldLastName": "姓",
   "fieldBirthday": "生日",
@@ -408,5 +412,6 @@
   "accountDeletionSubmitted": "帐户删除申请已发出，你可以检查你的收件箱并根据邮件内的指示完成删除操作。",
   "channelNewChannel": "新建频道",
   "channelNewDirectMessage": "发起私信",
-  "channelDirectMessageDescription": "与 {} 的私聊"
+  "channelDirectMessageDescription": "与 {} 的私聊",
+  "fieldCannotBeEmpty": "此字段不能为空。"
 }

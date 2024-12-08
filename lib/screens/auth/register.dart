@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -16,20 +17,21 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _nicknameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   void _performAction(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) return;
+
     final email = _emailController.value.text;
     final username = _usernameController.value.text;
     final nickname = _nicknameController.value.text;
     final password = _passwordController.value.text;
-    if (email.isEmpty ||
-        username.isEmpty ||
-        nickname.isEmpty ||
-        password.isEmpty) {
+    if (email.isEmpty || username.isEmpty || nickname.isEmpty || password.isEmpty) {
       return;
     }
 
@@ -42,8 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'password': password,
       });
 
-      if (!mounted) return;
-
+      if (!context.mounted) return;
       GoRouter.of(context).replaceNamed("authLogin");
     } catch (err) {
       context.showErrorDialog(err);
@@ -75,67 +76,96 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 fontWeight: FontWeight.w900,
               ),
             ).tr().padding(left: 4, bottom: 16),
-            Column(
-              children: [
-                TextField(
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  controller: _usernameController,
-                  autofillHints: const [AutofillHints.username],
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: const UnderlineInputBorder(),
-                    labelText: 'fieldUsername'.tr(),
+            Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                children: [
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.length < 4 || value.length > 32) {
+                        return 'fieldUsernameLengthLimit'.tr(args: [4.toString(), 32.toString()]);
+                      }
+                      if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                        return 'fieldUsernameAlphanumOnly'.tr();
+                      }
+                      return null;
+                    },
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    controller: _usernameController,
+                    autofillHints: const [AutofillHints.username],
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: const UnderlineInputBorder(),
+                      labelText: 'fieldUsername'.tr(),
+                    ),
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
-                ),
-                const Gap(12),
-                TextField(
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  controller: _nicknameController,
-                  autofillHints: const [AutofillHints.nickname],
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: const UnderlineInputBorder(),
-                    labelText: 'fieldNickname'.tr(),
+                  const Gap(12),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.length < 4 || value.length > 32) {
+                        return 'fieldNicknameLengthLimit'.tr(args: [4.toString(), 32.toString()]);
+                      }
+                      return null;
+                    },
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    controller: _nicknameController,
+                    autofillHints: const [AutofillHints.nickname],
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: const UnderlineInputBorder(),
+                      labelText: 'fieldNickname'.tr(),
+                    ),
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
-                ),
-                const Gap(12),
-                TextField(
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  controller: _emailController,
-                  autofillHints: const [AutofillHints.email],
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: const UnderlineInputBorder(),
-                    labelText: 'fieldEmail'.tr(),
+                  const Gap(12),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'fieldCannotBeEmpty'.tr();
+                      }
+                      if (!EmailValidator.validate(value)) {
+                        return 'fieldEmailAddressMustBeValid'.tr();
+                      }
+                      return null;
+                    },
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    controller: _emailController,
+                    autofillHints: const [AutofillHints.email],
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: const UnderlineInputBorder(),
+                      labelText: 'fieldEmail'.tr(),
+                    ),
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
-                ),
-                const Gap(12),
-                TextField(
-                  obscureText: true,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  autofillHints: const [AutofillHints.password],
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: const UnderlineInputBorder(),
-                    labelText: 'fieldPassword'.tr(),
+                  const Gap(12),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'fieldCannotBeEmpty'.tr();
+                      }
+                      return null;
+                    },
+                    obscureText: true,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    autofillHints: const [AutofillHints.password],
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: const UnderlineInputBorder(),
+                      labelText: 'fieldPassword'.tr(),
+                    ),
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
-                  onSubmitted: (_) => _performAction(context),
-                ),
-              ],
-            ).padding(horizontal: 7),
+                ],
+              ).padding(horizontal: 7),
+            ),
             const Gap(16),
             Align(
               alignment: Alignment.centerRight,

@@ -84,8 +84,12 @@
   "fieldEmail": "Email address",
   "fieldPassword": "Password",
   "fieldDescription": "Description",
+  "fieldUsernameAlphanumOnly": "Username can only contain alphanumeric characters.",
+  "fieldUsernameLengthLimit": "Username must be between {} and {} characters.",
   "fieldUsernameCannotEditHint": "Username cannot be edited after created",
   "fieldUsernameLookupHint": "You can use username, phone number or email to login",
+  "fieldNicknameLengthLimit": "Nickname must be between {} and {} characters.",
+  "fieldEmailAddressMustBeValid": "Email address must be an email address.",
   "fieldFirstName": "First name",
   "fieldLastName": "Last name",
   "fieldBirthday": "Birthday",
@@ -408,5 +412,6 @@
   "accountDeletionSubmitted": "Account deletion request has been sent, you can check your inbox and follow the instructions in the email to complete the deletion operation.",
   "channelNewChannel": "New Channel",
   "channelNewDirectMessage": "New Direct Message",
-  "channelDirectMessageDescription": "Direct Message with {}"
+  "channelDirectMessageDescription": "Direct Message with {}",
+  "fieldCannotBeEmpty": "This field cannot be empty."
 }
