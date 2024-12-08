@@ -35,7 +35,7 @@ mixin _$SnChannel {
   @HiveField(6)
   String get description => throw _privateConstructorUsedError;
   @HiveField(7)
-  List<dynamic>? get members => throw _privateConstructorUsedError;
+  List<SnChannelMember>? get members => throw _privateConstructorUsedError;
   List<SnChatMessage>? get messages => throw _privateConstructorUsedError;
   @HiveField(8)
   int get type => throw _privateConstructorUsedError;
@@ -73,7 +73,7 @@ abstract class $SnChannelCopyWith<$Res> {
       @HiveField(4) String alias,
       @HiveField(5) String name,
       @HiveField(6) String description,
-      @HiveField(7) List<dynamic>? members,
+      @HiveField(7) List<SnChannelMember>? members,
       List<SnChatMessage>? messages,
       @HiveField(8) int type,
       @HiveField(9) int accountId,
@@ -148,7 +148,7 @@ class _$SnChannelCopyWithImpl<$Res, $Val extends SnChannel>
       members: freezed == members
           ? _value.members
           : members // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<SnChannelMember>?,
       messages: freezed == messages
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
@@ -211,7 +211,7 @@ abstract class _$$SnChannelImplCopyWith<$Res>
       @HiveField(4) String alias,
       @HiveField(5) String name,
       @HiveField(6) String description,
-      @HiveField(7) List<dynamic>? members,
+      @HiveField(7) List<SnChannelMember>? members,
       List<SnChatMessage>? messages,
       @HiveField(8) int type,
       @HiveField(9) int accountId,
@@ -285,7 +285,7 @@ class __$$SnChannelImplCopyWithImpl<$Res>
       members: freezed == members
           ? _value._members
           : members // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<SnChannelMember>?,
       messages: freezed == messages
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
@@ -330,7 +330,7 @@ class _$SnChannelImpl extends _SnChannel {
       @HiveField(4) required this.alias,
       @HiveField(5) required this.name,
       @HiveField(6) required this.description,
-      @HiveField(7) required final List<dynamic>? members,
+      @HiveField(7) required final List<SnChannelMember>? members,
       final List<SnChatMessage>? messages,
       @HiveField(8) required this.type,
       @HiveField(9) required this.accountId,
@@ -366,10 +366,10 @@ class _$SnChannelImpl extends _SnChannel {
   @override
   @HiveField(6)
   final String description;
-  final List<dynamic>? _members;
+  final List<SnChannelMember>? _members;
   @override
   @HiveField(7)
-  List<dynamic>? get members {
+  List<SnChannelMember>? get members {
     final value = _members;
     if (value == null) return null;
     if (_members is EqualUnmodifiableListView) return _members;
@@ -484,7 +484,7 @@ abstract class _SnChannel extends SnChannel {
       @HiveField(4) required final String alias,
       @HiveField(5) required final String name,
       @HiveField(6) required final String description,
-      @HiveField(7) required final List<dynamic>? members,
+      @HiveField(7) required final List<SnChannelMember>? members,
       final List<SnChatMessage>? messages,
       @HiveField(8) required final int type,
       @HiveField(9) required final int accountId,
@@ -520,7 +520,7 @@ abstract class _SnChannel extends SnChannel {
   String get description;
   @override
   @HiveField(7)
-  List<dynamic>? get members;
+  List<SnChannelMember>? get members;
   @override
   List<SnChatMessage>? get messages;
   @override

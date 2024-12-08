@@ -23,9 +23,13 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
+import '../../providers/user_directory.dart';
+import '../../providers/userinfo.dart';
+
 class ChatRoomScreen extends StatefulWidget {
   final String scope;
   final String alias;
+
   const ChatRoomScreen({super.key, required this.scope, required this.alias});
 
   @override
@@ -37,6 +41,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   bool _isCalling = false;
 
   SnChannel? _channel;
+  SnChannelMember? _otherMember;
   SnChatCall? _ongoingCall;
 
   final GlobalKey<ChatMessageInputState> _inputGlobalKey = GlobalKey();
@@ -50,6 +55,24 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     try {
       final chan = context.read<ChatChannelProvider>();
       _channel = await chan.getChannel('${widget.scope}:${widget.alias}');
+
+      if (!mounted || _channel == null) return;
+      final ud = context.read<UserDirectoryProvider>();
+      final ua = context.read<UserProvider>();
+      if (_channel!.type == 1) {
+        await ud.listAccount(
+          _channel!.members
+                  ?.cast<SnChannelMember?>()
+                  .map((ele) => ele?.accountId)
+                  .where((ele) => ele != null && ele != ua.user?.id)
+                  .toSet() ??
+              {},
+        );
+        _otherMember = _channel!.members?.cast<SnChannelMember?>().firstWhere(
+          (ele) => ele?.accountId != ua.user?.id,
+          orElse: () => null,
+        );
+      }
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -183,15 +206,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final call = context.watch<ChatCallProvider>();
+    final ud = context.read<UserDirectoryProvider>();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_channel?.name ?? 'loading'.tr()),
+        title: Text(
+          _channel?.type == 1
+              ? ud.getAccountFromCache(_otherMember?.accountId)?.nick ?? _channel!.name
+              : _channel?.name ?? 'loading'.tr(),
+        ),
         actions: [
           IconButton(
-            icon: _ongoingCall == null
-                ? const Icon(Symbols.call)
-                : const Icon(Symbols.call_end),
+            icon: _ongoingCall == null ? const Icon(Symbols.call) : const Icon(Symbols.call_end),
             onPressed: _isCalling
                 ? null
                 : _ongoingCall == null
@@ -241,9 +267,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       )
                   ],
                 ),
-              ).height(_ongoingCall != null ? 54 : 0, animate: true).animate(
-                  const Duration(milliseconds: 300),
-                  Curves.fastLinearToSlowEaseIn),
+              )
+                  .height(_ongoingCall != null ? 54 : 0, animate: true)
+                  .animate(const Duration(milliseconds: 300), Curves.fastLinearToSlowEaseIn),
               if (_messageController.isPending)
                 Expanded(
                   child: const CircularProgressIndicator().center(),
@@ -284,8 +310,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         data: message,
                         isMerged: canMerge,
                         hasMerged: canMergePrevious,
-                        isPending: _messageController.unconfirmedMessages
-                            .contains(message.uuid),
+                        isPending: _messageController.unconfirmedMessages.contains(message.uuid),
                         onReply: (value) {
                           _inputGlobalKey.currentState?.setReply(value);
                         },
@@ -304,6 +329,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   elevation: 2,
                   child: ChatMessageInput(
                     key: _inputGlobalKey,
+                    otherMember: _otherMember,
                     controller: _messageController,
                   ).padding(bottom: MediaQuery.of(context).padding.bottom),
                 ),

@@ -21,7 +21,7 @@ class SnChannel with _$SnChannel {
     @HiveField(4) required String alias,
     @HiveField(5) required String name,
     @HiveField(6) required String description,
-    @HiveField(7) required List<dynamic>? members,
+    @HiveField(7) required List<SnChannelMember>? members,
     List<SnChatMessage>? messages,
     @HiveField(8) required int type,
     @HiveField(9) required int accountId,

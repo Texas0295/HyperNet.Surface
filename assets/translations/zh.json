@@ -242,6 +242,7 @@
   "realmMemberAddDescription": "给当前领域添加新成员。",
   "realmMemberAdded": "领域成员已添加。",
   "fieldChatMessage": "在 {} 中发消息",
+  "fieldChatMessageDirect": "给 {} 发消息",
   "eventResourceTag": "消息 {}",
   "messageDelete": "删除消息 {}",
   "messageDeleteDescription": "你确定要删除这个消息吗？该操作不可撤销。同时您将留下一条删除消息的记录。",
@@ -402,5 +403,8 @@
   "accountDeletion": "删除帐户",
   "accountDeletionDescription": "你确定要删除这个帐户吗？该操作不可撤销，其隶属于该帐户的所有资源（帖子、聊天频道、发布者、制品等）都将被永久删除。三思而后行！",
   "accountDeletionActionDescription": "删除你的 Solarpass 帐户。",
-  "accountDeletionSubmitted": "帐户删除申请已发出，你可以检查你的收件箱并根据邮件内的指示完成删除操作。"
+  "accountDeletionSubmitted": "帐户删除申请已发出，你可以检查你的收件箱并根据邮件内的指示完成删除操作。",
+  "channelNewChannel": "新建频道",
+  "channelNewDirectMessage": "发起私信",
+  "channelDirectMessageDescription": "与 {} 的私聊"
 }

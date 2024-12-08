@@ -24,7 +24,7 @@ class SnChannelImplAdapter extends TypeAdapter<_$SnChannelImpl> {
       alias: fields[4] as String,
       name: fields[5] as String,
       description: fields[6] as String,
-      members: (fields[7] as List?)?.cast<dynamic>(),
+      members: (fields[7] as List?)?.cast<SnChannelMember>(),
       type: fields[8] as int,
       accountId: fields[9] as int,
       realm: fields[10] as SnRealm?,
@@ -223,7 +223,9 @@ _$SnChannelImpl _$$SnChannelImplFromJson(Map<String, dynamic> json) =>
       alias: json['alias'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
-      members: json['members'] as List<dynamic>?,
+      members: (json['members'] as List<dynamic>?)
+          ?.map((e) => SnChannelMember.fromJson(e as Map<String, dynamic>))
+          .toList(),
       messages: (json['messages'] as List<dynamic>?)
           ?.map((e) => SnChatMessage.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -246,7 +248,7 @@ Map<String, dynamic> _$$SnChannelImplToJson(_$SnChannelImpl instance) =>
       'alias': instance.alias,
       'name': instance.name,
       'description': instance.description,
-      'members': instance.members,
+      'members': instance.members?.map((e) => e.toJson()).toList(),
       'messages': instance.messages?.map((e) => e.toJson()).toList(),
       'type': instance.type,
       'account_id': instance.accountId,

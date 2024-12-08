@@ -17,10 +17,13 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 
+import '../../providers/user_directory.dart';
+
 class ChatMessageInput extends StatefulWidget {
   final ChatMessageController controller;
+  final SnChannelMember? otherMember;
 
-  const ChatMessageInput({super.key, required this.controller});
+  const ChatMessageInput({super.key, required this.controller, this.otherMember});
 
   @override
   State<ChatMessageInput> createState() => ChatMessageInputState();
@@ -170,6 +173,8 @@ class ChatMessageInputState extends State<ChatMessageInput> {
 
   @override
   Widget build(BuildContext context) {
+    final ud = context.read<UserDirectoryProvider>();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -279,7 +284,11 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   controller: _contentController,
                   decoration: InputDecoration(
                     isCollapsed: true,
-                    hintText: 'fieldChatMessage'.tr(args: [widget.controller.channel?.name ?? 'loading'.tr()]),
+                    hintText: widget.otherMember != null
+                        ? 'fieldChatMessageDirect'.tr(args: [
+                            '@${ud.getAccountFromCache(widget.otherMember?.accountId)?.name}',
+                          ])
+                        : 'fieldChatMessage'.tr(args: [widget.controller.channel?.name ?? 'loading'.tr()]),
                     border: InputBorder.none,
                   ),
                   onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),

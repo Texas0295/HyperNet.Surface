@@ -242,6 +242,7 @@
   "realmMemberAddDescription": "Add new member to this realm.",
   "realmMemberAdded": "Realm member has been added.",
   "fieldChatMessage": "Message in {}",
+  "fieldChatMessageDirect": "Message with {}",
   "eventResourceTag": "Event {}",
   "messageDelete": "Delete message {}",
   "messageDeleteDescription": "Are you sure you want to delete this message? This operation is irreversible. You will leave a record of the deleted message.",
@@ -402,5 +403,8 @@
   "accountDeletion": "Delete Account",
   "accountDeletionDescription": "Are you sure you want to delete this account? This operation is irreversible, all resources (posts, chat channels, publishers, etc) belonging to this account will be permanently deleted. Be careful and think twice!",
   "accountDeletionActionDescription": "Delete your Solarpass account.",
-  "accountDeletionSubmitted": "Account deletion request has been sent, you can check your inbox and follow the instructions in the email to complete the deletion operation."
+  "accountDeletionSubmitted": "Account deletion request has been sent, you can check your inbox and follow the instructions in the email to complete the deletion operation.",
+  "channelNewChannel": "New Channel",
+  "channelNewDirectMessage": "New Direct Message",
+  "channelDirectMessageDescription": "Direct Message with {}"
 }
