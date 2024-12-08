@@ -68,7 +68,7 @@ class PostItem extends StatelessWidget {
               onDeleted: () {
                 if (onDeleted != null) {}
               },
-            ).padding(horizontal: 12, top: 8, bottom: 4),
+            ).padding(horizontal: 12, top: 8, bottom: 8),
             Container(
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 4, left: 12, right: 12),
@@ -120,7 +120,7 @@ class PostItem extends StatelessWidget {
             ).padding(left: 8, right: 14),
           ],
         ),
-      );
+      ).center();
     }
 
     return Column(
