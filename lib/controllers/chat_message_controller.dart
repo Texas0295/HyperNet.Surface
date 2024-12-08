@@ -162,6 +162,7 @@ class ChatMessageController extends ChangeNotifier {
   }
 
   Future<void> _applyMessage(SnChatMessage message) async {
+    print(message.toJson());
     if (message.channelId != channel?.id) return;
 
     switch (message.type) {
@@ -257,7 +258,6 @@ class ChatMessageController extends ChangeNotifier {
       await _sn.client.delete(
         '/cgi/im/channels/${channel!.keyPath}/messages/${message.id}',
       );
-      messages.removeWhere((x) => x.id == message.id);
     } catch (err) {
       // ignore
     }
