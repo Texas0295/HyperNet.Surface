@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -19,6 +20,7 @@ import 'package:surface/widgets/post/post_mini_editor.dart';
 class PostDetailScreen extends StatefulWidget {
   final String slug;
   final SnPost? preload;
+
   const PostDetailScreen({
     super.key,
     required this.slug,
@@ -82,18 +84,12 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 text: TextSpan(children: [
                   TextSpan(
                     text: _data?.body['title'] ?? 'postNoun'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
                   ),
                   const TextSpan(text: '\n'),
                   TextSpan(
                     text: 'postDetail'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
                   ),
                 ]),
               )
@@ -141,13 +137,23 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               child: Container(
                 height: 240,
                 constraints: const BoxConstraints(maxWidth: 640),
+                margin:
+                    ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? const EdgeInsets.all(8) : EdgeInsets.zero,
                 decoration: BoxDecoration(
-                  border: Border.symmetric(
-                    horizontal: BorderSide(
-                      color: Theme.of(context).dividerColor,
-                      width: 1 / devicePixelRatio,
-                    ),
-                  ),
+                  borderRadius: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                      ? const BorderRadius.all(Radius.circular(8))
+                      : BorderRadius.zero,
+                  border: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                      ? Border.all(
+                          color: Theme.of(context).dividerColor,
+                          width: 1 / devicePixelRatio,
+                        )
+                      : Border.symmetric(
+                          horizontal: BorderSide(
+                            color: Theme.of(context).dividerColor,
+                            width: 1 / devicePixelRatio,
+                          ),
+                        ),
                 ),
                 child: PostMiniEditor(
                   postReplyId: _data!.id,

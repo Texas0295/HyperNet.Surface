@@ -209,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           vertical: 5,
                         ),
                         height: 40,
-                        width: 140,
+                        width: 160,
                       ),
                       menuItemStyleData: const MenuItemStyleData(
                         height: 60,
