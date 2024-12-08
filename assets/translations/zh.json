@@ -256,6 +256,8 @@
   },
   "addAttachmentFromAlbum": "从相册中添加附件",
   "addAttachmentFromClipboard": "粘贴附件",
+  "addAttachmentFromCameraPhoto": "拍摄照片",
+  "addAttachmentFromCameraVideo": "拍摄视频",
   "attachmentPastedImage": "粘贴的图片",
   "attachmentInsertLink": "插入连接",
   "attachmentSetAsPostThumbnail": "设置为帖子缩略图",

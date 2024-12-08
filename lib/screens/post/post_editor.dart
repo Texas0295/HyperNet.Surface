@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -74,6 +77,16 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   }
 
   final _imagePicker = ImagePicker();
+
+  void _takeMedia(bool isVideo) async {
+    final result = isVideo
+        ? await _imagePicker.pickVideo(source: ImageSource.camera)
+        : await _imagePicker.pickImage(source: ImageSource.camera);
+    if (result == null) return;
+    _writeController.addAttachments([
+      PostWriteMedia.fromFile(result),
+    ]);
+  }
 
   void _selectMedia() async {
     final result = await _imagePicker.pickMultipleMedia();
@@ -396,6 +409,32 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                       color: Theme.of(context).colorScheme.primary,
                                     ),
                                     itemBuilder: (context) => [
+                                      if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
+                                        PopupMenuItem(
+                                          child: Row(
+                                            children: [
+                                              const Icon(Symbols.photo_camera),
+                                              const Gap(16),
+                                              Text('addAttachmentFromCameraPhoto').tr(),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            _takeMedia(false);
+                                          },
+                                        ),
+                                      if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
+                                        PopupMenuItem(
+                                          child: Row(
+                                            children: [
+                                              const Icon(Symbols.videocam),
+                                              const Gap(16),
+                                              Text('addAttachmentFromCameraVideo').tr(),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            _takeMedia(true);
+                                          },
+                                        ),
                                       PopupMenuItem(
                                         child: Row(
                                           children: [
@@ -443,7 +482,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     ).padding(horizontal: 16),
                   ],
                 ).padding(
-                  bottom: MediaQuery.of(context).padding.bottom,
+                  bottom: MediaQuery.of(context).padding.bottom + 8,
                   top: 4,
                 ),
               ),

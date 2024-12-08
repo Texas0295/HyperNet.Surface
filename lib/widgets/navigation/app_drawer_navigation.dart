@@ -8,6 +8,7 @@ import 'package:surface/providers/navigation.dart';
 
 class AppNavigationDrawer extends StatefulWidget {
   final double? elevation;
+
   const AppNavigationDrawer({super.key, this.elevation});
 
   @override
@@ -19,9 +20,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<NavigationProvider>()
-          .autoDetectIndex(GoRouter.maybeOf(context));
+      context.read<NavigationProvider>().autoDetectIndex(GoRouter.maybeOf(context));
     });
   }
 
@@ -29,9 +28,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
   Widget build(BuildContext context) {
     final nav = context.watch<NavigationProvider>();
 
-    final backgroundColor = ResponsiveBreakpoints.of(context).largerThan(TABLET)
-        ? Colors.transparent
-        : null;
+    final backgroundColor = ResponsiveBreakpoints.of(context).largerThan(TABLET) ? Colors.transparent : null;
 
     return ListenableBuilder(
       listenable: nav,
@@ -51,13 +48,14 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Solar Network').bold(),
-                Text('Canary Preview 2.0α').fontSize(12).textColor(
-                    Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
+                Text('Canary Preview 2.0α')
+                    .fontSize(12)
+                    .textColor(Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
               ],
             ).padding(
               horizontal: 32,
-              top: MediaQuery.of(context).padding.top > 32 ? 8 : 32,
-              bottom: 8,
+              top: MediaQuery.of(context).padding.top + 8,
+              bottom: 12,
             ),
             ...destinations.where((ele) => ele.isPinned).map((ele) {
               return NavigationDrawerDestination(

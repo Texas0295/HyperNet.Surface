@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
@@ -124,6 +127,17 @@ class ChatMessageInputState extends State<ChatMessageInput> {
 
   final List<PostWriteMedia> _attachments = List.empty(growable: true);
   final _imagePicker = ImagePicker();
+
+  void _takeMedia(bool isVideo) async {
+    final result = isVideo
+        ? await _imagePicker.pickVideo(source: ImageSource.camera)
+        : await _imagePicker.pickImage(source: ImageSource.camera);
+    if (result == null) return;
+    _attachments.add(
+      PostWriteMedia.fromFile(result),
+    );
+    setState(() {});
+  }
 
   void _selectMedia() async {
     final result = await _imagePicker.pickMultipleMedia();
@@ -283,6 +297,32 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 itemBuilder: (context) => [
+                  if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(Symbols.photo_camera),
+                          const Gap(16),
+                          Text('addAttachmentFromCameraPhoto').tr(),
+                        ],
+                      ),
+                      onTap: () {
+                        _takeMedia(false);
+                      },
+                    ),
+                  if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(Symbols.videocam),
+                          const Gap(16),
+                          Text('addAttachmentFromCameraVideo').tr(),
+                        ],
+                      ),
+                      onTap: () {
+                        _takeMedia(true);
+                      },
+                    ),
                   PopupMenuItem(
                     child: Row(
                       children: [

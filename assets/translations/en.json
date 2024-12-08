@@ -256,6 +256,8 @@
   },
   "addAttachmentFromAlbum": "Add from album",
   "addAttachmentFromClipboard": "Paste file",
+  "addAttachmentFromCameraPhoto": "Take photo",
+  "addAttachmentFromCameraVideo": "Take video",
   "attachmentPastedImage": "Pasted Image",
   "attachmentInsertLink": "Insert Link",
   "attachmentSetAsPostThumbnail": "Set as post thumbnail",
