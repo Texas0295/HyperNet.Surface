@@ -23,6 +23,7 @@ class AppPageScaffold extends StatelessWidget {
   final Widget? body;
   final bool showAppBar;
   final bool showBottomNavigation;
+
   const AppPageScaffold({
     super.key,
     this.title,
@@ -34,11 +35,9 @@ class AppPageScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = GoRouter.maybeOf(context);
-    final routeName =
-        state?.routerDelegate.currentConfiguration.last.route.name;
+    final routeName = state?.routerDelegate.currentConfiguration.last.route.name;
 
-    final autoTitle =
-        state != null ? 'screen${routeName?.capitalize()}' : 'screen';
+    final autoTitle = state != null ? 'screen${routeName?.capitalize()}' : 'screen';
 
     return Scaffold(
       appBar: showAppBar
@@ -53,29 +52,21 @@ class AppPageScaffold extends StatelessWidget {
 
 class AppRootScaffold extends StatelessWidget {
   final Widget body;
+
   const AppRootScaffold({super.key, required this.body});
 
   @override
   Widget build(BuildContext context) {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
-    final isCollapseDrawer =
-        ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
+    final isCollapseDrawer = ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
     final isExpandDrawer = ResponsiveBreakpoints.of(context).largerThan(TABLET);
 
-    final routeName = GoRouter.of(context)
-        .routerDelegate
-        .currentConfiguration
-        .last
-        .route
-        .name;
-    final isShowBottomNavigation =
-        NavigationProvider.kShowBottomNavScreen.contains(routeName)
-            ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
-            : false;
-    final isPopable = !NavigationProvider.kAllDestination
-        .map((ele) => ele.screen)
-        .contains(routeName);
+    final routeName = GoRouter.of(context).routerDelegate.currentConfiguration.last.route.name;
+    final isShowBottomNavigation = NavigationProvider.kShowBottomNavScreen.contains(routeName)
+        ? ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)
+        : false;
+    final isPopable = !NavigationProvider.kAllDestination.map((ele) => ele.screen).contains(routeName);
 
     final innerWidget = isCollapseDrawer
         ? body
@@ -90,9 +81,7 @@ class AppRootScaffold extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: isExpandDrawer
-                    ? AppNavigationDrawer(elevation: 0)
-                    : AppRailNavigation(),
+                child: isExpandDrawer ? AppNavigationDrawer(elevation: 0) : AppRailNavigation(),
               ),
               Expanded(child: body),
             ],
@@ -112,13 +101,19 @@ class AppRootScaffold extends StatelessWidget {
         key: globalRootScaffoldKey,
         body: Column(
           children: [
-            if (!kIsWeb &&
-                (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
-              WindowBorder(
-                color: Theme.of(context).dividerColor,
-                width: 1,
+            if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Theme.of(context).dividerColor,
+                      width: 1 / devicePixelRatio,
+                    ),
+                  ),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
                   children: [
                     WindowTitleBarBox(
                       child: MoveWindow(
@@ -128,22 +123,23 @@ class AppRootScaffold extends StatelessWidget {
                         ).padding(horizontal: 12, vertical: 5),
                       ),
                     ),
-                    Expanded(
-                      child: WindowTitleBarBox(
-                        child: Row(
-                          children: [
-                            Expanded(child: MoveWindow()),
-                            Row(
-                              children: [
-                                MinimizeWindowButton(colors: windowButtonColor),
-                                MaximizeWindowButton(colors: windowButtonColor),
-                                CloseWindowButton(colors: windowButtonColor),
-                              ],
-                            ),
-                          ],
+                    if (!Platform.isMacOS)
+                      Expanded(
+                        child: WindowTitleBarBox(
+                          child: Row(
+                            children: [
+                              Expanded(child: MoveWindow()),
+                              Row(
+                                children: [
+                                  MinimizeWindowButton(colors: windowButtonColor),
+                                  MaximizeWindowButton(colors: windowButtonColor),
+                                  CloseWindowButton(colors: windowButtonColor),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -153,8 +149,7 @@ class AppRootScaffold extends StatelessWidget {
         ),
         drawer: !isExpandDrawer ? AppNavigationDrawer() : null,
         drawerEdgeDragWidth: isPopable ? 0 : null,
-        bottomNavigationBar:
-            isShowBottomNavigation ? AppBottomNavigationBar() : null,
+        bottomNavigationBar: isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),
     );
   }
