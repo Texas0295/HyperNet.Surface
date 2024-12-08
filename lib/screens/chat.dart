@@ -87,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
       const uuid = Uuid();
       final sn = context.read<SnNetworkProvider>();
       final ua = context.read<UserProvider>();
-      final resp = await sn.client.post('/cgi/im/channels/global/dm', data: {
+      await sn.client.post('/cgi/im/channels/global/dm', data: {
         'alias': uuid.v4().replaceAll('-', '').substring(0, 12),
         'name': 'DM',
         'description': 'A direct message channel between @${ua.user?.name} and @${user.name}',

@@ -162,7 +162,6 @@ class ChatMessageController extends ChangeNotifier {
   }
 
   Future<void> _applyMessage(SnChatMessage message) async {
-    print(message.toJson());
     if (message.channelId != channel?.id) return;
 
     switch (message.type) {

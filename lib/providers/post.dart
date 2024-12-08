@@ -29,22 +29,14 @@ class SnPostContentProvider {
     for (var i = 0; i < out.length; i++) {
       out[i] = out[i].copyWith(
         preload: SnPostPreload(
-          thumbnail: attachments
-              .where((ele) => ele?.rid == out[i].body['thumbnail'])
-              .firstOrNull,
-          attachments: attachments
-              .where((ele) =>
-                  out[i].body['attachments']?.contains(ele?.rid) ?? false)
-              .toList(),
+          thumbnail: attachments.where((ele) => ele?.rid == out[i].body['thumbnail']).firstOrNull,
+          attachments: attachments.where((ele) => out[i].body['attachments']?.contains(ele?.rid) ?? false).toList(),
         ),
       );
     }
 
     await _ud.listAccount(
-      attachments
-          .where((ele) => ele != null)
-          .map((ele) => ele!.accountId)
-          .toSet(),
+      attachments.where((ele) => ele != null).map((ele) => ele!.accountId).toSet(),
     );
 
     return out;
@@ -60,13 +52,8 @@ class SnPostContentProvider {
     final attachments = await _attach.getMultiple(rids.toList());
     out = out.copyWith(
       preload: SnPostPreload(
-        thumbnail: attachments
-            .where((ele) => ele?.rid == out.body['thumbnail'])
-            .firstOrNull,
-        attachments: attachments
-            .where(
-                (ele) => out.body['attachments']?.contains(ele?.rid) ?? false)
-            .toList(),
+        thumbnail: attachments.where((ele) => ele?.rid == out.body['thumbnail']).firstOrNull,
+        attachments: attachments.where((ele) => out.body['attachments']?.contains(ele?.rid) ?? false).toList(),
       ),
     );
 
@@ -97,8 +84,7 @@ class SnPostContentProvider {
     int take = 10,
     int offset = 0,
   }) async {
-    final resp = await _sn.client
-        .get('/cgi/co/posts/$parentId/replies', queryParameters: {
+    final resp = await _sn.client.get('/cgi/co/posts/$parentId/replies', queryParameters: {
       'take': take,
       'offset': offset,
     });
@@ -113,11 +99,13 @@ class SnPostContentProvider {
     String searchTerm, {
     int take = 10,
     int offset = 0,
+    Iterable<String>? tags,
   }) async {
     final resp = await _sn.client.get('/cgi/co/posts/search', queryParameters: {
       'take': take,
       'offset': offset,
       'probe': searchTerm,
+      if (tags?.isNotEmpty ?? false) 'tags': tags!.join(','),
     });
     final List<SnPost> out = await _preloadRelatedDataInBatch(
       List.from(resp.data['data']?.map((e) => SnPost.fromJson(e)) ?? []),

@@ -5,9 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/post/post_item.dart';
+import 'package:surface/widgets/post/post_tags_field.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class PostSearchScreen extends StatefulWidget {
@@ -20,6 +23,8 @@ class PostSearchScreen extends StatefulWidget {
 class _PostSearchScreenState extends State<PostSearchScreen> {
   bool _isBusy = false;
 
+  List<String> _searchTags = List.empty(growable: true);
+
   final List<SnPost> _posts = List.empty(growable: true);
   int? _postCount;
 
@@ -27,28 +32,32 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
   Duration? _lastTook;
 
   Future<void> _fetchPosts() async {
-    if (_searchTerm.isEmpty) return;
+    if (_searchTerm.isEmpty && _searchTags.isEmpty) return;
     if (_postCount != null && _posts.length >= _postCount!) return;
 
     setState(() => _isBusy = true);
 
     final stopwatch = Stopwatch()..start();
 
-    final pt = context.read<SnPostContentProvider>();
-    final result = await pt.searchPosts(
-      _searchTerm,
-      take: 10,
-      offset: _posts.length,
-    );
-    final List<SnPost> out = result.$1;
-
-    if (!mounted) return;
-
-    stopwatch.stop();
-
-    _lastTook = stopwatch.elapsed;
-    _postCount = result.$2;
-    _posts.addAll(out);
+    try {
+      final pt = context.read<SnPostContentProvider>();
+      final result = await pt.searchPosts(
+        _searchTerm,
+        take: 10,
+        offset: _posts.length,
+        tags: _searchTags,
+      );
+      final List<SnPost> out = result.$1;
+      _postCount = result.$2;
+      _posts.addAll(out);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+      return;
+    } finally {
+      stopwatch.stop();
+      _lastTook = stopwatch.elapsed;
+    }
 
     if (mounted) setState(() => _isBusy = false);
   }
@@ -57,8 +66,16 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) => Column(
-        children: [],
-      ),
+        children: [
+          PostTagsField(
+            labelText: 'fieldPostTags'.tr(),
+            initialTags: _searchTags,
+            onUpdate: (value) {
+              setState(() => _searchTags = value);
+            },
+          ),
+        ],
+      ).padding(horizontal: 24, vertical: 16),
     );
   }
 
