@@ -306,20 +306,26 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         );
                       }
 
-                      return ChatMessage(
-                        data: message,
-                        isMerged: canMerge,
-                        hasMerged: canMergePrevious,
-                        isPending: _messageController.unconfirmedMessages.contains(message.uuid),
-                        onReply: (value) {
-                          _inputGlobalKey.currentState?.setReply(value);
-                        },
-                        onEdit: (value) {
-                          _inputGlobalKey.currentState?.setEdit(value);
-                        },
-                        onDelete: (value) {
-                          _inputGlobalKey.currentState?.deleteMessage(value);
-                        },
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          constraints: BoxConstraints(maxWidth: 480),
+                          child: ChatMessage(
+                            data: message,
+                            isMerged: canMerge,
+                            hasMerged: canMergePrevious,
+                            isPending: _messageController.unconfirmedMessages.contains(message.uuid),
+                            onReply: (value) {
+                              _inputGlobalKey.currentState?.setReply(value);
+                            },
+                            onEdit: (value) {
+                              _inputGlobalKey.currentState?.setEdit(value);
+                            },
+                            onDelete: (value) {
+                              _inputGlobalKey.currentState?.deleteMessage(value);
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),
