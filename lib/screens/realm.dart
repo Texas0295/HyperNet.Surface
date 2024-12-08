@@ -185,63 +185,66 @@ class _RealmScreenState extends State<RealmScreen> {
                     );
                   }
 
-                  return Card(
-                    margin: const EdgeInsets.all(12),
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 16 / 7,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              fit: StackFit.expand,
-                              children: [
-                                Container(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainer,
-                                  child: (realm.banner?.isEmpty ?? true)
-                                      ? const SizedBox.shrink()
-                                      : AutoResizeUniversalImage(
-                                          sn.getAttachmentUrl(realm.banner!),
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
-                                Positioned(
-                                  bottom: -30,
-                                  left: 18,
-                                  child: AccountImage(
-                                    content: realm.avatar,
-                                    radius: 24,
-                                    fallbackWidget:
-                                        const Icon(Symbols.group, size: 24),
+                  return Container(
+                    constraints: BoxConstraints(maxWidth: 640),
+                    child: Card(
+                      margin: const EdgeInsets.all(12),
+                      child: InkWell(
+                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AspectRatio(
+                              aspectRatio: 16 / 7,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                fit: StackFit.expand,
+                                children: [
+                                  Container(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainer,
+                                    child: (realm.banner?.isEmpty ?? true)
+                                        ? const SizedBox.shrink()
+                                        : AutoResizeUniversalImage(
+                                            sn.getAttachmentUrl(realm.banner!),
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
-                                ),
-                              ],
+                                  Positioned(
+                                    bottom: -30,
+                                    left: 18,
+                                    child: AccountImage(
+                                      content: realm.avatar,
+                                      radius: 24,
+                                      fallbackWidget:
+                                          const Icon(Symbols.group, size: 24),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const Gap(20 + 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(realm.name).textStyle(
-                                  Theme.of(context).textTheme.titleMedium!),
-                              Text(realm.description).textStyle(
-                                  Theme.of(context).textTheme.bodySmall!),
-                            ],
-                          ).padding(horizontal: 24, bottom: 14),
-                        ],
+                            const Gap(20 + 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(realm.name).textStyle(
+                                    Theme.of(context).textTheme.titleMedium!),
+                                Text(realm.description).textStyle(
+                                    Theme.of(context).textTheme.bodySmall!),
+                              ],
+                            ).padding(horizontal: 24, bottom: 14),
+                          ],
+                        ),
+                        onTap: () {
+                          GoRouter.of(context).pushNamed(
+                            'realmDetail',
+                            pathParameters: {'alias': realm.alias},
+                          );
+                        },
                       ),
-                      onTap: () {
-                        GoRouter.of(context).pushNamed(
-                          'realmDetail',
-                          pathParameters: {'alias': realm.alias},
-                        );
-                      },
                     ),
-                  );
+                  ).center();
                 },
               ),
             ),
