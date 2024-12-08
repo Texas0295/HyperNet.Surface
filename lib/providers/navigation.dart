@@ -59,7 +59,7 @@ class NavigationProvider extends ChangeNotifier {
       label: 'screenRealm',
     ),
     AppNavDestination(
-      icon: Icon(Symbols.album, weight: 400, opticalSize: 20),
+      icon: Icon(Symbols.photo_library, weight: 400, opticalSize: 20),
       screen: 'album',
       label: 'screenAlbum',
     ),

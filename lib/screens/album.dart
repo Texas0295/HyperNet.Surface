@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
@@ -35,6 +36,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
+      final ud = context.read<UserDirectoryProvider>();
       final resp = await sn.client.get('/cgi/uc/attachments', queryParameters: {
         'take': 10,
         'offset': _attachments.length,
@@ -44,6 +46,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
       ).where((e) => e.mimetype.startsWith('image')).toList();
       _attachments.addAll(attachments);
       _heroTags.addAll(_attachments.map((_) => uuid.v4()));
+
+      await ud.listAccount(attachments.map((e) => e.accountId).toSet());
 
       _totalCount = resp.data['count'] as int?;
     } catch (err) {
