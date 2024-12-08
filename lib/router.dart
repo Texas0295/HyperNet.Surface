@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:surface/screens/abuse_report.dart';
 import 'package:surface/screens/account.dart';
 import 'package:surface/screens/account/pfp.dart';
 import 'package:surface/screens/account/profile_edit.dart';
@@ -240,6 +241,13 @@ final _appRoutes = [
         name: 'authRegister',
         builder: (context, state) => const AppBackground(
           child: RegisterScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/reports',
+        name: 'abuseReport',
+        builder: (context, state) => const AppBackground(
+          child: AbuseReportScreen(),
         ),
       ),
       GoRoute(

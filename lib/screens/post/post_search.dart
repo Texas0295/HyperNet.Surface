@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';

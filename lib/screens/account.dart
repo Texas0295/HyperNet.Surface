@@ -107,14 +107,7 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           leading: const Icon(Symbols.flag),
           trailing: const Icon(Symbols.chevron_right),
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) => _AbuseReportDialog(),
-            ).then((value) {
-              if (value == true && context.mounted) {
-                context.showSnackbar('abuseReportSubmitted'.tr());
-              }
-            });
+            GoRouter.of(context).pushNamed('abuseReport');
           },
         ),
         ListTile(
@@ -216,92 +209,6 @@ class _UnauthorizedAccountScreen extends StatelessWidget {
           onTap: () {
             GoRouter.of(context).pushNamed('authRegister');
           },
-        ),
-      ],
-    );
-  }
-}
-
-class _AbuseReportDialog extends StatefulWidget {
-  const _AbuseReportDialog({super.key});
-
-  @override
-  State<_AbuseReportDialog> createState() => _AbuseReportDialogState();
-}
-
-class _AbuseReportDialogState extends State<_AbuseReportDialog> {
-  bool _isBusy = false;
-
-  final _resourceController = TextEditingController();
-  final _reasonController = TextEditingController();
-
-  @override
-  dispose() {
-    _resourceController.dispose();
-    _reasonController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _performAction() async {
-    setState(() => _isBusy = true);
-    try {
-      final sn = context.read<SnNetworkProvider>();
-      await sn.client.post(
-        '/cgi/id/reports/abuse',
-        data: {
-          'resource': _resourceController.text,
-          'reason': _reasonController.text,
-        },
-      );
-      if (!mounted) return;
-      Navigator.pop(context, true);
-    } catch (err) {
-      if (!mounted) return;
-      context.showErrorDialog(err);
-    } finally {
-      setState(() => _isBusy = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('abuseReport'.tr()),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('abuseReportDescription'.tr()),
-          const Gap(12),
-          TextField(
-            controller: _resourceController,
-            maxLength: null,
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: 'abuseReportResource'.tr(),
-            ),
-            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-          ),
-          const Gap(4),
-          TextField(
-            controller: _reasonController,
-            maxLength: null,
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: 'abuseReportReason'.tr(),
-            ),
-            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: _isBusy ? null : () => Navigator.pop(context),
-          child: Text('dialogDismiss').tr(),
-        ),
-        TextButton(
-          onPressed: _isBusy ? null : _performAction,
-          child: Text('submit').tr(),
         ),
       ],
     );

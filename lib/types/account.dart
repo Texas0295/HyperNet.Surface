@@ -119,3 +119,20 @@ class SnAccountStatusInfo with _$SnAccountStatusInfo {
   factory SnAccountStatusInfo.fromJson(Map<String, Object?> json) =>
       _$SnAccountStatusInfoFromJson(json);
 }
+
+@freezed
+class SnAbuseReport with _$SnAbuseReport {
+  const factory SnAbuseReport({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required String resource,
+    required String reason,
+    required String status,
+    required int accountId,
+  }) = _SnAbuseReport;
+
+  factory SnAbuseReport.fromJson(Map<String, Object?> json) =>
+      _$SnAbuseReportFromJson(json);
+}

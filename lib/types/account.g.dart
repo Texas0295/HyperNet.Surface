@@ -212,3 +212,29 @@ Map<String, dynamic> _$$SnAccountStatusInfoImplToJson(
       'last_seen_at': instance.lastSeenAt?.toIso8601String(),
       'status': instance.status,
     };
+
+_$SnAbuseReportImpl _$$SnAbuseReportImplFromJson(Map<String, dynamic> json) =>
+    _$SnAbuseReportImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      resource: json['resource'] as String,
+      reason: json['reason'] as String,
+      status: json['status'] as String,
+      accountId: (json['account_id'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$SnAbuseReportImplToJson(_$SnAbuseReportImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'resource': instance.resource,
+      'reason': instance.reason,
+      'status': instance.status,
+      'account_id': instance.accountId,
+    };

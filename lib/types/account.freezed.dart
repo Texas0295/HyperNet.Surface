@@ -2205,3 +2205,302 @@ abstract class _SnAccountStatusInfo implements SnAccountStatusInfo {
   _$$SnAccountStatusInfoImplCopyWith<_$SnAccountStatusInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+SnAbuseReport _$SnAbuseReportFromJson(Map<String, dynamic> json) {
+  return _SnAbuseReport.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnAbuseReport {
+  int get id => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get deletedAt => throw _privateConstructorUsedError;
+  String get resource => throw _privateConstructorUsedError;
+  String get reason => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
+  int get accountId => throw _privateConstructorUsedError;
+
+  /// Serializes this SnAbuseReport to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnAbuseReport
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnAbuseReportCopyWith<SnAbuseReport> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnAbuseReportCopyWith<$Res> {
+  factory $SnAbuseReportCopyWith(
+          SnAbuseReport value, $Res Function(SnAbuseReport) then) =
+      _$SnAbuseReportCopyWithImpl<$Res, SnAbuseReport>;
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      String resource,
+      String reason,
+      String status,
+      int accountId});
+}
+
+/// @nodoc
+class _$SnAbuseReportCopyWithImpl<$Res, $Val extends SnAbuseReport>
+    implements $SnAbuseReportCopyWith<$Res> {
+  _$SnAbuseReportCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnAbuseReport
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? resource = null,
+    Object? reason = null,
+    Object? status = null,
+    Object? accountId = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      resource: null == resource
+          ? _value.resource
+          : resource // ignore: cast_nullable_to_non_nullable
+              as String,
+      reason: null == reason
+          ? _value.reason
+          : reason // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnAbuseReportImplCopyWith<$Res>
+    implements $SnAbuseReportCopyWith<$Res> {
+  factory _$$SnAbuseReportImplCopyWith(
+          _$SnAbuseReportImpl value, $Res Function(_$SnAbuseReportImpl) then) =
+      __$$SnAbuseReportImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      String resource,
+      String reason,
+      String status,
+      int accountId});
+}
+
+/// @nodoc
+class __$$SnAbuseReportImplCopyWithImpl<$Res>
+    extends _$SnAbuseReportCopyWithImpl<$Res, _$SnAbuseReportImpl>
+    implements _$$SnAbuseReportImplCopyWith<$Res> {
+  __$$SnAbuseReportImplCopyWithImpl(
+      _$SnAbuseReportImpl _value, $Res Function(_$SnAbuseReportImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnAbuseReport
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? resource = null,
+    Object? reason = null,
+    Object? status = null,
+    Object? accountId = null,
+  }) {
+    return _then(_$SnAbuseReportImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      resource: null == resource
+          ? _value.resource
+          : resource // ignore: cast_nullable_to_non_nullable
+              as String,
+      reason: null == reason
+          ? _value.reason
+          : reason // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnAbuseReportImpl implements _SnAbuseReport {
+  const _$SnAbuseReportImpl(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.resource,
+      required this.reason,
+      required this.status,
+      required this.accountId});
+
+  factory _$SnAbuseReportImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnAbuseReportImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
+  final DateTime? deletedAt;
+  @override
+  final String resource;
+  @override
+  final String reason;
+  @override
+  final String status;
+  @override
+  final int accountId;
+
+  @override
+  String toString() {
+    return 'SnAbuseReport(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, resource: $resource, reason: $reason, status: $status, accountId: $accountId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnAbuseReportImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt) &&
+            (identical(other.resource, resource) ||
+                other.resource == resource) &&
+            (identical(other.reason, reason) || other.reason == reason) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.accountId, accountId) ||
+                other.accountId == accountId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, createdAt, updatedAt,
+      deletedAt, resource, reason, status, accountId);
+
+  /// Create a copy of SnAbuseReport
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnAbuseReportImplCopyWith<_$SnAbuseReportImpl> get copyWith =>
+      __$$SnAbuseReportImplCopyWithImpl<_$SnAbuseReportImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnAbuseReportImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnAbuseReport implements SnAbuseReport {
+  const factory _SnAbuseReport(
+      {required final int id,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
+      required final DateTime? deletedAt,
+      required final String resource,
+      required final String reason,
+      required final String status,
+      required final int accountId}) = _$SnAbuseReportImpl;
+
+  factory _SnAbuseReport.fromJson(Map<String, dynamic> json) =
+      _$SnAbuseReportImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  DateTime? get deletedAt;
+  @override
+  String get resource;
+  @override
+  String get reason;
+  @override
+  String get status;
+  @override
+  int get accountId;
+
+  /// Create a copy of SnAbuseReport
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnAbuseReportImplCopyWith<_$SnAbuseReportImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
