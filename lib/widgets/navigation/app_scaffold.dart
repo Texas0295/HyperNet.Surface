@@ -5,7 +5,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/widgets/connection_indicator.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -96,6 +98,14 @@ class AppRootScaffold extends StatelessWidget {
             ],
           );
 
+    final windowButtonColor = WindowButtonColors(
+      iconNormal: Theme.of(context).colorScheme.primary,
+      mouseOver: Theme.of(context).colorScheme.primaryContainer,
+      mouseDown: Theme.of(context).colorScheme.onPrimaryContainer,
+      iconMouseOver: Theme.of(context).colorScheme.primary,
+      iconMouseDown: Theme.of(context).colorScheme.primary,
+    );
+
     return AppBackground(
       isRoot: true,
       child: Scaffold(
@@ -104,16 +114,38 @@ class AppRootScaffold extends StatelessWidget {
           children: [
             if (!kIsWeb &&
                 (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Theme.of(context).dividerColor,
-                      width: 1 / devicePixelRatio,
+              WindowBorder(
+                color: Theme.of(context).dividerColor,
+                width: 1,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    WindowTitleBarBox(
+                      child: MoveWindow(
+                        child: Text(
+                          'Solian',
+                          style: GoogleFonts.spaceGrotesk(),
+                        ).padding(horizontal: 12, vertical: 5),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: WindowTitleBarBox(
+                        child: Row(
+                          children: [
+                            Expanded(child: MoveWindow()),
+                            Row(
+                              children: [
+                                MinimizeWindowButton(colors: windowButtonColor),
+                                MaximizeWindowButton(colors: windowButtonColor),
+                                CloseWindowButton(colors: windowButtonColor),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: WindowTitleBarBox(child: MoveWindow()),
               ),
             ConnectionIndicator(),
             Expanded(child: innerWidget),
