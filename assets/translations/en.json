@@ -430,5 +430,6 @@
   "unauthorizedDescription": "Login to explore the entire Solar Network.",
   "serviceStatus": "Service Status",
   "termRelated": "Related Terms",
-  "appDetails": "App Details"
+  "appDetails": "App Details",
+  "postRecommendation": "Highlight Posts"
 }

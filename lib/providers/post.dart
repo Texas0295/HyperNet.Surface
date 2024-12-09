@@ -60,6 +60,14 @@ class SnPostContentProvider {
     return out;
   }
 
+  Future<List<SnPost>> listRecommendations() async {
+    final resp = await _sn.client.get('/cgi/co/recommendations');
+    final out = _preloadRelatedDataInBatch(
+      List.from(resp.data.map((ele) => SnPost.fromJson(ele))),
+    );
+    return out;
+  }
+
   Future<(List<SnPost>, int)> listPosts({
     int take = 10,
     int offset = 0,

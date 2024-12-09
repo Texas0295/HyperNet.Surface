@@ -9,11 +9,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/check_in.dart';
+import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/post/post_item.dart';
 
 class HomeScreenDashEntry {
   final String name;
@@ -37,6 +40,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const List<HomeScreenDashEntry> kCards = [
+    HomeScreenDashEntry(
+      name: 'dashEntryRecommendation',
+      cols: 2,
+      rows: 2,
+      child: _HomeDashRecommendationPostWidget(),
+    ),
     HomeScreenDashEntry(
       name: 'dashEntryCheckIn',
       child: _HomeDashCheckInWidget(),
@@ -387,6 +396,78 @@ class _HomeDashNotificationWidgetState extends State<_HomeDashNotificationWidget
           )
         ],
       ).padding(all: 24),
+    );
+  }
+}
+
+class _HomeDashRecommendationPostWidget extends StatefulWidget {
+  const _HomeDashRecommendationPostWidget({super.key});
+
+  @override
+  State<_HomeDashRecommendationPostWidget> createState() => _HomeDashRecommendationPostWidgetState();
+}
+
+class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendationPostWidget> {
+  bool _isBusy = false;
+  List<SnPost>? _posts;
+
+  Future<void> _fetchRecommendationPosts() async {
+    setState(() => _isBusy = true);
+    try {
+      final pt = context.read<SnPostContentProvider>();
+      _posts = await pt.listRecommendations();
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRecommendationPosts();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isBusy) {
+      return Card(
+        child: CircularProgressIndicator().center(),
+      );
+    }
+
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'postRecommendation',
+            style: Theme.of(context).textTheme.titleLarge,
+          ).tr().padding(horizontal: 20, top: 16, bottom: 8),
+          Expanded(
+            child: PageView.builder(
+              itemCount: _posts?.length ?? 0,
+              itemBuilder: (context, index) {
+                return SingleChildScrollView(
+                  child: GestureDetector(
+                    child: PostItem(
+                      data: _posts![index],
+                      showMenu: false,
+                    ).padding(left: 8, right: 8, bottom: 8),
+                    onTap: () {
+                      GoRouter.of(context).pushNamed('postDetail', pathParameters: {
+                        'slug': _posts![index].id.toString(),
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

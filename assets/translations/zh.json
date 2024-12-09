@@ -35,7 +35,7 @@
   "errorRequestForbidden": "被禁止的请求，您没有足够的权限去做那件事。",
   "errorRequestNotFound": "您正查找的资源无法被找到。",
   "errorRequestConnection": "网络连接错误，请检查您的网络状态或者检查我们的服务状态。",
-  "errorRequestUnknown": "位置请求错误，您可能想将此对话框截图并发送给我们。",
+  "errorRequestUnknown": "未知请求错误，您可能想将此对话框截图并发送给我们。",
   "unknown": "未知",
   "loading": "加载中…",
   "prev": "上一步",
@@ -428,5 +428,6 @@
   "unauthorizedDescription": "登陆以探索整个 Solar Network。",
   "serviceStatus": "服务状态",
   "termRelated": "相关条款",
-  "appDetails": "应用程序详情"
+  "appDetails": "应用程序详情",
+  "postRecommendation": "推荐帖子"
 }
