@@ -11,6 +11,8 @@ import 'package:surface/types/auth.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../providers/websocket.dart';
+
 final Map<int, (String label, IconData icon, bool isOtp)> _factorLabelMap = {
   0: ('authFactorPassword'.tr(), Symbols.password, false),
   1: ('authFactorEmail'.tr(), Symbols.email, true),
@@ -155,6 +157,9 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
       if (!mounted) return;
       final user = context.read<UserProvider>();
       await user.refreshUser();
+      if (!mounted) return;
+      final ws = context.read<WebSocketProvider>();
+      await ws.connect();
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (err) {

@@ -1,6 +1,4 @@
 {
-  "nextVersionAlert": "高强度开发提示",
-  "nextVersionNotice": "您正在使用的是 Solian 2.0 的抢先体验版本，目前稳定分支（sn.solsynth.dev）版本为 1.4。该版本还在持续的开发中，部分功能可能不稳定，也并非所有功能都支持了。您可以通过 TestFlight 回滚到 1.4.X 或者继续体验新版本（sn-next.solsynth.dev）。",
   "screen": "页面",
   "screenAbout": "关于",
   "screenHome": "首页",

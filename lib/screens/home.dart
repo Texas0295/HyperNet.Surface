@@ -64,16 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       : MainAxisAlignment.start,
                   children: [
                     if (constraints.maxWidth <= 640) const Gap(8),
-                    Card(
-                      child: ListTile(
-                        isThreeLine: true,
-                        leading: const Icon(Symbols.construction),
-                        title: Text('nextVersionAlert').tr(),
-                        subtitle: Text('nextVersionNotice').tr(),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                      ),
-                    ).padding(horizontal: 8),
                     _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
                     StaggeredGrid.count(
                       crossAxisCount: 2,
