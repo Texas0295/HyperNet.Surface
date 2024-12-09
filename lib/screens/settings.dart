@@ -78,6 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       if (image == null) return;
 
                       await File(image.path).copy('$_docBasepath/app_background_image');
+                      _prefs?.setBool('has_background_image', true);
 
                       setState(() {});
                     },
@@ -98,6 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           trailing: const Icon(Symbols.chevron_right),
                           onTap: () {
                             File('$_docBasepath/app_background_image').deleteSync();
+                            _prefs?.remove('has_background_image');
                             setState(() {});
                           },
                         );

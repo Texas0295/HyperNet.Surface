@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const kMaterialYouToggleStoreKey = 'app_theme_material_you';
@@ -28,9 +32,10 @@ Future<ThemeData> createAppTheme(
     brightness: brightness,
   );
 
+  final hasBackground = prefs.getBool('has_background_image') ?? false;
+
   return ThemeData(
-    useMaterial3:
-        useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? false),
+    useMaterial3: useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? false),
     colorScheme: colorScheme,
     brightness: brightness,
     iconTheme: IconThemeData(
@@ -41,6 +46,8 @@ Future<ThemeData> createAppTheme(
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,
+      backgroundColor: hasBackground ? colorScheme.primary.withOpacity(0.75) : colorScheme.primary,
+      foregroundColor: colorScheme.onPrimary,
     ),
     scaffoldBackgroundColor: Colors.transparent,
   );
