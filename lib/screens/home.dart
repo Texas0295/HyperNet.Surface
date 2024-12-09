@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: constraints.maxWidth > 640 ? MainAxisAlignment.center : MainAxisAlignment.start,
                   children: [
-                    if (constraints.maxWidth <= 640) const Gap(8),
+                    const Gap(8),
                     _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
                     StaggeredGrid.count(
                       crossAxisCount: 2,
@@ -448,6 +449,10 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
           ).tr().padding(horizontal: 20, top: 16, bottom: 8),
           Expanded(
             child: PageView.builder(
+              scrollBehavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+              }),
               itemCount: _posts?.length ?? 0,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
