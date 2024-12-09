@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'dashEntryCheckIn',
       child: _HomeDashCheckInWidget(),
     ),
+    HomeScreenDashEntry(
+      name: 'dashEntryNotification',
+      child: _HomeDashNotificationWidget(),
+    ),
   ];
 
   @override
@@ -52,16 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Align(
-            alignment: constraints.maxWidth > 640
-                ? Alignment.center
-                : Alignment.topCenter,
+            alignment: constraints.maxWidth > 640 ? Alignment.center : Alignment.topCenter,
             child: Container(
               constraints: const BoxConstraints(maxWidth: 640),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: constraints.maxWidth > 640
-                      ? MainAxisAlignment.center
-                      : MainAxisAlignment.start,
+                  mainAxisAlignment: constraints.maxWidth > 640 ? MainAxisAlignment.center : MainAxisAlignment.start,
                   children: [
                     if (constraints.maxWidth <= 640) const Gap(8),
                     _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
@@ -96,9 +97,7 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
     final ua = context.watch<UserProvider>();
     final today = DateTime.now();
     final birthday = ua.user?.profile?.birthday?.toLocal();
-    final isBirthday = birthday != null &&
-        birthday.day == today.day &&
-        birthday.month == today.month;
+    final isBirthday = birthday != null && birthday.day == today.day && birthday.month == today.month;
     return Column(
       children: [
         if (isBirthday)
@@ -154,20 +153,15 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
   }
 
   Widget _buildDetailChunk(int index, bool positive) {
-    final prefix =
-        positive ? 'dailyCheckPositiveHint' : 'dailyCheckNegativeHint';
-    final mod =
-        positive ? kSuggestionPositiveHintCount : kSuggestionNegativeHintCount;
+    final prefix = positive ? 'dailyCheckPositiveHint' : 'dailyCheckNegativeHint';
+    final mod = positive ? kSuggestionPositiveHintCount : kSuggestionNegativeHintCount;
     final pos = math.max(1, _todayRecord!.resultModifiers[index] % mod);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           prefix.tr(args: ['$prefix$pos'.tr()]),
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
         ).tr(),
         Text(
           '$prefix${pos}Description',
@@ -202,10 +196,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
               else
                 Text(
                   'dailyCheckEverythingIsNegative',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                 ).tr(),
               const Gap(8),
               if (_todayRecord?.resultTier != 4)
@@ -221,10 +212,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
               else
                 Text(
                   'dailyCheckEverythingIsPositive',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                 ).tr(),
             ],
           ),
@@ -338,14 +326,28 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
   }
 }
 
-class _HomeDashLinkWidget extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  const _HomeDashLinkWidget({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
+class _HomeDashNotificationWidget extends StatefulWidget {
+  const _HomeDashNotificationWidget({super.key});
+
+  @override
+  State<_HomeDashNotificationWidget> createState() => _HomeDashNotificationWidgetState();
+}
+
+class _HomeDashNotificationWidgetState extends State<_HomeDashNotificationWidget> {
+  int? _count;
+
+  Future<void> _fetchNotificationCount() async {
+    final sn = context.read<SnNetworkProvider>();
+    final resp = await sn.client.get('/cgi/id/notifications/count');
+    _count = resp.data['count'];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotificationCount();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -358,11 +360,11 @@ class _HomeDashLinkWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  'notification',
                   style: Theme.of(context).textTheme.titleLarge,
-                ),
+                ).tr(),
                 Text(
-                  subtitle,
+                  _count == null ? 'loading'.tr() : 'notificationUnreadCount'.plural(_count ?? 0),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
@@ -377,7 +379,9 @@ class _HomeDashLinkWidget extends StatelessWidget {
               ),
               child: IconButton(
                 icon: const Icon(Symbols.arrow_right_alt),
-                onPressed: () {},
+                onPressed: () {
+                  GoRouter.of(context).goNamed('notification');
+                },
               ),
             ),
           )

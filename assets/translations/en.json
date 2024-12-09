@@ -274,6 +274,12 @@
   "attachmentUnsetAsPostThumbnail": "Unset as post thumbnail",
   "attachmentSetThumbnail": "Set thumbnail",
   "attachmentUpload": "Upload",
+  "notification": "Notification",
+  "notificationUnreadCount": {
+    "zero": "All notifications read",
+    "one": "{} unread notification",
+    "other": "{} unread notifications"
+  },
   "notificationUnread": "Unread",
   "notificationRead": "Read",
   "notificationMarkAllRead": "Mark all notifications as read",

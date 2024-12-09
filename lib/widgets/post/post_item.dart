@@ -720,32 +720,35 @@ class _PostTruncatedHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (data.body['content_length'] != null)
-          Row(
-            children: [
-              const Icon(Symbols.timer, size: 20),
-              const Gap(4),
-              Text('postReadEstimate').tr(args: [
-                '${Duration(
-                  seconds: (data.body['content_length'] as num).toDouble() * 60 ~/ kHumanReadSpeed,
-                ).inSeconds}s',
-              ]),
-            ],
-          ).padding(right: 8),
-        if (data.body['content_length'] != null)
-          Row(
-            children: [
-              const Icon(Symbols.height, size: 20),
-              const Gap(4),
-              Text(
-                'postTotalLength'.plural(data.body['content_length']),
-              )
-            ],
-          ),
-      ],
-    ).opacity(0.75);
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          if (data.body['content_length'] != null)
+            Row(
+              children: [
+                const Icon(Symbols.timer, size: 20),
+                const Gap(4),
+                Text('postReadEstimate').tr(args: [
+                  '${Duration(
+                    seconds: (data.body['content_length'] as num).toDouble() * 60 ~/ kHumanReadSpeed,
+                  ).inSeconds}s',
+                ]),
+              ],
+            ).padding(right: 8),
+          if (data.body['content_length'] != null)
+            Row(
+              children: [
+                const Icon(Symbols.height, size: 20),
+                const Gap(4),
+                Text(
+                  'postTotalLength'.plural(data.body['content_length']),
+                )
+              ],
+            ),
+        ],
+      ).opacity(0.75),
+    );
   }
 }
 

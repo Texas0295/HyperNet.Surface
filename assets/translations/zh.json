@@ -272,6 +272,12 @@
   "attachmentUnsetAsPostThumbnail": "取消设置为帖子缩略图",
   "attachmentSetThumbnail": "设置缩略图",
   "attachmentUpload": "上传",
+  "notification": "通知",
+  "notificationUnreadCount": {
+    "zero": "无未读通知",
+    "one": "有 {} 个未读通知",
+    "other": "有 {} 个未读通知"
+  },
   "notificationUnread": "未读",
   "notificationRead": "已读",
   "notificationMarkAllRead": "已读所有通知",
