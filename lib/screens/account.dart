@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/providers/websocket.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -123,7 +125,11 @@ class _AuthorizedAccountScreen extends StatelessWidget {
               'accountLogoutConfirm'.tr(),
             )
                 .then((value) {
+                  if(!context.mounted) return;
               if (value) ua.logoutUser();
+              final ws = context.read<WebSocketProvider>();
+              ws.disconnect();
+              Hive.deleteFromDisk();
             });
           },
         ),
