@@ -74,10 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: constraints.maxWidth > 640 ? MainAxisAlignment.center : MainAxisAlignment.start,
                   children: [
-                    const Gap(8),
                     _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
-                    StaggeredGrid.count(
-                      crossAxisCount: 2,
+                    StaggeredGrid.extent(
+                      maxCrossAxisExtent: 280,
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
                       children: kCards.map((card) {
@@ -89,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }).toList(),
                     ).padding(horizontal: 8),
                   ],
-                ),
+                ).padding(vertical: 8),
               ),
             ),
           );
@@ -443,10 +442,16 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'postRecommendation',
-            style: Theme.of(context).textTheme.titleLarge,
-          ).tr().padding(horizontal: 20, top: 16, bottom: 8),
+          Row(
+            children: [
+              const Icon(Symbols.star),
+              const Gap(8),
+              Text(
+                'postRecommendation',
+                style: Theme.of(context).textTheme.titleLarge,
+              ).tr()
+            ],
+          ).padding(horizontal: 18, top: 12, bottom: 8),
           Expanded(
             child: PageView.builder(
               scrollBehavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
@@ -460,7 +465,7 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
                     child: PostItem(
                       data: _posts![index],
                       showMenu: false,
-                    ).padding(left: 8, right: 8, bottom: 8),
+                    ).padding(bottom: 8),
                     onTap: () {
                       GoRouter.of(context).pushNamed('postDetail', pathParameters: {
                         'slug': _posts![index].id.toString(),
