@@ -23,6 +23,58 @@ class NotificationService: UNNotificationServiceExtension {
         identifier.starts(with: "http") ? identifier : "\(serverBaseUrl)/cgi/uc/attachments/\(identifier)"
     }
     
+    private func fetchAvatarImage(from url: String, completion: @escaping (INImage?) -> Void) {
+        guard let imageURL = URL(string: url) else {
+            completion(nil)
+            return
+        }
+        
+        // Define a cache location based on the URL hash
+        let cacheFileName = imageURL.lastPathComponent
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let cachedFileUrl = tempDirectory.appendingPathComponent(cacheFileName)
+        
+        // Check if the image is already cached
+        if FileManager.default.fileExists(atPath: cachedFileUrl.path) {
+            do {
+                let data = try Data(contentsOf: cachedFileUrl)
+                let cachedImage = INImage(imageData: data) // No optional binding here
+                completion(cachedImage)
+                return
+            } catch {
+                print("Failed to load cached avatar image: \(error.localizedDescription)")
+                try? FileManager.default.removeItem(at: cachedFileUrl) // Clear corrupted cache
+            }
+        }
+        
+        // Download the image if not cached
+        let session = URLSession(configuration: .default)
+        session.downloadTask(with: imageURL) { localUrl, response, error in
+            if let error = error {
+                print("Failed to fetch avatar image: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            guard let localUrl = localUrl, let data = try? Data(contentsOf: localUrl) else {
+                print("Failed to fetch data for avatar image.")
+                completion(nil)
+                return
+            }
+            
+            do {
+                // Cache the downloaded file
+                try FileManager.default.moveItem(at: localUrl, to: cachedFileUrl)
+            } catch {
+                print("Failed to cache avatar image: \(error.localizedDescription)")
+            }
+            
+            // Create INImage from the downloaded data
+            let inImage = INImage(imageData: data) // Create directly
+            completion(inImage)
+        }.resume()
+    }
+    
     override func didReceive(
         _ request: UNNotificationRequest,
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
@@ -61,32 +113,35 @@ class NotificationService: UNNotificationServiceExtension {
             throw ParseNotificationPayloadError.missingMetadata("The notification has no metadata.")
         }
         
-        guard var avatarUrl = metadata["avatar"] as? String else {
+        guard let avatarIdentifier = metadata["avatar"] as? String else {
             throw ParseNotificationPayloadError.missingAvatarUrl("The notification has no avatar.")
         }
-        avatarUrl = getAttachmentUrl(for: avatarUrl)
         
-        let handle = INPersonHandle(value: "\(metadata["user_id"] ?? "")", type: .unknown)
-        let avatar = INImage(url: URL(string: avatarUrl)!)
-        let sender = INPerson(
-            personHandle: handle,
-            nameComponents: nil,
-            displayName: content.title,
-            image: avatar,
-            contactIdentifier: nil,
-            customIdentifier: nil
-        )
-        
-        if content.categoryIdentifier == "messaging.callStart" {
-            let intent = createCallIntent(with: sender)
-            donateInteraction(for: intent)
-            let updatedContent = try request.content.updating(from: intent)
-            contentHandler?(updatedContent)
-        } else {
-            let intent = createMessageIntent(with: sender, metadata: metadata, body: content.body)
-            donateInteraction(for: intent)
-            let updatedContent = try request.content.updating(from: intent)
-            contentHandler?(updatedContent)
+        let avatarUrl = getAttachmentUrl(for: avatarIdentifier)
+        fetchAvatarImage(from: avatarUrl) { [weak self] inImage in
+            guard let self = self else { return }
+            
+            let handle = INPersonHandle(value: "\(metadata["user_id"] ?? "")", type: .unknown)
+            let sender = INPerson(
+                personHandle: handle,
+                nameComponents: nil,
+                displayName: content.title,
+                image: inImage,
+                contactIdentifier: nil,
+                customIdentifier: nil
+            )
+            
+            if content.categoryIdentifier == "messaging.callStart" {
+                let intent = self.createCallIntent(with: sender)
+                self.donateInteraction(for: intent)
+                let updatedContent = try? request.content.updating(from: intent)
+                self.contentHandler?(updatedContent ?? content)
+            } else {
+                let intent = self.createMessageIntent(with: sender, metadata: metadata, body: content.body)
+                self.donateInteraction(for: intent)
+                let updatedContent = try? request.content.updating(from: intent)
+                self.contentHandler?(updatedContent ?? content)
+            }
         }
     }
     
@@ -106,9 +161,56 @@ class NotificationService: UNNotificationServiceExtension {
     
     private func attachMedia(to content: UNMutableNotificationContent, withIdentifier identifier: String) {
         let attachmentUrl = getAttachmentUrl(for: identifier)
-        if let url = URL(string: attachmentUrl), let attachment = try? UNNotificationAttachment(identifier: identifier, url: url) {
-            content.attachments = [attachment]
+        
+        guard let remoteUrl = URL(string: attachmentUrl) else {
+            print("Invalid URL for attachment: \(attachmentUrl)")
+            return
         }
+        
+        // Define a cache location based on the identifier
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let cachedFileUrl = tempDirectory.appendingPathComponent(identifier)
+        
+        if FileManager.default.fileExists(atPath: cachedFileUrl.path) {
+            // Use cached file
+            attachLocalMedia(to: content, from: cachedFileUrl, withIdentifier: identifier)
+        } else {
+            // Download and cache the file
+            let session = URLSession(configuration: .default)
+            session.downloadTask(with: remoteUrl) { [weak content] localUrl, response, error in
+                guard let content = content else { return }
+                
+                if let error = error {
+                    print("Failed to download media: \(error.localizedDescription)")
+                    self.contentHandler?(content)
+                    return
+                }
+                
+                guard let localUrl = localUrl else {
+                    print("No local file URL after download")
+                    self.contentHandler?(content)
+                    return
+                }
+                
+                do {
+                    // Move the downloaded file to the cache
+                    try FileManager.default.moveItem(at: localUrl, to: cachedFileUrl)
+                    self.attachLocalMedia(to: content, from: cachedFileUrl, withIdentifier: identifier)
+                } catch {
+                    print("Failed to cache media file: \(error.localizedDescription)")
+                    self.contentHandler?(content)
+                }
+            }.resume()
+        }
+    }
+
+    private func attachLocalMedia(to content: UNMutableNotificationContent, from localUrl: URL, withIdentifier identifier: String) {
+        if let attachment = try? UNNotificationAttachment(identifier: identifier, url: localUrl) {
+            content.attachments = [attachment]
+        } else {
+            print("Failed to create attachment from cached file: \(localUrl.path)")
+        }
+        self.contentHandler?(content)
     }
     
     private func createCallIntent(with sender: INPerson) -> INStartCallIntent {
