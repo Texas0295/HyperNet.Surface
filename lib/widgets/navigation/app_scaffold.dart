@@ -118,7 +118,7 @@ class AppRootScaffold extends StatelessWidget {
                     WindowTitleBarBox(
                       child: MoveWindow(
                         child: Text(
-                          'Solian',
+                          'Solar Network',
                           style: GoogleFonts.spaceGrotesk(),
                         ).padding(horizontal: 12, vertical: 5),
                       ),

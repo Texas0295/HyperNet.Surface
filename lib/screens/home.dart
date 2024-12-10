@@ -346,6 +346,12 @@ class _HomeDashNotificationWidgetState extends State<_HomeDashNotificationWidget
   int? _count;
 
   Future<void> _fetchNotificationCount() async {
+    final ua = context.read<UserProvider>();
+    if (!ua.isAuthorized) {
+      setState(() => _count = 0);
+      return;
+    }
+
     final sn = context.read<SnNetworkProvider>();
     final resp = await sn.client.get('/cgi/id/notifications/count');
     _count = resp.data['count'];

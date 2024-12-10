@@ -79,7 +79,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
         final place = await attach.chunkedUploadInitialize(
           (await media.length())!,
           media.name,
-          'interactive',
+          'messaging',
           null,
           mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
         );
