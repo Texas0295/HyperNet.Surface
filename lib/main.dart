@@ -124,7 +124,6 @@ class AppMainContent extends StatelessWidget {
     final th = context.watch<ThemeProvider>();
 
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
       theme: th.theme?.light,
       darkTheme: th.theme?.dark,
       locale: context.locale,
