@@ -59,8 +59,7 @@ void main() async {
 
   await SentryFlutter.init(
     (options) {
-      options.dsn =
-          'https://c218d44126d59d69301e730498494def@o4506965897117696.ingest.us.sentry.io/4508346768228352';
+      options.dsn = 'https://c218d44126d59d69301e730498494def@o4506965897117696.ingest.us.sentry.io/4508346768228352';
       options.tracesSampleRate = 1.0;
       options.profilesSampleRate = 1.0;
     },
@@ -76,10 +75,14 @@ class SolianApp extends StatelessWidget {
     return ResponsiveBreakpoints.builder(
       child: EasyLocalization(
         path: 'assets/translations',
-        supportedLocales: [Locale('en', 'US'), Locale('zh', 'CN')],
+        supportedLocales: [
+          Locale('en', 'US'),
+          Locale('zh', 'CN'),
+          Locale('zh', 'TW'),
+          Locale('zh', 'HK'),
+        ],
         fallbackLocale: Locale('en', 'US'),
         useFallbackTranslations: true,
-        useOnlyLangCode: true,
         assetLoader: JsonAssetLoader(),
         child: MultiProvider(
           providers: [
