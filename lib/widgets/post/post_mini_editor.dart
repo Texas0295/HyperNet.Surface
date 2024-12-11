@@ -35,7 +35,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.get('/cgi/co/publishers');
+      final resp = await sn.client.get('/cgi/co/publishers/me');
       _publishers = List<SnPublisher>.from(
         resp.data?.map((e) => SnPublisher.fromJson(e)) ?? [],
       );
