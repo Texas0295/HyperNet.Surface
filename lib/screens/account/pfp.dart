@@ -3,13 +3,17 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/screens/abuse_report.dart';
 import 'package:surface/types/account.dart';
+import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -73,6 +77,98 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
     }
   }
 
+  List<SnPublisher>? _publishers;
+
+  Future<void> _fetchPublishers() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/co/publishers?user=${widget.name}');
+      _publishers = List<SnPublisher>.from(
+        resp.data?.map((e) => SnPublisher.fromJson(e)) ?? [],
+      );
+    } catch (err) {
+      if (mounted) context.showErrorDialog(err);
+      rethrow;
+    } finally {
+      setState(() {});
+    }
+  }
+
+  bool _isBusy = false;
+  SnRelationship? _accountRelationship;
+
+  Future<void> _addFriend() async {
+    if (_isBusy) return;
+
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.post('/cgi/id/users/me/relations/friend', data: {
+        'related': _account!.name,
+      });
+      if (!mounted) return;
+      context.showSnackbar('friendRequestSent'.tr());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  Future<void> _blockAccount() async {
+    if (_isBusy) return;
+
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.post('/cgi/id/users/me/relations/block', data: {
+        'related': _account!.name,
+      });
+      if (!mounted) return;
+      context.showSnackbar('userBlocked'.tr(args: ['@${_account?.name ?? 'unknown'}']));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  Future<void> _unblockAccount() async {
+    if (_isBusy) return;
+
+    setState(() => _isBusy = true);
+
+    try {
+      final rel = context.read<SnRelationshipProvider>();
+      await rel.updateRelationship(_account!.id, 1, _accountRelationship?.permNodes ?? {});
+      if (!mounted) return;
+      context.showSnackbar('userUnblocked'.tr(args: ['@${_account?.name ?? 'unknown'}']));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  void _showAbuseReportDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AbuseReportDialog(
+        resourceLocation: 'user:${_account?.name}',
+      ),
+    ).then((value) {
+      if (value == true && mounted) {
+        _fetchAccount();
+        context.showSnackbar('abuseReportSubmitted'.tr());
+      }
+    });
+  }
+
   double _appBarBlur = 0.0;
 
   late final _appBarWidth = MediaQuery.of(context).size.width;
@@ -88,8 +184,19 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _fetchAccount().then((_) {
+    _fetchAccount().then((_) async {
+      if (!mounted) return;
+
       _fetchStatus();
+      _fetchPublishers();
+
+      try {
+        final rel = context.read<SnRelationshipProvider>();
+        _accountRelationship = await rel.getRelationship(_account!.id);
+        if (mounted) setState(() {});
+      } catch (_) {
+        // ignore
+      }
     });
     _scrollController.addListener(_updateAppBarBlur);
   }
@@ -204,6 +311,57 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                             Text('@${_account!.name}').fontSize(13),
                           ],
                         ),
+                      ),
+                      PopupMenuButton(
+                        padding: EdgeInsets.zero,
+                        style: ButtonStyle(
+                          visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                        ),
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: _showAbuseReportDialog,
+                            child: Row(
+                              children: [
+                                const Icon(Symbols.flag),
+                                const Gap(16),
+                                Text('report').tr(),
+                              ],
+                            ),
+                          ),
+                          if (_accountRelationship == null)
+                            PopupMenuItem(
+                              onTap: _addFriend,
+                              child: Row(
+                                children: [
+                                  const Icon(Symbols.person_add),
+                                  const Gap(16),
+                                  Text('friendNew').tr(),
+                                ],
+                              ),
+                            ),
+                          if (_accountRelationship?.status != 2)
+                            PopupMenuItem(
+                              onTap: _blockAccount,
+                              child: Row(
+                                children: [
+                                  const Icon(Symbols.block),
+                                  const Gap(16),
+                                  Text('friendBlock').tr(),
+                                ],
+                              ),
+                            )
+                          else
+                            PopupMenuItem(
+                              onTap: _unblockAccount,
+                              child: Row(
+                                children: [
+                                  const Icon(Symbols.block),
+                                  const Gap(16),
+                                  Text('friendUnblock').tr(),
+                                ],
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ).padding(right: 8),
@@ -346,7 +504,31 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                 ),
               ],
             ),
-          )
+          ),
+          const SliverGap(8),
+          SliverToBoxAdapter(child: const Divider()),
+          SliverList.builder(
+            itemCount: _publishers?.length ?? 0,
+            itemBuilder: (context, idx) {
+              final ele = _publishers![idx];
+              return ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                leading: AccountImage(
+                  content: ele.avatar,
+                  fallbackWidget: const Icon(Symbols.group, size: 24),
+                ),
+                title: Text(ele.nick),
+                subtitle: Text('@${ele.name}'),
+                trailing: const Icon(Symbols.chevron_right),
+                onTap: () {
+                  GoRouter.of(context).pushNamed(
+                    'postPublisher',
+                    pathParameters: {'name': ele.name},
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
