@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -118,19 +119,19 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           leading: const Icon(Symbols.logout),
           trailing: const Icon(Symbols.chevron_right),
-          onTap: () {
-            context
-                .showConfirmDialog(
+          onTap: () async {
+            final confirm = await context.showConfirmDialog(
               'accountLogoutConfirmTitle'.tr(),
               'accountLogoutConfirm'.tr(),
-            )
-                .then((value) {
-                  if(!context.mounted) return;
-              if (value) ua.logoutUser();
-              final ws = context.read<WebSocketProvider>();
-              ws.disconnect();
-              Hive.deleteFromDisk();
-            });
+            );
+
+            if (!confirm) return;
+            if (!context.mounted) return;
+            ua.logoutUser();
+            final ws = context.read<WebSocketProvider>();
+            ws.disconnect();
+            await Hive.deleteFromDisk();
+            await Hive.initFlutter();
           },
         ),
         ListTile(
