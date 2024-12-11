@@ -145,6 +145,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
                   padding: const WidgetStatePropertyAll(
                     EdgeInsets.symmetric(horizontal: 24),
                   ),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   onChanged: (value) {
                     _searchTerm = value;
                   },

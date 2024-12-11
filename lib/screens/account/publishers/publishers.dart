@@ -31,7 +31,7 @@ class _PublisherScreenState extends State<PublisherScreen> {
     setState(() => _isBusy = true);
 
     try {
-      final resp = await sn.client.get('/cgi/co/publishers');
+      final resp = await sn.client.get('/cgi/co/publishers/me');
       final List<SnPublisher> out = List<SnPublisher>.from(
           resp.data?.map((e) => SnPublisher.fromJson(e)) ?? []);
 
