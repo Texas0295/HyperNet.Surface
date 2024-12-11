@@ -432,5 +432,9 @@
   "serviceStatus": "Service Status",
   "termRelated": "Related Terms",
   "appDetails": "App Details",
-  "postRecommendation": "Highlight Posts"
+  "postRecommendation": "Highlight Posts",
+  "publisherBlockHint": "Block {}",
+  "publisherBlockHintDescription": "You are going to block this publisher's maintainer, this will also block publishers that run by the same user.",
+  "userUnblocked": "{} has been unblocked.",
+  "userBlocked": "{} has been blocked."
 }

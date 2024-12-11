@@ -21,6 +21,9 @@ import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
+import '../../providers/relationship.dart';
+import '../abuse_report.dart';
+
 class PostPublisherScreen extends StatefulWidget {
   final String name;
 
@@ -35,18 +38,21 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
   late final TabController _tabController = TabController(length: 3, vsync: this);
 
   SnPublisher? _publisher;
-  SnRealm? _realm;
   SnAccount? _account;
+  SnRelationship? _accountRelationship;
+  SnRealm? _realm;
 
   Future<void> _fetchPublisher() async {
     try {
       final sn = context.read<SnNetworkProvider>();
       final ud = context.read<UserDirectoryProvider>();
+      final rel = context.read<SnRelationshipProvider>();
       final resp = await sn.client.get('/cgi/co/publishers/${widget.name}');
       if (!mounted) return;
       _publisher = SnPublisher.fromJson(resp.data);
       _account = await ud.getAccount(_publisher?.accountId);
-      if (_publisher?.realmId != null) {
+      _accountRelationship = await rel.getRelationship(_account!.id);
+      if (_publisher?.realmId != null && _publisher!.realmId != 0) {
         final resp = await sn.client.get('/cgi/id/realms/${_publisher!.realmId}');
         _realm = SnRealm.fromJson(resp.data);
       }
@@ -160,9 +166,71 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
     }
   }
 
+  bool _isWorking = false;
+
+  Future<void> _blockPublisher() async {
+    if (_isWorking) return;
+
+    final confirm = await context.showConfirmDialog(
+      'publisherBlockHint'.tr(args: ['@${_publisher?.name ?? 'unknown'.tr()}']),
+      'publisherBlockHintDescription'.tr(),
+    );
+    if (!confirm) return;
+    if (!mounted) return;
+
+    setState(() => _isWorking = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.post('/cgi/id/users/me/relations/block', data: {
+        'related': _account!.name,
+      });
+      if (!mounted) return;
+      context.showSnackbar('userBlocked'.tr(args: ['@${_account?.name ?? 'unknown'.tr()}']));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isWorking = false);
+    }
+  }
+
+  Future<void> _unblockPublisher() async {
+    if (_isWorking) return;
+
+    setState(() => _isWorking = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final rel = context.read<SnRelationshipProvider>();
+      await rel.updateRelationship(_account!.id, 1, _accountRelationship?.permNodes ?? {});
+      if (!mounted) return;
+      context.showSnackbar('userUnblocked'.tr(args: ['@${_account?.name ?? 'unknown'.tr()}']));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isWorking = false);
+    }
+  }
+
   void _updateFetchType() {
     _posts.clear();
     _fetchPosts();
+  }
+
+  void _showAbuseReportDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AbuseReportDialog(
+        resourceLocation: 'pub:${_publisher?.name}',
+      ),
+    ).then((value) {
+      if (value == true && mounted) {
+        _fetchPosts();
+        context.showSnackbar('abuseReportSubmitted'.tr());
+      }
+    });
   }
 
   @override
@@ -319,8 +387,48 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
                                     label: Text('unsubscribe').tr(),
                                     icon: const Icon(Symbols.remove),
                                   ),
+                                PopupMenuButton(
+                                  padding: EdgeInsets.zero,
+                                  style: ButtonStyle(
+                                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                                  ),
+                                  itemBuilder: (BuildContext context) => [
+                                    PopupMenuItem(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Symbols.flag),
+                                          const Gap(16),
+                                          Text('report').tr(),
+                                        ],
+                                      ),
+                                      onTap: () => _showAbuseReportDialog(),
+                                    ),
+                                    if (_accountRelationship?.status != 2)
+                                      PopupMenuItem(
+                                        onTap: _blockPublisher,
+                                        child: Row(
+                                          children: [
+                                            const Icon(Symbols.block),
+                                            const Gap(16),
+                                            Text('friendBlock').tr(),
+                                          ],
+                                        ),
+                                      )
+                                    else
+                                      PopupMenuItem(
+                                        onTap: _unblockPublisher,
+                                        child: Row(
+                                          children: [
+                                            const Icon(Symbols.block),
+                                            const Gap(16),
+                                            Text('friendUnblock').tr(),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ],
-                            ).padding(right: 8),
+                            ),
                             const Gap(12),
                             Text(_publisher!.description).padding(horizontal: 8),
                             const Gap(12),

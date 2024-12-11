@@ -39,7 +39,7 @@ class _AbuseReportScreenState extends State<AbuseReportScreen> {
   void _showAbuseReportDialog() {
     showDialog(
       context: context,
-      builder: (context) => _AbuseReportDialog(),
+      builder: (context) => AbuseReportDialog(),
     ).then((value) {
       if (value == true && mounted) {
         _fetchReports();
@@ -91,18 +91,28 @@ class _AbuseReportScreenState extends State<AbuseReportScreen> {
   }
 }
 
-class _AbuseReportDialog extends StatefulWidget {
-  const _AbuseReportDialog({super.key});
+class AbuseReportDialog extends StatefulWidget {
+  final String? resourceLocation;
+
+  const AbuseReportDialog({super.key, this.resourceLocation});
 
   @override
-  State<_AbuseReportDialog> createState() => _AbuseReportDialogState();
+  State<AbuseReportDialog> createState() => _AbuseReportDialogState();
 }
 
-class _AbuseReportDialogState extends State<_AbuseReportDialog> {
+class _AbuseReportDialogState extends State<AbuseReportDialog> {
   bool _isBusy = false;
 
   final _resourceController = TextEditingController();
   final _reasonController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.resourceLocation != null) {
+      _resourceController.text = widget.resourceLocation!;
+    }
+  }
 
   @override
   dispose() {
@@ -144,6 +154,7 @@ class _AbuseReportDialogState extends State<_AbuseReportDialog> {
           const Gap(12),
           TextField(
             controller: _resourceController,
+            readOnly: widget.resourceLocation != null,
             maxLength: null,
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),

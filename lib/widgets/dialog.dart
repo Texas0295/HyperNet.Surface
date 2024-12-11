@@ -99,7 +99,7 @@ extension AppPromptExtension on BuildContext {
 
       if (exception.response != null) {
         content = Text(
-          '$preview\n\n(${exception.response?.statusCode}) ${exception.response?.data}',
+          '$preview\n\n${exception.requestOptions.uri.path}\n(${exception.response?.statusCode}) ${exception.response?.data}',
         );
       } else {
         content = Text(preview);

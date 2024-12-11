@@ -149,7 +149,7 @@ class _RealmDetailHomeWidget extends StatelessWidget {
             itemBuilder: (context, idx) {
               final ele = publishers![idx];
               return ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                 leading: AccountImage(
                   content: ele.avatar,
                   fallbackWidget: const Icon(Symbols.group, size: 24),

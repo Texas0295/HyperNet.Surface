@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/account.dart';
 
 class SnRelationshipProvider {
   late final SnNetworkProvider _sn;
 
   SnRelationshipProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
+  }
+
+  Future<SnRelationship?> getRelationship(int relatedId) async {
+    try {
+      final resp = await _sn.client.get('/cgi/id/users/me/relations/$relatedId');
+      return SnRelationship.fromJson(resp.data);
+    } catch (err) {
+      return null;
+    }
   }
 
   Future<void> updateRelationship(

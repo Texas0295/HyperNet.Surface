@@ -430,5 +430,9 @@
   "serviceStatus": "服务状态",
   "termRelated": "相关条款",
   "appDetails": "应用程序详情",
-  "postRecommendation": "推荐帖子"
+  "postRecommendation": "推荐帖子",
+  "publisherBlockHint": "屏蔽 {}",
+  "publisherBlockHintDescription": "你正要屏蔽此发布者的运营者，该操作也将屏蔽由同一用户运营的发布者。",
+  "userUnblocked": "已解除屏蔽用户 {}",
+  "userBlocked": "已屏蔽用户 {}"
 }
