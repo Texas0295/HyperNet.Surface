@@ -6,15 +6,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/unauthorized_hint.dart';
 import 'package:surface/widgets/universal_image.dart';
-
-import '../providers/userinfo.dart';
-import '../widgets/unauthorized_hint.dart';
 
 class RealmScreen extends StatefulWidget {
   const RealmScreen({super.key});
@@ -101,9 +100,7 @@ class _RealmScreenState extends State<RealmScreen> {
         title: Text('screenRealm').tr(),
         actions: [
           IconButton(
-            icon: !_isCompactView
-                ? const Icon(Symbols.view_list)
-                : const Icon(Symbols.view_module),
+            icon: !_isCompactView ? const Icon(Symbols.view_list) : const Icon(Symbols.view_module),
             onPressed: () {
               setState(() => _isCompactView = !_isCompactView);
             },
@@ -129,8 +126,7 @@ class _RealmScreenState extends State<RealmScreen> {
                   final realm = _realms![idx];
                   if (_isCompactView) {
                     return ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       leading: AccountImage(
                         content: realm.avatar,
                         fallbackWidget: const Icon(Symbols.group, size: 20),
@@ -201,9 +197,7 @@ class _RealmScreenState extends State<RealmScreen> {
                                 fit: StackFit.expand,
                                 children: [
                                   Container(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .surfaceContainer,
+                                    color: Theme.of(context).colorScheme.surfaceContainer,
                                     child: (realm.banner?.isEmpty ?? true)
                                         ? const SizedBox.shrink()
                                         : AutoResizeUniversalImage(
@@ -217,8 +211,7 @@ class _RealmScreenState extends State<RealmScreen> {
                                     child: AccountImage(
                                       content: realm.avatar,
                                       radius: 24,
-                                      fallbackWidget:
-                                          const Icon(Symbols.group, size: 24),
+                                      fallbackWidget: const Icon(Symbols.group, size: 24),
                                     ),
                                   ),
                                 ],
@@ -228,10 +221,8 @@ class _RealmScreenState extends State<RealmScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(realm.name).textStyle(
-                                    Theme.of(context).textTheme.titleMedium!),
-                                Text(realm.description).textStyle(
-                                    Theme.of(context).textTheme.bodySmall!),
+                                Text(realm.name).textStyle(Theme.of(context).textTheme.titleMedium!),
+                                Text(realm.description).textStyle(Theme.of(context).textTheme.bodySmall!),
                               ],
                             ).padding(horizontal: 24, bottom: 14),
                           ],

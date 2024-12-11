@@ -13,8 +13,11 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
+import '../../types/post.dart';
+
 class RealmDetailScreen extends StatefulWidget {
   final String alias;
+
   const RealmDetailScreen({super.key, required this.alias});
 
   @override
@@ -32,6 +35,24 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
+      rethrow;
+    } finally {
+      setState(() {});
+    }
+  }
+
+  List<SnPublisher>? _publishers;
+
+  Future<void> _fetchPublishers() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/co/publishers?realm=${widget.alias}');
+      _publishers = List<SnPublisher>.from(
+        resp.data?.map((e) => SnPublisher.fromJson(e)) ?? [],
+      );
+    } catch (err) {
+      if (mounted) context.showErrorDialog(err);
+      rethrow;
     } finally {
       setState(() {});
     }
@@ -40,7 +61,9 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchRealm();
+    _fetchRealm().then((_) {
+      _fetchPublishers();
+    });
   }
 
   @override
@@ -60,8 +83,7 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
                 // scroll view thinks it has not been scrolled.
                 // This is not necessary if the "headerSliverBuilder" only builds
                 // widgets that do not overlap the next sliver.
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   title: Text(_realm?.name ?? 'loading'.tr()),
                   bottom: TabBar(
@@ -77,7 +99,7 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
           },
           body: TabBarView(
             children: [
-              _RealmDetailHomeWidget(realm: _realm),
+              _RealmDetailHomeWidget(realm: _realm, publishers: _publishers),
               _RealmMemberListWidget(realm: _realm),
               _RealmSettingsWidget(
                 realm: _realm,
@@ -95,7 +117,9 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
 
 class _RealmDetailHomeWidget extends StatelessWidget {
   final SnRealm? realm;
-  const _RealmDetailHomeWidget({super.key, required this.realm});
+  final List<SnPublisher>? publishers;
+
+  const _RealmDetailHomeWidget({super.key, required this.realm, this.publishers});
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +142,31 @@ class _RealmDetailHomeWidget extends StatelessWidget {
           ).padding(horizontal: 24),
         const Gap(16),
         const Divider(),
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: publishers?.length ?? 0,
+            itemBuilder: (context, idx) {
+              final ele = publishers![idx];
+              return ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                leading: AccountImage(
+                  content: ele.avatar,
+                  fallbackWidget: const Icon(Symbols.group, size: 24),
+                ),
+                title: Text(ele.nick),
+                subtitle: Text('@${ele.name}'),
+                trailing: const Icon(Symbols.chevron_right),
+                onTap: () {
+                  GoRouter.of(context).pushNamed(
+                    'postPublisher',
+                    pathParameters: {'name': ele.name},
+                  );
+                },
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -125,6 +174,7 @@ class _RealmDetailHomeWidget extends StatelessWidget {
 
 class _RealmMemberListWidget extends StatefulWidget {
   final SnRealm? realm;
+
   const _RealmMemberListWidget({super.key, this.realm});
 
   @override
@@ -143,12 +193,10 @@ class _RealmMemberListWidgetState extends State<_RealmMemberListWidget> {
     try {
       final ud = context.read<UserDirectoryProvider>();
       final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.get(
-          '/cgi/id/realms/${widget.realm!.alias}/members',
-          queryParameters: {
-            'take': 10,
-            'offset': 0,
-          });
+      final resp = await sn.client.get('/cgi/id/realms/${widget.realm!.alias}/members', queryParameters: {
+        'take': 10,
+        'offset': 0,
+      });
 
       final out = List<SnRealmMember>.from(
         resp.data['data']?.map((e) => SnRealmMember.fromJson(e)) ?? [],
@@ -236,12 +284,10 @@ class _RealmMemberListWidgetState extends State<_RealmMemberListWidget> {
                 fallbackWidget: const Icon(Symbols.group, size: 24),
               ),
               title: Text(
-                ud.getAccountFromCache(member.accountId)?.nick ??
-                    'unknown'.tr(),
+                ud.getAccountFromCache(member.accountId)?.nick ?? 'unknown'.tr(),
               ),
               subtitle: Text(
-                ud.getAccountFromCache(member.accountId)?.name ??
-                    'unknown'.tr(),
+                ud.getAccountFromCache(member.accountId)?.name ?? 'unknown'.tr(),
               ),
               trailing: IconButton(
                 icon: const Icon(Symbols.person_remove),
@@ -257,6 +303,7 @@ class _RealmMemberListWidgetState extends State<_RealmMemberListWidget> {
 
 class _NewRealmMemberWidget extends StatefulWidget {
   final SnRealm realm;
+
   const _NewRealmMemberWidget({super.key, required this.realm});
 
   @override
@@ -321,8 +368,7 @@ class _NewRealmMemberWidgetState extends State<_NewRealmMemberWidget> {
               child: IconButton(
                 onPressed: _isBusy ? null : () => _performAction(),
                 icon: Icon(Symbols.send),
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
+                visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                 padding: EdgeInsets.zero,
               ),
             ),
@@ -337,8 +383,8 @@ class _NewRealmMemberWidgetState extends State<_NewRealmMemberWidget> {
 class _RealmSettingsWidget extends StatefulWidget {
   final SnRealm? realm;
   final Function() onUpdate;
-  const _RealmSettingsWidget(
-      {super.key, required this.realm, required this.onUpdate});
+
+  const _RealmSettingsWidget({super.key, required this.realm, required this.onUpdate});
 
   @override
   State<_RealmSettingsWidget> createState() => _RealmSettingsWidgetState();
@@ -382,6 +428,7 @@ class _RealmSettingsWidgetState extends State<_RealmSettingsWidget> {
 
     return Column(
       children: [
+        const Gap(16),
         ListTile(
           leading: const Icon(Symbols.edit),
           trailing: const Icon(Symbols.chevron_right),

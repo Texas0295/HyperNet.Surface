@@ -112,6 +112,7 @@
     "one": "{} 点社会信用点",
     "other": "{} 点社会信用点"
   },
+  "publisherAffiliatedBy": "隶属于 {}",
   "publisherRunBy": "由 {} 管理",
   "fieldPublisherBelongToRealm": "所属领域",
   "fieldPublisherBelongToRealmUnset": "未设置发布者所属领域",

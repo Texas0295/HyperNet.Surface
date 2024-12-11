@@ -128,6 +128,7 @@
     "one": "{} social point",
     "other": "{} social points"
   },
+  "publisherAffiliatedBy": "Affiliated by {}",
   "publisherRunBy": "Run by {}",
   "fieldPublisherBelongToRealm": "Belongs to",
   "fieldPublisherBelongToRealmUnset": "Unset Publisher Belongs to Realm",

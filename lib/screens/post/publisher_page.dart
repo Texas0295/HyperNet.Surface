@@ -14,6 +14,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/account.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/post/post_item.dart';
@@ -22,19 +23,19 @@ import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class PostPublisherScreen extends StatefulWidget {
   final String name;
+
   const PostPublisherScreen({super.key, required this.name});
 
   @override
   State<PostPublisherScreen> createState() => _PostPublisherScreenState();
 }
 
-class _PostPublisherScreenState extends State<PostPublisherScreen>
-    with SingleTickerProviderStateMixin {
+class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTickerProviderStateMixin {
   late final ScrollController _scrollController = ScrollController();
-  late final TabController _tabController =
-      TabController(length: 3, vsync: this);
+  late final TabController _tabController = TabController(length: 3, vsync: this);
 
   SnPublisher? _publisher;
+  SnRealm? _realm;
   SnAccount? _account;
 
   Future<void> _fetchPublisher() async {
@@ -45,11 +46,16 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
       if (!mounted) return;
       _publisher = SnPublisher.fromJson(resp.data);
       _account = await ud.getAccount(_publisher?.accountId);
+      if (_publisher?.realmId != null) {
+        final resp = await sn.client.get('/cgi/id/realms/${_publisher!.realmId}');
+        _realm = SnRealm.fromJson(resp.data);
+      }
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err).then((_) {
         if (mounted) Navigator.pop(context);
       });
+      rethrow;
     } finally {
       setState(() {});
     }
@@ -114,14 +120,12 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
   double _appBarBlur = 0.0;
 
   late final _appBarWidth = MediaQuery.of(context).size.width;
-  late final _appBarHeight =
-      (_appBarWidth * kBannerAspectRatio).roundToDouble();
+  late final _appBarHeight = (_appBarWidth * kBannerAspectRatio).roundToDouble();
 
   void _updateAppBarBlur() {
     if (_scrollController.offset > _appBarHeight) return;
     setState(() {
-      _appBarBlur =
-          (_scrollController.offset / _appBarHeight * 10).clamp(0.0, 10.0);
+      _appBarBlur = (_scrollController.offset / _appBarHeight * 10).clamp(0.0, 10.0);
     });
   }
 
@@ -215,10 +219,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                             text: TextSpan(children: [
                               TextSpan(
                                 text: _publisher!.nick,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                       color: Colors.white,
                                       shadows: labelShadows,
                                     ),
@@ -226,10 +227,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                               const TextSpan(text: '\n'),
                               TextSpan(
                                 text: '@${_publisher!.name}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                       color: Colors.white,
                                       shadows: labelShadows,
                                     ),
@@ -241,14 +239,19 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                         ? Stack(
                             fit: StackFit.expand,
                             children: [
-                              UniversalImage(
-                                sn.getAttachmentUrl(_publisher!.banner),
-                                fit: BoxFit.cover,
-                                height: imageHeight,
-                                width: _appBarWidth,
-                                cacheHeight: imageHeight,
-                                cacheWidth: _appBarWidth,
-                              ),
+                              if (_publisher!.banner.isNotEmpty)
+                                UniversalImage(
+                                  sn.getAttachmentUrl(_publisher!.banner),
+                                  fit: BoxFit.cover,
+                                  height: imageHeight,
+                                  width: _appBarWidth,
+                                  cacheHeight: imageHeight,
+                                  cacheWidth: _appBarWidth,
+                                )
+                              else
+                                Container(
+                                  color: Theme.of(context).colorScheme.surfaceContainer,
+                                ),
                               Positioned(
                                 top: 0,
                                 left: 0,
@@ -288,14 +291,11 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                 const Gap(16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         _publisher!.nick,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
+                                        style: Theme.of(context).textTheme.titleMedium,
                                       ).bold(),
                                       Text('@${_publisher!.name}').fontSize(13),
                                     ],
@@ -306,9 +306,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                     style: ButtonStyle(
                                       elevation: WidgetStatePropertyAll(0),
                                     ),
-                                    onPressed: _isSubscribing
-                                        ? null
-                                        : _toggleSubscription,
+                                    onPressed: _isSubscribing ? null : _toggleSubscription,
                                     label: Text('subscribe').tr(),
                                     icon: const Icon(Symbols.add),
                                   )
@@ -317,17 +315,14 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                     style: ButtonStyle(
                                       elevation: WidgetStatePropertyAll(0),
                                     ),
-                                    onPressed: _isSubscribing
-                                        ? null
-                                        : _toggleSubscription,
+                                    onPressed: _isSubscribing ? null : _toggleSubscription,
                                     label: Text('unsubscribe').tr(),
                                     icon: const Icon(Symbols.remove),
                                   ),
                               ],
                             ).padding(right: 8),
                             const Gap(12),
-                            Text(_publisher!.description)
-                                .padding(horizontal: 8),
+                            Text(_publisher!.description).padding(horizontal: 8),
                             const Gap(12),
                             Column(
                               children: [
@@ -335,10 +330,8 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                   children: [
                                     const Icon(Symbols.calendar_add_on),
                                     const Gap(8),
-                                    Text('publisherJoinedAt').tr(args: [
-                                      DateFormat('y/M/d')
-                                          .format(_publisher!.createdAt)
-                                    ]),
+                                    Text('publisherJoinedAt')
+                                        .tr(args: [DateFormat('y/M/d').format(_publisher!.createdAt)]),
                                   ],
                                 ),
                                 Row(
@@ -346,11 +339,30 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                     const Icon(Symbols.trending_up),
                                     const Gap(8),
                                     Text('publisherSocialPointTotal').plural(
-                                      _publisher!.totalUpvote -
-                                          _publisher!.totalDownvote,
+                                      _publisher!.totalUpvote - _publisher!.totalDownvote,
                                     ),
                                   ],
                                 ),
+                                if (_realm != null)
+                                  Row(
+                                    children: [
+                                      const Icon(Symbols.group_work),
+                                      const Gap(8),
+                                      InkWell(
+                                        child: Text('publisherAffiliatedBy').tr(args: [
+                                          '@${_realm?.alias ?? 'unknown'}',
+                                        ]),
+                                        onTap: () {
+                                          GoRouter.of(context).pushNamed(
+                                            'realmDetail',
+                                            pathParameters: {'alias': _realm!.alias},
+                                          );
+                                        },
+                                      ),
+                                      const Gap(8),
+                                      AccountImage(content: _realm?.avatar, radius: 8),
+                                    ],
+                                  ),
                                 Row(
                                   children: [
                                     const Icon(Symbols.tools_wrench),
@@ -369,8 +381,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen>
                                       },
                                     ),
                                     const Gap(8),
-                                    AccountImage(
-                                        content: _account?.avatar, radius: 8),
+                                    AccountImage(content: _account?.avatar, radius: 8),
                                   ],
                                 ),
                               ],
@@ -447,6 +458,7 @@ class _PublisherPostList extends StatelessWidget {
   final void Function() fetchPosts;
   final void Function(int index, SnPost data) onChanged;
   final void Function() onDeleted;
+
   const _PublisherPostList({
     super.key,
     required this.isBusy,
