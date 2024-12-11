@@ -637,16 +637,35 @@ class _PostQuoteContent extends StatelessWidget {
             width: 1,
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.only(top: 8),
         child: Column(
           children: [
-            _PostContentHeader(
-              data: child,
-              isCompact: true,
-              showMenu: false,
-              onDeleted: () {},
-            ).padding(bottom: 4),
-            _PostContentBody(data: child),
+            Column(
+              children: [
+                _PostContentHeader(
+                  data: child,
+                  isCompact: true,
+                  showMenu: false,
+                  onDeleted: () {},
+                ).padding(bottom: 4),
+                _PostContentBody(data: child),
+                if (child.visibility > 0) _PostVisibilityHint(data: child).padding(top: 4),
+              ],
+            ).padding(horizontal: 16),
+            if (child.preload?.attachments?.isNotEmpty ?? false)
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+                child: AttachmentList(
+                  data: child.preload!.attachments!,
+                  listPadding: const EdgeInsets.symmetric(horizontal: 12),
+                ),
+              ).padding(
+                top: 8,
+                bottom: (child.preload?.attachments?.length ?? 0) > 1 ? 12 : 0,
+              ),
           ],
         ),
       ),

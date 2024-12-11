@@ -23,6 +23,11 @@ class SnPostContentProvider {
       if (out[i].body['thumbnail'] != null) {
         rids.add(out[i].body['thumbnail']);
       }
+      if (out[i].repostTo != null) {
+        out[i] = out[i].copyWith(
+          repostTo: await _preloadRelatedDataSingle(out[i].repostTo!),
+        );
+      }
     }
 
     final attachments = await _attach.getMultiple(rids.toList());
