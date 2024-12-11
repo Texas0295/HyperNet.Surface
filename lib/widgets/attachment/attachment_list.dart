@@ -130,7 +130,7 @@ class _AttachmentListState extends State<AttachmentList> {
         }
 
         return AspectRatio(
-          aspectRatio: widget.data.firstOrNull?.metadata['ratio'] ?? 1,
+          aspectRatio: (widget.data.firstOrNull?.metadata['ratio'] ?? 1).toDouble(),
           child: Container(
             constraints: BoxConstraints(maxHeight: constraints.maxHeight),
             child: ScrollConfiguration(
@@ -142,7 +142,7 @@ class _AttachmentListState extends State<AttachmentList> {
                   return Container(
                     constraints: constraints,
                     child: AspectRatio(
-                      aspectRatio: widget.data[idx]?.metadata['ratio'] ?? 1,
+                      aspectRatio: (widget.data[idx]?.metadata['ratio'] ?? 1).toDouble(),
                       child: GestureDetector(
                         onTap: () {
                           context.pushTransparentRoute(

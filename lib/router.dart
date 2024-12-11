@@ -58,7 +58,6 @@ final _appRoutes = [
             path: '/write/:mode',
             name: 'postEditor',
             builder: (context, state) => AppBackground(
-              isLessOptimization: true,
               child: PostEditorScreen(
                 mode: state.pathParameters['mode']!,
                 postEditId: int.tryParse(
@@ -77,7 +76,6 @@ final _appRoutes = [
             path: '/search',
             name: 'postSearch',
             builder: (context, state) => const AppBackground(
-              isLessOptimization: true,
               child: PostSearchScreen(),
             ),
           ),
@@ -119,7 +117,6 @@ final _appRoutes = [
             path: '/:scope/:alias',
             name: 'chatRoom',
             builder: (context, state) => AppBackground(
-              isLessOptimization: true,
               child: ChatRoomScreen(
                 scope: state.pathParameters['scope']!,
                 alias: state.pathParameters['alias']!,
@@ -159,7 +156,6 @@ final _appRoutes = [
                   secondaryAnimation: secondaryAnimation,
                   fillColor: Colors.transparent,
                   child: AppBackground(
-                    isLessOptimization: true,
                     child: child,
                   ),
                 );
@@ -195,7 +191,6 @@ final _appRoutes = [
                   secondaryAnimation: secondaryAnimation,
                   fillColor: Colors.transparent,
                   child: AppBackground(
-                    isLessOptimization: true,
                     child: child,
                   ),
                 );

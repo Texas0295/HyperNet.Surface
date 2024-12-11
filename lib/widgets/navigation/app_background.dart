@@ -7,12 +7,11 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 class AppBackground extends StatelessWidget {
   final Widget child;
-  final bool isLessOptimization;
   final bool isRoot;
+
   const AppBackground({
     super.key,
     required this.child,
-    this.isLessOptimization = false,
     this.isRoot = false,
   });
 
@@ -23,52 +22,25 @@ class AppBackground extends StatelessWidget {
   ) {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
-    if (isLessOptimization) {
-      final size = MediaQuery.of(context).size;
-      return Container(
-        color: Theme.of(context).colorScheme.surface,
-        child: Container(
-          decoration: BoxDecoration(
-            backgroundBlendMode: BlendMode.darken,
-            color: Theme.of(context).colorScheme.surface,
-            image: DecorationImage(
-              opacity: 0.2,
-              image: ResizeImage(
-                FileImage(imageFile),
-                width: (size.width * devicePixelRatio).round(),
-                height: (size.height * devicePixelRatio).round(),
-                policy: ResizeImagePolicy.fit,
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: child,
-        ),
-      );
-    }
-
+    final size = MediaQuery.of(context).size;
     return Container(
       color: Theme.of(context).colorScheme.surface,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Container(
-            decoration: BoxDecoration(
-              backgroundBlendMode: BlendMode.darken,
-              color: Theme.of(context).colorScheme.surface,
-              image: DecorationImage(
-                opacity: 0.2,
-                image: ResizeImage(
-                  FileImage(imageFile),
-                  width: (constraints.maxWidth * devicePixelRatio).round(),
-                  height: (constraints.maxHeight * devicePixelRatio).round(),
-                  policy: ResizeImagePolicy.fit,
-                ),
-                fit: BoxFit.cover,
-              ),
+      child: Container(
+        decoration: BoxDecoration(
+          backgroundBlendMode: BlendMode.darken,
+          color: Theme.of(context).colorScheme.surface,
+          image: DecorationImage(
+            opacity: 0.2,
+            image: ResizeImage(
+              FileImage(imageFile),
+              width: (size.width * devicePixelRatio).round(),
+              height: (size.height * devicePixelRatio).round(),
+              policy: ResizeImagePolicy.fit,
             ),
-            child: child,
-          );
-        },
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: child,
       ),
     );
   }
@@ -77,11 +49,9 @@ class AppBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
       child: FutureBuilder(
-        future:
-            kIsWeb ? Future.value(null) : getApplicationDocumentsDirectory(),
+        future: kIsWeb ? Future.value(null) : getApplicationDocumentsDirectory(),
         builder: (context, snapshot) {
-          if (isRoot ||
-              ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)) {
+          if (isRoot || ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE)) {
             if (snapshot.hasData) {
               final path = '${snapshot.data!.path}/app_background_image';
               final file = File(path);
