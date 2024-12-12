@@ -201,7 +201,6 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
     setState(() => _isWorking = true);
 
     try {
-      final sn = context.read<SnNetworkProvider>();
       final rel = context.read<SnRelationshipProvider>();
       await rel.updateRelationship(_account!.id, 1, _accountRelationship?.permNodes ?? {});
       if (!mounted) return;
@@ -288,7 +287,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
                               TextSpan(
                                 text: _publisher!.nick,
                                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                      color: Colors.white,
+                                      color: Theme.of(context).appBarTheme.foregroundColor!,
                                       shadows: labelShadows,
                                     ),
                               ),

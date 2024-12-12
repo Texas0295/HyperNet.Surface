@@ -213,6 +213,10 @@ class _PostBottomAction extends StatelessWidget {
     }
   }
 
+  void _doShareViaPicture() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).colorScheme.onSurface.withAlpha(
@@ -298,6 +302,7 @@ class _PostBottomAction extends StatelessWidget {
           ),
         InkWell(
           onTap: _doShare,
+          onLongPress: _doShareViaPicture,
           child: Icon(
             Symbols.share,
             size: 20,
@@ -369,10 +374,10 @@ class _PostHeadline extends StatelessWidget {
                 style: TextStyle(fontSize: 13),
               ),
               const Gap(8),
-              if (data.updatedAt != data.createdAt)
+              if (data.editedAt != null)
                 Text(
                   'articleEditedAt'.tr(
-                    args: [DateFormat('y/M/d HH:mm').format(data.updatedAt)],
+                    args: [DateFormat('y/M/d HH:mm').format(data.editedAt!)],
                   ),
                   style: TextStyle(fontSize: 13),
                 ),
@@ -652,7 +657,7 @@ class _PostQuoteContent extends StatelessWidget {
                 if (child.visibility > 0) _PostVisibilityHint(data: child).padding(top: 4),
               ],
             ).padding(horizontal: 16),
-            if (child.preload?.attachments?.isNotEmpty ?? false)
+            if (child.type != 'article' && (child.preload?.attachments?.isNotEmpty ?? false))
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(8),

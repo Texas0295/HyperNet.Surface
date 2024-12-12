@@ -238,7 +238,7 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                       TextSpan(
                         text: _account!.nick,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.white,
+                              color: Theme.of(context).appBarTheme.foregroundColor!,
                               shadows: labelShadows,
                             ),
                       ),
@@ -246,7 +246,7 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                       TextSpan(
                         text: '@${_account!.name}',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: Colors.white,
+                              color: Theme.of(context).appBarTheme.foregroundColor!,
                               shadows: labelShadows,
                             ),
                       ),

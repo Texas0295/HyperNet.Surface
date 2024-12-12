@@ -149,12 +149,16 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               text: TextSpan(children: [
                 TextSpan(
                   text: _writeController.title.isNotEmpty ? _writeController.title : 'untitled'.tr(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).appBarTheme.foregroundColor!,
+                  ),
                 ),
                 const TextSpan(text: '\n'),
                 TextSpan(
                   text: PostWriteController.kTitleMap[widget.mode]!.tr(),
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).appBarTheme.foregroundColor!,
+                  ),
                 ),
               ]),
             ),
