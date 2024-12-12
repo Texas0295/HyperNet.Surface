@@ -403,6 +403,7 @@
   "accountStatusOffline": "Offline",
   "accountStatusLastSeen": "Last seen at {}",
   "postArticle": "Article on the Solar Network",
+  "postStory": "Story on the Solar Network",
   "articleWrittenAt": "Written at {}",
   "articleEditedAt": "Edited at {}",
   "attachmentSaved": "Saved to album",
@@ -436,5 +437,7 @@
   "publisherBlockHint": "Block {}",
   "publisherBlockHintDescription": "You are going to block this publisher's maintainer, this will also block publishers that run by the same user.",
   "userUnblocked": "{} has been unblocked.",
-  "userBlocked": "{} has been blocked."
+  "userBlocked": "{} has been blocked.",
+  "postSharingViaPicture": "Capturing post as picture, please stand by...",
+  "postImageShareAds": "Explore posts on the Solar Network"
 }

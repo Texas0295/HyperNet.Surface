@@ -5,10 +5,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:relative_time/relative_time.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -56,6 +61,9 @@ class PostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
 
+    final ua = context.read<UserProvider>();
+    final isAuthor = ua.isAuthorized && data.publisher.accountId == ua.user!.id;
+
     // Article headline preview
     if (!showFullPost && data.type == 'article') {
       return Container(
@@ -65,6 +73,7 @@ class PostItem extends StatelessWidget {
           children: [
             _PostContentHeader(
               data: data,
+              isAuthor: isAuthor,
               onDeleted: () {
                 if (onDeleted != null) {}
               },
@@ -191,6 +200,118 @@ class PostItem extends StatelessWidget {
   }
 }
 
+class PostShareImage extends StatelessWidget {
+  const PostShareImage({
+    super.key,
+    required this.data,
+  });
+
+  final SnPost data;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 480,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _PostContentHeader(
+            data: data,
+            onDeleted: () {},
+            showMenu: false,
+            isRelativeDate: false,
+          ).padding(horizontal: 16, bottom: 8),
+          _PostHeadline(
+            data: data,
+            isEnlarge: data.type == 'article',
+          ).padding(horizontal: 16, bottom: 8),
+          _PostContentBody(
+            data: data,
+            isEnlarge: data.type == 'article',
+          ).padding(horizontal: 16, bottom: 8),
+          if (data.repostTo != null)
+            _PostQuoteContent(
+              child: data.repostTo!,
+              isRelativeDate: false,
+              isFlatted: true,
+            ).padding(horizontal: 16, bottom: 8),
+          if (data.type != 'article' && (data.preload?.attachments?.isNotEmpty ?? false))
+            AttachmentList(
+              data: data.preload!.attachments!,
+              isFlatted: true,
+            ).padding(horizontal: 16, bottom: 8),
+          _PostBottomAction(
+            data: data,
+            showComments: true,
+            showReactions: true,
+            onChanged: (SnPost data) {},
+          ).padding(left: 8, right: 14),
+          const Divider(height: 1),
+          const Gap(12),
+          SizedBox(
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${data.aliasPrefix} / ${data.alias ?? '#${data.id}'}',
+                              style: GoogleFonts.robotoMono(fontSize: 17),
+                            ),
+                            const Gap(2),
+                            Text(
+                              switch (data.type) {
+                                'article' => 'postArticle'.tr(),
+                                _ => 'postStory'.tr(),
+                              },
+                              style: GoogleFonts.robotoMono(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'postImageShareAds',
+                        style: GoogleFonts.robotoMono(fontSize: 13),
+                      ).tr(),
+                    ],
+                  ),
+                ),
+                QrImageView(
+                  padding: EdgeInsets.zero,
+                  data: 'https://solsynth.dev/posts/${data.id}',
+                  version: QrVersions.auto,
+                  size: 100,
+                  gapless: true,
+                  embeddedImage: AssetImage('assets/icon/icon-light-radius.png'),
+                  embeddedImageStyle: QrEmbeddedImageStyle(
+                    size: Size(32, 32),
+                  ),
+                  eyeStyle: QrEyeStyle(
+                    eyeShape: QrEyeShape.circle,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  dataModuleStyle: QrDataModuleStyle(
+                    dataModuleShape: QrDataModuleShape.square,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                )
+              ],
+            ),
+          ).padding(left: 16, right: 32, vertical: 8),
+        ],
+      ).padding(vertical: 16),
+    );
+  }
+}
+
 class _PostBottomAction extends StatelessWidget {
   final SnPost data;
   final bool showComments;
@@ -204,17 +325,57 @@ class _PostBottomAction extends StatelessWidget {
     required this.onChanged,
   });
 
-  void _doShare() {
+  void _doShare(BuildContext context) {
+    final box = context.findRenderObject() as RenderBox?;
     final url = 'https://solsynth.dev/posts/${data.id}';
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      Share.shareUri(Uri.parse(url));
+      Share.shareUri(Uri.parse(url), sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     } else {
-      Share.share(url);
+      Share.share(url, sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     }
   }
 
-  void _doShareViaPicture() {
+  void _doShareViaPicture(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    context.showSnackbar('postSharingViaPicture'.tr());
 
+    final controller = ScreenshotController();
+    final capturedImage = await controller.captureFromLongWidget(
+      InheritedTheme.captureAll(
+        context,
+        MediaQuery(
+          data: MediaQuery.of(context),
+          child: Material(
+            child: MultiProvider(
+              providers: [
+                Provider<SnNetworkProvider>(create: (_) => context.read()),
+              ],
+              child: ResponsiveBreakpoints.builder(
+                breakpoints: ResponsiveBreakpoints.of(context).breakpoints,
+                child: PostShareImage(data: data),
+              ),
+            ),
+          ),
+        ),
+      ),
+      pixelRatio: 3,
+      context: context,
+    );
+
+    if (kIsWeb) return;
+
+    final directory = await getTemporaryDirectory();
+    final imagePath = await File(
+      '${directory.path}/sn-share-via-image-${DateTime.now().millisecondsSinceEpoch}.png',
+    ).create();
+    await imagePath.writeAsBytes(capturedImage);
+
+    await Share.shareXFiles(
+      [XFile(imagePath.path)],
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
+
+    await imagePath.delete();
   }
 
   @override
@@ -301,8 +462,8 @@ class _PostBottomAction extends StatelessWidget {
               ..removeLast(),
           ),
         InkWell(
-          onTap: _doShare,
-          onLongPress: _doShareViaPicture,
+          onTap: () => _doShare(context),
+          onLongPress: () => _doShareViaPicture(context),
           child: Icon(
             Symbols.share,
             size: 20,
@@ -410,13 +571,17 @@ class _PostHeadline extends StatelessWidget {
 
 class _PostContentHeader extends StatelessWidget {
   final SnPost data;
+  final bool isAuthor;
   final bool isCompact;
+  final bool isRelativeDate;
   final bool showMenu;
   final Function onDeleted;
 
   const _PostContentHeader({
     required this.data,
+    this.isAuthor = false,
     this.isCompact = false,
+    this.isRelativeDate = true,
     this.showMenu = true,
     required this.onDeleted,
   });
@@ -446,9 +611,6 @@ class _PostContentHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ua = context.read<UserProvider>();
-    final isAuthor = ua.isAuthorized && data.publisher.accountId == ua.user!.id;
-
     return Row(
       children: [
         GestureDetector(
@@ -484,9 +646,11 @@ class _PostContentHeader extends StatelessWidget {
                 children: [
                   Text('@${data.publisher.name}').fontSize(13),
                   const Gap(4),
-                  Text(RelativeTime(context).format(
-                    data.publishedAt ?? data.createdAt,
-                  )).fontSize(13),
+                  Text(
+                    isRelativeDate
+                        ? RelativeTime(context).format(data.publishedAt ?? data.createdAt)
+                        : DateFormat('y/M/d HH:mm').format(data.publishedAt ?? data.createdAt),
+                  ).fontSize(13),
                 ],
               ).opacity(0.8),
             ],
@@ -501,9 +665,11 @@ class _PostContentHeader extends StatelessWidget {
                   children: [
                     Text('@${data.publisher.name}').fontSize(13),
                     const Gap(4),
-                    Text(RelativeTime(context).format(
-                      data.publishedAt ?? data.createdAt,
-                    )).fontSize(13),
+                    Text(
+                      isRelativeDate
+                          ? RelativeTime(context).format(data.publishedAt ?? data.createdAt)
+                          : DateFormat('y/M/d HH:mm').format(data.publishedAt ?? data.createdAt),
+                    ).fontSize(13),
                   ],
                 ).opacity(0.8),
               ],
@@ -628,8 +794,15 @@ class _PostContentBody extends StatelessWidget {
 
 class _PostQuoteContent extends StatelessWidget {
   final SnPost child;
+  final bool isRelativeDate;
+  final bool isFlatted;
 
-  const _PostQuoteContent({super.key, required this.child});
+  const _PostQuoteContent({
+    super.key,
+    this.isRelativeDate = true,
+    this.isFlatted = false,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -650,6 +823,7 @@ class _PostQuoteContent extends StatelessWidget {
                 _PostContentHeader(
                   data: child,
                   isCompact: true,
+                  isRelativeDate: isRelativeDate,
                   showMenu: false,
                   onDeleted: () {},
                 ).padding(bottom: 4),
@@ -665,12 +839,15 @@ class _PostQuoteContent extends StatelessWidget {
                 ),
                 child: AttachmentList(
                   data: child.preload!.attachments!,
+                  isFlatted: isFlatted,
                   listPadding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               ).padding(
                 top: 8,
                 bottom: (child.preload?.attachments?.length ?? 0) > 1 ? 12 : 0,
-              ),
+              )
+            else
+              const Gap(8),
           ],
         ),
       ),

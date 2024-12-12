@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,19 +15,21 @@ class AttachmentList extends StatefulWidget {
   final List<SnAttachment?> data;
   final bool bordered;
   final bool noGrow;
+  final bool isFlatted;
   final double? maxHeight;
   final EdgeInsets? listPadding;
+
   const AttachmentList({
     super.key,
     required this.data,
     this.bordered = false,
     this.noGrow = false,
+    this.isFlatted = false,
     this.maxHeight,
     this.listPadding,
   });
 
-  static const BorderRadius kDefaultRadius =
-      BorderRadius.all(Radius.circular(8));
+  static const BorderRadius kDefaultRadius = BorderRadius.all(Radius.circular(8));
 
   @override
   State<AttachmentList> createState() => _AttachmentListState();
@@ -44,9 +47,8 @@ class _AttachmentListState extends State<AttachmentList> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, layoutConstraints) {
-        final borderSide = widget.bordered
-            ? BorderSide(width: 1, color: Theme.of(context).dividerColor)
-            : BorderSide.none;
+        final borderSide =
+            widget.bordered ? BorderSide(width: 1, color: Theme.of(context).dividerColor) : BorderSide.none;
         final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
         final constraints = BoxConstraints(
           minWidth: 80,
@@ -56,14 +58,13 @@ class _AttachmentListState extends State<AttachmentList> {
 
         if (widget.data.isEmpty) return const SizedBox.shrink();
         if (widget.data.length == 1) {
-          final singleAspectRatio =
-              widget.data[0]?.metadata['ratio']?.toDouble() ??
-                  switch (widget.data[0]?.mimetype.split('/').firstOrNull) {
-                    'audio' => 16 / 9,
-                    'video' => 16 / 9,
-                    _ => 1,
-                  }
-                      .toDouble();
+          final singleAspectRatio = widget.data[0]?.metadata['ratio']?.toDouble() ??
+              switch (widget.data[0]?.mimetype.split('/').firstOrNull) {
+                'audio' => 16 / 9,
+                'video' => 16 / 9,
+                _ => 1,
+              }
+                  .toDouble();
 
           return Container(
             constraints: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
@@ -79,8 +80,7 @@ class _AttachmentListState extends State<AttachmentList> {
               child: GestureDetector(
                 child: Builder(
                   builder: (context) {
-                    if (ResponsiveBreakpoints.of(context).largerThan(MOBILE) ||
-                        widget.noGrow) {
+                    if (ResponsiveBreakpoints.of(context).largerThan(MOBILE) || widget.noGrow) {
                       return Padding(
                         // Single child list-like displaying
                         padding: widget.listPadding ?? EdgeInsets.zero,
@@ -129,6 +129,37 @@ class _AttachmentListState extends State<AttachmentList> {
           );
         }
 
+        if (widget.isFlatted) {
+          return Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children: widget.data
+                .mapIndexed(
+                  (idx, ele) => AspectRatio(
+                    aspectRatio: (ele?.metadata['ratio'] ?? 1).toDouble(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        border: Border(
+                          top: borderSide,
+                          bottom: borderSide,
+                        ),
+                        borderRadius: AttachmentList.kDefaultRadius,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: AttachmentList.kDefaultRadius,
+                        child: AttachmentItem(
+                          data: ele,
+                          heroTag: heroTags[idx],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+          );
+        }
+
         return AspectRatio(
           aspectRatio: (widget.data.firstOrNull?.metadata['ratio'] ?? 1).toDouble(),
           child: Container(
@@ -147,9 +178,7 @@ class _AttachmentListState extends State<AttachmentList> {
                         onTap: () {
                           context.pushTransparentRoute(
                             AttachmentZoomView(
-                              data: widget.data
-                                  .where((ele) => ele != null)
-                                  .cast(),
+                              data: widget.data.where((ele) => ele != null).cast(),
                               initialIndex: idx,
                               heroTags: heroTags,
                             ),

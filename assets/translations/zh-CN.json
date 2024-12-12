@@ -401,6 +401,7 @@
   "accountStatusOffline": "离线",
   "accountStatusLastSeen": "最后一次在 {} 上线",
   "postArticle": "Solar Network 上的文章",
+  "postStory": "Solar Network 上的故事",
   "articleWrittenAt": "发表于 {}",
   "articleEditedAt": "编辑于 {}",
   "attachmentSaved": "已保存到相册",
@@ -434,5 +435,7 @@
   "publisherBlockHint": "屏蔽 {}",
   "publisherBlockHintDescription": "你正要屏蔽此发布者的运营者，该操作也将屏蔽由同一用户运营的发布者。",
   "userUnblocked": "已解除屏蔽用户 {}",
-  "userBlocked": "已屏蔽用户 {}"
+  "userBlocked": "已屏蔽用户 {}",
+  "postSharingViaPicture": "正在生成帖子截图，请稍等片刻……",
+  "postImageShareAds": "来 Solar Network 探索更多有趣帖子"
 }
