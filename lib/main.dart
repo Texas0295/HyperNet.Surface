@@ -12,7 +12,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/chat_call.dart';
@@ -57,14 +56,7 @@ void main() async {
     });
   }
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = 'https://c218d44126d59d69301e730498494def@o4506965897117696.ingest.us.sentry.io/4508346768228352';
-      options.tracesSampleRate = 1.0;
-      options.profilesSampleRate = 1.0;
-    },
-    appRunner: () => runApp(const SolianApp()),
-  );
+  runApp(const SolianApp());
 }
 
 class SolianApp extends StatelessWidget {

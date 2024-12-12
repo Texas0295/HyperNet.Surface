@@ -6,8 +6,6 @@ PODS:
     - FlutterMacOS
   - croppy (0.0.1):
     - FlutterMacOS
-  - cupertino_http (0.0.1):
-    - FlutterMacOS
   - device_info_plus (0.0.1):
     - FlutterMacOS
   - file_selector_macos (0.0.1):
@@ -158,11 +156,6 @@ PODS:
   - SAMKeychain (1.5.3)
   - screen_brightness_macos (0.1.0):
     - FlutterMacOS
-  - Sentry/HybridSDK (8.41.0)
-  - sentry_flutter (8.11.0):
-    - Flutter
-    - FlutterMacOS
-    - Sentry/HybridSDK (= 8.41.0)
   - share_plus (0.0.1):
     - FlutterMacOS
   - shared_preferences_foundation (0.0.1):
@@ -181,7 +174,6 @@ DEPENDENCIES:
   - bitsdojo_window_macos (from `Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos`)
   - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin`)
   - croppy (from `Flutter/ephemeral/.symlinks/plugins/croppy/macos`)
-  - cupertino_http (from `Flutter/ephemeral/.symlinks/plugins/cupertino_http/macos`)
   - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - firebase_analytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos`)
@@ -199,7 +191,6 @@ DEPENDENCIES:
   - pasteboard (from `Flutter/ephemeral/.symlinks/plugins/pasteboard/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - screen_brightness_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_brightness_macos/macos`)
-  - sentry_flutter (from `Flutter/ephemeral/.symlinks/plugins/sentry_flutter/macos`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
@@ -220,7 +211,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SAMKeychain
-    - Sentry
     - WebRTC-SDK
 
 EXTERNAL SOURCES:
@@ -230,8 +220,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin
   croppy:
     :path: Flutter/ephemeral/.symlinks/plugins/croppy/macos
-  cupertino_http:
-    :path: Flutter/ephemeral/.symlinks/plugins/cupertino_http/macos
   device_info_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   file_selector_macos:
@@ -266,8 +254,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   screen_brightness_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_brightness_macos/macos
-  sentry_flutter:
-    :path: Flutter/ephemeral/.symlinks/plugins/sentry_flutter/macos
   share_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
   shared_preferences_foundation:
@@ -283,7 +269,6 @@ SPEC CHECKSUMS:
   bitsdojo_window_macos: 44e3b8fe3dd463820e0321f6256c5b1c16bb6a00
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
   croppy: 25a638bd7d05411d8c697f481568f261037694fc
-  cupertino_http: 1d506209e339211efa0764caa7b2de4bc55b6818
   device_info_plus: 1b14eed9bf95428983aed283a8d51cce3d8c4215
   file_selector_macos: cc3858c981fe6889f364731200d6232dac1d812d
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
@@ -313,8 +298,6 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   screen_brightness_macos: 2d6d3af2165592d9a55ffcd95b7550970e41ebda
-  Sentry: 54d0fe6c0df448497c8ed4cce66ccf7027e1823e
-  sentry_flutter: 83a84efb7f978522c9127fbc0c07dab09663eecc
   share_plus: 1fa619de8392a4398bfaf176d441853922614e89
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
