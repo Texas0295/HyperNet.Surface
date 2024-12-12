@@ -112,6 +112,7 @@
     "one": "{} 點社會信用點",
     "other": "{} 點社會信用點"
   },
+  "publisherAffiliatedBy": "隸屬於 {}",
   "publisherRunBy": "由 {} 管理",
   "fieldPublisherBelongToRealm": "所屬領域",
   "fieldPublisherBelongToRealmUnset": "未設定釋出者所屬領域",
@@ -400,6 +401,7 @@
   "accountStatusOffline": "離線",
   "accountStatusLastSeen": "最後一次在 {} 上線",
   "postArticle": "Solar Network 上的文章",
+  "postStory": "Solar Network 上的故事",
   "articleWrittenAt": "發表於 {}",
   "articleEditedAt": "編輯於 {}",
   "attachmentSaved": "已儲存到相簿",
@@ -429,5 +431,13 @@
   "serviceStatus": "服務狀態",
   "termRelated": "相關條款",
   "appDetails": "應用程式詳情",
-  "postRecommendation": "推薦帖子"
+  "postRecommendation": "推薦帖子",
+  "publisherBlockHint": "遮蔽 {}",
+  "publisherBlockHintDescription": "你正要遮蔽此釋出者的運營者，該操作也將遮蔽由同一使用者運營的釋出者。",
+  "userUnblocked": "已解除遮蔽使用者 {}",
+  "userBlocked": "已遮蔽使用者 {}",
+  "postSharingViaPicture": "正在生成帖子截圖，請稍等片刻……",
+  "postImageShareAds": "來 Solar Network 探索更多有趣帖子",
+  "postShare": "分享",
+  "postShareImage": "分享帖圖"
 }
