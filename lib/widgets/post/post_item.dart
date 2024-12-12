@@ -57,6 +57,59 @@ class PostItem extends StatelessWidget {
     if (onChanged != null) onChanged!(data);
   }
 
+  void _doShare(BuildContext context) {
+    final box = context.findRenderObject() as RenderBox?;
+    final url = 'https://solsynth.dev/posts/${data.id}';
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      Share.shareUri(Uri.parse(url), sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+    } else {
+      Share.share(url, sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+    }
+  }
+
+  void _doShareViaPicture(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    context.showSnackbar('postSharingViaPicture'.tr());
+
+    final controller = ScreenshotController();
+    final capturedImage = await controller.captureFromLongWidget(
+      InheritedTheme.captureAll(
+        context,
+        MediaQuery(
+          data: MediaQuery.of(context),
+          child: Material(
+            child: MultiProvider(
+              providers: [
+                Provider<SnNetworkProvider>(create: (_) => context.read()),
+              ],
+              child: ResponsiveBreakpoints.builder(
+                breakpoints: ResponsiveBreakpoints.of(context).breakpoints,
+                child: PostShareImage(data: data),
+              ),
+            ),
+          ),
+        ),
+      ),
+      pixelRatio: 3,
+      context: context,
+    );
+
+    if (kIsWeb) return;
+
+    final directory = await getTemporaryDirectory();
+    final imagePath = await File(
+      '${directory.path}/sn-share-via-image-${DateTime.now().millisecondsSinceEpoch}.png',
+    ).create();
+    await imagePath.writeAsBytes(capturedImage);
+
+    await Share.shareXFiles(
+      [XFile(imagePath.path)],
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
+
+    await imagePath.delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
@@ -74,6 +127,8 @@ class PostItem extends StatelessWidget {
             _PostContentHeader(
               data: data,
               isAuthor: isAuthor,
+              onShare: () => _doShare(context),
+              onShareImage: () => _doShareViaPicture(context),
               onDeleted: () {
                 if (onDeleted != null) {}
               },
@@ -125,6 +180,8 @@ class PostItem extends StatelessWidget {
               data: data,
               showComments: showComments,
               showReactions: showReactions,
+              onShare: () => _doShare(context),
+              onShareImage: () => _doShareViaPicture(context),
               onChanged: _onChanged,
             ).padding(left: 8, right: 14),
           ],
@@ -143,6 +200,8 @@ class PostItem extends StatelessWidget {
               _PostContentHeader(
                 data: data,
                 showMenu: showMenu,
+                onShare: () => _doShare(context),
+                onShareImage: () => _doShareViaPicture(context),
                 onDeleted: () {
                   if (onDeleted != null) onDeleted!();
                 },
@@ -190,6 +249,8 @@ class PostItem extends StatelessWidget {
                 data: data,
                 showComments: showComments,
                 showReactions: showReactions,
+                onShare: () => _doShare(context),
+                onShareImage: () => _doShareViaPicture(context),
                 onChanged: _onChanged,
               ).padding(left: 8, right: 14),
             ],
@@ -219,6 +280,8 @@ class PostShareImage extends StatelessWidget {
           _PostContentHeader(
             data: data,
             onDeleted: () {},
+            onShare: () {},
+            onShareImage: () {},
             showMenu: false,
             isRelativeDate: false,
           ).padding(horizontal: 16, bottom: 8),
@@ -241,10 +304,19 @@ class PostShareImage extends StatelessWidget {
               data: data.preload!.attachments!,
               isFlatted: true,
             ).padding(horizontal: 16, bottom: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (data.visibility > 0) _PostVisibilityHint(data: data),
+              if (data.body['content_truncated'] == true) _PostTruncatedHint(data: data),
+            ],
+          ).padding(horizontal: 16),
           _PostBottomAction(
             data: data,
             showComments: true,
             showReactions: true,
+            onShare: () {},
+            onShareImage: () {},
             onChanged: (SnPost data) {},
           ).padding(left: 8, right: 14),
           const Divider(height: 1),
@@ -317,66 +389,16 @@ class _PostBottomAction extends StatelessWidget {
   final bool showComments;
   final bool showReactions;
   final Function(SnPost data) onChanged;
+  final Function() onShare, onShareImage;
 
   const _PostBottomAction({
     required this.data,
     required this.showComments,
     required this.showReactions,
     required this.onChanged,
+    required this.onShare,
+    required this.onShareImage,
   });
-
-  void _doShare(BuildContext context) {
-    final box = context.findRenderObject() as RenderBox?;
-    final url = 'https://solsynth.dev/posts/${data.id}';
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      Share.shareUri(Uri.parse(url), sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
-    } else {
-      Share.share(url, sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
-    }
-  }
-
-  void _doShareViaPicture(BuildContext context) async {
-    final box = context.findRenderObject() as RenderBox?;
-    context.showSnackbar('postSharingViaPicture'.tr());
-
-    final controller = ScreenshotController();
-    final capturedImage = await controller.captureFromLongWidget(
-      InheritedTheme.captureAll(
-        context,
-        MediaQuery(
-          data: MediaQuery.of(context),
-          child: Material(
-            child: MultiProvider(
-              providers: [
-                Provider<SnNetworkProvider>(create: (_) => context.read()),
-              ],
-              child: ResponsiveBreakpoints.builder(
-                breakpoints: ResponsiveBreakpoints.of(context).breakpoints,
-                child: PostShareImage(data: data),
-              ),
-            ),
-          ),
-        ),
-      ),
-      pixelRatio: 3,
-      context: context,
-    );
-
-    if (kIsWeb) return;
-
-    final directory = await getTemporaryDirectory();
-    final imagePath = await File(
-      '${directory.path}/sn-share-via-image-${DateTime.now().millisecondsSinceEpoch}.png',
-    ).create();
-    await imagePath.writeAsBytes(capturedImage);
-
-    await Share.shareXFiles(
-      [XFile(imagePath.path)],
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-    );
-
-    await imagePath.delete();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -462,8 +484,8 @@ class _PostBottomAction extends StatelessWidget {
               ..removeLast(),
           ),
         InkWell(
-          onTap: () => _doShare(context),
-          onLongPress: () => _doShareViaPicture(context),
+          onTap: onShare,
+          onLongPress: onShareImage,
           child: Icon(
             Symbols.share,
             size: 20,
@@ -576,6 +598,7 @@ class _PostContentHeader extends StatelessWidget {
   final bool isRelativeDate;
   final bool showMenu;
   final Function onDeleted;
+  final Function() onShare, onShareImage;
 
   const _PostContentHeader({
     required this.data,
@@ -584,6 +607,8 @@ class _PostContentHeader extends StatelessWidget {
     this.isRelativeDate = true,
     this.showMenu = true,
     required this.onDeleted,
+    required this.onShare,
+    required this.onShareImage,
   });
 
   Future<void> _deletePost(BuildContext context) async {
@@ -745,6 +770,27 @@ class _PostContentHeader extends StatelessWidget {
               ),
               const PopupMenuDivider(),
               PopupMenuItem(
+                onTap: onShare,
+                child: Row(
+                  children: [
+                    const Icon(Symbols.share),
+                    const Gap(16),
+                    Text('postShare').tr(),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: onShareImage,
+                child: Row(
+                  children: [
+                    const Icon(Symbols.share_reviews),
+                    const Gap(16),
+                    Text('postShareImage').tr(),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
                 child: Row(
                   children: [
                     const Icon(Symbols.flag),
@@ -825,6 +871,8 @@ class _PostQuoteContent extends StatelessWidget {
                   isCompact: true,
                   isRelativeDate: isRelativeDate,
                   showMenu: false,
+                  onShare: () {},
+                  onShareImage: () {},
                   onDeleted: () {},
                 ).padding(bottom: 4),
                 _PostContentBody(data: child),

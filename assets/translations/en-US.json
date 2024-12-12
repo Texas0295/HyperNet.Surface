@@ -439,5 +439,7 @@
   "userUnblocked": "{} has been unblocked.",
   "userBlocked": "{} has been blocked.",
   "postSharingViaPicture": "Capturing post as picture, please stand by...",
-  "postImageShareAds": "Explore posts on the Solar Network"
+  "postImageShareAds": "Explore posts on the Solar Network",
+  "postShare": "Share",
+  "postShareImage": "Share via Image"
 }
