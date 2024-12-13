@@ -439,6 +439,7 @@
   "userUnblocked": "{} has been unblocked.",
   "userBlocked": "{} has been blocked.",
   "postSharingViaPicture": "Capturing post as picture, please stand by...",
+  "postImageShareReadMore": "Scan the QR code to read full post",
   "postImageShareAds": "Explore posts on the Solar Network",
   "postShare": "Share",
   "postShareImage": "Share via Image"

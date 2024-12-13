@@ -84,7 +84,7 @@ class PostItem extends StatelessWidget {
               ],
               child: ResponsiveBreakpoints.builder(
                 breakpoints: ResponsiveBreakpoints.of(context).breakpoints,
-                child: PostShareImage(data: data),
+                child: PostShareImageWidget(data: data),
               ),
             ),
           ),
@@ -115,7 +115,7 @@ class PostItem extends StatelessWidget {
     final sn = context.read<SnNetworkProvider>();
 
     final ua = context.read<UserProvider>();
-    final isAuthor = ua.isAuthorized && data.publisher.accountId == ua.user!.id;
+    final isAuthor = ua.isAuthorized && data.publisher.accountId == ua.user?.id;
 
     // Article headline preview
     if (!showFullPost && data.type == 'article') {
@@ -261,8 +261,8 @@ class PostItem extends StatelessWidget {
   }
 }
 
-class PostShareImage extends StatelessWidget {
-  const PostShareImage({
+class PostShareImageWidget extends StatelessWidget {
+  const PostShareImageWidget({
     super.key,
     required this.data,
   });
@@ -349,6 +349,11 @@ class PostShareImage extends StatelessWidget {
                           ],
                         ),
                       ),
+                      if(data.body['content_truncated'] == true)
+                        Text(
+                          'postImageShareReadMore'.tr(),
+                          style: GoogleFonts.robotoMono(fontSize: 11),
+                        ),
                       Text(
                         'postImageShareAds',
                         style: GoogleFonts.robotoMono(fontSize: 13),
@@ -359,15 +364,16 @@ class PostShareImage extends StatelessWidget {
                 QrImageView(
                   padding: EdgeInsets.zero,
                   data: 'https://solsynth.dev/posts/${data.id}',
+                  errorCorrectionLevel: QrErrorCorrectLevel.H,
                   version: QrVersions.auto,
                   size: 100,
                   gapless: true,
                   embeddedImage: AssetImage('assets/icon/icon-light-radius.png'),
                   embeddedImageStyle: QrEmbeddedImageStyle(
-                    size: Size(32, 32),
+                    size: Size(24, 24),
                   ),
                   eyeStyle: QrEyeStyle(
-                    eyeShape: QrEyeShape.circle,
+                    eyeShape: QrEyeShape.square,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   dataModuleStyle: QrDataModuleStyle(

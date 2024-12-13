@@ -437,6 +437,7 @@
   "userUnblocked": "已解除遮蔽使用者 {}",
   "userBlocked": "已遮蔽使用者 {}",
   "postSharingViaPicture": "正在生成帖子截圖，請稍等片刻……",
+  "postImageShareReadMore": "掃描坐車 QRCode 檢視全文",
   "postImageShareAds": "來 Solar Network 探索更多有趣帖子",
   "postShare": "分享",
   "postShareImage": "分享帖圖"

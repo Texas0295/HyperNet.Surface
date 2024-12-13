@@ -53,7 +53,7 @@ class SnPostContentProvider {
     if (out.body['thumbnail'] != null) {
       rids.add(out.body['thumbnail']);
     }
-    if (out.repostId != null) {
+    if (out.repostTo != null) {
       out = out.copyWith(
         repostTo: await _preloadRelatedDataSingle(out.repostTo!),
       );
