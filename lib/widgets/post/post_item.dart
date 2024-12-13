@@ -271,12 +271,28 @@ class PostShareImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sn = context.read<SnNetworkProvider>();
+
     return SizedBox(
       width: 480,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (data.preload?.thumbnail != null)
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+                child: AutoResizeUniversalImage(
+                  sn.getAttachmentUrl(data.preload!.thumbnail!.rid),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ).padding(bottom: 8),
           _PostContentHeader(
             data: data,
             onDeleted: () {},
