@@ -104,11 +104,6 @@ class ChatMessageInputState extends State<ChatMessageInput> {
       return;
     }
 
-    attach.putCache(
-      _attachments.where((e) => e.attachment != null).map((e) => e.attachment!),
-      noCheck: true,
-    );
-
     // Send the message
     // NOTICE This future should not be awaited, so that the message can be sent in the background and the user can continue to type
     widget.controller.sendMessage(

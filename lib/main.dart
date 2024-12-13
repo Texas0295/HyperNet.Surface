@@ -187,7 +187,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
         body: Container(
           constraints: const BoxConstraints(maxWidth: 180),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset("assets/icon/icon.png", width: 64, height: 64),
