@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/navigation.dart';
+import 'package:surface/widgets/version_label.dart';
 
 class AppNavigationDrawer extends StatefulWidget {
   final double? elevation;
@@ -49,14 +50,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Solar Network').bold(),
-                FutureBuilder<String>(
-                  future: PackageInfo.fromPlatform().then((value) => 'Stable ${value.version}+${value.buildNumber}'),
-                  builder: (context, snapshot) {
-                    return Text(!snapshot.hasData ? 'Stable 2.0' : snapshot.data!)
-                        .fontSize(12)
-                        .textColor(Theme.of(context).colorScheme.onSurface.withOpacity(0.5));
-                  },
-                ),
+                AppVersionLabel(),
               ],
             ).padding(
               horizontal: 32,

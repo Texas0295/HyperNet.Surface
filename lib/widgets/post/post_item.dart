@@ -203,6 +203,7 @@ class PostItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _PostContentHeader(
+                isAuthor: isAuthor,
                 data: data,
                 showMenu: showMenu,
                 onShare: () => _doShare(context),
@@ -299,6 +300,7 @@ class PostShareImageWidget extends StatelessWidget {
               ),
             ).padding(bottom: 8),
           _PostContentHeader(
+            isAuthor: false,
             data: data,
             onDeleted: () {},
             onShare: () {},
@@ -629,7 +631,7 @@ class _PostContentHeader extends StatelessWidget {
 
   const _PostContentHeader({
     required this.data,
-    this.isAuthor = false,
+    required this.isAuthor,
     this.isCompact = false,
     this.isRelativeDate = true,
     this.showMenu = true,
@@ -894,6 +896,7 @@ class _PostQuoteContent extends StatelessWidget {
             Column(
               children: [
                 _PostContentHeader(
+                  isAuthor: false,
                   data: child,
                   isCompact: true,
                   isRelativeDate: isRelativeDate,

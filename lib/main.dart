@@ -32,6 +32,7 @@ import 'package:surface/types/chat.dart';
 import 'package:surface/types/realm.dart';
 import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/version_label.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -196,6 +197,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
               ),
               const Gap(20),
               Text('appInitializing'.tr(), textAlign: TextAlign.center),
+              AppVersionLabel(),
             ],
           ),
         ).center(),

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -111,7 +109,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.post(
+      await sn.client.post(
         '/cgi/im/channels/${_messageController.channel!.keyPath}/calls',
         options: Options(
           sendTimeout: const Duration(seconds: 30),
