@@ -370,7 +370,7 @@ class PostShareImageWidget extends StatelessWidget {
                   gapless: true,
                   embeddedImage: AssetImage('assets/icon/icon-light-radius.png'),
                   embeddedImageStyle: QrEmbeddedImageStyle(
-                    size: Size(24, 24),
+                    size: Size(28, 28),
                   ),
                   eyeStyle: QrEyeStyle(
                     eyeShape: QrEyeShape.square,
