@@ -65,10 +65,6 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
       return;
     }
 
-    if (!await Gal.hasAccess(toAlbum: true)) {
-      if (!await Gal.requestAccess(toAlbum: true)) return;
-    }
-
     setState(() => _isDownloading = true);
 
     var extName = extension(item.name);
@@ -85,6 +81,9 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
     bool isSuccess = false;
     try {
       if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+        if (!await Gal.hasAccess(toAlbum: true)) {
+          if (!await Gal.requestAccess(toAlbum: true)) return;
+        }
         await Gal.putImage(imagePath, album: 'Solar Network');
       } else {
         await FileSaver.instance.saveFile(
@@ -104,11 +103,13 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
 
     if (!mounted) return;
     context.showSnackbar(
-      'attachmentSaved'.tr(),
-      action: SnackBarAction(
-        label: 'openInAlbum'.tr(),
-        onPressed: () async => Gal.open(),
-      ),
+      (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) ? 'attachmentSaved'.tr() : 'attachmentSavedDesktop'.tr(),
+      action: (!kIsWeb && (Platform.isIOS || Platform.isAndroid))
+          ? SnackBarAction(
+              label: 'openInAlbum'.tr(),
+              onPressed: () async => Gal.open(),
+            )
+          : null,
     );
   }
 
@@ -260,6 +261,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                                 ).padding(right: 8),
                               ),
                             InkWell(
+                              borderRadius: const BorderRadius.all(Radius.circular(16)),
                               onTap: _isDownloading
                                   ? null
                                   : () => _saveToAlbum(widget.data.length > 1 ? _pageController.page?.round() ?? 0 : 0),
@@ -335,10 +337,11 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                                 '${item.size} Bytes',
                                 style: metaTextStyle,
                               ),
-                            Text(
-                              '${item.metadata['width']}x${item.metadata['height']}',
-                              style: metaTextStyle,
-                            ),
+                            if (item.metadata['width'] != null && item.metadata['height'] != null)
+                              Text(
+                                '${item.metadata['width']}x${item.metadata['height']}',
+                                style: metaTextStyle,
+                              ),
                             if (item.metadata['ratio'] != null)
                               Text(
                                 (item.metadata['ratio'] as num).toStringAsFixed(2),

@@ -19,16 +19,17 @@ class UserProvider extends ChangeNotifier {
 
   UserProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
+  }
 
-    SharedPreferences.getInstance().then((prefs) {
-      final value = prefs.getString(kAtkStoreKey);
-      isAuthorized = value != null;
-      notifyListeners();
-      refreshUser().then((value) {
-        if (value != null) {
-          log('Logged in as @${value.name}');
-        }
-      });
+  Future<void> initialize() async {
+    final prefs = await SharedPreferences.getInstance();
+    final value = prefs.getString(kAtkStoreKey);
+    isAuthorized = value != null;
+    notifyListeners();
+    refreshUser().then((value) {
+      if (value != null) {
+        log('Logged in as @${value.name}');
+      }
     });
   }
 

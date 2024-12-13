@@ -12,12 +12,11 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_attachment.dart';
+import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
-
-import '../../providers/user_directory.dart';
 
 class ChatMessageInput extends StatefulWidget {
   final ChatMessageController controller;

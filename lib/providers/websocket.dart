@@ -23,16 +23,13 @@ class WebSocketProvider extends ChangeNotifier {
   WebSocketProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
     _ua = context.read<UserProvider>();
+  }
 
-    // Wait for the userinfo provide initialize authorization status
-    Future.delayed(const Duration(milliseconds: 250), () async {
-      if (_ua.isAuthorized) {
-        log('[WebSocket] Connecting to the server...');
-        await connect();
-      } else {
-        log('[WebSocket] Unable connect to the server, unauthorized.');
-      }
-    });
+  Future<void> tryConnect() async {
+    if (!_ua.isAuthorized) return;
+
+    log('[WebSocket] Connecting to the server...');
+    await connect();
   }
 
   Future<void> connect({noRetry = false}) async {

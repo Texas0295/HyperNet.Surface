@@ -405,6 +405,7 @@
   "articleWrittenAt": "發表於 {}",
   "articleEditedAt": "編輯於 {}",
   "attachmentSaved": "已保存到相冊",
+  "attachmentSavedDesktop": "已保存到下載目錄",
   "openInAlbum": "在相冊中打開",
   "postAbuseReport": "檢舉帖子",
   "postAbuseReportDescription": "檢舉不符合我們用户協議以及社區準則的帖子，來幫助我們更好的維護 Solar Network 上的內容。請在下面描述該帖子如何違反我麼的相關規定。請勿填寫任何敏感信息。我們將會在 24 小時內處理您的檢舉。",

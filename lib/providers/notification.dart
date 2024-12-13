@@ -16,14 +16,6 @@ class NotificationProvider extends ChangeNotifier {
   NotificationProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
     _ua = context.read<UserProvider>();
-
-    // Delay to wait user provider ready to use
-    Future.delayed(const Duration(milliseconds: 3000), () async {
-      if (!_ua.isAuthorized) return;
-      log("Registering push notifications...");
-      await registerPushNotifications();
-      log("Registered push notification subscriber successfully!");
-    });
   }
 
   Future<void> registerPushNotifications() async {

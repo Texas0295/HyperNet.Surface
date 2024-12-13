@@ -407,6 +407,7 @@
   "articleWrittenAt": "Written at {}",
   "articleEditedAt": "Edited at {}",
   "attachmentSaved": "Saved to album",
+  "attachmentSavedDesktop": "Saved to Downloads folder",
   "openInAlbum": "Open in album",
   "postAbuseReport": "Report Post",
   "postAbuseReportDescription": "Report posts that violate our user agreement and community guidelines to help us improve the content on Solar Network. Please describe how this post violates the relevant rules. Do not include any sensitive information. We will process your report within 24 hours.",
@@ -442,5 +443,6 @@
   "postImageShareReadMore": "Scan the QR code to read full post",
   "postImageShareAds": "Explore posts on the Solar Network",
   "postShare": "Share",
-  "postShareImage": "Share via Image"
+  "postShareImage": "Share via Image",
+  "appInitializing": "Initializing"
 }

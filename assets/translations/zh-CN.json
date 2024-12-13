@@ -405,6 +405,7 @@
   "articleWrittenAt": "发表于 {}",
   "articleEditedAt": "编辑于 {}",
   "attachmentSaved": "已保存到相册",
+  "attachmentSavedDesktop": "已保存到下载目录",
   "openInAlbum": "在相册中打开",
   "postAbuseReport": "检举帖子",
   "postAbuseReportDescription": "检举不符合我们用户协议以及社区准则的帖子，来帮助我们更好的维护 Solar Network 上的内容。请在下面描述该帖子如何违反我么的相关规定。请勿填写任何敏感信息。我们将会在 24 小时内处理您的检举。",
@@ -440,5 +441,6 @@
   "postImageShareReadMore": "扫描右侧 QRCode 查看全文",
   "postImageShareAds": "来 Solar Network 探索更多有趣帖子",
   "postShare": "分享",
-  "postShareImage": "分享帖图"
+  "postShareImage": "分享帖图",
+  "appInitializing": "正在初始化"
 }

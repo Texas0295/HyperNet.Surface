@@ -7,11 +7,13 @@ import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/chat_call.dart';
@@ -29,6 +31,7 @@ import 'package:surface/router.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/types/realm.dart';
 import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
+import 'package:surface/widgets/dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -94,7 +97,7 @@ class SolianApp extends StatelessWidget {
             ChangeNotifierProvider(create: (ctx) => ChatChannelProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => ChatCallProvider(ctx)),
           ],
-          child: AppMainContent(),
+          child: _AppDelegate(),
         ),
       ),
       breakpoints: [
@@ -106,8 +109,8 @@ class SolianApp extends StatelessWidget {
   }
 }
 
-class AppMainContent extends StatelessWidget {
-  const AppMainContent({super.key});
+class _AppDelegate extends StatelessWidget {
+  const _AppDelegate({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +132,76 @@ class AppMainContent extends StatelessWidget {
         ...context.localizationDelegates,
       ],
       routerConfig: appRouter,
+      builder: (context, child) {
+        return _AppSplashScreen(child: child!);
+      },
     );
+  }
+}
+
+class _AppSplashScreen extends StatefulWidget {
+  final Widget child;
+
+  const _AppSplashScreen({super.key, required this.child});
+
+  @override
+  State<_AppSplashScreen> createState() => _AppSplashScreenState();
+}
+
+class _AppSplashScreenState extends State<_AppSplashScreen> {
+  bool _isReady = false;
+
+  Future<void> _initialize() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.initializeUserAgent();
+      if (!mounted) return;
+      final ua = context.read<UserProvider>();
+      await ua.initialize();
+      if (!mounted) return;
+      final ws = context.read<WebSocketProvider>();
+      await ws.tryConnect();
+      if (!mounted) return;
+      final notify = context.read<NotificationProvider>();
+      await notify.registerPushNotifications();
+    } catch (err) {
+      if (!mounted) return;
+      await context.showErrorDialog(err);
+    } finally {
+      setState(() => _isReady = true);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isReady) {
+      return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: Container(
+          constraints: const BoxConstraints(maxWidth: 180),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset("assets/icon/icon.png", width: 64, height: 64),
+              const Gap(6),
+              LinearProgressIndicator(
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+              ),
+              const Gap(20),
+              Text('appInitializing'.tr(), textAlign: TextAlign.center),
+            ],
+          ),
+        ).center(),
+      );
+    }
+
+    return widget.child;
   }
 }

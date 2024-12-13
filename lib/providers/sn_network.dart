@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
+import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
 
@@ -22,6 +26,8 @@ class SnNetworkProvider {
   late final Dio client;
 
   late final SharedPreferences _prefs;
+
+  String? _userAgent;
 
   SnNetworkProvider() {
     client = Dio();
@@ -46,6 +52,9 @@ class SnNetworkProvider {
           if (atk != null) {
             options.headers['Authorization'] = 'Bearer $atk';
           }
+          if (_userAgent != null) {
+            options.headers['User-Agent'] = _userAgent!;
+          }
           return handler.next(options);
         },
       ),
@@ -53,9 +62,37 @@ class SnNetworkProvider {
 
     SharedPreferences.getInstance().then((prefs) {
       _prefs = prefs;
-      client.options.baseUrl =
-          _prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
+      client.options.baseUrl = _prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
     });
+  }
+
+  Future<void> initializeUserAgent() async {
+    final String platformInfo;
+    if (kIsWeb) {
+      final deviceInfo = await DeviceInfoPlugin().webBrowserInfo;
+      platformInfo = 'Web; ${deviceInfo.vendor}';
+    } else if (Platform.isAndroid) {
+      final deviceInfo = await DeviceInfoPlugin().androidInfo;
+      platformInfo = 'Android; ${deviceInfo.brand} ${deviceInfo.model}; ${deviceInfo.id}';
+    } else if (Platform.isIOS) {
+      final deviceInfo = await DeviceInfoPlugin().iosInfo;
+      platformInfo = 'iOS; ${deviceInfo.model}; ${deviceInfo.name}';
+    } else if (Platform.isMacOS) {
+      final deviceInfo = await DeviceInfoPlugin().macOsInfo;
+      platformInfo = 'MacOS; ${deviceInfo.model}; ${deviceInfo.hostName}';
+    } else if (Platform.isWindows) {
+      final deviceInfo = await DeviceInfoPlugin().windowsInfo;
+      platformInfo = 'Windows NT; ${deviceInfo.productName}; ${deviceInfo.computerName}';
+    } else if (Platform.isLinux) {
+      final deviceInfo = await DeviceInfoPlugin().linuxInfo;
+      platformInfo = 'Linux; ${deviceInfo.prettyName}';
+    } else {
+      platformInfo = 'Unknown';
+    }
+
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    _userAgent = 'Solian/${packageInfo.version}+${packageInfo.buildNumber} ($platformInfo)';
   }
 
   final tkLock = Lock();
