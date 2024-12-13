@@ -69,9 +69,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               {},
         );
         _otherMember = _channel!.members?.cast<SnChannelMember?>().firstWhere(
-          (ele) => ele?.accountId != ua.user?.id,
-          orElse: () => null,
-        );
+              (ele) => ele?.accountId != ua.user?.id,
+              orElse: () => null,
+            );
       }
     } catch (err) {
       if (!mounted) return;
@@ -90,6 +90,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         '/cgi/im/channels/${_messageController.channel!.keyPath}/calls/ongoing',
         options: Options(
           validateStatus: (status) => status != null && status < 500,
+          receiveTimeout: const Duration(seconds: 60),
+          sendTimeout: const Duration(seconds: 60),
         ),
       );
       if (resp.statusCode == 200) {
@@ -97,6 +99,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       }
     } catch (err) {
       if (!mounted) return;
+      print((err as DioException).response?.data);
       context.showErrorDialog(err);
     } finally {
       setState(() => _isCalling = false);
@@ -115,10 +118,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           receiveTimeout: const Duration(seconds: 30),
         ),
       );
-      log(jsonDecode(resp.data));
     } catch (err) {
       if (!mounted) return;
-      context.showErrorDialog(err);
+      if (_ongoingCall == null) {
+        // ignore the error because the call is already ongoing
+        context.showErrorDialog(err);
+      }
     } finally {
       setState(() => _isCalling = false);
     }

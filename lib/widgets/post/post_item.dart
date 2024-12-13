@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -97,17 +98,21 @@ class PostItem extends StatelessWidget {
     if (kIsWeb) return;
 
     final directory = await getTemporaryDirectory();
-    final imagePath = await File(
+    final imageFile = await File(
       '${directory.path}/sn-share-via-image-${DateTime.now().millisecondsSinceEpoch}.png',
     ).create();
-    await imagePath.writeAsBytes(capturedImage);
+    await imageFile.writeAsBytes(capturedImage);
 
-    await Share.shareXFiles(
-      [XFile(imagePath.path)],
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-    );
+    if(!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      await Share.shareXFiles(
+        [XFile(imageFile.path)],
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    } else {
+      await FileSaver.instance.saveFile(name: 'Solar Network Post #${data.id}', file: imageFile);
+    }
 
-    await imagePath.delete();
+    await imageFile.delete();
   }
 
   @override

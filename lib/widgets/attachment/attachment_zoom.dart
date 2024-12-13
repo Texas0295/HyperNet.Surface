@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gal/gal.dart';
@@ -83,7 +84,14 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
 
     bool isSuccess = false;
     try {
-      await Gal.putImage(imagePath, album: 'Solar Network');
+      if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+        await Gal.putImage(imagePath, album: 'Solar Network');
+      } else {
+        await FileSaver.instance.saveFile(
+          name: item.name,
+          file: File(imagePath),
+        );
+      }
       setState(() {
         isSuccess = true;
         _isDownloading = false;
