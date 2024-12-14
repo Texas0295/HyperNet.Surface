@@ -125,7 +125,7 @@ struct CheckInWidget: Widget {
         }
         .configurationDisplayName("Check In")
         .description("View your today's fortune on your home screen")
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
