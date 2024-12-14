@@ -16,8 +16,11 @@ struct Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let prefs = UserDefaults(suiteName: "group.solsynth.solian")
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"
+        
         let jsonDecoder = JSONDecoder()
-        jsonDecoder.dateDecodingStrategy = .iso8601
+        jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
         let userRaw = prefs?.string(forKey: "user")
@@ -56,14 +59,53 @@ struct SimpleEntry: TimelineEntry {
 
 struct SolarWidgetEntryView : View {
     var entry: Provider.Entry
+    
+    private let resultTierSymbols: [String] = ["大凶", "凶", "中平", "大吉", "吉"]
+    
+    func checkIn() -> Void {}
+    
+    func seeDetail() -> Void {}
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let user = entry.user {
-                Text("User")
-                Text("\(user.name)")
+            if let checkIn = entry.checkIn {
+                VStack(alignment: .leading) {
+                    Text(resultTierSymbols[checkIn.resultTier]).font(.system(size: 27, weight: .bold))
+                    Text("+\(checkIn.resultExperience) EXP").font(.system(size: 15, design: .monospaced))
+                }.padding(.horizontal, 4)
+                
+                Spacer()
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(
+                            checkIn.createdAt,
+                            format: .dateTime.weekday()
+                        ).font(.system(size: 13))
+                        Text(
+                            checkIn.createdAt,
+                            format: .dateTime.day().month()
+                        ).font(.system(size: 13))
+                    }.padding(.leading, 4)
+                    
+                    Button("See Detail", systemImage: "arrow.right", action: seeDetail)
+                        .labelStyle(.iconOnly)
+                        .buttonBorderShape(.circle)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }.frame(alignment: .bottom)
+            } else {
+                VStack(alignment: .leading) {
+                    Text("Check In").font(.system(size: 19, weight: .bold))
+                    Text("You haven't check in today").font(.system(size: 15))
+                }.padding(.horizontal, 4)
+                
+                Spacer()
+                
+                HStack(alignment: .bottom) {
+                    Button("Check In", systemImage: "checkmark", action: checkIn).labelStyle(.iconOnly).buttonBorderShape(.circle).frame(maxWidth: .infinity, alignment: .trailing)
+                }
             }
-        }
+        }.padding(8)
     }
 }
 
@@ -81,8 +123,9 @@ struct CheckInWidget: Widget {
                     .background()
             }
         }
-        .configurationDisplayName("Solar Overview")
-        .description("Get Instant Insights on your home screen")
+        .configurationDisplayName("Check In")
+        .description("View your today's fortune on your home screen")
+        .supportedFamilies([.systemSmall])
     }
 }
 
@@ -93,6 +136,6 @@ struct CheckInWidget: Widget {
     SimpleEntry(
         date: .now,
         user: SolarUser(id: 1, name: "demo", nick: "Deemo"),
-        checkIn: SolarCheckInRecord(id: 1, resultTier: 1, createdAt: Date.now)
+        checkIn: SolarCheckInRecord(id: 1, resultTier: 1, resultExperience: 100, createdAt: Date.now)
     )
 }

@@ -16,5 +16,6 @@ struct SolarUser: Codable {
 struct SolarCheckInRecord: Codable {
     let id: Int
     let resultTier: Int
+    let resultExperience: Int
     let createdAt: Date
 }
