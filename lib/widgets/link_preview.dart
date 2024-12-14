@@ -113,17 +113,17 @@ class _LinkPreviewEntry extends StatelessWidget {
                         children: [
                           SizedBox(
                             height: 24,
-                            child: ((meta.title?.length ?? 0) > 40)
+                            child: ((meta.title?.length ?? 0) > 32)
                                 ? Marquee(
                                     text: meta.title ?? 'unknown'.tr(),
-                                    style: TextStyle(fontSize: 17, height: 1),
+                                    style: TextStyle(fontSize: 17),
                                     scrollAxis: Axis.horizontal,
                                     showFadingOnlyWhenScrolling: true,
                                     pauseAfterRound: const Duration(seconds: 3),
                                   )
                                 : Text(
                                     meta.title ?? 'unknown'.tr(),
-                                    style: TextStyle(fontSize: 17, height: 1),
+                                    style: TextStyle(fontSize: 17),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
