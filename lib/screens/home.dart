@@ -6,6 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -18,6 +19,8 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/post/post_item.dart';
+
+import '../providers/widget.dart';
 
 class HomeScreenDashEntry {
   final String name;
@@ -140,8 +143,10 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
     setState(() => _isBusy = true);
     try {
       final sn = context.read<SnNetworkProvider>();
+      final home = context.read<HomeWidgetProvider>();
       final resp = await sn.client.get('/cgi/id/check-in/today');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
+      home.saveWidgetData('today_check_in', _todayRecord!.toJson());
     } finally {
       setState(() => _isBusy = false);
     }
@@ -151,8 +156,10 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
     setState(() => _isBusy = true);
     try {
       final sn = context.read<SnNetworkProvider>();
+      final home = context.read<HomeWidgetProvider>();
       final resp = await sn.client.post('/cgi/id/check-in');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
+      home.saveWidgetData('today_check_in', _todayRecord!.toJson());
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

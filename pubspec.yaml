@@ -104,6 +104,7 @@ dependencies:
   device_info_plus: ^11.2.0
   marquee: ^2.3.0
   flutter_svg: ^2.0.16
+  home_widget: ^0.7.0
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/widget.dart';
 import 'package:surface/types/account.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -11,14 +13,16 @@ class UserProvider extends ChangeNotifier {
   SnAccount? user;
 
   late final SnNetworkProvider _sn;
+  late final HomeWidgetProvider _home;
+
+  UserProvider(BuildContext context) {
+    _sn = context.read<SnNetworkProvider>();
+    _home = context.read<HomeWidgetProvider>();
+  }
 
   Future<String?> get atk async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(kAtkStoreKey);
-  }
-
-  UserProvider(BuildContext context) {
-    _sn = context.read<SnNetworkProvider>();
   }
 
   Future<void> initialize() async {
@@ -29,6 +33,7 @@ class UserProvider extends ChangeNotifier {
     refreshUser().then((value) {
       if (value != null) {
         log('Logged in as @${value.name}');
+        _home.saveWidgetData('user', value.toJson());
       }
     });
   }

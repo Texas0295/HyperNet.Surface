@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -28,6 +29,7 @@ import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
+import 'package:surface/providers/widget.dart';
 import 'package:surface/router.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/types/realm.dart';
@@ -86,6 +88,9 @@ class SolianApp extends StatelessWidget {
             // Display layer
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
+
+            // System extensions layer
+            Provider(create: (ctx) => HomeWidgetProvider(ctx)),
 
             // Data layer
             Provider(create: (_) => SnNetworkProvider()),
@@ -159,6 +164,9 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
 
   Future<void> _initialize() async {
     try {
+      final home = context.read<HomeWidgetProvider>();
+      await home.initialize();
+      if (!mounted) return;
       final sn = context.read<SnNetworkProvider>();
       await sn.initializeUserAgent();
       if (!mounted) return;
