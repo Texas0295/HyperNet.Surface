@@ -50,7 +50,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		73DA8A022D05C7620024A03E /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
@@ -113,17 +113,25 @@
 			);
 			target = 738C1EAA2D0D76A400A215F3 /* SolarWidgetExtension */;
 		};
-		738C1F502D0D91D000A215F3 /* Exceptions for "Data" folder in "Runner" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				User.swift,
-			);
-			target = 97C146ED1CF9000F007C117D /* Runner */;
-		};
 		738C1F512D0D91D000A215F3 /* Exceptions for "Data" folder in "SolarWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Post.swift,
 				User.swift,
+			);
+			target = 738C1EAA2D0D76A400A215F3 /* SolarWidgetExtension */;
+		};
+		73BC73712D0DDF6300956BE0 /* Exceptions for "Service" folder in "SolarNotifyService" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Attachment.swift,
+			);
+			target = 73DA89F92D05C7620024A03E /* SolarNotifyService */;
+		};
+		73BC73722D0DDF6300956BE0 /* Exceptions for "Service" folder in "SolarWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Attachment.swift,
 			);
 			target = 738C1EAA2D0D76A400A215F3 /* SolarWidgetExtension */;
 		};
@@ -148,10 +156,18 @@
 		738C1F4F2D0D91CC00A215F3 /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				738C1F502D0D91D000A215F3 /* Exceptions for "Data" folder in "Runner" target */,
 				738C1F512D0D91D000A215F3 /* Exceptions for "Data" folder in "SolarWidgetExtension" target */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		73BC736C2D0DDF5600956BE0 /* Service */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				73BC73712D0DDF6300956BE0 /* Exceptions for "Service" folder in "SolarNotifyService" target */,
+				73BC73722D0DDF6300956BE0 /* Exceptions for "Service" folder in "SolarWidgetExtension" target */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		73DA89FB2D05C7620024A03E /* SolarNotifyService */ = {
@@ -260,6 +276,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				73BC736C2D0DDF5600956BE0 /* Service */,
 				738C1F4F2D0D91CC00A215F3 /* Data */,
 				73111C212CEE3D5E004CF4B3 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -378,6 +395,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				738C1F4F2D0D91CC00A215F3 /* Data */,
+				73BC736C2D0DDF5600956BE0 /* Service */,
 			);
 			name = Runner;
 			productName = Runner;

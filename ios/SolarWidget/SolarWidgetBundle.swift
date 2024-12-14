@@ -11,6 +11,7 @@ import SwiftUI
 @main
 struct SolarWidgetBundle: WidgetBundle {
     var body: some Widget {
-        CheckInWidget()
+        // CheckInWidget()
+        FeaturedPostWidget()
     }
 }

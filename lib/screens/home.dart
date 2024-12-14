@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:home_widget/home_widget.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -428,7 +427,9 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
     setState(() => _isBusy = true);
     try {
       final pt = context.read<SnPostContentProvider>();
+      final home = context.read<HomeWidgetProvider>();
       _posts = await pt.listRecommendations();
+      home.saveWidgetData('post_featured', _posts!.map((e) => e.toJson()).toList());
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

@@ -15,18 +15,22 @@ class HomeWidgetProvider {
     }
   }
 
-  Future<void> saveWidgetData(String id, dynamic data) async {
+  Future<void> saveWidgetData(String id, dynamic data, {bool update = true}) async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
     await HomeWidget.saveWidgetData(id, jsonEncode(data));
+    if (update) await updateWidget();
   }
 
   Future<void> updateWidget() async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
-    await HomeWidget.updateWidget(
-      name: "SolarWidget",
-      iOSName: "SolarWidget",
-      androidName: "com.solsynth.solian.SolarWidget",
-      qualifiedAndroidName: "group.solsynth.solian.SolarWidget",
-    );
+    const widgets = ["SolarFeaturedPostWidget", "SolarCheckInWidget"];
+    for(final widget in widgets) {
+      await HomeWidget.updateWidget(
+        name: widget,
+        iOSName: widget,
+        androidName: "com.solsynth.solian.$widget",
+        qualifiedAndroidName: "group.solsynth.solian.$widget",
+      );
+    }
   }
 }

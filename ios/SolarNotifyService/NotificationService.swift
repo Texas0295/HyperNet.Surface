@@ -17,11 +17,6 @@ class NotificationService: UNNotificationServiceExtension {
     
     private var contentHandler: ((UNNotificationContent) -> Void)?
     private var bestAttemptContent: UNMutableNotificationContent?
-    private let serverBaseUrl = "https://api.sn.solsynth.dev"
-    
-    private func getAttachmentUrl(for identifier: String) -> String {
-        identifier.starts(with: "http") ? identifier : "\(serverBaseUrl)/cgi/uc/attachments/\(identifier)"
-    }
     
     private func fetchAvatarImage(from url: String, completion: @escaping (INImage?) -> Void) {
         guard let imageURL = URL(string: url) else {

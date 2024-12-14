@@ -8,12 +8,12 @@
 import WidgetKit
 import SwiftUI
 
-struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), user: nil, checkIn: nil)
+struct CheckInProvider: TimelineProvider {
+    func placeholder(in context: Context) -> CheckInEntry {
+        CheckInEntry(date: Date(), user: nil, checkIn: nil)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(in context: Context, completion: @escaping (CheckInEntry) -> ()) {
         let prefs = UserDefaults(suiteName: "group.solsynth.solian")
         
         let dateFormatter = DateFormatter()
@@ -35,7 +35,7 @@ struct Provider: TimelineProvider {
             checkIn = try! jsonDecoder.decode(SolarCheckInRecord.self, from: checkInRaw.data(using: .utf8)!)
         }
         
-        let entry = SimpleEntry(
+        let entry = CheckInEntry(
             date: Date(),
             user: user,
             checkIn: checkIn
@@ -51,14 +51,14 @@ struct Provider: TimelineProvider {
     }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct CheckInEntry: TimelineEntry {
     let date: Date
     let user: SolarUser?
     let checkIn: SolarCheckInRecord?
 }
 
-struct SolarWidgetEntryView : View {
-    var entry: Provider.Entry
+struct CheckInWidgetEntryView : View {
+    var entry: CheckInProvider.Entry
     
     private let resultTierSymbols: [String] = ["大凶", "凶", "中平", "大吉", "吉"]
     
@@ -110,15 +110,15 @@ struct SolarWidgetEntryView : View {
 }
 
 struct CheckInWidget: Widget {
-    let kind: String = "SolarWidget"
+    let kind: String = "SolarCheckInWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: CheckInProvider()) { entry in
             if #available(iOS 17.0, *) {
-                SolarWidgetEntryView(entry: entry)
+                CheckInWidgetEntryView(entry: entry)
                     .containerBackground(.fill.tertiary, for: .widget)
             } else {
-                SolarWidgetEntryView(entry: entry)
+                CheckInWidgetEntryView(entry: entry)
                     .padding()
                     .background()
             }
@@ -132,8 +132,8 @@ struct CheckInWidget: Widget {
 #Preview(as: .systemSmall) {
     CheckInWidget()
 } timeline: {
-    SimpleEntry(date: .now, user: nil, checkIn: nil)
-    SimpleEntry(
+    CheckInEntry(date: .now, user: nil, checkIn: nil)
+    CheckInEntry(
         date: .now,
         user: SolarUser(id: 1, name: "demo", nick: "Deemo"),
         checkIn: SolarCheckInRecord(id: 1, resultTier: 1, resultExperience: 100, createdAt: Date.now)
