@@ -132,6 +132,7 @@ class PostItem extends StatelessWidget {
             _PostContentHeader(
               data: data,
               isAuthor: isAuthor,
+              isRelativeDate: !showFullPost,
               onShare: () => _doShare(context),
               onShareImage: () => _doShareViaPicture(context),
               onDeleted: () {
@@ -204,6 +205,7 @@ class PostItem extends StatelessWidget {
             children: [
               _PostContentHeader(
                 isAuthor: isAuthor,
+                isRelativeDate: !showFullPost,
                 data: data,
                 showMenu: showMenu,
                 onShare: () => _doShare(context),
@@ -219,6 +221,7 @@ class PostItem extends StatelessWidget {
                 ).padding(horizontal: 16, bottom: 8),
               _PostContentBody(
                 data: data,
+                isSelectable: showFullPost,
                 isEnlarge: data.type == 'article' && showFullPost,
               ).padding(horizontal: 16, bottom: 6),
               if (data.repostTo != null)
@@ -850,16 +853,19 @@ class _PostContentHeader extends StatelessWidget {
 class _PostContentBody extends StatelessWidget {
   final SnPost data;
   final bool isEnlarge;
+  final bool isSelectable;
 
   const _PostContentBody({
     required this.data,
     this.isEnlarge = false,
+    this.isSelectable = false,
   });
 
   @override
   Widget build(BuildContext context) {
     if (data.body['content'] == null) return const SizedBox.shrink();
     return MarkdownTextContent(
+      isSelectable: isSelectable,
       textScaler: isEnlarge ? TextScaler.linear(1.1) : null,
       content: data.body['content'],
       attachments: data.preload?.attachments,

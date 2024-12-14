@@ -17,6 +17,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/chat_call.dart';
+import 'package:surface/providers/link_preview.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/notification.dart';
 import 'package:surface/providers/post.dart';
@@ -92,6 +93,7 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             Provider(create: (ctx) => SnPostContentProvider(ctx)),
             Provider(create: (ctx) => SnRelationshipProvider(ctx)),
+            Provider(create: (ctx) => SnLinkPreviewProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),
@@ -111,7 +113,7 @@ class SolianApp extends StatelessWidget {
 }
 
 class _AppDelegate extends StatelessWidget {
-  const _AppDelegate({super.key});
+  const _AppDelegate();
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +136,10 @@ class _AppDelegate extends StatelessWidget {
       ],
       routerConfig: appRouter,
       builder: (context, child) {
-        return _AppSplashScreen(child: child!);
+        return _AppSplashScreen(
+          key: const Key('global-splash-screen'),
+          child: child!,
+        );
       },
     );
   }
@@ -187,7 +192,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
         body: Container(
           constraints: const BoxConstraints(maxWidth: 180),
           child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset("assets/icon/icon.png", width: 64, height: 64),

@@ -26,6 +26,7 @@ class WebSocketProvider extends ChangeNotifier {
   }
 
   Future<void> tryConnect() async {
+    if (isConnected) return;
     if (!_ua.isAuthorized) return;
 
     log('[WebSocket] Connecting to the server...');
@@ -76,6 +77,7 @@ class WebSocketProvider extends ChangeNotifier {
     if (conn != null) {
       conn!.sink.close();
     }
+    conn = null;
     isConnected = false;
     notifyListeners();
   }

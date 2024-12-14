@@ -10,6 +10,7 @@ import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
+import 'package:surface/widgets/link_preview.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:swipe_to/swipe_to.dart';
 
@@ -22,6 +23,7 @@ class ChatMessage extends StatelessWidget {
   final Function(SnChatMessage)? onReply;
   final Function(SnChatMessage)? onEdit;
   final Function(SnChatMessage)? onDelete;
+
   const ChatMessage({
     super.key,
     required this.data,
@@ -63,7 +65,7 @@ class ChatMessage extends StatelessWidget {
                   onReply!(data);
                 },
               ),
-            if (isOwner && onEdit != null)
+            if (isOwner && data.type == 'messages.new' && onEdit != null)
               MenuItem(
                 label: 'edit'.tr(),
                 icon: Symbols.edit,
@@ -71,7 +73,7 @@ class ChatMessage extends StatelessWidget {
                   onEdit!(data);
                 },
               ),
-            if (isOwner && onDelete != null)
+            if (isOwner && data.type == 'messages.new' && onDelete != null)
               MenuItem(
                 label: 'delete'.tr(),
                 icon: Symbols.delete,
@@ -109,9 +111,7 @@ class ChatMessage extends StatelessWidget {
                                 radius: 12,
                               ).padding(right: 6),
                             Text(
-                              (data.sender.nick?.isNotEmpty ?? false)
-                                  ? data.sender.nick!
-                                  : user?.nick ?? 'unknown',
+                              (data.sender.nick?.isNotEmpty ?? false) ? data.sender.nick! : user?.nick ?? 'unknown',
                             ).bold(),
                             const Gap(6),
                             Text(
@@ -123,8 +123,7 @@ class ChatMessage extends StatelessWidget {
                       if (data.preload?.quoteEvent != null)
                         StyledWidget(Container(
                           decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                             border: Border.all(
                               color: Theme.of(context).dividerColor,
                               width: 1,
@@ -153,6 +152,8 @@ class ChatMessage extends StatelessWidget {
                 )
               ],
             ).opacity(isPending ? 0.5 : 1),
+            if (data.body['text'] != null && (data.body['text']?.isNotEmpty ?? false))
+              LinkPreviewWidget(text: data.body['text']!),
             if (data.preload?.attachments?.isNotEmpty ?? false)
               AttachmentList(
                 data: data.preload!.attachments!,
@@ -161,10 +162,7 @@ class ChatMessage extends StatelessWidget {
                 maxHeight: 520,
                 listPadding: const EdgeInsets.only(top: 8),
               ),
-            if (!hasMerged && !isCompact)
-              const Gap(12)
-            else if (!isCompact)
-              const Gap(6),
+            if (!hasMerged && !isCompact) const Gap(12) else if (!isCompact) const Gap(6),
           ],
         ),
       ),
@@ -174,6 +172,7 @@ class ChatMessage extends StatelessWidget {
 
 class _ChatMessageText extends StatelessWidget {
   final SnChatMessage data;
+
   const _ChatMessageText({super.key, required this.data});
 
   @override
@@ -184,6 +183,7 @@ class _ChatMessageText extends StatelessWidget {
         children: [
           MarkdownTextContent(
             content: data.body['text'],
+            isSelectable: true,
             isAutoWarp: true,
           ),
           if (data.updatedAt != data.createdAt)
@@ -212,6 +212,7 @@ class _ChatMessageText extends StatelessWidget {
 
 class _ChatMessageSystemNotify extends StatelessWidget {
   final SnChatMessage data;
+
   const _ChatMessageSystemNotify({super.key, required this.data});
 
   String _formatDuration(Duration duration) {

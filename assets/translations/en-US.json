@@ -444,5 +444,6 @@
   "postImageShareAds": "Explore posts on the Solar Network",
   "postShare": "Share",
   "postShareImage": "Share via Image",
-  "appInitializing": "Initializing"
+  "appInitializing": "Initializing",
+  "poweredBy": "Powered by {}"
 }
