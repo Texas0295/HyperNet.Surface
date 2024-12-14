@@ -5,6 +5,8 @@ part 'link.freezed.dart';
 
 @freezed
 class SnLinkMeta with _$SnLinkMeta {
+  const SnLinkMeta._();
+
   const factory SnLinkMeta({
     required int id,
     required DateTime createdAt,
@@ -17,7 +19,7 @@ class SnLinkMeta with _$SnLinkMeta {
     required String? image,
     required String? video,
     required String? audio,
-    required String description,
+    required String? description,
     required String? siteName,
     required String? type,
   }) = _SnLinkMeta;

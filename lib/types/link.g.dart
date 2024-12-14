@@ -21,7 +21,7 @@ _$SnLinkMetaImpl _$$SnLinkMetaImplFromJson(Map<String, dynamic> json) =>
       image: json['image'] as String?,
       video: json['video'] as String?,
       audio: json['audio'] as String?,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       siteName: json['site_name'] as String?,
       type: json['type'] as String?,
     );

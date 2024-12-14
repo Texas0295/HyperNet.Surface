@@ -24,6 +24,7 @@ import 'package:surface/types/reaction.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/link_preview.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
@@ -103,7 +104,7 @@ class PostItem extends StatelessWidget {
     ).create();
     await imageFile.writeAsBytes(capturedImage);
 
-    if(!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       await Share.shareXFiles(
         [XFile(imageFile.path)],
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
@@ -219,11 +220,12 @@ class PostItem extends StatelessWidget {
                   data: data,
                   isEnlarge: data.type == 'article' && showFullPost,
                 ).padding(horizontal: 16, bottom: 8),
-              _PostContentBody(
-                data: data,
-                isSelectable: showFullPost,
-                isEnlarge: data.type == 'article' && showFullPost,
-              ).padding(horizontal: 16, bottom: 6),
+              if (data.body['content']?.isNotEmpty ?? false)
+                _PostContentBody(
+                  data: data,
+                  isSelectable: showFullPost,
+                  isEnlarge: data.type == 'article' && showFullPost,
+                ).padding(horizontal: 16, bottom: 6),
               if (data.repostTo != null)
                 _PostQuoteContent(child: data.repostTo!).padding(
                   horizontal: 12,
@@ -250,6 +252,10 @@ class PostItem extends StatelessWidget {
             maxHeight: 560,
             listPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
+        if (data.body['content'] != null)
+          LinkPreviewWidget(
+            text: data.body['content'],
+          ).padding(horizontal: 4),
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
           child: Column(
@@ -315,10 +321,11 @@ class PostShareImageWidget extends StatelessWidget {
             data: data,
             isEnlarge: data.type == 'article',
           ).padding(horizontal: 16, bottom: 8),
-          _PostContentBody(
-            data: data,
-            isEnlarge: data.type == 'article',
-          ).padding(horizontal: 16, bottom: 8),
+          if (data.body['content']?.isNotEmpty ?? false)
+            _PostContentBody(
+              data: data,
+              isEnlarge: data.type == 'article',
+            ).padding(horizontal: 16, bottom: 8),
           if (data.repostTo != null)
             _PostQuoteContent(
               child: data.repostTo!,
@@ -330,6 +337,10 @@ class PostShareImageWidget extends StatelessWidget {
               data: data.preload!.attachments!,
               isFlatted: true,
             ).padding(horizontal: 16, bottom: 8),
+          if (data.body['content'] != null)
+            LinkPreviewWidget(
+              text: data.body['content'],
+            ).padding(horizontal: 4),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -375,7 +386,7 @@ class PostShareImageWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if(data.body['content_truncated'] == true)
+                      if (data.body['content_truncated'] == true)
                         Text(
                           'postImageShareReadMore'.tr(),
                           style: GoogleFonts.robotoMono(fontSize: 11),

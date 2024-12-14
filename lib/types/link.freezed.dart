@@ -31,7 +31,7 @@ mixin _$SnLinkMeta {
   String? get image => throw _privateConstructorUsedError;
   String? get video => throw _privateConstructorUsedError;
   String? get audio => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   String? get siteName => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
 
@@ -63,7 +63,7 @@ abstract class $SnLinkMetaCopyWith<$Res> {
       String? image,
       String? video,
       String? audio,
-      String description,
+      String? description,
       String? siteName,
       String? type});
 }
@@ -94,7 +94,7 @@ class _$SnLinkMetaCopyWithImpl<$Res, $Val extends SnLinkMeta>
     Object? image = freezed,
     Object? video = freezed,
     Object? audio = freezed,
-    Object? description = null,
+    Object? description = freezed,
     Object? siteName = freezed,
     Object? type = freezed,
   }) {
@@ -143,10 +143,10 @@ class _$SnLinkMetaCopyWithImpl<$Res, $Val extends SnLinkMeta>
           ? _value.audio
           : audio // ignore: cast_nullable_to_non_nullable
               as String?,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       siteName: freezed == siteName
           ? _value.siteName
           : siteName // ignore: cast_nullable_to_non_nullable
@@ -179,7 +179,7 @@ abstract class _$$SnLinkMetaImplCopyWith<$Res>
       String? image,
       String? video,
       String? audio,
-      String description,
+      String? description,
       String? siteName,
       String? type});
 }
@@ -208,7 +208,7 @@ class __$$SnLinkMetaImplCopyWithImpl<$Res>
     Object? image = freezed,
     Object? video = freezed,
     Object? audio = freezed,
-    Object? description = null,
+    Object? description = freezed,
     Object? siteName = freezed,
     Object? type = freezed,
   }) {
@@ -257,10 +257,10 @@ class __$$SnLinkMetaImplCopyWithImpl<$Res>
           ? _value.audio
           : audio // ignore: cast_nullable_to_non_nullable
               as String?,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       siteName: freezed == siteName
           ? _value.siteName
           : siteName // ignore: cast_nullable_to_non_nullable
@@ -275,7 +275,7 @@ class __$$SnLinkMetaImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SnLinkMetaImpl implements _SnLinkMeta {
+class _$SnLinkMetaImpl extends _SnLinkMeta {
   const _$SnLinkMetaImpl(
       {required this.id,
       required this.createdAt,
@@ -290,7 +290,8 @@ class _$SnLinkMetaImpl implements _SnLinkMeta {
       required this.audio,
       required this.description,
       required this.siteName,
-      required this.type});
+      required this.type})
+      : super._();
 
   factory _$SnLinkMetaImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnLinkMetaImplFromJson(json);
@@ -318,7 +319,7 @@ class _$SnLinkMetaImpl implements _SnLinkMeta {
   @override
   final String? audio;
   @override
-  final String description;
+  final String? description;
   @override
   final String? siteName;
   @override
@@ -390,7 +391,7 @@ class _$SnLinkMetaImpl implements _SnLinkMeta {
   }
 }
 
-abstract class _SnLinkMeta implements SnLinkMeta {
+abstract class _SnLinkMeta extends SnLinkMeta {
   const factory _SnLinkMeta(
       {required final int id,
       required final DateTime createdAt,
@@ -403,9 +404,10 @@ abstract class _SnLinkMeta implements SnLinkMeta {
       required final String? image,
       required final String? video,
       required final String? audio,
-      required final String description,
+      required final String? description,
       required final String? siteName,
       required final String? type}) = _$SnLinkMetaImpl;
+  const _SnLinkMeta._() : super._();
 
   factory _SnLinkMeta.fromJson(Map<String, dynamic> json) =
       _$SnLinkMetaImpl.fromJson;
@@ -433,7 +435,7 @@ abstract class _SnLinkMeta implements SnLinkMeta {
   @override
   String? get audio;
   @override
-  String get description;
+  String? get description;
   @override
   String? get siteName;
   @override

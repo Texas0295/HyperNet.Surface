@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:marquee/marquee.dart';
@@ -50,100 +51,120 @@ class _LinkPreviewWidgetState extends State<LinkPreviewWidget> {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: _links
-          .map(
-            (e) => Container(
-              constraints: BoxConstraints(
-                maxWidth: ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE) ? double.infinity : 480,
-              ),
-              child: GestureDetector(
-                child: Card(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (e.image != null)
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 4),
-                          color: Theme.of(context).colorScheme.surfaceContainer,
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: ClipRRect(
-                              child: AutoResizeUniversalImage(
-                                e.image!,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ),
-                      SizedBox(
-                        height: 48,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (e.icon != null)
-                              UniversalImage(
-                                e.icon!,
+      children: _links.map((e) => _LinkPreviewEntry(meta: e)).toList(),
+    );
+  }
+}
+
+class _LinkPreviewEntry extends StatelessWidget {
+  final SnLinkMeta meta;
+
+  const _LinkPreviewEntry({
+    super.key,
+    required this.meta,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE) ? double.infinity : 480,
+      ),
+      child: GestureDetector(
+        child: Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (meta.image != null)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 4),
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: ClipRRect(
+                      child: AutoResizeUniversalImage(
+                        meta.image!,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              SizedBox(
+                height: 48,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (meta.icon?.isNotEmpty ?? false)
+                      StyledWidget(
+                        meta.icon!.endsWith('.svg')
+                            ? SvgPicture.network(meta.icon!)
+                            : UniversalImage(
+                                meta.icon!,
                                 width: 36,
                                 height: 36,
                                 cacheHeight: 36,
                                 cacheWidth: 36,
-                              ).padding(all: 4),
-                            const Gap(12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 24,
-                                    child: Marquee(
-                                      text: e.title ?? 'unknown'.tr(),
-                                      style: TextStyle(fontSize: 17, height: 1),
-                                      scrollAxis: Axis.horizontal,
-                                      showFadingOnlyWhenScrolling: true,
-                                      pauseAfterRound: const Duration(seconds: 3),
-                                    ),
-                                  ),
-                                  if (e.siteName != null)
-                                    Text(
-                                      e.siteName!,
-                                      style: TextStyle(fontSize: 13, height: 0.9),
-                                    ).fontSize(11),
-                                ],
                               ),
-                            ),
-                            const Gap(6),
-                          ],
-                        ).padding(horizontal: 16),
+                      ).padding(all: 4, right: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 24,
+                            child: ((meta.title?.length ?? 0) > 40)
+                                ? Marquee(
+                                    text: meta.title ?? 'unknown'.tr(),
+                                    style: TextStyle(fontSize: 17, height: 1),
+                                    scrollAxis: Axis.horizontal,
+                                    showFadingOnlyWhenScrolling: true,
+                                    pauseAfterRound: const Duration(seconds: 3),
+                                  )
+                                : Text(
+                                    meta.title ?? 'unknown'.tr(),
+                                    style: TextStyle(fontSize: 17, height: 1),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                          ),
+                          if (meta.siteName != null)
+                            Text(
+                              meta.siteName!,
+                              style: TextStyle(fontSize: 13, height: 0.9),
+                            ).fontSize(11),
+                        ],
                       ),
-                      Text(
-                        e.description,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ).padding(horizontal: 16),
-                      const Gap(8),
-                      Text(
-                        e.url,
-                        style: GoogleFonts.roboto(fontSize: 11, height: 0.9),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ).opacity(0.75).padding(horizontal: 16),
-                      const Gap(4),
-                      Text(
-                        'poweredBy'.tr(args: ['HyperNet.Reader']),
-                        style: GoogleFonts.roboto(fontSize: 11, height: 0.9),
-                      ).opacity(0.75).padding(horizontal: 16),
-                      const Gap(16),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  launchUrlString(e.url, mode: LaunchMode.externalApplication);
-                },
+                    ),
+                    const Gap(6),
+                  ],
+                ).padding(horizontal: 16),
               ),
-            ),
-          )
-          .toList(),
+              if (meta.description != null)
+                Text(
+                  meta.description!,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ).padding(horizontal: 16, bottom: 8),
+              Text(
+                meta.url,
+                style: GoogleFonts.roboto(fontSize: 11, height: 0.9),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ).opacity(0.75).padding(horizontal: 16),
+              const Gap(4),
+              Text(
+                'poweredBy'.tr(args: ['HyperNet.Reader']),
+                style: GoogleFonts.roboto(fontSize: 11, height: 0.9),
+              ).opacity(0.75).padding(horizontal: 16),
+              const Gap(16),
+            ],
+          ),
+        ),
+        onTap: () {
+          launchUrlString(meta.url, mode: LaunchMode.externalApplication);
+        },
+      ),
     );
   }
 }

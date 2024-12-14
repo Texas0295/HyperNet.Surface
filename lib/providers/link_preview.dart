@@ -28,7 +28,7 @@ class SnLinkPreviewProvider {
       _cache[url] = meta;
       return meta;
     } catch (err) {
-      log('[LinkPreview] Failed to fetch $url ($target)');
+      log('[LinkPreview] Failed to fetch $url ($target)...');
       return null;
     }
   }
