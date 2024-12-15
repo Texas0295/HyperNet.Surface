@@ -80,14 +80,23 @@
             android:value="2" />
 
         <!-- Widgets -->
-        <receiver android:name=".glance.HomeWidgetReceiver"
+        <receiver android:name=".widgets.CheckInWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/home_widget" />
+                android:resource="@xml/check_in_widget" />
+        </receiver>
+        <receiver android:name=".widgets.FeaturedPostWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/featured_post_widget" />
         </receiver>
     </application>
 

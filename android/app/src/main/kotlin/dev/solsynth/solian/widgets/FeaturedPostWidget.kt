@@ -13,7 +13,7 @@ import androidx.glance.layout.padding
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.text.Text
 
-class AppWidget : GlanceAppWidget() {
+class FeaturedPostWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>?
         get() = HomeWidgetGlanceStateDefinition()
 
@@ -26,11 +26,13 @@ class AppWidget : GlanceAppWidget() {
     @Composable
     private fun GlanceContent(context: Context, currentState: HomeWidgetGlanceState) {
         val prefs = currentState.preferences
-        val counter = prefs.getInt("counter", 0)
+        val checkIn = prefs.getString("post_featured", null)
         Box(modifier = GlanceModifier.background(Color.White).padding(16.dp)) {
-            Text(
-                counter.toString()
-            )
+            checkIn?.let {
+                Text(it)
+            } ?: run {
+                Text("No featured posts")
+            }
         }
     }
 }

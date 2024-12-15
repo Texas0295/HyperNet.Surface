@@ -13,6 +13,7 @@ dependencies {
     implementation "androidx.glance:glance:1.1.1"
     implementation "androidx.glance:glance-appwidget:1.1.1"
     implementation 'androidx.compose.foundation:foundation-layout-android:1.7.6'
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 android {
@@ -25,8 +26,12 @@ android {
     ndkVersion = "27.0.12077973"
 
     compileOptions {
-      sourceCompatibility JavaVersion.VERSION_17
-      targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
 
     kotlinOptions {
@@ -35,7 +40,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.solsynth.solian"
-        minSdk = flutter.minSdkVersion
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

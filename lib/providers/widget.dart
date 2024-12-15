@@ -15,7 +15,8 @@ class HomeWidgetProvider {
     }
   }
 
-  Future<void> saveWidgetData(String id, dynamic data, {bool update = true}) async {
+  Future<void> saveWidgetData(String id, dynamic data,
+      {bool update = true}) async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
     await HomeWidget.saveWidgetData(id, jsonEncode(data));
     if (update) await updateWidget();
@@ -29,8 +30,14 @@ class HomeWidgetProvider {
         await HomeWidget.updateWidget(
           name: widget,
           iOSName: widget,
-          androidName: "com.solsynth.solian.$widget",
-          qualifiedAndroidName: "group.solsynth.solian.$widget",
+        );
+      }
+    } else if (Platform.isAndroid) {
+      const widgets = ["FeaturedPostWidget", "CheckInWidget"];
+      for (final widget in widgets) {
+        await HomeWidget.updateWidget(
+          androidName: "${widget}Receiver",
+          qualifiedAndroidName: "dev.solsynth.solian.widgets.${widget}Receiver",
         );
       }
     }
