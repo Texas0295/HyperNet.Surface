@@ -3,7 +3,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.glance.Button
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
@@ -14,12 +13,12 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.text.FontFamily
-import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.google.gson.FieldNamingPolicy
@@ -30,6 +29,7 @@ import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+
 
 class CheckInWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>?
@@ -56,6 +56,7 @@ class CheckInWidget : GlanceAppWidget() {
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .background(Color.White)
                 .padding(16.dp)
         ) {
@@ -85,11 +86,6 @@ class CheckInWidget : GlanceAppWidget() {
                 Text(
                     text = "You haven't checked in today",
                     style = TextStyle(fontSize = 15.sp)
-                )
-                Spacer(modifier = GlanceModifier.height(8.dp))
-                Button(
-                    text = "Check In",
-                    onClick = {}
                 )
             }
         }

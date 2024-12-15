@@ -69,12 +69,16 @@ class _HomeScreenState extends State<HomeScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Align(
-            alignment: constraints.maxWidth > 640 ? Alignment.center : Alignment.topCenter,
+            alignment: constraints.maxWidth > 640
+                ? Alignment.center
+                : Alignment.topCenter,
             child: Container(
               constraints: const BoxConstraints(maxWidth: 640),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: constraints.maxWidth > 640 ? MainAxisAlignment.center : MainAxisAlignment.start,
+                  mainAxisAlignment: constraints.maxWidth > 640
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
                   children: [
                     _HomeDashSpecialDayWidget().padding(top: 8, horizontal: 8),
                     StaggeredGrid.extent(
@@ -108,7 +112,9 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
     final ua = context.watch<UserProvider>();
     final today = DateTime.now();
     final birthday = ua.user?.profile?.birthday?.toLocal();
-    final isBirthday = birthday != null && birthday.day == today.day && birthday.month == today.month;
+    final isBirthday = birthday != null &&
+        birthday.day == today.day &&
+        birthday.month == today.month;
     return Column(
       children: [
         if (isBirthday)
@@ -168,15 +174,20 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
   }
 
   Widget _buildDetailChunk(int index, bool positive) {
-    final prefix = positive ? 'dailyCheckPositiveHint' : 'dailyCheckNegativeHint';
-    final mod = positive ? kSuggestionPositiveHintCount : kSuggestionNegativeHintCount;
+    final prefix =
+        positive ? 'dailyCheckPositiveHint' : 'dailyCheckNegativeHint';
+    final mod =
+        positive ? kSuggestionPositiveHintCount : kSuggestionNegativeHintCount;
     final pos = math.max(1, _todayRecord!.resultModifiers[index] % mod);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           prefix.tr(args: ['$prefix$pos'.tr()]),
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
           '$prefix${pos}Description',
@@ -211,7 +222,10 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
               else
                 Text(
                   'dailyCheckEverythingIsNegative',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ).tr(),
               const Gap(8),
               if (_todayRecord?.resultTier != 4)
@@ -227,7 +241,10 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
               else
                 Text(
                   'dailyCheckEverythingIsPositive',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ).tr(),
             ],
           ),
@@ -345,10 +362,12 @@ class _HomeDashNotificationWidget extends StatefulWidget {
   const _HomeDashNotificationWidget({super.key});
 
   @override
-  State<_HomeDashNotificationWidget> createState() => _HomeDashNotificationWidgetState();
+  State<_HomeDashNotificationWidget> createState() =>
+      _HomeDashNotificationWidgetState();
 }
 
-class _HomeDashNotificationWidgetState extends State<_HomeDashNotificationWidget> {
+class _HomeDashNotificationWidgetState
+    extends State<_HomeDashNotificationWidget> {
   int? _count;
 
   Future<void> _fetchNotificationCount() async {
@@ -385,7 +404,9 @@ class _HomeDashNotificationWidgetState extends State<_HomeDashNotificationWidget
                   style: Theme.of(context).textTheme.titleLarge,
                 ).tr(),
                 Text(
-                  _count == null ? 'loading'.tr() : 'notificationUnreadCount'.plural(_count ?? 0),
+                  _count == null
+                      ? 'loading'.tr()
+                      : 'notificationUnreadCount'.plural(_count ?? 0),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
@@ -416,10 +437,12 @@ class _HomeDashRecommendationPostWidget extends StatefulWidget {
   const _HomeDashRecommendationPostWidget({super.key});
 
   @override
-  State<_HomeDashRecommendationPostWidget> createState() => _HomeDashRecommendationPostWidgetState();
+  State<_HomeDashRecommendationPostWidget> createState() =>
+      _HomeDashRecommendationPostWidgetState();
 }
 
-class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendationPostWidget> {
+class _HomeDashRecommendationPostWidgetState
+    extends State<_HomeDashRecommendationPostWidget> {
   bool _isBusy = false;
   List<SnPost>? _posts;
 
@@ -429,7 +452,7 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
       final pt = context.read<SnPostContentProvider>();
       final home = context.read<HomeWidgetProvider>();
       _posts = await pt.listRecommendations();
-      home.saveWidgetData('post_featured', _posts!.map((e) => e.toJson()).toList());
+      home.saveWidgetData('post_featured', _posts!.first.toJson());
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -468,7 +491,8 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
           ).padding(horizontal: 18, top: 12, bottom: 8),
           Expanded(
             child: PageView.builder(
-              scrollBehavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+              scrollBehavior:
+                  ScrollConfiguration.of(context).copyWith(dragDevices: {
                 PointerDeviceKind.mouse,
                 PointerDeviceKind.touch,
               }),
@@ -481,7 +505,8 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
                       showMenu: false,
                     ).padding(bottom: 8),
                     onTap: () {
-                      GoRouter.of(context).pushNamed('postDetail', pathParameters: {
+                      GoRouter.of(context)
+                          .pushNamed('postDetail', pathParameters: {
                         'slug': _posts![index].id.toString(),
                       });
                     },

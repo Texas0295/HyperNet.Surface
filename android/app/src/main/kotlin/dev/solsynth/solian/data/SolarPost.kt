@@ -1,7 +1,9 @@
 package dev.solsynth.solian.data
 
+import androidx.annotation.Keep
 import java.time.Instant
 
+@Keep
 data class SolarPost(
     val id: Int,
     val body: SolarPostBody,
@@ -13,13 +15,14 @@ data class SolarPost(
     val publishedAt: Instant?
 )
 
+@Keep
 data class SolarPostBody(
     val content: String?,
     val title: String?,
     val description: String?,
-    val attachments: List<String>?
 )
 
+@Keep
 data class SolarPublisher(
     val id: Int,
     val name: String,
