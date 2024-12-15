@@ -11,7 +11,6 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -49,7 +48,7 @@ class CheckInWidget : GlanceAppWidget() {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(Instant::class.java, InstantAdapter())
                 .create()
-        val resultTierSymbols = listOf("大凶", "凶", "中平", "大吉", "吉")
+        val resultTierSymbols = listOf("大凶", "凶", "中平", "吉", "大吉")
 
         val prefs = currentState.preferences
         val checkInRaw = prefs.getString("today_check_in", null)

@@ -60,7 +60,7 @@ struct CheckInEntry: TimelineEntry {
 struct CheckInWidgetEntryView : View {
     var entry: CheckInProvider.Entry
     
-    private let resultTierSymbols: [String] = ["大凶", "凶", "中平", "大吉", "吉"]
+    private let resultTierSymbols: [String] = ["大凶", "凶", "中平", "吉", "大吉"]
     
     func checkIn() -> Void {}
     
