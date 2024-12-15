@@ -6,9 +6,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:surface/providers/widget.dart';
 import 'package:synchronized/synchronized.dart';
 
 const kAtkStoreKey = 'nex_user_atk';
@@ -26,10 +29,13 @@ class SnNetworkProvider {
   late final Dio client;
 
   late final SharedPreferences _prefs;
+  late final HomeWidgetProvider _home;
 
   String? _userAgent;
 
-  SnNetworkProvider() {
+  SnNetworkProvider(BuildContext context) {
+    _home = context.read<HomeWidgetProvider>();
+
     client = Dio();
 
     client.interceptors.add(RetryInterceptor(
@@ -63,6 +69,8 @@ class SnNetworkProvider {
     SharedPreferences.getInstance().then((prefs) {
       _prefs = prefs;
       client.options.baseUrl = _prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
+      if (!context.mounted) return;
+      _home.saveWidgetData("server_url", client.options.baseUrl);
     });
   }
 
@@ -190,5 +198,6 @@ class SnNetworkProvider {
 
   void setBaseUrl(String url) {
     client.options.baseUrl = url;
+    _home.saveWidgetData("server_url", client.options.baseUrl);
   }
 }

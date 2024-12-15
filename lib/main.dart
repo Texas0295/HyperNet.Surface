@@ -37,7 +37,6 @@ import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/version_label.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -94,7 +93,7 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => HomeWidgetProvider(ctx)),
 
             // Data layer
-            Provider(create: (_) => SnNetworkProvider()),
+            Provider(create: (ctx) => SnNetworkProvider(ctx)),
             Provider(create: (ctx) => UserDirectoryProvider(ctx)),
             Provider(create: (ctx) => SnAttachmentProvider(ctx)),
             Provider(create: (ctx) => SnPostContentProvider(ctx)),
@@ -206,7 +205,10 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset("assets/icon/icon.png", width: 64, height: 64),
+              if (MediaQuery.of(context).platformBrightness == Brightness.dark)
+                Image.asset("assets/icon/icon-dark.png", width: 64, height: 64)
+              else
+                Image.asset("assets/icon/icon.png", width: 64, height: 64),
               const Gap(6),
               LinearProgressIndicator(
                 backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
