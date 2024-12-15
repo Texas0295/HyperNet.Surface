@@ -177,7 +177,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
         Text(
           prefix.tr(args: ['$prefix$pos'.tr()]),
           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
-        ).tr(),
+        ),
         Text(
           '$prefix${pos}Description',
           style: Theme.of(context).textTheme.bodyMedium,

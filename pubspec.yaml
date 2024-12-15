@@ -105,6 +105,7 @@ dependencies:
   marquee: ^2.3.0
   flutter_svg: ^2.0.16
   home_widget: ^0.7.0
+  receive_sharing_intent: ^1.8.1
 
 dev_dependencies:
   flutter_test:

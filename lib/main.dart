@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -12,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -162,6 +165,8 @@ class _AppSplashScreen extends StatefulWidget {
 class _AppSplashScreenState extends State<_AppSplashScreen> {
   bool _isReady = false;
 
+  late StreamSubscription _shareIntentSubscription;
+
   Future<void> _initialize() async {
     try {
       final home = context.read<HomeWidgetProvider>();
@@ -186,10 +191,17 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
     }
   }
 
+  void _listenShareIntent() async {
+    _shareIntentSubscription = ReceiveSharingIntent.instance.getMediaStream().listen((value) {}, onError: (err) {
+      log("[ShareIntent] Unable to subscribe: $err");
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _initialize();
+    _listenShareIntent();
   }
 
   @override
