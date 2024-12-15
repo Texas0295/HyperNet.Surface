@@ -23,14 +23,16 @@ class HomeWidgetProvider {
 
   Future<void> updateWidget() async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
-    const widgets = ["SolarFeaturedPostWidget", "SolarCheckInWidget"];
-    for(final widget in widgets) {
-      await HomeWidget.updateWidget(
-        name: widget,
-        iOSName: widget,
-        androidName: "com.solsynth.solian.$widget",
-        qualifiedAndroidName: "group.solsynth.solian.$widget",
-      );
+    if (Platform.isIOS) {
+      const widgets = ["SolarFeaturedPostWidget", "SolarCheckInWidget"];
+      for (final widget in widgets) {
+        await HomeWidget.updateWidget(
+          name: widget,
+          iOSName: widget,
+          androidName: "com.solsynth.solian.$widget",
+          qualifiedAndroidName: "group.solsynth.solian.$widget",
+        );
+      }
     }
   }
 }
