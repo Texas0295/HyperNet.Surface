@@ -91,6 +91,7 @@
 
         <!-- Widgets -->
         <receiver android:name=".widgets.CheckInWidgetReceiver"
+            android:label="Check In"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -100,6 +101,7 @@
                 android:resource="@xml/check_in_widget" />
         </receiver>
         <receiver android:name=".widgets.FeaturedPostWidgetReceiver"
+            android:label="Featured Post"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
