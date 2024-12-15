@@ -967,7 +967,7 @@
 				INFOPLIST_FILE = SolarWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1010,7 +1010,7 @@
 				INFOPLIST_FILE = SolarWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1050,7 +1050,7 @@
 				INFOPLIST_FILE = SolarWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1090,7 +1090,7 @@
 				INFOPLIST_FILE = SolarShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarShare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1133,7 +1133,7 @@
 				INFOPLIST_FILE = SolarShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarShare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1173,7 +1173,7 @@
 				INFOPLIST_FILE = SolarShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarShare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1211,7 +1211,7 @@
 				INFOPLIST_FILE = SolarNotifyService/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarNotifyService;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1252,7 +1252,7 @@
 				INFOPLIST_FILE = SolarNotifyService/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarNotifyService;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1290,7 +1290,7 @@
 				INFOPLIST_FILE = SolarNotifyService/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SolarNotifyService;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

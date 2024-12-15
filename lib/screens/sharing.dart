@@ -52,7 +52,12 @@ class _AppSharingListenerState extends State<AppSharingListener> {
                             'mode': 'stories',
                           },
                           extra: PostEditorExtraProps(
-                            attachments: value.map((e) => PostWriteMedia.fromFile(XFile(e.path))).toList(),
+                            text: value
+                                .where((e) => [SharedMediaType.text, SharedMediaType.url].contains(e.type))
+                                .map((e) => e.path).join('\n'),
+                            attachments: value
+                                .where((e) => [SharedMediaType.video, SharedMediaType.file, SharedMediaType.image].contains(e.type))
+                                .map((e) => PostWriteMedia.fromFile(XFile(e.path))).toList(),
                           ),
                         );
                         Navigator.pop(context);
