@@ -443,5 +443,8 @@
   "postShare": "分享",
   "postShareImage": "分享帖图",
   "appInitializing": "正在初始化",
-  "poweredBy": "由 {} 提供支持"
+  "poweredBy": "由 {} 提供支持",
+  "shareIntent": "分享",
+  "shareIntentDescription": "您想对您分享的内容做些什么？",
+  "shareIntentPostStory": "发布动态"
 }

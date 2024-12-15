@@ -28,6 +28,7 @@ import 'package:surface/screens/realm.dart';
 import 'package:surface/screens/realm/manage.dart';
 import 'package:surface/screens/realm/realm_detail.dart';
 import 'package:surface/screens/settings.dart';
+import 'package:surface/screens/sharing.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/about.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
@@ -69,6 +70,7 @@ final _appRoutes = [
                 postRepostId: int.tryParse(
                   state.uri.queryParameters['reposting'] ?? '',
                 ),
+                extraProps: state.extra as PostEditorExtraProps?,
               ),
             ),
           ),
@@ -315,7 +317,9 @@ final appRouter = GoRouter(
   routes: [
     ShellRoute(
       routes: _appRoutes,
-      builder: (context, state, child) => AppRootScaffold(body: child),
+      builder: (context, state, child) => AppRootScaffold(
+        body: AppSharingListener(child: child),
+      ),
     ),
   ],
 );

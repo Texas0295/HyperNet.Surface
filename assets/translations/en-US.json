@@ -445,5 +445,8 @@
   "postShare": "Share",
   "postShareImage": "Share via Image",
   "appInitializing": "Initializing",
-  "poweredBy": "Powered by {}"
+  "poweredBy": "Powered by {}",
+  "shareIntent": "Share",
+  "shareIntentDescription":  "What do you want to do with the content you are sharing?",
+  "shareIntentPostStory": "Post a Story"
 }

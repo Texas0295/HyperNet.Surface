@@ -23,11 +23,26 @@ import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 
+class PostEditorExtraProps {
+  final String? text;
+  final String? title;
+  final String? description;
+  final List<PostWriteMedia>? attachments;
+
+  const PostEditorExtraProps({
+    this.text,
+    this.title,
+    this.description,
+    this.attachments,
+  });
+}
+
 class PostEditorScreen extends StatefulWidget {
   final String mode;
   final int? postEditId;
   final int? postReplyId;
   final int? postRepostId;
+  final PostEditorExtraProps? extraProps;
 
   const PostEditorScreen({
     super.key,
@@ -35,6 +50,7 @@ class PostEditorScreen extends StatefulWidget {
     required this.postEditId,
     required this.postReplyId,
     required this.postRepostId,
+    this.extraProps,
   });
 
   @override
@@ -130,6 +146,12 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
       replying: widget.postReplyId,
       reposting: widget.postRepostId,
     );
+    if (widget.extraProps != null) {
+      _writeController.contentController.text = widget.extraProps!.text ?? '';
+      _writeController.titleController.text = widget.extraProps!.title ?? '';
+      _writeController.descriptionController.text = widget.extraProps!.description ?? '';
+      _writeController.addAttachments(widget.extraProps!.attachments ?? []);
+    }
   }
 
   @override
@@ -150,15 +172,15 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 TextSpan(
                   text: _writeController.title.isNotEmpty ? _writeController.title : 'untitled'.tr(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).appBarTheme.foregroundColor!,
-                  ),
+                        color: Theme.of(context).appBarTheme.foregroundColor!,
+                      ),
                 ),
                 const TextSpan(text: '\n'),
                 TextSpan(
                   text: PostWriteController.kTitleMap[widget.mode]!.tr(),
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Theme.of(context).appBarTheme.foregroundColor!,
-                  ),
+                        color: Theme.of(context).appBarTheme.foregroundColor!,
+                      ),
                 ),
               ]),
             ),
