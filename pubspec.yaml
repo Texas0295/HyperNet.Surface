@@ -86,6 +86,7 @@ dependencies:
   media_kit_libs_video: ^1.0.5
   pasteboard: ^0.3.0
   synchronized: ^3.3.0+3
+  dart_webrtc: ^1.4.10
   livekit_client: ^2.3.1+hotfix.1
   wakelock_plus: ^1.2.8
   permission_handler: ^11.3.1
