@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
@@ -103,8 +105,10 @@ class _AppSharingListenerState extends State<AppSharingListener> {
   @override
   void initState() {
     super.initState();
-    _initialize();
-    _initialHandle();
+    if(!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      _initialize();
+      _initialHandle();
+    }
   }
 
   @override

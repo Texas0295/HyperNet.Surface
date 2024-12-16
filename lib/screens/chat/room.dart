@@ -158,7 +158,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     GoRouter.of(context).pushNamed(
       'chatCallRoom',
       pathParameters: {
-        'scope': _channel!.realm!.alias,
+        'scope': _channel!.realm?.alias ?? 'global',
         'alias': _channel!.alias,
       },
     );

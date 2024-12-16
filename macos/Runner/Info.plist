@@ -31,16 +31,18 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Grant access to Photo Library will allow Solian take photo or video for your post.</string>
+	<string>Grant access to Camera will allow Solian use your camera during a call.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Grant access to Photo Library will allow Solian record audio for your post.</string>
+	<string>Grant access to Microphone will allow Solian use your microphone during a call.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Grant access to Photo Library will allow Solian download photo to album for you.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Grant access to Photo Library will allow Solian upload photo or video for your post.</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(PRODUCT_NAME)</string>
+	<key>NSCameraUseContinuityCameraDeviceType</key>
+	<string></string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Grant access to Photo Library will allow Solian download photo to album for you.</string>
 </dict>
 </plist>

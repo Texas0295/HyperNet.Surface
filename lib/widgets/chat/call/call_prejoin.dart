@@ -1,4 +1,4 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
+    import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:livekit_client/livekit_client.dart';
@@ -130,7 +130,7 @@ class _ChatCallPrejoinPopupState extends State<ChatCallPrejoinPopup> {
                     Text('callCamera').tr(),
                     Switch(
                       value: call.enableVideo,
-                      onChanged: (value) => call.setEnableAudio(value),
+                      onChanged: call.setEnableVideo,
                     ),
                   ],
                 ).padding(bottom: 5),
