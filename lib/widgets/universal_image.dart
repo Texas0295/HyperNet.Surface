@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 
 class UniversalImage extends StatelessWidget {
   final String url;
@@ -14,6 +15,7 @@ class UniversalImage extends StatelessWidget {
   final bool noProgressIndicator;
   final bool noErrorWidget;
   final double? cacheWidth, cacheHeight;
+  final FilterQuality filterQuality;
 
   const UniversalImage(
     this.url, {
@@ -25,45 +27,43 @@ class UniversalImage extends StatelessWidget {
     this.noErrorWidget = false,
     this.cacheWidth,
     this.cacheHeight,
+    this.filterQuality = FilterQuality.high,
   });
 
   @override
   Widget build(BuildContext context) {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final double? resizeHeight =
-        cacheHeight != null ? (cacheHeight! * devicePixelRatio) : null;
-    final double? resizeWidth =
-        cacheWidth != null ? (cacheWidth! * devicePixelRatio) : null;
+    final double? resizeHeight = cacheHeight != null ? (cacheHeight! * devicePixelRatio) : null;
+    final double? resizeWidth = cacheWidth != null ? (cacheWidth! * devicePixelRatio) : null;
 
     return Image(
-      image: ResizeImage(
-        UniversalImage.provider(url),
-        width: resizeWidth?.round(),
-        height: resizeHeight?.round(),
-        policy: ResizeImagePolicy.fit,
-      ),
+      filterQuality: filterQuality,
+      image: kIsWeb
+          ? UniversalImage.provider(url)
+          : ResizeImage(
+              UniversalImage.provider(url),
+              width: resizeWidth?.round(),
+              height: resizeHeight?.round(),
+              policy: ResizeImagePolicy.fit,
+            ),
       width: width,
       height: height,
       fit: fit,
       loadingBuilder: noProgressIndicator
           ? null
-          : (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
+          : (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
               if (loadingProgress == null) return child;
               return Center(
                 child: TweenAnimationBuilder(
                   tween: Tween(
                     begin: 0,
                     end: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
+                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                         : 0,
                   ),
                   duration: const Duration(milliseconds: 300),
                   builder: (context, value, _) => CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? value.toDouble()
-                        : null,
+                    value: loadingProgress.expectedTotalBytes != null ? value.toDouble() : null,
                   ),
                 ),
               );
@@ -94,10 +94,13 @@ class UniversalImage extends StatelessWidget {
   }
 
   static ImageProvider provider(String url) {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
-      return CachedNetworkImageProvider(url);
-    }
-    return NetworkImage(url);
+    // This place used to use network image or cached network image depending on the platform.
+    // But now the cached network image is working on every platform.
+    // So we just use it now.
+    return CachedNetworkImageProvider(
+      url,
+      imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+    );
   }
 }
 
