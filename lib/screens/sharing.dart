@@ -6,13 +6,11 @@ import 'package:cross_file/cross_file.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/screens/post/post_editor.dart';
-import 'package:surface/widgets/dialog.dart';
 
 class AppSharingListener extends StatefulWidget {
   final Widget child;

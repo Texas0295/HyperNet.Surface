@@ -11,14 +11,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/widget.dart';
 import 'package:synchronized/synchronized.dart';
-
-const kAtkStoreKey = 'nex_user_atk';
-const kRtkStoreKey = 'nex_user_rtk';
-
-const kNetworkServerDefault = 'https://api.sn.solsynth.dev';
-const kNetworkServerStoreKey = 'app_server_url';
 
 const kNetworkServerDirectory = [
   ('Solar Network', 'https://api.sn.solsynth.dev'),
@@ -29,6 +24,7 @@ class SnNetworkProvider {
   late final Dio client;
 
   late final SharedPreferences _prefs;
+  late final ConfigProvider _config;
   late final HomeWidgetProvider _home;
 
   String? _userAgent;
@@ -66,11 +62,12 @@ class SnNetworkProvider {
       ),
     );
 
-    SharedPreferences.getInstance().then((prefs) {
-      _prefs = prefs;
-      client.options.baseUrl = _prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
+    _config = context.read<ConfigProvider>();
+    _config.initialize().then((_) {
+      _prefs = _config.prefs;
+      client.options.baseUrl = _config.serverUrl;
       if (!context.mounted) return;
-      _home.saveWidgetData("server_url", client.options.baseUrl);
+      _home.saveWidgetData("nex_server_url", client.options.baseUrl);
     });
   }
 
@@ -197,7 +194,7 @@ class SnNetworkProvider {
   }
 
   void setBaseUrl(String url) {
+    _config.serverUrl = url;
     client.options.baseUrl = url;
-    _home.saveWidgetData("server_url", client.options.baseUrl);
   }
 }

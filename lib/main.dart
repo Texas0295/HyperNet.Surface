@@ -86,14 +86,15 @@ class SolianApp extends StatelessWidget {
         assetLoader: JsonAssetLoader(),
         child: MultiProvider(
           providers: [
-            Provider(create: (ctx) => ConfigProvider()),
+            // System extensions layer
+            Provider(create: (ctx) => HomeWidgetProvider(ctx)),
+
+            // Preferences layer
+            Provider(create: (ctx) => ConfigProvider(ctx)),
 
             // Display layer
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
-
-            // System extensions layer
-            Provider(create: (ctx) => HomeWidgetProvider(ctx)),
 
             // Data layer
             Provider(create: (ctx) => SnNetworkProvider(ctx)),
@@ -167,12 +168,12 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
 
   Future<void> _initialize() async {
     try {
-      final config = context.read<ConfigProvider>();
-      await config.initialize();
-      if (!mounted) return;
       final home = context.read<HomeWidgetProvider>();
       await home.initialize();
       if (!mounted) return;
+      // The Network initialization must be done after the HomeWidget initialization
+      // The Network initialization will save the server url to the HomeWidget
+      // The Network initialization will also save initialize the Config, so it not need to be initialized again
       final sn = context.read<SnNetworkProvider>();
       await sn.initializeUserAgent();
       if (!mounted) return;

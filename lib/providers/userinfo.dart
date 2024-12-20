@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/widget.dart';
 import 'package:surface/types/account.dart';
@@ -13,10 +15,12 @@ class UserProvider extends ChangeNotifier {
 
   late final SnNetworkProvider _sn;
   late final HomeWidgetProvider _home;
+  late final ConfigProvider _config;
 
   UserProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
     _home = context.read<HomeWidgetProvider>();
+    _config = context.read<ConfigProvider>();
   }
 
   Future<String?> get atk async {
@@ -25,8 +29,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> initialize() async {
-    final prefs = await SharedPreferences.getInstance();
-    final value = prefs.getString(kAtkStoreKey);
+    final value = _config.prefs.getString(kAtkStoreKey);
     isAuthorized = value != null;
     notifyListeners();
     refreshUser().then((value) {

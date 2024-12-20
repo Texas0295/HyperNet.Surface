@@ -40,7 +40,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         setState(() {});
       }
     });
-    _prefs = context.read<ConfigProvider>().prefs;
+    final config = context.read<ConfigProvider>();
+    _prefs = config.prefs;
+    _serverUrlController.text = config.serverUrl;
   }
 
   @override
