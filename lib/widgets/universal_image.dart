@@ -4,9 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
+// Keep this import to make the web image render work
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
+import 'package:surface/providers/config.dart';
 
 class UniversalImage extends StatelessWidget {
   final String url;
@@ -15,7 +19,7 @@ class UniversalImage extends StatelessWidget {
   final bool noProgressIndicator;
   final bool noErrorWidget;
   final double? cacheWidth, cacheHeight;
-  final FilterQuality filterQuality;
+  final FilterQuality? filterQuality;
 
   const UniversalImage(
     this.url, {
@@ -27,7 +31,7 @@ class UniversalImage extends StatelessWidget {
     this.noErrorWidget = false,
     this.cacheWidth,
     this.cacheHeight,
-    this.filterQuality = FilterQuality.high,
+    this.filterQuality,
   });
 
   @override
@@ -37,7 +41,7 @@ class UniversalImage extends StatelessWidget {
     final double? resizeWidth = cacheWidth != null ? (cacheWidth! * devicePixelRatio) : null;
 
     return Image(
-      filterQuality: filterQuality,
+      filterQuality: filterQuality ?? context.read<ConfigProvider>().imageQuality,
       image: kIsWeb
           ? UniversalImage.provider(url)
           : ResizeImage(

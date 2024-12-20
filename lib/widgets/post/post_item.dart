@@ -458,6 +458,7 @@ class _PostBottomAction extends StatelessWidget {
       children: [
         if (showReactions || showComments)
           Row(
+            spacing: 8,
             children: [
               if (showReactions)
                 InkWell(
@@ -523,8 +524,7 @@ class _PostBottomAction extends StatelessWidget {
                     );
                   },
                 ),
-            ].expand((ele) => [ele, const Gap(8)]).toList()
-              ..removeLast(),
+            ],
           ),
         InkWell(
           onTap: onShare,

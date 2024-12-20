@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/theme.dart';
@@ -25,7 +26,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  SharedPreferences? _prefs;
+  late final SharedPreferences _prefs;
   String _docBasepath = '/';
 
   final TextEditingController _serverUrlController = TextEditingController();
@@ -39,12 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         setState(() {});
       }
     });
-    SharedPreferences.getInstance().then((prefs) {
-      setState(() {
-        _prefs = prefs;
-        _serverUrlController.text = prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
-      });
-    });
+    _prefs = context.read<ConfigProvider>().prefs;
   }
 
   @override
@@ -60,6 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
@@ -78,7 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       if (image == null) return;
 
                       await File(image.path).copy('$_docBasepath/app_background_image');
-                      _prefs?.setBool('has_background_image', true);
+                      _prefs.setBool('has_background_image', true);
 
                       setState(() {});
                     },
@@ -99,29 +96,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           trailing: const Icon(Symbols.chevron_right),
                           onTap: () {
                             File('$_docBasepath/app_background_image').deleteSync();
-                            _prefs?.remove('has_background_image');
+                            _prefs.remove('has_background_image');
                             setState(() {});
                           },
                         );
                       }),
-                if (_prefs != null)
-                  CheckboxListTile(
-                    title: Text('settingsThemeMaterial3').tr(),
-                    subtitle: Text('settingsThemeMaterial3Description').tr(),
-                    contentPadding: const EdgeInsets.only(left: 24, right: 17),
-                    secondary: const Icon(Symbols.new_releases),
-                    value: _prefs!.getBool(kMaterialYouToggleStoreKey) ?? false,
-                    onChanged: (value) {
-                      setState(() {
-                        _prefs!.setBool(
-                          kMaterialYouToggleStoreKey,
-                          value ?? false,
-                        );
-                      });
-                      final th = context.watch<ThemeProvider>();
-                      th.reloadTheme(useMaterial3: value ?? false);
-                    },
-                  ),
+                CheckboxListTile(
+                  title: Text('settingsThemeMaterial3').tr(),
+                  subtitle: Text('settingsThemeMaterial3Description').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  secondary: const Icon(Symbols.new_releases),
+                  value: _prefs.getBool(kMaterialYouToggleStoreKey) ?? false,
+                  onChanged: (value) {
+                    setState(() {
+                      _prefs.setBool(
+                        kMaterialYouToggleStoreKey,
+                        value ?? false,
+                      );
+                    });
+                    final th = context.watch<ThemeProvider>();
+                    th.reloadTheme(useMaterial3: value ?? false);
+                  },
+                ),
               ],
             ),
             Column(
@@ -139,7 +135,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: const Icon(Symbols.save),
                       onPressed: () {
                         sn.setBaseUrl(_serverUrlController.text);
-                        _prefs?.setString(
+                        _prefs.setString(
                           kNetworkServerStoreKey,
                           _serverUrlController.text,
                         );
@@ -182,7 +178,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onChanged: (String? value) {
                         if (value == null) return;
                         _serverUrlController.text = value;
-                        _prefs?.setString(kNetworkServerStoreKey, value);
+                        _prefs.setString(kNetworkServerStoreKey, value);
                         context.showSnackbar('settingsNetworkServerSaved'.tr());
                         setState(() {});
                       },
@@ -208,10 +204,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   trailing: const Icon(Symbols.chevron_right),
                   onTap: () {
                     _serverUrlController.text = kNetworkServerDefault;
-                    _prefs?.remove(kNetworkServerStoreKey);
+                    _prefs.remove(kNetworkServerStoreKey);
                     context.showSnackbar('settingsNetworkServerSaved'.tr());
                     setState(() {});
                   },
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('settingsPerformance').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
+                ListTile(
+                  title: Text('settingsImageQuality').tr(),
+                  subtitle: Text('settingsImageQualityDescription').tr(),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  leading: const Icon(Symbols.image),
+                  trailing: DropdownButtonHideUnderline(
+                    child: DropdownButton2<FilterQuality>(
+                      value: kImageQualityLevel.values.elementAtOrNull(_prefs.getInt('app_image_quality') ?? 3) ??
+                          FilterQuality.high,
+                      isExpanded: true,
+                      items: kImageQualityLevel.entries
+                          .map(
+                            (item) => DropdownMenuItem<FilterQuality>(
+                              value: item.value,
+                              child: Text(item.key).tr().fontSize(14),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (FilterQuality? value) {
+                        if (value == null) return;
+                        _prefs.setInt('app_image_quality', kImageQualityLevel.values.toList().indexOf(value));
+                        setState(() {});
+                      },
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 5,
+                        ),
+                        height: 40,
+                        width: 160,
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 60,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -231,7 +270,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-          ].expand((ele) => [ele, const Gap(16)]).toList(),
+          ],
         ).padding(vertical: 20),
       ),
     );

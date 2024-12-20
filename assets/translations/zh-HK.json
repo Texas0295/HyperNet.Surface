@@ -188,6 +188,13 @@
   "settingsNetworkServerPreset": "預設的 HyperNet 服務器",
   "settingsNetworkServerPresetDescription": "你可以在旁邊的列表中選擇我們提供的預設 HyperNet 服務器地址。",
   "settingsNetworkServerSaved": "服務器地址已保存。",
+  "settingsPerformance": "性能",
+  "settingsImageQuality": "圖片預覽質量",
+  "settingsImageQualityDescription": "設置圖片預覽質量，會影響圖片解碼速度。",
+  "settingsImageQualityLowest": "極低",
+  "settingsImageQualityLow": "低",
+  "settingsImageQualityMedium": "中",
+  "settingsImageQualityHigh": "高",
   "settingsMisc": "雜項",
   "settingsMiscAbout": "關於",
   "settingsMiscAboutDescription": "查看 Solian 的版本信息。",
@@ -441,5 +448,10 @@
   "postImageShareReadMore": "掃描右側 QRCode 查看全文",
   "postImageShareAds": "來 Solar Network 探索更多有趣帖子",
   "postShare": "分享",
-  "postShareImage": "分享帖圖"
+  "postShareImage": "分享帖圖",
+  "appInitializing": "正在初始化",
+  "poweredBy": "由 {} 提供支持",
+  "shareIntent": "分享",
+  "shareIntentDescription": "您想對您分享的內容做些什麼？",
+  "shareIntentPostStory": "發佈動態"
 }

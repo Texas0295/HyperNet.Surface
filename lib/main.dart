@@ -18,6 +18,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/chat_call.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/link_preview.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/providers/notification.dart';
@@ -85,6 +86,8 @@ class SolianApp extends StatelessWidget {
         assetLoader: JsonAssetLoader(),
         child: MultiProvider(
           providers: [
+            Provider(create: (ctx) => ConfigProvider()),
+
             // Display layer
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
@@ -162,10 +165,11 @@ class _AppSplashScreen extends StatefulWidget {
 class _AppSplashScreenState extends State<_AppSplashScreen> {
   bool _isReady = false;
 
-  late StreamSubscription _shareIntentSubscription;
-
   Future<void> _initialize() async {
     try {
+      final config = context.read<ConfigProvider>();
+      await config.initialize();
+      if (!mounted) return;
       final home = context.read<HomeWidgetProvider>();
       await home.initialize();
       if (!mounted) return;
