@@ -73,10 +73,11 @@ struct RandomPostWidgetEntryView : View {
                         if let avatar = randomPost.publisher.avatar {
                             let avatarUrl = getAttachmentUrl(for: avatar)
                             let size: CGFloat = 28
+                            let scaleProcessor = ResizingImageProcessor(referenceSize: CGSize(width: size, height: size), mode: .aspectFit)
                             
                             KFImage.url(URL(string: avatarUrl))
                                 .resizable()
-                                .setProcessor(DownsamplingImageProcessor(size: CGSize(width: size, height: size)))
+                                .setProcessor(scaleProcessor)
                                 .transition(.opacity)
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: size, height: size)

@@ -8,6 +8,7 @@
 import UserNotifications
 import Intents
 import Kingfisher
+import UniformTypeIdentifiers
 
 enum ParseNotificationPayloadError: Error {
     case missingMetadata(String)
@@ -102,15 +103,15 @@ class NotificationService: UNNotificationServiceExtension {
         }
         
         if let imageIdentifier = metadata["image"] as? String {
-            attachMedia(to: content, withIdentifier: imageIdentifier)
+            attachMedia(to: content, withIdentifier: imageIdentifier, fileType: UTType.jpeg, doScaleDown: true)
         } else if let avatarIdentifier = metadata["avatar"] as? String {
-            attachMedia(to: content, withIdentifier: avatarIdentifier)
+            attachMedia(to: content, withIdentifier: avatarIdentifier, fileType: UTType.jpeg, doScaleDown: true)
+        } else {
+            contentHandler?(content)
         }
-        
-        contentHandler?(content)
     }
     
-    private func attachMedia(to content: UNMutableNotificationContent, withIdentifier identifier: String) {
+    private func attachMedia(to content: UNMutableNotificationContent, withIdentifier identifier: String, fileType type: UTType?, doScaleDown scaleDown: Bool = false) {
         let attachmentUrl = getAttachmentUrl(for: identifier)
         
         guard let remoteUrl = URL(string: attachmentUrl) else {
@@ -118,49 +119,62 @@ class NotificationService: UNNotificationServiceExtension {
             return
         }
         
-        // Define a cache location based on the identifier
-        let tempDirectory = FileManager.default.temporaryDirectory
-        let cachedFileUrl = tempDirectory.appendingPathComponent(identifier)
+        let targetSize = 800
+        let scaleProcessor = ResizingImageProcessor(referenceSize: CGSize(width: targetSize, height: targetSize), mode: .aspectFit)
         
-        if FileManager.default.fileExists(atPath: cachedFileUrl.path) {
-            // Use cached file
-            attachLocalMedia(to: content, from: cachedFileUrl, withIdentifier: identifier)
-        } else {
-            // Download and cache the file
-            let session = URLSession(configuration: .default)
-            session.downloadTask(with: remoteUrl) { [weak content] localUrl, response, error in
-                guard let content = content else { return }
-                
-                if let error = error {
-                    print("Failed to download media: \(error.localizedDescription)")
-                    self.contentHandler?(content)
-                    return
-                }
-                
-                guard let localUrl = localUrl else {
-                    print("No local file URL after download")
-                    self.contentHandler?(content)
-                    return
-                }
+        KingfisherManager.shared.retrieveImage(with: remoteUrl, options: scaleDown ? [
+            .processor(scaleProcessor)
+        ] : nil) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let retrievalResult):
+                // The image is either retrieved from cache or downloaded
+                let tempDirectory = FileManager.default.temporaryDirectory
+                let cachedFileUrl = tempDirectory.appendingPathComponent(identifier)
                 
                 do {
-                    // Move the downloaded file to the cache
-                    try FileManager.default.moveItem(at: localUrl, to: cachedFileUrl)
-                    self.attachLocalMedia(to: content, from: cachedFileUrl, withIdentifier: identifier)
+                    // Write the image data to a temporary file for UNNotificationAttachment
+                    try retrievalResult.image.pngData()?.write(to: cachedFileUrl)
+                    self.attachLocalMedia(to: content, fileType: type?.identifier, from: cachedFileUrl, withIdentifier: identifier)
                 } catch {
-                    print("Failed to cache media file: \(error.localizedDescription)")
+                    print("Failed to write media to temporary file: \(error.localizedDescription)")
                     self.contentHandler?(content)
                 }
-            }.resume()
+                
+            case .failure(let error):
+                print("Failed to retrieve image: \(error.localizedDescription)")
+                self.contentHandler?(content)
+            }
         }
     }
 
-    private func attachLocalMedia(to content: UNMutableNotificationContent, from localUrl: URL, withIdentifier identifier: String) {
-        if let attachment = try? UNNotificationAttachment(identifier: identifier, url: localUrl) {
+    private func attachLocalMedia(to content: UNMutableNotificationContent, fileType type: String?, from localUrl: URL, withIdentifier identifier: String) {
+        do {
+            let attachment = try UNNotificationAttachment(identifier: identifier, url: localUrl, options: [
+                UNNotificationAttachmentOptionsTypeHintKey: type as Any,
+                UNNotificationAttachmentOptionsThumbnailHiddenKey: 0,
+            ])
             content.attachments = [attachment]
-        } else {
-            print("Failed to create attachment from cached file: \(localUrl.path)")
+        } catch let error as NSError {
+            // Log detailed error information
+            print("Failed to create attachment from file at \(localUrl.path)")
+            print("Error: \(error.localizedDescription)")
+            
+            // Check specific error codes if needed
+            if error.domain == NSCocoaErrorDomain {
+                switch error.code {
+                case NSFileReadNoSuchFileError:
+                    print("File does not exist at \(localUrl.path)")
+                case NSFileReadNoPermissionError:
+                    print("No permission to read file at \(localUrl.path)")
+                default:
+                    print("Unhandled file error: \(error.code)")
+                }
+            }
         }
+        
+        // Call content handler regardless of success or failure
         self.contentHandler?(content)
     }
     
