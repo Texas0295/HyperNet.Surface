@@ -196,7 +196,7 @@ class PostMediaPendingList extends StatelessWidget {
                               width: (constraints.maxWidth * devicePixelRatio).round(),
                               height: (constraints.maxHeight * devicePixelRatio).round(),
                             )!,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           );
                         }),
                       _ => Container(

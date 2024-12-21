@@ -17,6 +17,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/config.dart';
+import 'package:surface/providers/link_preview.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
@@ -83,6 +85,8 @@ class PostItem extends StatelessWidget {
             child: MultiProvider(
               providers: [
                 Provider<SnNetworkProvider>(create: (_) => context.read()),
+                Provider<SnLinkPreviewProvider>(create: (_) => context.read()),
+                ChangeNotifierProvider<ConfigProvider>(create: (_) => context.read()),
               ],
               child: ResponsiveBreakpoints.builder(
                 breakpoints: ResponsiveBreakpoints.of(context).breakpoints,
@@ -410,7 +414,7 @@ class PostShareImageWidget extends StatelessWidget {
                     size: Size(28, 28),
                   ),
                   eyeStyle: QrEyeStyle(
-                    eyeShape: QrEyeShape.square,
+                    eyeShape: QrEyeShape.circle,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   dataModuleStyle: QrDataModuleStyle(
