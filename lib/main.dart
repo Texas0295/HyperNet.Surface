@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -42,13 +43,15 @@ import 'package:workmanager/workmanager.dart';
 @pragma('vm:entry-point')
 void appBackgroundDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    print("Native called background task: $task");
+    log("[WorkManager] Native called background task: $task");
     switch (task) {
       case Workmanager.iOSBackgroundTask:
         await Future.wait([widgetUpdateRandomPost()]);
         return true;
       case "WidgetUpdateRandomPost":
         await widgetUpdateRandomPost();
+        return true;
+      case "ChatReplyMessage":
         return true;
       default:
         return true;

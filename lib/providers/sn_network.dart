@@ -20,6 +20,8 @@ const kNetworkServerDirectory = [
   ('Local', 'http://localhost:8001'),
 ];
 
+Completer<String?>? _refreshCompleter;
+
 class SnNetworkProvider {
   late final Dio client;
 
@@ -90,6 +92,13 @@ class SnNetworkProvider {
           RequestOptions options,
           RequestInterceptorHandler handler,
         ) async {
+          final atk = await _getFreshAtk(client, prefs.getString(kAtkStoreKey), (atk, rtk) {
+            prefs.setString(kAtkStoreKey, atk);
+            prefs.setString(kRtkStoreKey, rtk);
+          });
+          if (atk != null) {
+            options.headers['Authorization'] = 'Bearer $atk';
+          }
           options.headers['User-Agent'] = ua;
           return handler.next(options);
         },
@@ -135,9 +144,13 @@ class SnNetworkProvider {
 
   final tkLock = Lock();
 
-  Completer<String?>? _refreshCompleter;
-
   Future<String?> getFreshAtk() async {
+    return await _getFreshAtk(client, _prefs.getString(kAtkStoreKey), (atk, rtk) {
+      setTokenPair(atk, rtk);
+    });
+  }
+
+  static Future<String?> _getFreshAtk(Dio client, String? atk, Function(String atk, String rtk)? onRefresh) async {
     if (_refreshCompleter != null) {
       return await _refreshCompleter!.future;
     } else {
@@ -145,7 +158,6 @@ class SnNetworkProvider {
     }
 
     try {
-      var atk = _prefs.getString(kAtkStoreKey);
       if (atk != null) {
         final atkParts = atk.split('.');
         if (atkParts.length != 3) {
@@ -171,7 +183,13 @@ class SnNetworkProvider {
         final exp = jsonDecode(payload)['exp'];
         if (exp <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
           log('Access token need refresh, doing it at ${DateTime.now()}');
-          atk = await refreshToken();
+          final result = await _refreshToken(client.options.baseUrl, atk);
+          if (result == null) {
+            atk = null;
+          } else {
+            atk = result.$1;
+            onRefresh?.call(atk, result.$2);
+          }
         }
 
         if (atk != null) {
@@ -209,21 +227,28 @@ class SnNetworkProvider {
 
   Future<String?> refreshToken() async {
     final rtk = _prefs.getString(kRtkStoreKey);
+    final result = await _refreshToken(client.options.baseUrl, rtk);
+    if (result == null) return null;
+    _prefs.setString(kAtkStoreKey, result.$1);
+    _prefs.setString(kRtkStoreKey, result.$2);
+    return result.$1;
+  }
+
+  static Future<(String, String)?> _refreshToken(String baseUrl, String? rtk) async {
     if (rtk == null) return null;
 
     final dio = Dio();
-    dio.options.baseUrl = client.options.baseUrl;
+    dio.options.baseUrl = baseUrl;
 
     final resp = await dio.post('/cgi/id/auth/token', data: {
       'grant_type': 'refresh_token',
       'refresh_token': rtk,
     });
 
-    final atk = resp.data['access_token'];
-    final nRtk = resp.data['refresh_token'];
-    setTokenPair(atk, nRtk);
+    final String atk = resp.data['access_token'];
+    final String nRtk = resp.data['refresh_token'];
 
-    return atk;
+    return (atk, nRtk);
   }
 
   void setBaseUrl(String url) {
