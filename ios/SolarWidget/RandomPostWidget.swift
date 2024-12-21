@@ -13,7 +13,7 @@ struct RandomPostProvider: TimelineProvider {
     func placeholder(in context: Context) -> RandomPostEntry {
         RandomPostEntry(date: Date(), user: nil, randomPost: nil, family: .systemMedium)
     }
-
+    
     func getSnapshot(in context: Context, completion: @escaping (RandomPostEntry) -> ()) {
         let prefs = UserDefaults(suiteName: "group.solsynth.solian")
         
@@ -45,7 +45,7 @@ struct RandomPostProvider: TimelineProvider {
         )
         completion(entry)
     }
-
+    
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         getSnapshot(in: context) { (entry) in
             let timeline = Timeline(entries: [entry], policy: .atEnd)
@@ -64,7 +64,7 @@ struct RandomPostEntry: TimelineEntry {
 
 struct RandomPostWidgetEntryView : View {
     var entry: RandomPostProvider.Entry
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let randomPost = entry.randomPost {
@@ -73,15 +73,20 @@ struct RandomPostWidgetEntryView : View {
                         if let avatar = randomPost.publisher.avatar {
                             let avatarUrl = getAttachmentUrl(for: avatar)
                             let size: CGFloat = 28
-                            let scaleProcessor = ResizingImageProcessor(referenceSize: CGSize(width: size, height: size), mode: .aspectFit)
+                            let scaleProcessor = ResizingImageProcessor(referenceSize: CGSize(width: size, height: size), mode: .aspectFill)
                             
                             KFImage.url(URL(string: avatarUrl))
                                 .resizable()
                                 .setProcessor(scaleProcessor)
                                 .fade(duration: 0.25)
-                                .aspectRatio(contentMode: .fit)
+                                .placeholder{
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                }
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: size, height: size)
                                 .cornerRadius(size / 2)
+                            
                                 .frame(width: size, height: size, alignment: .center)
                         }
                         
@@ -158,7 +163,7 @@ struct RandomPostWidgetEntryView : View {
 
 struct RandomPostWidget: Widget {
     let kind: String = "SolarRandomPostWidget"
-
+    
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: RandomPostProvider()) { entry in
             if #available(iOS 17.0, *) {

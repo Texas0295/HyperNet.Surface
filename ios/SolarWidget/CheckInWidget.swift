@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CheckInProvider: TimelineProvider {
     func placeholder(in context: Context) -> CheckInEntry {
-        CheckInEntry(date: Date(), user: nil, checkIn: nil)
+        CheckInEntry(date: Date(), checkIn: nil)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (CheckInEntry) -> ()) {
@@ -23,24 +23,17 @@ struct CheckInProvider: TimelineProvider {
         jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        let userRaw = prefs?.string(forKey: "user")
-        var user: SolarUser?
-        if let userRaw = userRaw {
-            user = try! jsonDecoder.decode(SolarUser.self, from: userRaw.data(using: .utf8)!)
-        }
-        
         let checkInRaw = prefs?.string(forKey: "pas_check_in_record")
         var checkIn: SolarCheckInRecord?
         if let checkInRaw = checkInRaw {
             checkIn = try! jsonDecoder.decode(SolarCheckInRecord.self, from: checkInRaw.data(using: .utf8)!)
-            if checkIn != nil && Calendar.current.isDate(checkIn!.createdAt, inSameDayAs: Date()) {
+            if checkIn != nil && !Calendar.current.isDate(checkIn!.createdAt, inSameDayAs: Date()) {
                 checkIn = nil
             }
         }
         
         let entry = CheckInEntry(
             date: Date(),
-            user: user,
             checkIn: checkIn
         )
         completion(entry)
@@ -56,7 +49,6 @@ struct CheckInProvider: TimelineProvider {
 
 struct CheckInEntry: TimelineEntry {
     let date: Date
-    let user: SolarUser?
     let checkIn: SolarCheckInRecord?
 }
 
@@ -135,10 +127,9 @@ struct CheckInWidget: Widget {
 #Preview(as: .systemSmall) {
     CheckInWidget()
 } timeline: {
-    CheckInEntry(date: .now, user: nil, checkIn: nil)
+    CheckInEntry(date: .now, checkIn: nil)
     CheckInEntry(
         date: .now,
-        user: SolarUser(id: 1, name: "demo", nick: "Deemo"),
         checkIn: SolarCheckInRecord(id: 1, resultTier: 1, resultExperience: 100, createdAt: Date.now)
     )
 }
