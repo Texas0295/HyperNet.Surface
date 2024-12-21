@@ -13,6 +13,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
@@ -71,11 +72,14 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
+      final config = context.read<ConfigProvider>();
       final resp = await sn.client.get('/cgi/co/publishers/me');
       _publishers = List<SnPublisher>.from(
         resp.data?.map((e) => SnPublisher.fromJson(e)) ?? [],
       );
-      _writeController.setPublisher(_publishers?.firstOrNull);
+      final beforeId = config.prefs.getInt('int_last_publisher_id');
+      _writeController
+          .setPublisher(_publishers?.where((ele) => ele.id == beforeId).firstOrNull ?? _publishers?.firstOrNull);
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -265,6 +269,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       });
                     } else {
                       _writeController.setPublisher(value);
+                      final config = context.read<ConfigProvider>();
+                      config.prefs.setInt('int_last_publisher_id', value.id);
                     }
                   },
                   buttonStyleData: const ButtonStyleData(

@@ -7,6 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
@@ -16,6 +17,7 @@ import 'package:surface/widgets/loading_indicator.dart';
 class PostMiniEditor extends StatefulWidget {
   final int? postReplyId;
   final Function? onPost;
+
   const PostMiniEditor({super.key, this.postReplyId, this.onPost});
 
   @override
@@ -26,6 +28,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
   final PostWriteController _writeController = PostWriteController();
 
   bool _isFetching = false;
+
   bool get _isLoading => _isFetching || _writeController.isLoading;
 
   List<SnPublisher>? _publishers;
@@ -35,11 +38,14 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
+      final config = context.read<ConfigProvider>();
       final resp = await sn.client.get('/cgi/co/publishers/me');
       _publishers = List<SnPublisher>.from(
         resp.data?.map((e) => SnPublisher.fromJson(e)) ?? [],
       );
-      _writeController.setPublisher(_publishers?.firstOrNull);
+      final beforeId = config.prefs.getInt('int_last_publisher_id');
+      _writeController
+          .setPublisher(_publishers?.where((ele) => ele.id == beforeId).firstOrNull ?? _publishers?.firstOrNull);
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -93,17 +99,11 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(item.nick).textStyle(
-                                          Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!),
+                                      Text(item.nick).textStyle(Theme.of(context).textTheme.bodyMedium!),
                                       Text('@${item.name}')
-                                          .textStyle(Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!)
+                                          .textStyle(Theme.of(context).textTheme.bodySmall!)
                                           .fontSize(12),
                                     ],
                                   ),
@@ -120,8 +120,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                           CircleAvatar(
                             radius: 16,
                             backgroundColor: Colors.transparent,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onSurface,
+                            foregroundColor: Theme.of(context).colorScheme.onSurface,
                             child: const Icon(Symbols.add),
                           ),
                           const Gap(8),
@@ -130,8 +129,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('publishersNew').tr().textStyle(
-                                    Theme.of(context).textTheme.bodyMedium!),
+                                Text('publishersNew').tr().textStyle(Theme.of(context).textTheme.bodyMedium!),
                               ],
                             ),
                           ),
@@ -142,9 +140,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                   value: _writeController.publisher,
                   onChanged: (SnPublisher? value) {
                     if (value == null) {
-                      GoRouter.of(context)
-                          .pushNamed('accountPublisherNew')
-                          .then((value) {
+                      GoRouter.of(context).pushNamed('accountPublisherNew').then((value) {
                         if (value == true) {
                           _publishers = null;
                           _fetchPublishers();
@@ -152,6 +148,8 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                       });
                     } else {
                       _writeController.setPublisher(value);
+                      final config = context.read<ConfigProvider>();
+                      config.prefs.setInt('int_last_publisher_id', value.id);
                     }
                   },
                   buttonStyleData: const ButtonStyleData(
@@ -178,8 +176,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                     ),
                     border: InputBorder.none,
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ),
               ),
               const Gap(8),
@@ -188,8 +185,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                 TweenAnimationBuilder<double>(
                   tween: Tween(begin: 0, end: _writeController.progress),
                   duration: Duration(milliseconds: 300),
-                  builder: (context, value, _) =>
-                      LinearProgressIndicator(value: value, minHeight: 2),
+                  builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 2),
                 )
               else if (_writeController.isBusy)
                 const LinearProgressIndicator(value: null, minHeight: 2),
@@ -206,15 +202,13 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                         'postEditor',
                         pathParameters: {'mode': 'stories'},
                         queryParameters: {
-                          if (widget.postReplyId != null)
-                            'replying': widget.postReplyId.toString(),
+                          if (widget.postReplyId != null) 'replying': widget.postReplyId.toString(),
                         },
                       );
                     },
                   ),
                   TextButton.icon(
-                    onPressed: (_writeController.isBusy ||
-                            _writeController.publisher == null)
+                    onPressed: (_writeController.isBusy || _writeController.publisher == null)
                         ? null
                         : () {
                             _writeController.sendPost(context).then((_) {
