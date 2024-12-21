@@ -27,6 +27,11 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            <!-- Widgets Indents -->
+            <intent-filter>
+                <action android:name="es.antonborri.home_widget.action.LAUNCH" />
+            </intent-filter>
+
             <!-- Sharing Intents -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -100,15 +105,15 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/check_in_widget" />
         </receiver>
-        <receiver android:name=".widgets.FeaturedPostWidgetReceiver"
-            android:label="Featured Post"
+        <receiver android:name=".widgets.RandomPostWidgetReceiver"
+            android:label="Random Post"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/featured_post_widget" />
+                android:resource="@xml/random_post_widget" />
         </receiver>
     </application>
 

@@ -34,7 +34,7 @@ class HomeWidgetProvider {
         );
       }
     } else if (Platform.isAndroid) {
-      const widgets = ["FeaturedPostWidget", "CheckInWidget"];
+      const widgets = ["RandomPostWidget", "CheckInWidget"];
       for (final widget in widgets) {
         await HomeWidget.updateWidget(
           androidName: "${widget}Receiver",
@@ -53,7 +53,7 @@ Future<void> widgetUpdateRandomPost() async {
   await HomeWidget.updateWidget(
     name: "SolarRandomPostWidget",
     iOSName: "SolarRandomPostWidget",
-    androidName: "FeaturedPostWidgetReceiver",
-    qualifiedAndroidName: "dev.solsynth.solian.widgets.FeaturedPostWidgetReceiver",
+    androidName: "RandomPostWidgetReceiver",
+    qualifiedAndroidName: "dev.solsynth.solian.widgets.RandomPostWidgetReceiver",
   );
 }

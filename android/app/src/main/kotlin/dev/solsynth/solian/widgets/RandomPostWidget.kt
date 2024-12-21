@@ -1,6 +1,7 @@
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -10,10 +11,12 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.ContentScale
@@ -30,23 +33,12 @@ import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import coil3.Image
-import coil3.compose.AsyncImagePainter
-import coil3.compose.rememberAsyncImagePainter
-import coil3.imageLoader
-import coil3.request.ErrorResult
-import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import coil3.request.crossfade
-import coil3.toBitmap
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import dev.solsynth.solian.MainActivity
 import dev.solsynth.solian.data.InstantAdapter
-import dev.solsynth.solian.data.SolarPagination
 import dev.solsynth.solian.data.SolarPost
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import es.antonborri.home_widget.actionStartActivity
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -56,31 +48,16 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class FeaturedPostWidget : GlanceAppWidget() {
+class RandomPostWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>?
         get() = HomeWidgetGlanceStateDefinition()
 
     private val defaultUrl = "https://api.sn.solsynth.dev"
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        // TODO: Fix this
-//        val state = currentState<HomeWidgetGlanceState>()
-//        val prefs = state.preferences
-//        var baseUrl = prefs.getString("nex_server_url", null) ?: defaultUrl
-//        if (baseUrl.startsWith("\"") && baseUrl.endsWith("\"")) {
-//            baseUrl = baseUrl.substring(1, baseUrl.length - 1)
-//        }
-
-        val postData = withContext(Dispatchers.IO) { fetchPostRandomly(defaultUrl) }
-        val avatarImage = withContext(Dispatchers.IO) {
-            postData?.publisher?.avatar?.let {
-                loadImageFromUrl(it)
-            }
-        }
-
         provideContent {
             GlanceTheme {
-                GlanceContent(context, postData, avatarImage)
+                GlanceContent(context, currentState(), null)
             }
         }
     }
@@ -109,40 +86,37 @@ class FeaturedPostWidget : GlanceAppWidget() {
         }
     }
 
-    private fun fetchPostRandomly(baseUrl: String): SolarPost? {
+    @Composable
+    private fun GlanceContent(
+        context: Context,
+        currentState: HomeWidgetGlanceState,
+        avatar: Bitmap?
+    ) {
+        val prefs = currentState.preferences
+        val postRaw = prefs.getString("int_random_post", null)
+
         val gson =
             GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(Instant::class.java, InstantAdapter())
                 .create()
-        val type = object : TypeToken<SolarPagination<SolarPost>>() {}.type
 
-        val request = Request.Builder()
-            .url("$baseUrl/cgi/co/recommendations/shuffle?take=1")
-            .build()
+        val data: SolarPost? = postRaw?.let { postRaw ->
+            gson.fromJson(postRaw, SolarPost::class.java)
+        } ?: null;
 
-        return try {
-            val response: Response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                val body = response.body?.string()
-                val resp = gson.fromJson<SolarPagination<SolarPost>>(body, type)
-                resp.data.firstOrNull()
-            } else {
-                null
-            }
-        } catch (e: IOException) {
-            null
-        }
-    }
-
-    @Composable
-    private fun GlanceContent(context: Context, data: SolarPost?, avatar: Bitmap?) {
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(Color.White)
                 .padding(16.dp)
+                .clickable(
+                    onClick = actionStartActivity<MainActivity>(
+                        context,
+                        Uri.parse("https://sn.solsynth.dev/posts/${data!!.id}")
+                    )
+                )
         ) {
             if (data != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -154,9 +128,8 @@ class FeaturedPostWidget : GlanceAppWidget() {
                                 .cornerRadius(18.dp),
                             contentScale = ContentScale.Crop
                         )
+                        Spacer(modifier = GlanceModifier.width(8.dp))
                     }
-
-                    Spacer(modifier = GlanceModifier.width(8.dp))
 
                     Text(
                         text = data.publisher.nick,
@@ -174,13 +147,13 @@ class FeaturedPostWidget : GlanceAppWidget() {
                 if (data.body.title != null) {
                     Text(
                         text = data.body.title,
-                        style = TextStyle(fontSize = 25.sp, fontFamily = FontFamily.Serif)
+                        style = TextStyle(fontSize = 25.sp)
                     )
                 }
                 if (data.body.description != null) {
                     Text(
                         text = data.body.description,
-                        style = TextStyle(fontSize = 19.sp, fontFamily = FontFamily.Serif)
+                        style = TextStyle(fontSize = 19.sp)
                     )
                 }
 
@@ -203,7 +176,7 @@ class FeaturedPostWidget : GlanceAppWidget() {
                 )
 
                 Text(
-                    "Solar Network Featured Post",
+                    "#${data.id}",
                     style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Bold),
                 )
 
