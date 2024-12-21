@@ -41,8 +41,7 @@ class SnAttachmentProvider {
     return out;
   }
 
-  Future<List<SnAttachment?>> getMultiple(List<String> rids,
-      {noCache = false}) async {
+  Future<List<SnAttachment?>> getMultiple(List<String> rids, {noCache = false}) async {
     final result = List<SnAttachment?>.filled(rids.length, null);
     final Map<String, int> randomMapping = {};
     for (int i = 0; i < rids.length; i++) {
@@ -63,9 +62,7 @@ class SnAttachmentProvider {
           'id': pendingFetch.join(','),
         },
       );
-      final out = resp.data['data']
-          .map((e) => e['id'] == 0 ? null : SnAttachment.fromJson(e))
-          .toList();
+      final out = resp.data['data'].map((e) => e['id'] == 0 ? null : SnAttachment.fromJson(e)).toList();
 
       for (final item in out) {
         if (item == null) continue;
@@ -79,10 +76,7 @@ class SnAttachmentProvider {
     return result;
   }
 
-  static Map<String, String> mimetypeOverrides = {
-    'mov': 'video/quicktime',
-    'mp4': 'video/mp4'
-  };
+  static Map<String, String> mimetypeOverrides = {'mov': 'video/quicktime', 'mp4': 'video/mp4'};
 
   Future<SnAttachment> directUploadOne(
     Uint8List data,
@@ -93,11 +87,8 @@ class SnAttachmentProvider {
     Function(double progress)? onProgress,
   }) async {
     final filePayload = MultipartFile.fromBytes(data, filename: filename);
-    final fileAlt = filename.contains('.')
-        ? filename.substring(0, filename.lastIndexOf('.'))
-        : filename;
-    final fileExt =
-        filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+    final fileAlt = filename.contains('.') ? filename.substring(0, filename.lastIndexOf('.')) : filename;
+    final fileExt = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 
     String? mimetypeOverride;
     if (mimetype != null) {
@@ -133,11 +124,8 @@ class SnAttachmentProvider {
     Map<String, dynamic>? metadata, {
     String? mimetype,
   }) async {
-    final fileAlt = filename.contains('.')
-        ? filename.substring(0, filename.lastIndexOf('.'))
-        : filename;
-    final fileExt =
-        filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+    final fileAlt = filename.contains('.') ? filename.substring(0, filename.lastIndexOf('.')) : filename;
+    final fileExt = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 
     String? mimetypeOverride;
     if (mimetype == null && mimetypeOverrides.keys.contains(fileExt)) {
@@ -155,10 +143,7 @@ class SnAttachmentProvider {
       if (mimetypeOverride != null) 'mimetype': mimetypeOverride,
     });
 
-    return (
-      SnAttachment.fromJson(resp.data['meta']),
-      resp.data['chunk_size'] as int
-    );
+    return (SnAttachment.fromJson(resp.data['meta']), resp.data['chunk_size'] as int);
   }
 
   Future<SnAttachment> _chunkedUploadOnePart(
@@ -200,23 +185,16 @@ class SnAttachmentProvider {
           (entry.value + 1) * chunkSize,
           await file.length(),
         );
-        final data = Uint8List.fromList(await file
-            .openRead(beginCursor, endCursor)
-            .expand((chunk) => chunk)
-            .toList());
+        final data = Uint8List.fromList(await file.openRead(beginCursor, endCursor).expand((chunk) => chunk).toList());
 
         place = await _chunkedUploadOnePart(
           data,
           place.rid,
           entry.key,
-          onProgress: (chunkProgress) {
-            final overallProgress =
-                (currentTask + chunkProgress) / chunks.length;
-            if (onProgress != null) {
-              onProgress(overallProgress);
-            }
-          },
         );
+
+        final overallProgress = currentTask / chunks.length;
+        onProgress?.call(overallProgress);
 
         currentTask++;
       }());

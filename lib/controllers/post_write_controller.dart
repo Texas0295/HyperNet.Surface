@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -307,12 +308,14 @@ class PostWriteController extends ChangeNotifier {
           place.$2,
           onProgress: (progress) {
             // Calculate overall progress for attachments
-            progress = ((i + progress) / attachments.length) * kAttachmentProgressWeight;
+            progress = math.max(((i + progress) / attachments.length) * kAttachmentProgressWeight, progress);
             notifyListeners();
           },
         );
 
+        progress = (i + 1) / attachments.length * kAttachmentProgressWeight;
         attachments[i] = PostWriteMedia(item);
+        notifyListeners();
       }
     } catch (err) {
       isBusy = false;
