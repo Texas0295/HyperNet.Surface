@@ -61,6 +61,22 @@ class NotificationService: UNNotificationServiceExtension {
         guard let avatarIdentifier = metadata["avatar"] as? String else {
             throw ParseNotificationPayloadError.missingAvatarUrl("The notification has no avatar.")
         }
+
+        let replyableMessageCategory = UNNotificationCategory(
+            identifier: content.categoryIdentifier,
+            actions: [
+                UNTextInputNotificationAction(
+                    identifier: "reply_action",
+                    title: "Reply",
+                    options: []
+                ),
+            ],
+            intentIdentifiers: [],
+            options: []
+        )
+        
+        UNUserNotificationCenter.current().setNotificationCategories([replyableMessageCategory])
+        content.categoryIdentifier = replyableMessageCategory.identifier
         
         let metadataCopy = metadata as? [String: String] ?? [:]
         let avatarUrl = getAttachmentUrl(for: avatarIdentifier)

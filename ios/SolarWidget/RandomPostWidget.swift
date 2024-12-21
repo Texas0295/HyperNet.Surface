@@ -78,7 +78,7 @@ struct RandomPostWidgetEntryView : View {
                             KFImage.url(URL(string: avatarUrl))
                                 .resizable()
                                 .setProcessor(scaleProcessor)
-                                .transition(.opacity)
+                                .fade(duration: 0.25)
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: size, height: size)
                                 .cornerRadius(size / 2)

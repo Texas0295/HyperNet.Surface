@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,7 @@
 		738C1EAC2D0D76A400A215F3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731B7B6B2D0D6CE000CEB9B7 /* WidgetKit.framework */; };
 		738C1EAD2D0D76A400A215F3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731B7B6D2D0D6CE000CEB9B7 /* SwiftUI.framework */; };
 		738C1EB82D0D76A500A215F3 /* SolarWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 738C1EAB2D0D76A400A215F3 /* SolarWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7396A3522D16BD890095F4A8 /* NotifyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396A3512D16BD890095F4A8 /* NotifyDelegate.swift */; };
 		73B7746E2D0E869200A789CE /* SolarShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 73B774642D0E869200A789CE /* SolarShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		73DA8A012D05C7620024A03E /* SolarNotifyService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 73DA89FA2D05C7620024A03E /* SolarNotifyService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -107,6 +108,7 @@
 		731B7B6D2D0D6CE000CEB9B7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		738C1EAB2D0D76A400A215F3 /* SolarWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SolarWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		738C1F132D0D7DDC00A215F3 /* SolarWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SolarWidgetExtension.entitlements; sourceTree = "<group>"; };
+		7396A3512D16BD890095F4A8 /* NotifyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyDelegate.swift; sourceTree = "<group>"; };
 		73B774642D0E869200A789CE /* SolarShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SolarShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DA89FA2D05C7620024A03E /* SolarNotifyService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SolarNotifyService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				7396A3512D16BD890095F4A8 /* NotifyDelegate.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -831,6 +834,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				7396A3522D16BD890095F4A8 /* NotifyDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
