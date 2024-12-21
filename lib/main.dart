@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:croppy/croppy.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,9 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/firebase_options.dart';
 import 'package:surface/providers/channel.dart';
@@ -38,7 +41,9 @@ import 'package:surface/types/realm.dart';
 import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/version_label.dart';
+import 'package:version/version.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 @pragma('vm:entry-point')
 void appBackgroundDispatcher() {
@@ -125,7 +130,7 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => HomeWidgetProvider(ctx)),
 
             // Preferences layer
-            Provider(create: (ctx) => ConfigProvider(ctx)),
+            ChangeNotifierProvider(create: (ctx) => ConfigProvider(ctx)),
 
             // Display layer
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
@@ -201,6 +206,56 @@ class _AppSplashScreen extends StatefulWidget {
 class _AppSplashScreenState extends State<_AppSplashScreen> {
   bool _isReady = false;
 
+  void _tryRequestRating() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('first_boot_time')) {
+      final rawTime = prefs.getString('first_boot_time');
+      final time = DateTime.tryParse(rawTime ?? '');
+      if (time != null && time.isBefore(DateTime.now().subtract(const Duration(days: 3)))) {
+        final inAppReview = InAppReview.instance;
+        if (prefs.getBool('rating_requested') == true) return;
+        if (await inAppReview.isAvailable()) {
+          await inAppReview.requestReview();
+          prefs.setBool('rating_requested', true);
+        } else {
+          log('Unable request app review, unavailable');
+        }
+      }
+    } else {
+      prefs.setString('first_boot_time', DateTime.now().toIso8601String());
+    }
+  }
+
+  Future<void> _checkForUpdate() async {
+    if (kIsWeb) return;
+    try {
+      final info = await PackageInfo.fromPlatform();
+      final localVersionString = '${info.version}+${info.buildNumber}';
+      final resp = await Dio(
+        BaseOptions(
+          sendTimeout: const Duration(seconds: 60),
+          receiveTimeout: const Duration(seconds: 60),
+        ),
+      ).get(
+        'https://git.solsynth.dev/api/v1/repos/HyperNet/Surface/tags?page=1&limit=1',
+      );
+      final remoteVersionString = (resp.data as List).firstOrNull?['name'] ?? '0.0.0+0';
+      final remoteVersion = Version.parse(remoteVersionString.split('+').first);
+      final localVersion = Version.parse(localVersionString.split('+').first);
+      final remoteBuildNumber = int.tryParse(remoteVersionString.split('+').last) ?? 0;
+      final localBuildNumber = int.tryParse(localVersionString.split('+').last) ?? 0;
+      log("[Update] Local: $localVersionString, Remote: $remoteVersionString");
+      // TODO remove this true
+      if ((remoteVersion > localVersion || remoteBuildNumber > localBuildNumber) && mounted) {
+        final config = context.read<ConfigProvider>();
+        config.setUpdate(remoteVersionString);
+        log("[Update] Update available: $remoteVersionString");
+      }
+    } catch (e) {
+      if (mounted) context.showErrorDialog('Unable to check update: $e');
+    }
+  }
+
   Future<void> _initialize() async {
     try {
       final home = context.read<HomeWidgetProvider>();
@@ -235,7 +290,11 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
   @override
   void initState() {
     super.initState();
-    _initialize().then((_) => _postInitialization());
+    _initialize().then((_) {
+      _postInitialization();
+      _tryRequestRating();
+      _checkForUpdate();
+    });
   }
 
   @override

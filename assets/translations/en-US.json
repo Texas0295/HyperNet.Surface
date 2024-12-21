@@ -370,6 +370,8 @@
   "dailyCheckNegativeHint6": "Going out",
   "dailyCheckNegativeHint6Description": "Forgot your umbrella and got caught in the rain",
   "happyBirthday": "Happy birthday, {}!",
+  "celebrateMerryXmas": "Merry christmas, {}！",
+  "celebrateNewYear": "Happy new year, {}！",
   "friendNew": "Add Friend",
   "friendRequests": "Friend Requests",
   "friendRequestsDescription": {
@@ -455,5 +457,7 @@
   "poweredBy": "Powered by {}",
   "shareIntent": "Share",
   "shareIntentDescription":  "What do you want to do with the content you are sharing?",
-  "shareIntentPostStory": "Post a Story"
+  "shareIntentPostStory": "Post a Story",
+  "updateAvailable": "Update Available",
+  "updateOngoing": "正在更新，请稍后..."
 }

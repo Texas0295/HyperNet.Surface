@@ -368,6 +368,8 @@
   "dailyCheckNegativeHint6": "出门",
   "dailyCheckNegativeHint6Description": "忘带伞遇上大雨",
   "happyBirthday": "生日快乐，{}！",
+  "celebrateMerryXmas": "圣诞快乐，{}！",
+  "celebrateNewYear": "新年快乐，{}！",
   "friendNew": "添加好友",
   "friendRequests": "好友请求",
   "friendRequestsDescription": {
@@ -453,5 +455,7 @@
   "poweredBy": "由 {} 提供支持",
   "shareIntent": "分享",
   "shareIntentDescription": "您想对您分享的内容做些什么？",
-  "shareIntentPostStory": "发布动态"
+  "shareIntentPostStory": "发布动态",
+  "updateAvailable": "检测到更新可用",
+  "updateOngoing": "正在更新，请稍后……"
 }

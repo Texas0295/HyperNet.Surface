@@ -16,7 +16,7 @@ const Map<String, FilterQuality> kImageQualityLevel = {
   'settingsImageQualityHigh': FilterQuality.high,
 };
 
-class ConfigProvider {
+class ConfigProvider extends ChangeNotifier {
   late final SharedPreferences prefs;
 
   late final HomeWidgetProvider _home;
@@ -36,8 +36,16 @@ class ConfigProvider {
   String get serverUrl {
     return prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
   }
+
   set serverUrl(String url) {
     prefs.setString(kNetworkServerStoreKey, url);
     _home.saveWidgetData("nex_server_url", url);
+  }
+
+  String? updatableVersion;
+
+  void setUpdate(String newVersion) {
+    updatableVersion = newVersion;
+    notifyListeners();
   }
 }
