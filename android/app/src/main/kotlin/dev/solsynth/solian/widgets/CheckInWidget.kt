@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
@@ -25,8 +26,10 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import dev.solsynth.solian.MainActivity
 import dev.solsynth.solian.data.InstantAdapter
 import dev.solsynth.solian.data.SolarCheckInRecord
+import es.antonborri.home_widget.actionStartActivity
 import java.time.Instant
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -39,7 +42,9 @@ class CheckInWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            GlanceContent(context, currentState())
+            GlanceTheme {
+                GlanceContent(context, currentState())
+            }
         }
     }
 
@@ -53,18 +58,27 @@ class CheckInWidget : GlanceAppWidget() {
         val resultTierSymbols = listOf("大凶", "凶", "中平", "吉", "大吉")
 
         val prefs = currentState.preferences
-        val checkInRaw = prefs.getString("pas_check_in_record", null)
+        val checkInRaw: String? = prefs.getString("pas_check_in_record", null)
+
+        val checkIn: SolarCheckInRecord? =
+            checkInRaw?.let { checkInRaw ->
+                gson.fromJson(checkInRaw, SolarCheckInRecord::class.java)
+            } ?: null;
 
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(Color.White)
+                .background(GlanceTheme.colors.widgetBackground)
                 .padding(16.dp)
+                .clickable(
+                    onClick = actionStartActivity<MainActivity>(
+                        context,
+                        Uri.parse("https://sn.solsynth.dev")
+                    )
+                )
         ) {
-            if (checkInRaw != null) {
-                val checkIn: SolarCheckInRecord =
-                    gson.fromJson(checkInRaw, SolarCheckInRecord::class.java)
+            if (checkIn != null) {
                 val dateFormatter = DateTimeFormatter.ofPattern("EEE, MM/dd")
 
                 val checkDate = checkIn.createdAt.atZone(ZoneId.of("UTC")).toLocalDate()
@@ -73,11 +87,11 @@ class CheckInWidget : GlanceAppWidget() {
                     Column {
                         Text(
                             text = resultTierSymbols[checkIn.resultTier],
-                            style = TextStyle(fontSize = 25.sp, fontFamily = FontFamily.Serif)
+                            style = TextStyle(fontSize = 17.sp)
                         )
                         Text(
                             text = "+${checkIn.resultExperience} EXP",
-                            style = TextStyle(fontSize = 15.sp, fontFamily = FontFamily.Monospace)
+                            style = TextStyle(fontSize = 13.sp, fontFamily = FontFamily.Monospace)
                         )
                     }
                     Spacer(modifier = GlanceModifier.height(8.dp))
@@ -88,18 +102,18 @@ class CheckInWidget : GlanceAppWidget() {
                                 ZoneId.systemDefault()
                             )
                                 .format(dateFormatter),
-                            style = TextStyle(fontSize = 13.sp)
+                            style = TextStyle(fontSize = 11.sp)
                         )
                     }
 
                     return@Column;
                 }
             }
-        }
 
-        Text(
-            text = "You haven't checked in today",
-            style = TextStyle(fontSize = 15.sp)
-        )
+            Text(
+                text = "You haven't checked in today",
+                style = TextStyle(fontSize = 15.sp)
+            )
+        }
     }
 }
