@@ -7,6 +7,7 @@
 
 import SwiftUI
 import WidgetKit
+import Kingfisher
 
 struct RandomPostProvider: TimelineProvider {
     func placeholder(in context: Context) -> RandomPostEntry {
@@ -67,82 +68,76 @@ struct RandomPostWidgetEntryView : View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let randomPost = entry.randomPost {
-                HStack(alignment: .center) {
-                    if let avatar = randomPost.publisher.avatar {
-                        let avatarUrl = getAttachmentUrl(for: avatar)
-                        let size: CGFloat = 24
-                        
-                        AsyncImage(url: URL(string: avatarUrl)) { image in
-                            image.resizable()
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .center) {
+                        if let avatar = randomPost.publisher.avatar {
+                            let avatarUrl = getAttachmentUrl(for: avatar)
+                            let size: CGFloat = 28
+                            
+                            KFImage.url(URL(string: avatarUrl))
+                                .resizable()
+                                .setProcessor(ResizingImageProcessor(referenceSize: CGSize(width: size, height: size), mode: .aspectFit))
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: size, height: size)
                                 .cornerRadius(size / 2)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 4)
-                                        .frame(width: size, height: size)
-                                )
-                                .shadow(radius: 10)
-                                .frame(width: 24, height: 24, alignment: .center)
-                        } placeholder: {
-                            ProgressView().frame(width: 24, height: 24, alignment: .center)
+                                .frame(width: size, height: size, alignment: .center)
+                        }
+                        
+                        Text("@\(randomPost.publisher.name)")
+                            .font(.system(size: 13, design: .monospaced))
+                            .opacity(0.9)
+                        
+                        Spacer()
+                    }.frame(maxWidth: .infinity).padding(.bottom, 12)
+                    
+                    if randomPost.body.title != nil || randomPost.body.description != nil {
+                        VStack(alignment: .leading) {
+                            if let title = randomPost.body.title {
+                                Text(title)
+                                    .font(.system(size: 17))
+                            }
+                            if let description = randomPost.body.description {
+                                Text(description)
+                                    .font(.system(size: 15))
+                            }
+                        }.padding(.bottom, 8)
+                    }
+                    
+                    if let content = randomPost.body.content {
+                        if (randomPost.body.title == nil && randomPost.body.description == nil) || entry.family == .systemLarge || entry.family == .systemExtraLarge {
+                            Text(
+                                (entry.family == .systemLarge || entry.family == .systemExtraLarge) ? content : content.replacingOccurrences(of: "\n", with: " ")
+                            )
+                            .font(.system(size: 15))
+                        } else {
+                            Text("\(Image(systemName: "plus")) total \(content.count) characters")
+                                .font(.system(size: 11, design: .monospaced))
+                                .opacity(0.75)
+                                .padding(.top, 1)
                         }
                     }
                     
-                    Text("@\(randomPost.publisher.name)")
-                        .font(.system(size: 13, design: .monospaced))
-                        .opacity(0.9)
+                    if let attachment = randomPost.body.attachments {
+                        if attachment.count == 1 {
+                            Text("\(Image(systemName: "document.fill")) \(attachment.count) attachment")
+                                .font(.system(size: 11, design: .monospaced))
+                                .opacity(0.75)
+                                .padding(.top, 2)
+                        } else if attachment.count > 1 {
+                            Text("\(Image(systemName: "document.fill")) \(attachment.count) attachments")
+                                .font(.system(size: 11, design: .monospaced))
+                                .opacity(0.75)
+                                .padding(.top, 2)
+                        }
+                    }
                     
                     Spacer()
-                }.frame(maxWidth: .infinity).padding(.bottom, 12)
-                
-                if randomPost.body.title != nil || randomPost.body.description != nil {
-                    VStack(alignment: .leading) {
-                        if let title = randomPost.body.title {
-                            Text(title)
-                                .font(.system(size: 17))
-                        }
-                        if let description = randomPost.body.description {
-                            Text(description)
-                                .font(.system(size: 15))
-                        }
-                    }.padding(.bottom, 8)
-                }
-                
-                if let content = randomPost.body.content {
-                    if (randomPost.body.title == nil && randomPost.body.description == nil) || entry.family == .systemLarge || entry.family == .systemExtraLarge {
-                        Text(
-                            (entry.family == .systemLarge || entry.family == .systemExtraLarge) ? content : content.replacingOccurrences(of: "\n", with: " ")
-                        )
-                            .font(.system(size: 15))
-                    } else {
-                        Text("\(Image(systemName: "plus")) total \(content.count) characters")
-                            .font(.system(size: 11, design: .monospaced))
-                            .opacity(0.75)
-                            .padding(.top, 1)
-                    }
-                }
-                
-                if let attachment = randomPost.body.attachments {
-                    if attachment.count == 1 {
-                        Text("\(Image(systemName: "document.fill")) \(attachment.count) attachment")
-                            .font(.system(size: 11, design: .monospaced))
-                            .opacity(0.75)
-                            .padding(.top, 1)
-                    } else if attachment.count > 1 {
-                        Text("\(Image(systemName: "document.fill")) \(attachment.count) attachments")
-                            .font(.system(size: 11, design: .monospaced))
-                            .opacity(0.75)
-                            .padding(.top, 1)
-                    }
-                }
-                
-                Spacer()
-                
-                Text(randomPost.publishedAt!, format: .dateTime)
-                    .font(.system(size: 11))
-                Text("#\(randomPost.id)")
-                    .font(.system(size: 9))
+                    
+                    Text(randomPost.publishedAt!, format: .dateTime)
+                        .font(.system(size: 11))
+                    Text("#\(randomPost.id)")
+                        .font(.system(size: 9))
+                }.widgetURL(URL(string: "https://sn.solsynth.dev/posts/\(randomPost.id)"))
             } else {
                 VStack(alignment: .center) {
                     Text("No Recommendations").font(.system(size: 19, weight: .bold))

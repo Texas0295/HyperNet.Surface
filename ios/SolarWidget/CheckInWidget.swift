@@ -108,7 +108,7 @@ struct CheckInWidgetEntryView : View {
                     Button("Check In", systemImage: "checkmark", action: checkIn).labelStyle(.iconOnly).buttonBorderShape(.circle).frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
-        }.padding(8)
+        }.padding(8).widgetURL(URL(string: "https://sn.solsynth.dev"))
     }
 }
 
