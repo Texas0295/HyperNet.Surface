@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/post.dart';
 
 class HomeWidgetProvider {
   HomeWidgetProvider(BuildContext context);
@@ -15,8 +17,7 @@ class HomeWidgetProvider {
     }
   }
 
-  Future<void> saveWidgetData(String id, dynamic data,
-      {bool update = true}) async {
+  Future<void> saveWidgetData(String id, dynamic data, {bool update = true}) async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
     await HomeWidget.saveWidgetData(id, jsonEncode(data));
     if (update) await updateWidget();
@@ -25,7 +26,7 @@ class HomeWidgetProvider {
   Future<void> updateWidget() async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
     if (Platform.isIOS) {
-      const widgets = ["SolarFeaturedPostWidget", "SolarCheckInWidget"];
+      const widgets = ["SolarRandomPostWidget", "SolarCheckInWidget"];
       for (final widget in widgets) {
         await HomeWidget.updateWidget(
           name: widget,
@@ -42,4 +43,17 @@ class HomeWidgetProvider {
       }
     }
   }
+}
+
+Future<void> widgetUpdateRandomPost() async {
+  final snc = await SnNetworkProvider.createOffContextClient();
+  final resp = await snc.get('/cgi/co/recommendations/shuffle?take=1');
+  final post = SnPost.fromJson(resp.data['data'][0]);
+  await HomeWidget.saveWidgetData("int_random_post", jsonEncode(post.toJson()));
+  await HomeWidget.updateWidget(
+    name: "SolarRandomPostWidget",
+    iOSName: "SolarRandomPostWidget",
+    androidName: "FeaturedPostWidgetReceiver",
+    qualifiedAndroidName: "dev.solsynth.solian.widgets.FeaturedPostWidgetReceiver",
+  );
 }

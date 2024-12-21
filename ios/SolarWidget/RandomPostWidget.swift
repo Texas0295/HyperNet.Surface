@@ -1,5 +1,5 @@
 //
-//  FeaturedPostWidget.swift
+//  RandomPostWidget.swift
 //  Runner
 //
 //  Created by LittleSheep on 2024/12/14.
@@ -8,12 +8,12 @@
 import SwiftUI
 import WidgetKit
 
-struct FeaturedPostProvider: TimelineProvider {
-    func placeholder(in context: Context) -> FeaturedPostEntry {
-        FeaturedPostEntry(date: Date(), user: nil, featuredPost: nil, family: .systemMedium)
+struct RandomPostProvider: TimelineProvider {
+    func placeholder(in context: Context) -> RandomPostEntry {
+        RandomPostEntry(date: Date(), user: nil, randomPost: nil, family: .systemMedium)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (FeaturedPostEntry) -> ()) {
+    func getSnapshot(in context: Context, completion: @escaping (RandomPostEntry) -> ()) {
         let prefs = UserDefaults(suiteName: "group.solsynth.solian")
         
         let dateFormatter = DateFormatter()
@@ -29,16 +29,17 @@ struct FeaturedPostProvider: TimelineProvider {
             user = try! jsonDecoder.decode(SolarUser.self, from: userRaw.data(using: .utf8)!)
         }
         
-        let featuredPostRaw = prefs?.string(forKey: "post_featured")
-        var featuredPosts: [SolarPost]?
-        if let featuredPostRaw = featuredPostRaw {
-            featuredPosts = try! jsonDecoder.decode([SolarPost].self, from: featuredPostRaw.data(using: .utf8)!)
+        let randomPostRaw = prefs?.string(forKey: "int_random_post")
+        var randomPost: SolarPost?
+        if let randomPostRaw = randomPostRaw {
+            randomPost = try! jsonDecoder.decode(SolarPost.self, from: randomPostRaw.data(using: .utf8)!)
         }
         
-        let entry = FeaturedPostEntry(
+        
+        let entry = RandomPostEntry(
             date: Date(),
             user: user,
-            featuredPost: featuredPosts?.first,
+            randomPost: randomPost,
             family: context.family
         )
         completion(entry)
@@ -52,24 +53,22 @@ struct FeaturedPostProvider: TimelineProvider {
     }
 }
 
-struct FeaturedPostEntry: TimelineEntry {
+struct RandomPostEntry: TimelineEntry {
     let date: Date
     let user: SolarUser?
-    let featuredPost: SolarPost?
+    let randomPost: SolarPost?
     
     let family: WidgetFamily
 }
 
-struct FeaturedPostWidgetEntryView : View {
-    var entry: FeaturedPostProvider.Entry
-    
-    private let resultTierSymbols: [String] = ["大凶", "凶", "中平", "大吉", "吉"]
+struct RandomPostWidgetEntryView : View {
+    var entry: RandomPostProvider.Entry
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if let featuredPost = entry.featuredPost {
+            if let randomPost = entry.randomPost {
                 HStack(alignment: .center) {
-                    if let avatar = featuredPost.publisher.avatar {
+                    if let avatar = randomPost.publisher.avatar {
                         let avatarUrl = getAttachmentUrl(for: avatar)
                         let size: CGFloat = 24
                         
@@ -90,28 +89,28 @@ struct FeaturedPostWidgetEntryView : View {
                         }
                     }
                     
-                    Text("@\(featuredPost.publisher.name)")
+                    Text("@\(randomPost.publisher.name)")
                         .font(.system(size: 13, design: .monospaced))
                         .opacity(0.9)
                     
                     Spacer()
                 }.frame(maxWidth: .infinity).padding(.bottom, 12)
                 
-                if featuredPost.body.title != nil || featuredPost.body.description != nil {
+                if randomPost.body.title != nil || randomPost.body.description != nil {
                     VStack(alignment: .leading) {
-                        if let title = featuredPost.body.title {
+                        if let title = randomPost.body.title {
                             Text(title)
                                 .font(.system(size: 17))
                         }
-                        if let description = featuredPost.body.description {
+                        if let description = randomPost.body.description {
                             Text(description)
                                 .font(.system(size: 15))
                         }
                     }.padding(.bottom, 8)
                 }
                 
-                if let content = featuredPost.body.content {
-                    if (featuredPost.body.title == nil && featuredPost.body.description == nil) || entry.family == .systemLarge || entry.family == .systemExtraLarge {
+                if let content = randomPost.body.content {
+                    if (randomPost.body.title == nil && randomPost.body.description == nil) || entry.family == .systemLarge || entry.family == .systemExtraLarge {
                         Text(
                             (entry.family == .systemLarge || entry.family == .systemExtraLarge) ? content : content.replacingOccurrences(of: "\n", with: " ")
                         )
@@ -124,7 +123,7 @@ struct FeaturedPostWidgetEntryView : View {
                     }
                 }
                 
-                if let attachment = featuredPost.body.attachments {
+                if let attachment = randomPost.body.attachments {
                     if attachment.count == 1 {
                         Text("\(Image(systemName: "document.fill")) \(attachment.count) attachment")
                             .font(.system(size: 11, design: .monospaced))
@@ -140,14 +139,14 @@ struct FeaturedPostWidgetEntryView : View {
                 
                 Spacer()
                 
-                Text(featuredPost.publishedAt!, format: .dateTime)
+                Text(randomPost.publishedAt!, format: .dateTime)
                     .font(.system(size: 11))
-                Text("Solar Network Featured Posts")
+                Text("#\(randomPost.id)")
                     .font(.system(size: 9))
             } else {
                 VStack(alignment: .center) {
                     Text("No Recommendations").font(.system(size: 19, weight: .bold))
-                    Text("Click the widget to open the app to load featured posts")
+                    Text("Open the app to load some random post")
                         .font(.system(size: 15))
                         .multilineTextAlignment(.center)
                 }.frame(alignment: .center)
@@ -156,34 +155,34 @@ struct FeaturedPostWidgetEntryView : View {
     }
 }
 
-struct FeaturedPostWidget: Widget {
-    let kind: String = "SolarFeaturedPostWidget"
+struct RandomPostWidget: Widget {
+    let kind: String = "SolarRandomPostWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: FeaturedPostProvider()) { entry in
+        StaticConfiguration(kind: kind, provider: RandomPostProvider()) { entry in
             if #available(iOS 17.0, *) {
-                FeaturedPostWidgetEntryView(entry: entry)
+                RandomPostWidgetEntryView(entry: entry)
                     .containerBackground(.fill.tertiary, for: .widget)
             } else {
-                FeaturedPostWidgetEntryView(entry: entry)
+                RandomPostWidgetEntryView(entry: entry)
                     .padding()
                     .background()
             }
         }
-        .configurationDisplayName("Featured Posts")
-        .description("View the featured posts on the Solar Network")
+        .configurationDisplayName("Random Post")
+        .description("View the random post on the Solar Network")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge])
     }
 }
 
 #Preview(as: .systemSmall) {
-    FeaturedPostWidget()
+    RandomPostWidget()
 } timeline: {
-    FeaturedPostEntry(date: Date.now, user: nil, featuredPost: nil, family: .systemLarge)
-    FeaturedPostEntry(
+    RandomPostEntry(date: Date.now, user: nil, randomPost: nil, family: .systemLarge)
+    RandomPostEntry(
         date: .now,
         user: SolarUser(id: 1, name: "demo", nick: "Deemo"),
-        featuredPost: SolarPost(
+        randomPost: SolarPost(
             id: 1,
             body: SolarPostBody(
                 content: "Hello, World",
@@ -209,10 +208,10 @@ struct FeaturedPostWidget: Widget {
         ),
         family: .systemSmall
     )
-    FeaturedPostEntry(
+    RandomPostEntry(
         date: .now,
         user: SolarUser(id: 1, name: "demo", nick: "Deemo"),
-        featuredPost: SolarPost(
+        randomPost: SolarPost(
             id: 1,
             body: SolarPostBody(
                 content: "Hello, World\nOh wow",

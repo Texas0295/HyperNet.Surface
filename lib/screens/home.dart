@@ -151,7 +151,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
       final home = context.read<HomeWidgetProvider>();
       final resp = await sn.client.get('/cgi/id/check-in/today');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
-      home.saveWidgetData('today_check_in', _todayRecord!.toJson());
+      home.saveWidgetData('pas_check_in_record', _todayRecord!.toJson());
     } finally {
       setState(() => _isBusy = false);
     }
@@ -164,7 +164,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
       final home = context.read<HomeWidgetProvider>();
       final resp = await sn.client.post('/cgi/id/check-in');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
-      home.saveWidgetData('today_check_in', _todayRecord!.toJson());
+      home.saveWidgetData('pas_check_in_record', _todayRecord!.toJson());
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

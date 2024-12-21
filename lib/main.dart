@@ -37,6 +37,24 @@ import 'package:surface/types/realm.dart';
 import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/version_label.dart';
+import 'package:workmanager/workmanager.dart';
+
+@pragma('vm:entry-point')
+void appBackgroundDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    print("Native called background task: $task");
+    switch (task) {
+      case Workmanager.iOSBackgroundTask:
+        await Future.wait([widgetUpdateRandomPost()]);
+        return true;
+      case "WidgetUpdateRandomPost":
+        await widgetUpdateRandomPost();
+        return true;
+      default:
+        return true;
+    }
+  });
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +80,20 @@ void main() async {
       appWindow.alignment = Alignment.center;
       appWindow.show();
     });
+  }
+
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    Workmanager().initialize(
+      appBackgroundDispatcher,
+      isInDebugMode: kDebugMode,
+    );
+    Workmanager().registerPeriodicTask(
+      "widget-update-random-post",
+      "WidgetUpdateRandomPost",
+      frequency: Duration(minutes: 1),
+      constraints: Constraints(networkType: NetworkType.connected),
+      tag: "widget-update",
+    );
   }
 
   runApp(const SolianApp());
@@ -193,10 +225,14 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
     }
   }
 
+  Future<void> _postInitialization() async {
+    await widgetUpdateRandomPost();
+  }
+
   @override
   void initState() {
     super.initState();
-    _initialize();
+    _initialize().then((_) => _postInitialization());
   }
 
   @override

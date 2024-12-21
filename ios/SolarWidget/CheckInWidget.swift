@@ -29,10 +29,13 @@ struct CheckInProvider: TimelineProvider {
             user = try! jsonDecoder.decode(SolarUser.self, from: userRaw.data(using: .utf8)!)
         }
         
-        let checkInRaw = prefs?.string(forKey: "today_check_in")
+        let checkInRaw = prefs?.string(forKey: "pas_check_in_record")
         var checkIn: SolarCheckInRecord?
         if let checkInRaw = checkInRaw {
             checkIn = try! jsonDecoder.decode(SolarCheckInRecord.self, from: checkInRaw.data(using: .utf8)!)
+            if checkIn != nil && Calendar.current.isDate(checkIn!.createdAt, inSameDayAs: Date()) {
+                checkIn = nil
+            }
         }
         
         let entry = CheckInEntry(

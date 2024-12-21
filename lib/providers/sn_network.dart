@@ -71,7 +71,36 @@ class SnNetworkProvider {
     });
   }
 
-  Future<void> initializeUserAgent() async {
+  static Future<Dio> createOffContextClient() async {
+    final prefs = await SharedPreferences.getInstance();
+    final client = Dio();
+    client.interceptors.add(RetryInterceptor(
+      dio: client,
+      retries: 3,
+      retryDelays: const [
+        Duration(milliseconds: 300),
+        Duration(milliseconds: 1000),
+        Duration(milliseconds: 3000),
+      ],
+    ));
+    final ua = await _getUserAgent();
+    client.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (
+          RequestOptions options,
+          RequestInterceptorHandler handler,
+        ) async {
+          options.headers['User-Agent'] = ua;
+          return handler.next(options);
+        },
+      ),
+    );
+    client.options.baseUrl = prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
+
+    return client;
+  }
+
+  static Future<String> _getUserAgent() async {
     final String platformInfo;
     if (kIsWeb) {
       final deviceInfo = await DeviceInfoPlugin().webBrowserInfo;
@@ -97,7 +126,11 @@ class SnNetworkProvider {
 
     final packageInfo = await PackageInfo.fromPlatform();
 
-    _userAgent = 'Solian/${packageInfo.version}+${packageInfo.buildNumber} ($platformInfo)';
+    return 'Solian/${packageInfo.version}+${packageInfo.buildNumber} ($platformInfo)';
+  }
+
+  Future<void> initializeUserAgent() async {
+    _userAgent = await _getUserAgent();
   }
 
   final tkLock = Lock();
