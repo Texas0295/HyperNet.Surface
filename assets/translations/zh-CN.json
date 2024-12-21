@@ -123,6 +123,8 @@
   "fieldPostTitle": "标题",
   "fieldPostDescription": "描述",
   "fieldPostTags": "标签",
+  "fieldPostAlias": "别名",
+  "fieldPostAliasHint": "可选项，用于在 URL 中表示该帖子，应遵循 URL-Safe 的原则。",
   "postPublish": "发布",
   "postPublishedAt": "发布于",
   "postPublishedUntil": "取消发布于",

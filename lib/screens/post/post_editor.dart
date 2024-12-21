@@ -496,7 +496,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           onPressed: (_writeController.isBusy || _writeController.publisher == null)
                               ? null
                               : () {
-                                  _writeController.post(context).then((_) {
+                                  _writeController.sendPost(context).then((_) {
                                     if (!context.mounted) return;
                                     Navigator.pop(context, true);
                                   });

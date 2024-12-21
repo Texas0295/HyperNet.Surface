@@ -217,7 +217,7 @@ class _PostMiniEditorState extends State<PostMiniEditor> {
                             _writeController.publisher == null)
                         ? null
                         : () {
-                            _writeController.post(context).then((_) {
+                            _writeController.sendPost(context).then((_) {
                               if (!context.mounted) return;
                               if (widget.onPost != null) widget.onPost!();
                               context.showSnackbar('postPosted'.tr());

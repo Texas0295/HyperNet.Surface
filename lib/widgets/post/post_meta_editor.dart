@@ -114,6 +114,18 @@ class PostMetaEditor extends StatelessWidget {
                 controller.setTags(value);
               },
             ).padding(horizontal: 24),
+            const Gap(4),
+            TextField(
+              controller: controller.aliasController,
+              decoration: InputDecoration(
+                labelText: 'fieldPostAlias'.tr(),
+                helperText: 'fieldPostAliasHint'.tr(),
+                helperMaxLines: 2,
+                border: UnderlineInputBorder(),
+              ),
+              onTapOutside: (_) =>
+                  FocusManager.instance.primaryFocus?.unfocus(),
+            ).padding(horizontal: 24),
             const Gap(12),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),

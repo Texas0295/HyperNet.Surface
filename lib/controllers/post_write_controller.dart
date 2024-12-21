@@ -152,6 +152,7 @@ class PostWriteController extends ChangeNotifier {
   final TextEditingController contentController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController aliasController = TextEditingController();
 
   PostWriteController() {
     titleController.addListener(() => notifyListeners());
@@ -198,6 +199,7 @@ class PostWriteController extends ChangeNotifier {
         titleController.text = post.body['title'] ?? '';
         descriptionController.text = post.body['description'] ?? '';
         contentController.text = post.body['content'] ?? '';
+        aliasController.text = post.alias ?? '';
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
         visibleUsers = List.from(post.visibleUsersList ?? []);
@@ -269,7 +271,7 @@ class PostWriteController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> post(BuildContext context) async {
+  Future<void> sendPost(BuildContext context) async {
     if (isBusy || publisher == null) return;
 
     final sn = context.read<SnNetworkProvider>();
@@ -334,6 +336,7 @@ class PostWriteController extends ChangeNotifier {
         data: {
           'publisher': publisher!.id,
           'content': contentController.text,
+          if (aliasController.text.isNotEmpty) 'alias': aliasController.text,
           if (titleController.text.isNotEmpty) 'title': titleController.text,
           if (descriptionController.text.isNotEmpty) 'description': descriptionController.text,
           if (thumbnail != null && thumbnail!.attachment != null) 'thumbnail': thumbnail!.attachment!.rid,

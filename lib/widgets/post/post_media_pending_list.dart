@@ -189,16 +189,19 @@ class PostMediaPendingList extends StatelessWidget {
                   child: AspectRatio(
                     aspectRatio: 1,
                     child: switch (thumbnail!.type) {
-                      PostWriteMediaType.image => LayoutBuilder(builder: (context, constraints) {
-                          return Image(
-                            image: thumbnail!.getImageProvider(
-                              context,
-                              width: (constraints.maxWidth * devicePixelRatio).round(),
-                              height: (constraints.maxHeight * devicePixelRatio).round(),
-                            )!,
-                            fit: BoxFit.contain,
-                          );
-                        }),
+                      PostWriteMediaType.image => Container(
+                        color: Theme.of(context).colorScheme.surfaceContainer,
+                        child: LayoutBuilder(builder: (context, constraints) {
+                            return Image(
+                              image: thumbnail!.getImageProvider(
+                                context,
+                                width: (constraints.maxWidth * devicePixelRatio).round(),
+                                height: (constraints.maxHeight * devicePixelRatio).round(),
+                              )!,
+                              fit: BoxFit.contain,
+                            );
+                          }),
+                      ),
                       _ => Container(
                           color: Theme.of(context).colorScheme.surface,
                           child: const Icon(Symbols.docs).center(),
@@ -236,18 +239,21 @@ class PostMediaPendingList extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 1,
                         child: switch (media.type) {
-                          PostWriteMediaType.image => LayoutBuilder(builder: (context, constraints) {
-                              return Image(
-                                image: media.getImageProvider(
-                                  context,
-                                  width: (constraints.maxWidth * devicePixelRatio).round(),
-                                  height: (constraints.maxHeight * devicePixelRatio).round(),
-                                )!,
-                                fit: BoxFit.cover,
-                              );
-                            }),
+                          PostWriteMediaType.image => Container(
+                            color: Theme.of(context).colorScheme.surfaceContainer,
+                            child: LayoutBuilder(builder: (context, constraints) {
+                                return Image(
+                                  image: media.getImageProvider(
+                                    context,
+                                    width: (constraints.maxWidth * devicePixelRatio).round(),
+                                    height: (constraints.maxHeight * devicePixelRatio).round(),
+                                  )!,
+                                  fit: BoxFit.contain,
+                                );
+                              }),
+                          ),
                           _ => Container(
-                              color: Theme.of(context).colorScheme.surface,
+                              color: Theme.of(context).colorScheme.surfaceContainer,
                               child: const Icon(Symbols.docs).center(),
                             ),
                         },
