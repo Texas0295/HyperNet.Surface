@@ -245,7 +245,6 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
       final remoteBuildNumber = int.tryParse(remoteVersionString.split('+').last) ?? 0;
       final localBuildNumber = int.tryParse(localVersionString.split('+').last) ?? 0;
       log("[Update] Local: $localVersionString, Remote: $remoteVersionString");
-      // TODO remove this true
       if ((remoteVersion > localVersion || remoteBuildNumber > localBuildNumber) && mounted) {
         final config = context.read<ConfigProvider>();
         config.setUpdate(remoteVersionString);
