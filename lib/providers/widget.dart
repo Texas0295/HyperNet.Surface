@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:surface/main.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/post.dart';
 
@@ -15,6 +17,8 @@ class HomeWidgetProvider {
     if (!kIsWeb && Platform.isIOS) {
       await HomeWidget.setAppGroupId("group.solsynth.solian");
     }
+
+    await HomeWidget.registerInteractivityCallback(appInteractiveBackgroundDispatcher);
   }
 
   Future<void> saveWidgetData(String id, dynamic data, {bool update = true}) async {

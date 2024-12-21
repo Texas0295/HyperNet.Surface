@@ -51,12 +51,27 @@ void appBackgroundDispatcher() {
       case "WidgetUpdateRandomPost":
         await widgetUpdateRandomPost();
         return true;
-      case "ChatReplyMessage":
-        return true;
       default:
         return true;
     }
   });
+}
+
+@pragma("vm:entry-point")
+FutureOr<void> appInteractiveBackgroundDispatcher(Uri? data) async {
+  print('Interactive background dispatcher called with $data');
+  switch (data?.path) {
+    case "/chat/reply":
+      final channelId = data?.queryParameters['channel_id'];
+      final eventId = data?.queryParameters['event_id'];
+      final message = data?.queryParameters['text'];
+      if (channelId != null && eventId != null && (message?.isNotEmpty ?? false)) {
+        await chatReplyMessage(channelId, eventId, message!);
+      }
+      break;
+    default:
+      break;
+  }
 }
 
 void main() async {
@@ -90,13 +105,15 @@ void main() async {
       appBackgroundDispatcher,
       isInDebugMode: kDebugMode,
     );
-    Workmanager().registerPeriodicTask(
-      "widget-update-random-post",
-      "WidgetUpdateRandomPost",
-      frequency: Duration(minutes: 1),
-      constraints: Constraints(networkType: NetworkType.connected),
-      tag: "widget-update",
-    );
+    if (Platform.isAndroid) {
+      Workmanager().registerPeriodicTask(
+        "widget-update-random-post",
+        "WidgetUpdateRandomPost",
+        frequency: Duration(minutes: 1),
+        constraints: Constraints(networkType: NetworkType.connected),
+        tag: "widget-update",
+      );
+    }
   }
 
   runApp(const SolianApp());

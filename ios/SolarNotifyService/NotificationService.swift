@@ -61,7 +61,7 @@ class NotificationService: UNNotificationServiceExtension {
         guard let avatarIdentifier = metadata["avatar"] as? String else {
             throw ParseNotificationPayloadError.missingAvatarUrl("The notification has no avatar.")
         }
-
+        
         let replyableMessageCategory = UNNotificationCategory(
             identifier: content.categoryIdentifier,
             actions: [
@@ -88,7 +88,7 @@ class NotificationService: UNNotificationServiceExtension {
             case .failure(let error):
                 print("Unable to get avatar url: \(error)")
             }
-    
+            
             let handle = INPersonHandle(value: "\(metadataCopy["user_id"] ?? "")", type: .unknown)
             let sender = INPerson(
                 personHandle: handle,
@@ -164,7 +164,7 @@ class NotificationService: UNNotificationServiceExtension {
             }
         }
     }
-
+    
     private func attachLocalMedia(to content: UNMutableNotificationContent, fileType type: String?, from localUrl: URL, withIdentifier identifier: String) {
         do {
             let attachment = try UNNotificationAttachment(identifier: identifier, url: localUrl, options: [

@@ -92,7 +92,7 @@ class SnNetworkProvider {
           RequestOptions options,
           RequestInterceptorHandler handler,
         ) async {
-          final atk = await _getFreshAtk(client, prefs.getString(kAtkStoreKey), (atk, rtk) {
+          final atk = await _getFreshAtk(client, prefs.getString(kAtkStoreKey), prefs.getString(kRtkStoreKey), (atk, rtk) {
             prefs.setString(kAtkStoreKey, atk);
             prefs.setString(kRtkStoreKey, rtk);
           });
@@ -145,12 +145,12 @@ class SnNetworkProvider {
   final tkLock = Lock();
 
   Future<String?> getFreshAtk() async {
-    return await _getFreshAtk(client, _prefs.getString(kAtkStoreKey), (atk, rtk) {
+    return await _getFreshAtk(client, _prefs.getString(kAtkStoreKey), _prefs.getString(kRtkStoreKey), (atk, rtk) {
       setTokenPair(atk, rtk);
     });
   }
 
-  static Future<String?> _getFreshAtk(Dio client, String? atk, Function(String atk, String rtk)? onRefresh) async {
+  static Future<String?> _getFreshAtk(Dio client, String? atk, String? rtk, Function(String atk, String rtk)? onRefresh) async {
     if (_refreshCompleter != null) {
       return await _refreshCompleter!.future;
     } else {
@@ -183,7 +183,7 @@ class SnNetworkProvider {
         final exp = jsonDecode(payload)['exp'];
         if (exp <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
           log('Access token need refresh, doing it at ${DateTime.now()}');
-          final result = await _refreshToken(client.options.baseUrl, atk);
+          final result = await _refreshToken(client.options.baseUrl, rtk);
           if (result == null) {
             atk = null;
           } else {
