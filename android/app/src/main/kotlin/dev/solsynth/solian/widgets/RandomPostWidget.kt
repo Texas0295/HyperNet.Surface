@@ -87,12 +87,16 @@ class RandomPostWidget : GlanceAppWidget() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = data.publisher.nick,
-                        style = TextStyle(fontSize = 15.sp)
+                        style = TextStyle(fontSize = 15.sp, color = GlanceTheme.colors.onSurface)
                     )
                     Spacer(modifier = GlanceModifier.width(8.dp))
                     Text(
                         text = "@${data.publisher.name}",
-                        style = TextStyle(fontSize = 13.sp, fontFamily = FontFamily.Monospace)
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily.Monospace,
+                            color = GlanceTheme.colors.onSurface
+                        )
                     )
                 }
 
@@ -101,13 +105,13 @@ class RandomPostWidget : GlanceAppWidget() {
                 if (data.body.title != null) {
                     Text(
                         text = data.body.title,
-                        style = TextStyle(fontSize = 25.sp)
+                        style = TextStyle(fontSize = 19.sp, color = GlanceTheme.colors.onSurface)
                     )
                 }
                 if (data.body.description != null) {
                     Text(
                         text = data.body.description,
-                        style = TextStyle(fontSize = 19.sp)
+                        style = TextStyle(fontSize = 17.sp, color = GlanceTheme.colors.onSurface)
                     )
                 }
 
@@ -117,7 +121,7 @@ class RandomPostWidget : GlanceAppWidget() {
 
                 Text(
                     text = data.body.content ?: "No content",
-                    style = TextStyle(fontSize = 15.sp),
+                    style = TextStyle(fontSize = 15.sp, color = GlanceTheme.colors.onSurface),
                 )
 
                 Spacer(modifier = GlanceModifier.height(8.dp))
@@ -126,12 +130,16 @@ class RandomPostWidget : GlanceAppWidget() {
                 Text(
                     LocalDateTime.ofInstant(data.createdAt, ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                    style = TextStyle(fontSize = 13.sp),
+                    style = TextStyle(fontSize = 13.sp, color = GlanceTheme.colors.onSurface),
                 )
 
                 Text(
                     "#${data.id}",
-                    style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Bold),
+                    style = TextStyle(
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = GlanceTheme.colors.onSurface
+                    ),
                 )
 
                 return@Column;
@@ -143,12 +151,16 @@ class RandomPostWidget : GlanceAppWidget() {
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally
             ) {
                 Text(
-                    text = "Unable to fetch post",
-                    style = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                    text = "No Recommendations",
+                    style = TextStyle(
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = GlanceTheme.colors.onSurface
+                    )
                 )
                 Text(
-                    text = "Check your internet connection",
-                    style = TextStyle(fontSize = 15.sp)
+                    text = "Open app to load some posts",
+                    style = TextStyle(fontSize = 15.sp, color = GlanceTheme.colors.onSurface)
                 )
             }
         }

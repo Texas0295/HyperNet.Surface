@@ -1,7 +1,6 @@
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -87,11 +86,18 @@ class CheckInWidget : GlanceAppWidget() {
                     Column {
                         Text(
                             text = resultTierSymbols[checkIn.resultTier],
-                            style = TextStyle(fontSize = 17.sp)
+                            style = TextStyle(
+                                fontSize = 17.sp,
+                                color = GlanceTheme.colors.onSurface
+                            )
                         )
                         Text(
                             text = "+${checkIn.resultExperience} EXP",
-                            style = TextStyle(fontSize = 13.sp, fontFamily = FontFamily.Monospace)
+                            style = TextStyle(
+                                fontSize = 13.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = GlanceTheme.colors.onSurface
+                            )
                         )
                     }
                     Spacer(modifier = GlanceModifier.height(8.dp))
@@ -102,7 +108,10 @@ class CheckInWidget : GlanceAppWidget() {
                                 ZoneId.systemDefault()
                             )
                                 .format(dateFormatter),
-                            style = TextStyle(fontSize = 11.sp)
+                            style = TextStyle(
+                                fontSize = 11.sp,
+                                color = GlanceTheme.colors.onSurface
+                            )
                         )
                     }
 
@@ -112,7 +121,7 @@ class CheckInWidget : GlanceAppWidget() {
 
             Text(
                 text = "You haven't checked in today",
-                style = TextStyle(fontSize = 15.sp)
+                style = TextStyle(fontSize = 15.sp, color = GlanceTheme.colors.onSurface)
             )
         }
     }
