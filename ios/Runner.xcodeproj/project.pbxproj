@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,6 +22,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		A0DA907BED0C7BC1351253EC /* Pods_SolarNotifyService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B83A5C5D84D0F730A80A03E3 /* Pods_SolarNotifyService.framework */; };
 		CED170BFB6A72CDDAC285637 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF483E994343CDFBF9BA347 /* Pods_Runner.framework */; };
 		F51C4E3C8FA95426C91FC0A4 /* Pods_SolarShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F41E029731EA30268EDE2A /* Pods_SolarShare.framework */; };
 /* End PBXBuildFile section */
@@ -96,6 +97,7 @@
 		40B53769EB464E54DACA7CE4 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		48AE73F9950AF4FB02B5E9F4 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		4A2F84B6033057E3BD2C7CB8 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		4CBF45ABD292EE527D0A4D1E /* Pods-SolarNotifyService.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarNotifyService.profile.xcconfig"; path = "Target Support Files/Pods-SolarNotifyService/Pods-SolarNotifyService.profile.xcconfig"; sourceTree = "<group>"; };
 		5922A50B1231B06B92E31F20 /* Pods-SolarShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarShare.debug.xcconfig"; path = "Target Support Files/Pods-SolarShare/Pods-SolarShare.debug.xcconfig"; sourceTree = "<group>"; };
 		64FBE78F9C282712818D6D95 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		6618E2E3015264643175B43D /* Pods-SolarWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-SolarWidgetExtension/Pods-SolarWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -120,7 +122,10 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2C24C5238FAC44EA2CCF738 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B1763F1D7318A2745CA7EDFE /* Pods-SolarShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarShare.release.xcconfig"; path = "Target Support Files/Pods-SolarShare/Pods-SolarShare.release.xcconfig"; sourceTree = "<group>"; };
+		B83A5C5D84D0F730A80A03E3 /* Pods_SolarNotifyService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SolarNotifyService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE0C4086B776A27B202B373 /* Pods-SolarWidgetExtension.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarWidgetExtension.profile.xcconfig"; path = "Target Support Files/Pods-SolarWidgetExtension/Pods-SolarWidgetExtension.profile.xcconfig"; sourceTree = "<group>"; };
+		D7E1FA77FDA53439DB2C0E75 /* Pods-SolarNotifyService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarNotifyService.release.xcconfig"; path = "Target Support Files/Pods-SolarNotifyService/Pods-SolarNotifyService.release.xcconfig"; sourceTree = "<group>"; };
+		D96D1DB4ED46A2640C1B9D34 /* Pods-SolarNotifyService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SolarNotifyService.debug.xcconfig"; path = "Target Support Files/Pods-SolarNotifyService/Pods-SolarNotifyService.debug.xcconfig"; sourceTree = "<group>"; };
 		EDF483E994343CDFBF9BA347 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F357CFDA89A0D9E5692846D4 /* Pods_SolarWidgetExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SolarWidgetExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -238,6 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0DA907BED0C7BC1351253EC /* Pods_SolarNotifyService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +275,7 @@
 				731B7B6D2D0D6CE000CEB9B7 /* SwiftUI.framework */,
 				16F41E029731EA30268EDE2A /* Pods_SolarShare.framework */,
 				F357CFDA89A0D9E5692846D4 /* Pods_SolarWidgetExtension.framework */,
+				B83A5C5D84D0F730A80A03E3 /* Pods_SolarNotifyService.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -354,6 +361,9 @@
 				2134F3903A0E8EB8CC2670BE /* Pods-SolarWidgetExtension.debug.xcconfig */,
 				6618E2E3015264643175B43D /* Pods-SolarWidgetExtension.release.xcconfig */,
 				BCE0C4086B776A27B202B373 /* Pods-SolarWidgetExtension.profile.xcconfig */,
+				D96D1DB4ED46A2640C1B9D34 /* Pods-SolarNotifyService.debug.xcconfig */,
+				D7E1FA77FDA53439DB2C0E75 /* Pods-SolarNotifyService.release.xcconfig */,
+				4CBF45ABD292EE527D0A4D1E /* Pods-SolarNotifyService.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -427,6 +437,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 73DA8A072D05C7620024A03E /* Build configuration list for PBXNativeTarget "SolarNotifyService" */;
 			buildPhases = (
+				50F5704AB2E7309C916CA2E7 /* [CP] Check Pods Manifest.lock */,
 				73DA89F62D05C7620024A03E /* Sources */,
 				73DA89F72D05C7620024A03E /* Frameworks */,
 				73DA89F82D05C7620024A03E /* Resources */,
@@ -620,6 +631,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		50F5704AB2E7309C916CA2E7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SolarNotifyService-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		738C1EBE2D0D76C500A215F3 /* Copy Bundle Version */ = {
@@ -1229,6 +1262,7 @@
 		};
 		73DA8A032D05C7620024A03E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D96D1DB4ED46A2640C1B9D34 /* Pods-SolarNotifyService.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1270,6 +1304,7 @@
 		};
 		73DA8A042D05C7620024A03E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7E1FA77FDA53439DB2C0E75 /* Pods-SolarNotifyService.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1308,6 +1343,7 @@
 		};
 		73DA8A052D05C7620024A03E /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CBF45ABD292EE527D0A4D1E /* Pods-SolarNotifyService.profile.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

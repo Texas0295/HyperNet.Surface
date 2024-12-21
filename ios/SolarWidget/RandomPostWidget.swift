@@ -76,12 +76,17 @@ struct RandomPostWidgetEntryView : View {
                             
                             KFImage.url(URL(string: avatarUrl))
                                 .resizable()
-                                .setProcessor(ResizingImageProcessor(referenceSize: CGSize(width: size, height: size), mode: .aspectFit))
+                                .setProcessor(DownsamplingImageProcessor(size: CGSize(width: size, height: size)))
+                                .transition(.opacity)
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: size, height: size)
                                 .cornerRadius(size / 2)
                                 .frame(width: size, height: size, alignment: .center)
                         }
+                        
+                        Text(randomPost.publisher.nick)
+                            .font(.system(size: 15))
+                            .opacity(0.9)
                         
                         Text("@\(randomPost.publisher.name)")
                             .font(.system(size: 13, design: .monospaced))

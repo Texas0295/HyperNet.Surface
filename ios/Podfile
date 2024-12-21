@@ -36,6 +36,11 @@ target 'Runner' do
     inherit! :search_paths
   end
 
+  target 'SolarNotifyService' do
+    inherit! :search_paths
+    pod 'Kingfisher', '~> 8.0'
+  end
+
   target 'SolarWidgetExtension' do
     inherit! :search_paths
     pod 'Kingfisher', '~> 8.0'
