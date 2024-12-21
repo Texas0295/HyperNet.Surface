@@ -57,23 +57,6 @@ void appBackgroundDispatcher() {
   });
 }
 
-@pragma("vm:entry-point")
-FutureOr<void> appInteractiveBackgroundDispatcher(Uri? data) async {
-  print('Interactive background dispatcher called with $data');
-  switch (data?.path) {
-    case "/chat/reply":
-      final channelId = data?.queryParameters['channel_id'];
-      final eventId = data?.queryParameters['event_id'];
-      final message = data?.queryParameters['text'];
-      if (channelId != null && eventId != null && (message?.isNotEmpty ?? false)) {
-        await chatReplyMessage(channelId, eventId, message!);
-      }
-      break;
-    default:
-      break;
-  }
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();

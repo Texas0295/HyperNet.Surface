@@ -38,13 +38,10 @@ target 'Runner' do
 
   target 'SolarNotifyService' do
     inherit! :search_paths
-    use_frameworks!
-    use_modular_headers!
-
     pod 'home_widget', :path => '.symlinks/plugins/home_widget/ios'
-    pod 'shared_preferences_foundation', :path => '.symlinks/plugins/shared_preferences_foundation/darwin'
 
     pod 'Kingfisher', '~> 8.0'
+    pod 'Alamofire'
   end
 
   target 'SolarWidgetExtension' do
@@ -53,7 +50,6 @@ target 'Runner' do
     use_modular_headers!
 
     pod 'home_widget', :path => '.symlinks/plugins/home_widget/ios'
-    pod 'shared_preferences_foundation', :path => '.symlinks/plugins/shared_preferences_foundation/darwin'
 
     pod 'Kingfisher', '~> 8.0'
   end

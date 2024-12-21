@@ -140,19 +140,3 @@ class ChatChannelProvider extends ChangeNotifier {
     super.dispose();
   }
 }
-
-Future<void> chatReplyMessage(channelId, eventId, String message) async {
-  print('Chat reply message called with $channelId $eventId $message');
-  try {
-    final snc = await SnNetworkProvider.createOffContextClient();
-    await snc.post('/cgi/im/quick/$channelId/reply/$eventId', data: {
-      'type': 'messages.new',
-      'body': {
-        'text': message,
-        'algorithm': 'plain',
-      },
-    });
-  } catch (err) {
-    print('Failed to send chat reply message: $err');
-  }
-}

@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.10.2)
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -221,6 +222,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - Alamofire
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
   - croppy (from `.symlinks/plugins/croppy/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -257,6 +259,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - DKImagePickerController
     - DKPhotoGallery
     - Firebase
@@ -343,6 +346,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/workmanager/ios"
 
 SPEC CHECKSUMS:
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
   croppy: b6199bc8d56bd2e03cc11609d1c47ad9875c1321
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
@@ -394,6 +398,6 @@ SPEC CHECKSUMS:
   WebRTC-SDK: 79942c006ea64f6fb48d7da8a4786dfc820bc1db
   workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
 
-PODFILE CHECKSUM: c287205af8b370f21f61cbff93ce745f0157a3c8
+PODFILE CHECKSUM: 9b244e02f87527430136c8d21cbdcf1cd586b6bc
 
 COCOAPODS: 1.16.2
