@@ -9,6 +9,10 @@ const kRtkStoreKey = 'nex_user_rtk';
 const kNetworkServerDefault = 'https://api.sn.solsynth.dev';
 const kNetworkServerStoreKey = 'app_server_url';
 
+const kAppbarTransparentStoreKey = 'app_bar_transparent';
+const kAppBackgroundStoreKey = 'app_has_background';
+const kAppColorSchemeStoreKey = 'app_color_scheme';
+
 const Map<String, FilterQuality> kImageQualityLevel = {
   'settingsImageQualityLowest': FilterQuality.none,
   'settingsImageQualityLow': FilterQuality.low,

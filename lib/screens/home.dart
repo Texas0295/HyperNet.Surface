@@ -17,13 +17,12 @@ import 'package:surface/providers/config.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/providers/widget.dart';
 import 'package:surface/types/check_in.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/post/post_item.dart';
-
-import '../providers/widget.dart';
 
 class HomeScreenDashEntry {
   final String name;
@@ -212,7 +211,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
       final home = context.read<HomeWidgetProvider>();
       final resp = await sn.client.get('/cgi/id/check-in/today');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
-      home.saveWidgetData('pas_check_in_record', _todayRecord!.toJson());
+      await home.saveWidgetData('pas_check_in_record', _todayRecord!.toJson());
     } finally {
       setState(() => _isBusy = false);
     }
@@ -225,7 +224,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
       final home = context.read<HomeWidgetProvider>();
       final resp = await sn.client.post('/cgi/id/check-in');
       _todayRecord = SnCheckInRecord.fromJson(resp.data);
-      home.saveWidgetData('pas_check_in_record', _todayRecord!.toJson());
+      await home.saveWidgetData('pas_check_in_record', _todayRecord!.toJson());
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

@@ -89,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       if (image == null) return;
 
                       await File(image.path).copy('$_docBasepath/app_background_image');
-                      _prefs.setBool('app_has_background', true);
+                      _prefs.setBool(kAppBackgroundStoreKey, true);
 
                       setState(() {});
                     },
@@ -110,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           trailing: const Icon(Symbols.chevron_right),
                           onTap: () {
                             File('$_docBasepath/app_background_image').deleteSync();
-                            _prefs.remove('app_has_background');
+                            _prefs.remove(kAppBackgroundStoreKey);
                             setState(() {});
                           },
                         );
@@ -128,7 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         value ?? false,
                       );
                     });
-                    final th = context.watch<ThemeProvider>();
+                    final th = context.read<ThemeProvider>();
                     th.reloadTheme(useMaterial3: value ?? false);
                   },
                 ),
@@ -136,10 +136,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(Symbols.format_paint),
                   title: Text('settingsColorScheme').tr(),
                   subtitle: Text('settingsColorSchemeDescription').tr(),
-                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                   trailing: const Icon(Symbols.chevron_right),
                   onTap: () async {
-                    Color pickerColor = Color(_prefs.getInt('app_color_scheme') ?? Colors.indigo.value);
+                    Color pickerColor = Color(_prefs.getInt(kAppColorSchemeStoreKey) ?? Colors.indigo.value);
                     final color = await showDialog<Color?>(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -170,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                     if (color == null || !context.mounted) return;
 
-                    _prefs.setInt('app_color_scheme', color.value);
+                    _prefs.setInt(kAppColorSchemeStoreKey, color.value);
                     final th = context.read<ThemeProvider>();
                     th.reloadTheme(seedColorOverride: color);
                     setState(() {});
@@ -198,15 +198,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Text('custom').tr(),
                         ),
                       ],
-                      value: _prefs.getInt('app_color_scheme') == null
+                      value: _prefs.getInt(kAppColorSchemeStoreKey) == null
                           ? 1
                           : kColorSchemes.values
                               .toList()
-                              .indexWhere((ele) => ele.value == _prefs.getInt('app_color_scheme')),
+                              .indexWhere((ele) => ele.value == _prefs.getInt(kAppColorSchemeStoreKey)),
                       onChanged: (int? value) {
                         if (value != null && value != -1) {
-                          _prefs.setInt('app_color_scheme', kColorSchemes.values.elementAt(value).value);
-                          final th = context.watch<ThemeProvider>();
+                          _prefs.setInt(kAppColorSchemeStoreKey, kColorSchemes.values.elementAt(value).value);
+                          final th = context.read<ThemeProvider>();
                           th.reloadTheme(seedColorOverride: kColorSchemes.values.elementAt(value));
                           setState(() {});
 
@@ -226,6 +226,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                   ),
+                ),
+                CheckboxListTile(
+                  secondary: const Icon(Symbols.blur_on),
+                  title: Text('settingsAppBarTransparent').tr(),
+                  subtitle: Text('settingsAppBarTransparentDescription').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  value: _prefs.getBool(kAppbarTransparentStoreKey) ?? false,
+                  onChanged: (value) {
+                    _prefs.setBool(kAppbarTransparentStoreKey, value ?? false);
+                    final th = context.read<ThemeProvider>();
+                    th.reloadTheme();
+                    setState(() {});
+                  },
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:surface/providers/config.dart';
 
 const kMaterialYouToggleStoreKey = 'app_theme_material_you';
 
@@ -24,7 +25,7 @@ Future<ThemeData> createAppTheme(
 }) async {
   final prefs = await SharedPreferences.getInstance();
 
-  final seedColorString = prefs.getInt('app_color_scheme');
+  final seedColorString = prefs.getInt(kAppColorSchemeStoreKey);
   final seedColor = seedColorString != null ? Color(seedColorString) : Colors.indigo;
 
   final colorScheme = ColorScheme.fromSeed(
@@ -32,7 +33,8 @@ Future<ThemeData> createAppTheme(
     brightness: brightness,
   );
 
-  final hasBackground = prefs.getBool('app_has_background') ?? false;
+  final hasBackground = prefs.getBool(kAppBackgroundStoreKey) ?? false;
+  final hasAppBarBlurry = prefs.getBool(kAppbarTransparentStoreKey) ?? false;
 
   return ThemeData(
     useMaterial3: useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? false),
@@ -46,8 +48,9 @@ Future<ThemeData> createAppTheme(
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,
-      backgroundColor: hasBackground ? colorScheme.primary.withOpacity(0.75) : colorScheme.primary,
-      foregroundColor: colorScheme.onPrimary,
+      elevation: hasAppBarBlurry ? 0 : null,
+      backgroundColor: hasAppBarBlurry ? colorScheme.surfaceContainer.withAlpha(200) : colorScheme.primary,
+      foregroundColor: hasAppBarBlurry ? colorScheme.onSurface : colorScheme.onPrimary,
     ),
     scaffoldBackgroundColor: Colors.transparent,
   );

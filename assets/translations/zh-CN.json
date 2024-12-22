@@ -182,6 +182,8 @@
   "settingsBackgroundImageClearDescription": "将应用背景图重置为空白。",
   "settingsThemeMaterial3": "使用 Material You 设计范式",
   "settingsThemeMaterial3Description": "将应用主题设置为 Material 3 设计范式的主题。",
+  "settingsAppBarTransparent": "透明顶栏",
+  "settingsAppBarTransparentDescription": "为顶栏启用透明效果。",
   "settingsColorScheme": "主题色",
   "settingsColorSchemeDescription": "设置应用主题色。",
   "settingsColorSeed": "预设色彩主题",
