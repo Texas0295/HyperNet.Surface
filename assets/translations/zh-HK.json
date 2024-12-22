@@ -476,5 +476,15 @@
   "colorSchemeRed": "紅色",
   "colorSchemeWhite": "白色",
   "colorSchemeBlack": "黑色",
-  "colorSchemeApplied": "主題色已應用，可能需要重啓來生效。"
+  "colorSchemeApplied": "主題色已應用，可能需要重啓來生效。",
+  "postCategoryTechnology": "技術",
+  "postCategoryGaming": "遊戲",
+  "postCategoryLife": "生活",
+  "postCategoryArts": "藝術",
+  "postCategorySports": "體育",
+  "postCategoryMusic": "音樂",
+  "postCategoryNews": "新聞",
+  "postCategoryKnowledge": "知識",
+  "postCategoryLiterature": "文學",
+  "postCategoryUncategorized": "未分類"
 }

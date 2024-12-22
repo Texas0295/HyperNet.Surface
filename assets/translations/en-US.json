@@ -478,5 +478,15 @@
   "colorSchemeRed": "Red",
   "colorSchemeWhite": "White",
   "colorSchemeBlack": "Black",
-  "colorSchemeApplied": "Color scheme has been applied, may need restart the app to take effect."
+  "colorSchemeApplied": "Color scheme has been applied, may need restart the app to take effect.",
+  "postCategoryTechnology": "Technology",
+  "postCategoryGaming": "Gaming",
+  "postCategoryLife": "Life",
+  "postCategoryArts": "Arts",
+  "postCategorySports": "Sports",
+  "postCategoryMusic": "Music",
+  "postCategoryNews": "News",
+  "postCategoryKnowledge": "Knowledge",
+  "postCategoryLiterature": "Literature",
+  "postCategoryUncategorized": "Uncategorized"
 }

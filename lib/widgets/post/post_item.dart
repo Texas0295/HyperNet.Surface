@@ -981,7 +981,12 @@ class _PostTagsList extends StatelessWidget {
                     children: [
                       const Icon(Symbols.category, size: 20),
                       const Gap(4),
-                      Text(ele.alias, style: GoogleFonts.robotoMono()),
+                      Text(
+                        'postCategory${ele.alias.capitalize()}'.trExists()
+                            ? 'postCategory${ele.alias.capitalize()}'.tr()
+                            : ele.alias,
+                        style: GoogleFonts.robotoMono(),
+                      ),
                     ],
                   ),
                   onTap: () {},

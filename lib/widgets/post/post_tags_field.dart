@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/widgets/dialog.dart';
 
 class PostTagsField extends StatefulWidget {
   final List<String>? initialTags;
@@ -100,8 +102,7 @@ class _PostTagsFieldState extends State<PostTagsField> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                           margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 4.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -237,46 +238,47 @@ class _PostCategoriesFieldState extends State<PostCategoriesField> {
             ),
             prefixIcon: _currentCategories.isNotEmpty
                 ? SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _currentCategories.map((String category) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 4.0),
+                    scrollDirection: Axis.horizontal,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          child: Text(
-                            '#$category',
-                            style: const TextStyle(color: Colors.white),
+                      children: _currentCategories.map((String category) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                        ),
-                        const Gap(4),
-                        InkWell(
-                          child: const Icon(
-                            Icons.cancel,
-                            size: 14.0,
-                            color: Color.fromARGB(255, 233, 233, 233),
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                child: Text(
+                                  'postCategory${category.capitalize()}'.trExists()
+                                      ? 'postCategory${category.capitalize()}'.tr()
+                                      : '#$category',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              const Gap(4),
+                              InkWell(
+                                child: const Icon(
+                                  Icons.cancel,
+                                  size: 14.0,
+                                  color: Color.fromARGB(255, 233, 233, 233),
+                                ),
+                                onTap: () {
+                                  setState(() => _currentCategories.remove(category));
+                                  widget.onUpdate(_currentCategories);
+                                },
+                              )
+                            ],
                           ),
-                          onTap: () {
-                            setState(() => _currentCategories.remove(category));
-                            widget.onUpdate(_currentCategories);
-                          },
-                        )
-                      ],
+                        );
+                      }).toList(),
                     ),
-                  );
-                }).toList(),
-              ),
-            )
+                  )
                 : null,
           ),
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),

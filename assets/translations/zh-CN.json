@@ -476,5 +476,15 @@
   "colorSchemeRed": "红色",
   "colorSchemeWhite": "白色",
   "colorSchemeBlack": "黑色",
-  "colorSchemeApplied": "主题色已应用，可能需要重启来生效。"
+  "colorSchemeApplied": "主题色已应用，可能需要重启来生效。",
+  "postCategoryTechnology": "技术",
+  "postCategoryGaming": "游戏",
+  "postCategoryLife": "生活",
+  "postCategoryArts": "艺术",
+  "postCategorySports": "体育",
+  "postCategoryMusic": "音乐",
+  "postCategoryNews": "新闻",
+  "postCategoryKnowledge": "知识",
+  "postCategoryLiterature": "文学",
+  "postCategoryUncategorized": "未分类"
 }
