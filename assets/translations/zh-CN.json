@@ -182,6 +182,10 @@
   "settingsBackgroundImageClearDescription": "将应用背景图重置为空白。",
   "settingsThemeMaterial3": "使用 Material You 设计范式",
   "settingsThemeMaterial3Description": "将应用主题设置为 Material 3 设计范式的主题。",
+  "settingsColorScheme": "主题色",
+  "settingsColorSchemeDescription": "设置应用主题色。",
+  "settingsColorSeed": "预设色彩主题",
+  "settingsColorSeedDescription": "选择一个预设色彩主题。",
   "settingsNetwork": "网络",
   "settingsNetworkServer": "HyperNet 服务器",
   "settingsNetworkServerDescription": "设置 HyperNet 服务器地址，选择我们提供的，或者自己搭建。",
@@ -459,5 +463,15 @@
   "shareIntentDescription": "您想对您分享的内容做些什么？",
   "shareIntentPostStory": "发布动态",
   "updateAvailable": "检测到更新可用",
-  "updateOngoing": "正在更新，请稍后……"
+  "updateOngoing": "正在更新，请稍后……",
+  "custom": "自定义",
+  "colorSchemeIndigo": "靛蓝",
+  "colorSchemeBlue": "蓝色",
+  "colorSchemeGreen": "绿色",
+  "colorSchemeYellow": "黄色",
+  "colorSchemeOrange": "橙色",
+  "colorSchemeRed": "红色",
+  "colorSchemeWhite": "白色",
+  "colorSchemeBlack": "黑色",
+  "colorSchemeApplied": "主题色已应用，可能需要重启来生效。"
 }

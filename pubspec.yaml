@@ -111,6 +111,7 @@ dependencies:
   flutter_app_update: ^3.2.2
   in_app_review: ^2.0.10
   version: ^3.0.2
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

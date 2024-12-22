@@ -10,7 +10,7 @@ class ThemeSet {
   ThemeSet({required this.light, required this.dark});
 }
 
-Future<ThemeSet> createAppThemeSet({bool? useMaterial3}) async {
+Future<ThemeSet> createAppThemeSet({Color? seedColorOverride, bool? useMaterial3}) async {
   return ThemeSet(
     light: await createAppTheme(Brightness.light, useMaterial3: useMaterial3),
     dark: await createAppTheme(Brightness.dark, useMaterial3: useMaterial3),
@@ -19,16 +19,20 @@ Future<ThemeSet> createAppThemeSet({bool? useMaterial3}) async {
 
 Future<ThemeData> createAppTheme(
   Brightness brightness, {
+    Color? seedColorOverride,
   bool? useMaterial3,
 }) async {
   final prefs = await SharedPreferences.getInstance();
 
+  final seedColorString = prefs.getInt('app_color_scheme');
+  final seedColor = seedColorString != null ? Color(seedColorString) : Colors.indigo;
+
   final colorScheme = ColorScheme.fromSeed(
-    seedColor: Colors.indigo,
+    seedColor: seedColorOverride ?? seedColor,
     brightness: brightness,
   );
 
-  final hasBackground = prefs.getBool('has_background_image') ?? false;
+  final hasBackground = prefs.getBool('app_has_background') ?? false;
 
   return ThemeData(
     useMaterial3: useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? false),

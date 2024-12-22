@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -17,6 +18,17 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/theme.dart';
 import 'package:surface/widgets/dialog.dart';
+
+const Map<String, Color> kColorSchemes = {
+  'colorSchemeIndigo': Colors.indigo,
+  'colorSchemeBlue': Colors.blue,
+  'colorSchemeGreen': Colors.green,
+  'colorSchemeYellow': Colors.yellow,
+  'colorSchemeOrange': Colors.orange,
+  'colorSchemeRed': Colors.red,
+  'colorSchemeWhite': Colors.white,
+  'colorSchemeBlack': Colors.black,
+};
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -77,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       if (image == null) return;
 
                       await File(image.path).copy('$_docBasepath/app_background_image');
-                      _prefs.setBool('has_background_image', true);
+                      _prefs.setBool('app_has_background', true);
 
                       setState(() {});
                     },
@@ -98,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           trailing: const Icon(Symbols.chevron_right),
                           onTap: () {
                             File('$_docBasepath/app_background_image').deleteSync();
-                            _prefs.remove('has_background_image');
+                            _prefs.remove('app_has_background');
                             setState(() {});
                           },
                         );
@@ -119,6 +131,101 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     final th = context.watch<ThemeProvider>();
                     th.reloadTheme(useMaterial3: value ?? false);
                   },
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.format_paint),
+                  title: Text('settingsColorScheme').tr(),
+                  subtitle: Text('settingsColorSchemeDescription').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  trailing: const Icon(Symbols.chevron_right),
+                  onTap: () async {
+                    Color pickerColor = Color(_prefs.getInt('app_color_scheme') ?? Colors.indigo.value);
+                    final color = await showDialog<Color?>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: SingleChildScrollView(
+                          child: ColorPicker(
+                            pickerColor: pickerColor,
+                            onColorChanged: (color) => pickerColor = color,
+                            enableAlpha: false,
+                            hexInputBar: true,
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('dialogDismiss').tr(),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('dialogConfirm').tr(),
+                            onPressed: () {
+                              Navigator.of(context).pop(pickerColor);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (color == null || !context.mounted) return;
+
+                    _prefs.setInt('app_color_scheme', color.value);
+                    final th = context.read<ThemeProvider>();
+                    th.reloadTheme(seedColorOverride: color);
+                    setState(() {});
+
+                    context.showSnackbar('colorSchemeApplied'.tr());
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.palette),
+                  title: Text('settingsColorSeed').tr(),
+                  subtitle: Text('settingsColorSeedDescription').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  trailing: DropdownButtonHideUnderline(
+                    child: DropdownButton2<int?>(
+                      isExpanded: true,
+                      items: [
+                        ...kColorSchemes.entries.mapIndexed((idx, ele) {
+                          return DropdownMenuItem<int>(
+                            value: idx,
+                            child: Text(ele.key).tr(),
+                          );
+                        }),
+                        DropdownMenuItem<int>(
+                          value: -1,
+                          child: Text('custom').tr(),
+                        ),
+                      ],
+                      value: _prefs.getInt('app_color_scheme') == null
+                          ? 1
+                          : kColorSchemes.values
+                              .toList()
+                              .indexWhere((ele) => ele.value == _prefs.getInt('app_color_scheme')),
+                      onChanged: (int? value) {
+                        if (value != null && value != -1) {
+                          _prefs.setInt('app_color_scheme', kColorSchemes.values.elementAt(value).value);
+                          final th = context.watch<ThemeProvider>();
+                          th.reloadTheme(seedColorOverride: kColorSchemes.values.elementAt(value));
+                          setState(() {});
+
+                          context.showSnackbar('colorSchemeApplied'.tr());
+                        }
+                      },
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 5,
+                        ),
+                        height: 40,
+                        width: 160,
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -189,7 +296,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           horizontal: 16,
                           vertical: 5,
                         ),
-                        height: 40,
+                        height: 56,
                         width: 160,
                       ),
                       menuItemStyleData: const MenuItemStyleData(
