@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +15,7 @@ import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/screens/abuse_report.dart';
 import 'package:surface/types/account.dart';
+import 'package:surface/types/check_in.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -59,6 +61,19 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
       });
     } finally {
       setState(() {});
+    }
+  }
+
+  Future<List<SnCheckInRecord>> _getCheckInRecords() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/id/users/${widget.name}/check-in?take=14');
+      return List.from(
+        resp.data['data']?.map((x) => SnCheckInRecord.fromJson(x)) ?? [],
+      );
+    } catch (err) {
+      if (mounted) context.showErrorDialog(err);
+      rethrow;
     }
   }
 
@@ -498,6 +513,27 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
           SliverToBoxAdapter(child: const Divider()),
           const SliverGap(12),
           SliverToBoxAdapter(
+            child: FutureBuilder<List<SnCheckInRecord>>(
+              future: _getCheckInRecords(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox.shrink();
+                final records = snapshot.data!;
+                return SizedBox(
+                  width: double.infinity,
+                  height: 240,
+                  child: CheckInRecordChart(records: records),
+                ).padding(
+                  right: 24,
+                  left: 16,
+                  top: 12,
+                );
+              },
+            ),
+          ),
+          const SliverGap(12),
+          SliverToBoxAdapter(child: const Divider()),
+          const SliverGap(12),
+          SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -561,6 +597,108 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CheckInRecordChart extends StatelessWidget {
+  const CheckInRecordChart({
+    super.key,
+    required this.records,
+  });
+
+  final List<SnCheckInRecord> records;
+
+  @override
+  Widget build(BuildContext context) {
+    return LineChart(
+      LineChartData(
+        lineBarsData: [
+          LineChartBarData(
+            color: Theme.of(context).colorScheme.primary,
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: List.filled(
+                  records.length,
+                  Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                ).toList(),
+              ),
+            ),
+            spots: records
+                .map(
+                  (x) => FlSpot(
+                    x.createdAt
+                        .copyWith(
+                          hour: 0,
+                          minute: 0,
+                          second: 0,
+                          millisecond: 0,
+                          microsecond: 0,
+                        )
+                        .millisecondsSinceEpoch
+                        .toDouble(),
+                    x.resultTier.toDouble(),
+                  ),
+                )
+                .toList(),
+          )
+        ],
+        lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            getTooltipItems: (spots) => spots
+                .map(
+                  (spot) => LineTooltipItem(
+                    '${kCheckInResultTierSymbols[spot.y.toInt()]}\n${DateFormat('MM/dd').format(DateTime.fromMillisecondsSinceEpoch(spot.x.toInt()))}',
+                    TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                )
+                .toList(),
+            getTooltipColor: (_) => Theme.of(context).colorScheme.surfaceContainerHigh,
+          ),
+        ),
+        titlesData: FlTitlesData(
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              interval: 1,
+              getTitlesWidget: (value, _) => Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  kCheckInResultTierSymbols[value.toInt()],
+                  textAlign: TextAlign.right,
+                ).padding(right: 8),
+              ),
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 28,
+              interval: 86400000,
+              getTitlesWidget: (value, _) => Text(
+                DateFormat('dd').format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    value.toInt(),
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ).padding(top: 8),
+            ),
+          ),
+        ),
+        gridData: const FlGridData(show: false),
+        borderData: FlBorderData(show: false),
       ),
     );
   }

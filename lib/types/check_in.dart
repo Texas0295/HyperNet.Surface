@@ -3,6 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'check_in.freezed.dart';
 part 'check_in.g.dart';
 
+const List<String> kCheckInResultTierSymbols = ['大凶', '凶', '中平', '吉', '大吉'];
+
 @freezed
 class SnCheckInRecord with _$SnCheckInRecord {
   const SnCheckInRecord._();
@@ -21,11 +23,5 @@ class SnCheckInRecord with _$SnCheckInRecord {
   factory SnCheckInRecord.fromJson(Map<String, dynamic> json) =>
       _$SnCheckInRecordFromJson(json);
 
-  String get symbol => switch (resultTier) {
-        0 => '大凶',
-        1 => '凶',
-        2 => '中平',
-        3 => '吉',
-        _ => '大吉',
-      };
+  String get symbol => kCheckInResultTierSymbols[resultTier];
 }
