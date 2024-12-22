@@ -142,7 +142,7 @@ class ChatMessage extends StatelessWidget {
                             onEdit: onEdit,
                             onDelete: onDelete,
                           ),
-                        )).padding(bottom: 4, top: isMerged ? 4 : 2),
+                        )).padding(bottom: 4, top: 4),
                       switch (data.type) {
                         'messages.new' => _ChatMessageText(data: data),
                         _ => _ChatMessageSystemNotify(data: data),

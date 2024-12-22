@@ -181,11 +181,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 const Gap(8),
               ],
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(40),
+                preferredSize: const Size.fromHeight(50),
                 child: SizedBox(
-                  height: 40,
+                  height: 50,
                   child: ListView.builder(
-                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 12),
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
                     itemBuilder: (context, idx) {
