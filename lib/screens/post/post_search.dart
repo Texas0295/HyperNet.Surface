@@ -99,9 +99,14 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
         ],
       ).padding(horizontal: 24, vertical: 16),
     ).then((_) {
-      _posts.clear();
-      _fetchPosts();
+      _refreshPosts();
     });
+  }
+
+  Future<void> _refreshPosts() {
+    _postCount = null;
+    _posts.clear();
+    return _fetchPosts();
   }
 
   @override
@@ -144,8 +149,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
                     setState(() => _posts[idx] = data);
                   },
                   onDeleted: () {
-                    _posts.clear();
-                    _fetchPosts();
+                    _refreshPosts();
                   },
                 ),
                 onTap: () {
@@ -176,10 +180,8 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
                     _searchTerm = value;
                   },
                   onSubmitted: (value) {
-                    setState(() => _posts.clear());
-
                     _searchTerm = value;
-                    _fetchPosts();
+                    _refreshPosts();
                   },
                 ),
                 if (_lastTook != null)
