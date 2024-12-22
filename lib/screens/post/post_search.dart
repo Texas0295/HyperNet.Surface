@@ -23,6 +23,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
   bool _isBusy = false;
 
   List<String> _searchTags = List.empty(growable: true);
+  List<String> _searchCategories = List.empty(growable: true);
 
   final List<SnPost> _posts = List.empty(growable: true);
   int? _postCount;
@@ -31,7 +32,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
   Duration? _lastTook;
 
   Future<void> _fetchPosts() async {
-    if (_searchTerm.isEmpty && _searchTags.isEmpty) return;
+    if (_searchTerm.isEmpty && _searchCategories.isEmpty && _searchTags.isEmpty) return;
     if (_postCount != null && _posts.length >= _postCount!) return;
 
     setState(() => _isBusy = true);
@@ -45,6 +46,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
         take: 10,
         offset: _posts.length,
         tags: _searchTags,
+        categories: _searchCategories,
       );
       final List<SnPost> out = result.$1;
       _postCount = result.$2;
@@ -73,9 +75,20 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
               setState(() => _searchTags = value);
             },
           ),
+          const Gap(4),
+          PostCategoriesField(
+            labelText: 'fieldPostCategories'.tr(),
+            initialCategories: _searchCategories,
+            onUpdate: (value) {
+              setState(() => _searchCategories = value);
+            },
+          ),
         ],
       ).padding(horizontal: 24, vertical: 16),
-    );
+    ).then((_) {
+      _posts.clear();
+      _fetchPosts();
+    });
   }
 
   @override
