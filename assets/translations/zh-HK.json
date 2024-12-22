@@ -123,6 +123,7 @@
   "fieldPostTitle": "標題",
   "fieldPostDescription": "描述",
   "fieldPostTags": "標籤",
+  "fieldPostCategories": "分類",
   "fieldPostAlias": "別名",
   "fieldPostAliasHint": "可選項，用於在 URL 中表示該帖子，應遵循 URL-Safe 的原則。",
   "postPublish": "發佈",

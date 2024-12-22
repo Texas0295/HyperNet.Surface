@@ -21,9 +21,9 @@ class PostTagsField extends StatefulWidget {
   State<PostTagsField> createState() => _PostTagsFieldState();
 }
 
-class _PostTagsFieldState extends State<PostTagsField> {
-  static const List<String> kTagsDividers = [' ', ','];
+const List<String> kTagsDividers = [' ', ','];
 
+class _PostTagsFieldState extends State<PostTagsField> {
   late final _Debounceable<List<String>?, String> _debouncedSearch;
 
   final List<String> _currentTags = List.empty(growable: true);
@@ -142,6 +142,154 @@ class _PostTagsFieldState extends State<PostTagsField> {
                 }
                 controller.clear();
                 widget.onUpdate(_currentTags);
+                break;
+              }
+            }
+          },
+          onSubmitted: (_) {
+            onSubmitted();
+          },
+        );
+      },
+    );
+  }
+}
+
+class PostCategoriesField extends StatefulWidget {
+  final List<String>? initialCategories;
+  final String labelText;
+  final Function(List<String>) onUpdate;
+
+  const PostCategoriesField({
+    super.key,
+    this.initialCategories,
+    required this.labelText,
+    required this.onUpdate,
+  });
+
+  @override
+  State<PostCategoriesField> createState() => _PostCategoriesFieldState();
+}
+
+class _PostCategoriesFieldState extends State<PostCategoriesField> {
+  late final _Debounceable<List<String>?, String> _debouncedSearch;
+
+  final List<String> _currentCategories = List.empty(growable: true);
+
+  String? _currentSearchProbe;
+  List<String> _lastAutocompleteResult = List.empty();
+  TextEditingController? _textEditingController;
+
+  Future<List<String>?> _searchCategories(String probe) async {
+    _currentSearchProbe = probe;
+
+    final sn = context.read<SnNetworkProvider>();
+    final resp = await sn.client.get(
+      '/cgi/co/categories?take=10&probe=$_currentSearchProbe',
+    );
+
+    if (_currentSearchProbe != probe) {
+      return null;
+    }
+    _currentSearchProbe = null;
+
+    return resp.data.map((x) => x['alias']).toList().cast<String>();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _debouncedSearch = _debounce<List<String>?, String>(_searchCategories);
+    if (widget.initialCategories != null) {
+      _currentCategories.addAll(widget.initialCategories!);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        final result = await _debouncedSearch(textEditingValue.text);
+        if (result == null) {
+          return _lastAutocompleteResult;
+        }
+        _lastAutocompleteResult = result;
+        return result;
+      },
+      onSelected: (String value) {
+        if (value.isEmpty) return;
+        if (!_currentCategories.contains(value)) {
+          setState(() => _currentCategories.add(value));
+        }
+        _textEditingController?.clear();
+        widget.onUpdate(_currentCategories);
+      },
+      fieldViewBuilder: (context, controller, focusNode, onSubmitted) {
+        _textEditingController = controller;
+        return TextField(
+          controller: controller,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            label: Text(widget.labelText),
+            border: const UnderlineInputBorder(),
+            prefixIconConstraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75,
+            ),
+            prefixIcon: _currentCategories.isNotEmpty
+                ? SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _currentCategories.map((String category) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          child: Text(
+                            '#$category',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const Gap(4),
+                        InkWell(
+                          child: const Icon(
+                            Icons.cancel,
+                            size: 14.0,
+                            color: Color.fromARGB(255, 233, 233, 233),
+                          ),
+                          onTap: () {
+                            setState(() => _currentCategories.remove(category));
+                            widget.onUpdate(_currentCategories);
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            )
+                : null,
+          ),
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          onChanged: (value) {
+            for (final divider in kTagsDividers) {
+              if (value.endsWith(divider)) {
+                final tagValue = value.substring(0, value.length - 1);
+                if (tagValue.isEmpty) return;
+                if (!_currentCategories.contains(tagValue)) {
+                  setState(() => _currentCategories.add(tagValue));
+                }
+                controller.clear();
+                widget.onUpdate(_currentCategories);
                 break;
               }
             }

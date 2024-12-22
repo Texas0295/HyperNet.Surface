@@ -139,6 +139,7 @@
   "fieldPostTitle": "Title",
   "fieldPostDescription": "Description",
   "fieldPostTags": "Tags",
+  "fieldPostCategories": "Categories",
   "fieldPostAlias": "Alias",
   "fieldPostAliasHint": "Optional, used to represent the post in URL, should follow URL-Safe.",
   "postPublish": "Publish",

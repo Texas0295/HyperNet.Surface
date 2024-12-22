@@ -178,6 +178,7 @@ class PostWriteController extends ChangeNotifier {
   List<int> visibleUsers = List.empty();
   List<int> invisibleUsers = List.empty();
   List<String> tags = List.empty();
+  List<String> categories = List.empty();
   PostWriteMedia? thumbnail;
   List<PostWriteMedia> attachments = List.empty(growable: true);
   DateTime? publishedAt, publishedUntil;
@@ -207,6 +208,7 @@ class PostWriteController extends ChangeNotifier {
         invisibleUsers = List.from(post.invisibleUsersList ?? []);
         visibility = post.visibility;
         tags = List.from(post.tags.map((ele) => ele.alias));
+        categories = List.from(post.categories.map((ele) => ele.alias));
         attachments.addAll(post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? []);
 
         if (post.preload?.thumbnail != null && (post.preload?.thumbnail?.rid.isNotEmpty ?? false)) {
@@ -345,6 +347,7 @@ class PostWriteController extends ChangeNotifier {
           if (thumbnail != null && thumbnail!.attachment != null) 'thumbnail': thumbnail!.attachment!.rid,
           'attachments': attachments.where((e) => e.attachment != null).map((e) => e.attachment!.rid).toList(),
           'tags': tags.map((ele) => {'alias': ele}).toList(),
+          'categories': categories.map((ele) => {'alias': ele}).toList(),
           'visibility': visibility,
           'visible_users_list': visibleUsers,
           'invisible_users_list': invisibleUsers,
@@ -431,6 +434,11 @@ class PostWriteController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setCategories(List<String> value) {
+    categories = value;
+    notifyListeners();
+  }
+
   void setVisibility(int value) {
     visibility = value;
     notifyListeners();
@@ -467,6 +475,9 @@ class PostWriteController extends ChangeNotifier {
     titleController.clear();
     descriptionController.clear();
     contentController.clear();
+    aliasController.clear();
+    tags.clear();
+    categories.clear();
     attachments.clear();
     editingPost = null;
     replyingPost = null;
@@ -480,6 +491,7 @@ class PostWriteController extends ChangeNotifier {
     contentController.dispose();
     titleController.dispose();
     descriptionController.dispose();
+    aliasController.dispose();
     super.dispose();
   }
 }
