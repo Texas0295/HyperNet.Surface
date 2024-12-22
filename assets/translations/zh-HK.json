@@ -416,7 +416,7 @@
   "accountStatus": "狀態",
   "accountStatusOnline": "在線",
   "accountStatusOffline": "離線",
-  "accountStatusLastSeen": "最後一次在 {} 上線",
+  "accountStatusLastSeen": "最後一次上線於 {}",
   "postArticle": "Solar Network 上的文章",
   "postStory": "Solar Network 上的故事",
   "articleWrittenAt": "發表於 {}",

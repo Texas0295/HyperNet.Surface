@@ -277,70 +277,77 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: MultiSliver(
                 children: [
-                  SliverAppBar(
-                    expandedHeight: _appBarHeight,
-                    title: _publisher == null
-                        ? Text('loading').tr()
-                        : RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: _publisher!.nick,
-                                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                      color: Theme.of(context).appBarTheme.foregroundColor!,
-                                      shadows: labelShadows,
-                                    ),
-                              ),
-                              const TextSpan(text: '\n'),
-                              TextSpan(
-                                text: '@${_publisher!.name}',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      color: Colors.white,
-                                      shadows: labelShadows,
-                                    ),
-                              ),
-                            ]),
-                          ),
-                    pinned: true,
-                    flexibleSpace: _publisher != null
-                        ? Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              if (_publisher!.banner.isNotEmpty)
-                                UniversalImage(
-                                  sn.getAttachmentUrl(_publisher!.banner),
-                                  fit: BoxFit.cover,
-                                  height: imageHeight,
-                                  width: _appBarWidth,
-                                  cacheHeight: imageHeight,
-                                  cacheWidth: _appBarWidth,
-                                )
-                              else
-                                Container(
-                                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      appBarTheme: Theme.of(context).appBarTheme.copyWith(
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                    child: SliverAppBar(
+                      expandedHeight: _appBarHeight,
+                      title: _publisher == null
+                          ? Text('loading').tr()
+                          : RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: _publisher!.nick,
+                                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                        color: Colors.white,
+                                        shadows: labelShadows,
+                                      ),
                                 ),
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                height: 56 + MediaQuery.of(context).padding.top,
-                                child: ClipRect(
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                      sigmaX: _appBarBlur,
-                                      sigmaY: _appBarBlur,
-                                    ),
-                                    child: Container(
-                                      color: Colors.black.withOpacity(
-                                        clampDouble(_appBarBlur * 0.1, 0, 0.5),
+                                const TextSpan(text: '\n'),
+                                TextSpan(
+                                  text: '@${_publisher!.name}',
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        color: Colors.white,
+                                        shadows: labelShadows,
+                                      ),
+                                ),
+                              ]),
+                            ),
+                      pinned: true,
+                      flexibleSpace: _publisher != null
+                          ? Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                if (_publisher!.banner.isNotEmpty)
+                                  UniversalImage(
+                                    sn.getAttachmentUrl(_publisher!.banner),
+                                    fit: BoxFit.cover,
+                                    height: imageHeight,
+                                    width: _appBarWidth,
+                                    cacheHeight: imageHeight,
+                                    cacheWidth: _appBarWidth,
+                                  )
+                                else
+                                  Container(
+                                    color: Theme.of(context).colorScheme.surfaceContainer,
+                                  ),
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: 56 + MediaQuery.of(context).padding.top,
+                                  child: ClipRect(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: _appBarBlur,
+                                        sigmaY: _appBarBlur,
+                                      ),
+                                      child: Container(
+                                        color: Colors.black.withOpacity(
+                                          clampDouble(_appBarBlur * 0.1, 0, 0.5),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                        : null,
+                              ],
+                            )
+                          : null,
+                    ),
                   ),
                   if (_publisher != null)
                     SliverToBoxAdapter(

@@ -416,7 +416,7 @@
   "accountStatus": "状态",
   "accountStatusOnline": "在线",
   "accountStatusOffline": "离线",
-  "accountStatusLastSeen": "最后一次在 {} 上线",
+  "accountStatusLastSeen": "最后一次上线于 {}",
   "postArticle": "Solar Network 上的文章",
   "postStory": "Solar Network 上的故事",
   "articleWrittenAt": "发表于 {}",

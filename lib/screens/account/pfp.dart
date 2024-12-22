@@ -228,65 +228,72 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverAppBar(
-            expandedHeight: _appBarHeight,
-            title: _account == null
-                ? Text('loading').tr()
-                : RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: _account!.nick,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Theme.of(context).appBarTheme.foregroundColor!,
-                              shadows: labelShadows,
-                            ),
-                      ),
-                      const TextSpan(text: '\n'),
-                      TextSpan(
-                        text: '@${_account!.name}',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: Theme.of(context).appBarTheme.foregroundColor!,
-                              shadows: labelShadows,
-                            ),
-                      ),
-                    ]),
+          Theme(
+            data: Theme.of(context).copyWith(
+              appBarTheme: Theme.of(context).appBarTheme.copyWith(
+                    foregroundColor: Colors.white,
                   ),
-            pinned: true,
-            flexibleSpace: _account != null
-                ? Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      UniversalImage(
-                        sn.getAttachmentUrl(_account!.banner),
-                        fit: BoxFit.cover,
-                        height: imageHeight,
-                        width: _appBarWidth,
-                        cacheHeight: imageHeight,
-                        cacheWidth: _appBarWidth,
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: 56 + MediaQuery.of(context).padding.top,
-                        child: ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(
-                              sigmaX: _appBarBlur,
-                              sigmaY: _appBarBlur,
-                            ),
-                            child: Container(
-                              color: Colors.black.withOpacity(
-                                clampDouble(_appBarBlur * 0.1, 0, 0.5),
+            ),
+            child: SliverAppBar(
+              expandedHeight: _appBarHeight,
+              title: _account == null
+                  ? Text('loading').tr()
+                  : RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: _account!.nick,
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                color: Colors.white,
+                                shadows: labelShadows,
+                              ),
+                        ),
+                        const TextSpan(text: '\n'),
+                        TextSpan(
+                          text: '@${_account!.name}',
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                color: Colors.white,
+                                shadows: labelShadows,
+                              ),
+                        ),
+                      ]),
+                    ),
+              pinned: true,
+              flexibleSpace: _account != null
+                  ? Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        UniversalImage(
+                          sn.getAttachmentUrl(_account!.banner),
+                          fit: BoxFit.cover,
+                          height: imageHeight,
+                          width: _appBarWidth,
+                          cacheHeight: imageHeight,
+                          cacheWidth: _appBarWidth,
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: 56 + MediaQuery.of(context).padding.top,
+                          child: ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: _appBarBlur,
+                                sigmaY: _appBarBlur,
+                              ),
+                              child: Container(
+                                color: Colors.black.withOpacity(
+                                  clampDouble(_appBarBlur * 0.1, 0, 0.5),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                : null,
+                      ],
+                    )
+                  : null,
+            ),
           ),
           if (_account != null)
             SliverToBoxAdapter(
