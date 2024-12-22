@@ -179,6 +179,7 @@ class PostItem extends StatelessWidget {
                     children: [
                       if (data.visibility > 0) _PostVisibilityHint(data: data),
                       _PostTruncatedHint(data: data),
+                      if (data.tags.isNotEmpty) _PostTagsList(data: data),
                     ],
                   ).padding(horizontal: 12),
                   const Gap(8),
@@ -186,7 +187,6 @@ class PostItem extends StatelessWidget {
               ),
             ),
             Text('postArticle').tr().fontSize(13).opacity(0.75).padding(horizontal: 24, bottom: 8),
-            if (data.tags.isNotEmpty) _PostTagsList(data: data).padding(horizontal: 16, bottom: 6),
             _PostBottomAction(
               data: data,
               showComments: showComments,
@@ -966,23 +966,50 @@ class _PostTagsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 4,
-      runSpacing: 4,
-      children: data.tags
-          .map(
-            (ele) => InkWell(
-              child: Text(
-                '#${ele.alias}',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 4,
+          runSpacing: 4,
+          children: data.categories
+              .map(
+                (ele) => InkWell(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Symbols.category, size: 20),
+                      const Gap(4),
+                      Text(ele.alias, style: GoogleFonts.robotoMono()),
+                    ],
+                  ),
+                  onTap: () {},
                 ),
-              ).fontSize(13),
-              onTap: () {},
-            ),
-          )
-          .toList(),
-    ).opacity(0.8);
+              )
+              .toList(),
+        ).opacity(0.8),
+        Wrap(
+          spacing: 4,
+          runSpacing: 4,
+          children: data.tags
+              .map(
+                (ele) => InkWell(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Symbols.label, size: 20),
+                      const Gap(4),
+                      Text(ele.alias, style: GoogleFonts.robotoMono()),
+                    ],
+                  ),
+                  onTap: () {},
+                ),
+              )
+              .toList(),
+        ).opacity(0.8),
+      ],
+    );
   }
 }
 
@@ -1023,6 +1050,7 @@ class _PostTruncatedHint extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
+        spacing: 8,
         children: [
           if (data.body['content_length'] != null)
             Row(
@@ -1035,7 +1063,7 @@ class _PostTruncatedHint extends StatelessWidget {
                   ).inSeconds}s',
                 ]),
               ],
-            ).padding(right: 8),
+            ),
           if (data.body['content_length'] != null)
             Row(
               children: [

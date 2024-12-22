@@ -22,7 +22,10 @@ _$SnPostImpl _$$SnPostImplFromJson(Map<String, dynamic> json) => _$SnPostImpl(
               ?.map((e) => SnPostTag.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      categories: json['categories'] as List<dynamic>? ?? const [],
+      categories: (json['categories'] as List<dynamic>?)
+              ?.map((e) => SnPostCategory.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       replies: (json['replies'] as List<dynamic>?)
           ?.map((e) => SnPost.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -80,7 +83,7 @@ Map<String, dynamic> _$$SnPostImplToJson(_$SnPostImpl instance) =>
       'alias': instance.alias,
       'alias_prefix': instance.aliasPrefix,
       'tags': instance.tags.map((e) => e.toJson()).toList(),
-      'categories': instance.categories,
+      'categories': instance.categories.map((e) => e.toJson()).toList(),
       'replies': instance.replies?.map((e) => e.toJson()).toList(),
       'reply_id': instance.replyId,
       'repost_id': instance.repostId,
@@ -116,6 +119,31 @@ _$SnPostTagImpl _$$SnPostTagImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$SnPostTagImplToJson(_$SnPostTagImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt,
+      'alias': instance.alias,
+      'name': instance.name,
+      'description': instance.description,
+      'posts': instance.posts,
+    };
+
+_$SnPostCategoryImpl _$$SnPostCategoryImplFromJson(Map<String, dynamic> json) =>
+    _$SnPostCategoryImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'],
+      alias: json['alias'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      posts: json['posts'],
+    );
+
+Map<String, dynamic> _$$SnPostCategoryImplToJson(
+        _$SnPostCategoryImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'created_at': instance.createdAt.toIso8601String(),

@@ -19,7 +19,7 @@ class SnPost with _$SnPost {
     required String? alias,
     required String? aliasPrefix,
     @Default([]) List<SnPostTag> tags,
-    @Default([]) List<dynamic> categories,
+    @Default([]) List<SnPostCategory> categories,
     required List<SnPost>? replies,
     required int? replyId,
     required int? repostId,
@@ -65,6 +65,23 @@ class SnPostTag with _$SnPostTag {
 
   factory SnPostTag.fromJson(Map<String, Object?> json) =>
       _$SnPostTagFromJson(json);
+}
+
+@freezed
+class SnPostCategory with _$SnPostCategory {
+  const factory SnPostCategory({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required dynamic deletedAt,
+    required String alias,
+    required String name,
+    required String description,
+    required dynamic posts,
+  }) = _SnPostCategory;
+
+  factory SnPostCategory.fromJson(Map<String, Object?> json) =>
+      _$SnPostCategoryFromJson(json);
 }
 
 @freezed
