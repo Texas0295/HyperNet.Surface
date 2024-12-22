@@ -989,7 +989,14 @@ class _PostTagsList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(
+                      'postSearch',
+                      queryParameters: {
+                        'categories': ele.alias,
+                      },
+                    );
+                  },
                 ),
               )
               .toList(),
@@ -1008,7 +1015,14 @@ class _PostTagsList extends StatelessWidget {
                       Text(ele.alias, style: GoogleFonts.robotoMono()),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(
+                      'postSearch',
+                      queryParameters: {
+                        'tags': ele.alias,
+                      },
+                    );
+                  },
                 ),
               )
               .toList(),

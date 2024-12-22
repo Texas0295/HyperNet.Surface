@@ -13,7 +13,10 @@ import 'package:surface/widgets/post/post_tags_field.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class PostSearchScreen extends StatefulWidget {
-  const PostSearchScreen({super.key});
+  final Iterable<String>? initialTags;
+  final Iterable<String>? initialCategories;
+
+  const PostSearchScreen({super.key, this.initialTags, this.initialCategories});
 
   @override
   State<PostSearchScreen> createState() => _PostSearchScreenState();
@@ -30,6 +33,16 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
 
   String _searchTerm = '';
   Duration? _lastTook;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchTags.addAll(widget.initialTags ?? []);
+    _searchCategories.addAll(widget.initialCategories ?? []);
+    if (_searchTags.isNotEmpty || _searchCategories.isNotEmpty) {
+      _fetchPosts();
+    }
+  }
 
   Future<void> _fetchPosts() async {
     if (_searchTerm.isEmpty && _searchCategories.isEmpty && _searchTags.isEmpty) return;

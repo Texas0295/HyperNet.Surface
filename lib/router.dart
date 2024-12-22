@@ -77,8 +77,11 @@ final _appRoutes = [
           GoRoute(
             path: '/search',
             name: 'postSearch',
-            builder: (context, state) => const AppBackground(
-              child: PostSearchScreen(),
+            builder: (context, state) => AppBackground(
+              child: PostSearchScreen(
+                initialTags: state.uri.queryParameters['tags']?.split(','),
+                initialCategories: state.uri.queryParameters['categories']?.split(','),
+              ),
             ),
           ),
           GoRoute(
