@@ -83,12 +83,16 @@ class SnPostContentProvider {
     int offset = 0,
     String? type,
     String? author,
+    Iterable<String>? categories,
+    Iterable<String>? tags,
   }) async {
     final resp = await _sn.client.get('/cgi/co/posts', queryParameters: {
       'take': take,
       'offset': offset,
       if (type != null) 'type': type,
       if (author != null) 'author': author,
+      if (tags?.isNotEmpty ?? false) 'tags': tags!.join(','),
+      if (categories?.isNotEmpty ?? false) 'categories': categories!.join(','),
     });
     final List<SnPost> out = await _preloadRelatedDataInBatch(
       List.from(resp.data['data']?.map((e) => SnPost.fromJson(e)) ?? []),

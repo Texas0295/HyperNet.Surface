@@ -245,7 +245,7 @@ class PostItem extends StatelessWidget {
                   horizontal: 16,
                   vertical: 4,
                 ),
-              if (data.tags.isNotEmpty) _PostTagsList(data: data).padding(horizontal: 16, bottom: 6),
+              if (data.tags.isNotEmpty) _PostTagsList(data: data).padding(horizontal: 16, top: 4, bottom: 6),
             ],
           ),
         ),
