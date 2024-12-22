@@ -9,6 +9,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/experience.dart';
 import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/screens/abuse_report.dart';
@@ -437,6 +438,7 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                   Column(
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Icon(Symbols.calendar_add_on),
                           const Gap(8),
@@ -444,6 +446,7 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                         ],
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Icon(Symbols.cake),
                           const Gap(8),
@@ -457,6 +460,7 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                         ],
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Icon(Symbols.identity_platform),
                           const Gap(8),
@@ -464,6 +468,26 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                             '#${_account!.id.toString().padLeft(8, '0')}',
                             style: GoogleFonts.robotoMono(),
                           ).opacity(0.8),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Symbols.star),
+                          const Gap(8),
+                          Text('Lv${getLevelFromExp(_account?.profile?.experience ?? 0)}'),
+                          const Gap(8),
+                          Text(calcLevelUpProgressLevel(_account?.profile?.experience ?? 0)).fontSize(11).opacity(0.5),
+                          const Gap(8),
+                          Container(
+                            width: double.infinity,
+                            constraints: const BoxConstraints(maxWidth: 160),
+                            child: LinearProgressIndicator(
+                              value: calcLevelUpProgress(_account?.profile?.experience ?? 0),
+                              borderRadius: BorderRadius.circular(8),
+                              backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                            ).alignment(Alignment.centerLeft),
+                          ),
                         ],
                       ),
                     ],

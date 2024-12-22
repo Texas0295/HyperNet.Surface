@@ -45,17 +45,9 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
   Future<void> _fetchPublisher() async {
     try {
       final sn = context.read<SnNetworkProvider>();
-      final ud = context.read<UserDirectoryProvider>();
-      final rel = context.read<SnRelationshipProvider>();
       final resp = await sn.client.get('/cgi/co/publishers/${widget.name}');
       if (!mounted) return;
       _publisher = SnPublisher.fromJson(resp.data);
-      _account = await ud.getAccount(_publisher?.accountId);
-      _accountRelationship = await rel.getRelationship(_account!.id);
-      if (_publisher?.realmId != null && _publisher!.realmId != 0) {
-        final resp = await sn.client.get('/cgi/id/realms/${_publisher!.realmId}');
-        _realm = SnRealm.fromJson(resp.data);
-      }
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err).then((_) {
@@ -64,6 +56,20 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
       rethrow;
     } finally {
       setState(() {});
+    }
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final ud = context.read<UserDirectoryProvider>();
+      final rel = context.read<SnRelationshipProvider>();
+      _account = await ud.getAccount(_publisher?.accountId);
+      _accountRelationship = await rel.getRelationship(_account!.id);
+      if (_publisher?.realmId != null && _publisher!.realmId != 0) {
+        final resp = await sn.client.get('/cgi/id/realms/${_publisher!.realmId}');
+        _realm = SnRealm.fromJson(resp.data);
+      }
+    } catch (_) {
+      // ignore
     }
   }
 
