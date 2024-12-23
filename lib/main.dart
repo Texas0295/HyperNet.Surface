@@ -30,6 +30,7 @@ import 'package:surface/providers/post.dart';
 import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/special_day.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -148,6 +149,9 @@ class SolianApp extends StatelessWidget {
             ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => ChatChannelProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => ChatCallProvider(ctx)),
+
+            // Additional helper layer
+            Provider(create: (ctx) => SpecialDayProvider(ctx)),
           ],
           child: _AppDelegate(),
         ),

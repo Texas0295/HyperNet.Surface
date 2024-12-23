@@ -376,9 +376,12 @@
   "dailyCheckNegativeHint5Description": "關鍵時刻斷網",
   "dailyCheckNegativeHint6": "出門",
   "dailyCheckNegativeHint6Description": "忘帶傘遇上大雨",
-  "happyBirthday": "生日快樂，{}！",
+  "celebrateBirthday": "生日快樂，{}！",
   "celebrateMerryXmas": "聖誕快樂，{}！",
   "celebrateNewYear": "新年快樂，{}！",
+  "pendingBirthday": "{} 過生日",
+  "pendingMerryXmas": "{} 過聖誕節",
+  "pendingNewYear": "{} 跨年",
   "friendNew": "添加好友",
   "friendRequests": "好友請求",
   "friendRequestsDescription": {

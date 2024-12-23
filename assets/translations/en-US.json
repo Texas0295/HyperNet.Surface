@@ -378,9 +378,12 @@
   "dailyCheckNegativeHint5Description": "Lost connection at a crucial moment",
   "dailyCheckNegativeHint6": "Going out",
   "dailyCheckNegativeHint6Description": "Forgot your umbrella and got caught in the rain",
-  "happyBirthday": "Happy birthday, {}!",
+  "celebrateBirthday": "Happy birthday, {}!",
   "celebrateMerryXmas": "Merry christmas, {}！",
   "celebrateNewYear": "Happy new year, {}！",
+  "pendingBirthday": "Birthday in {}",
+  "pendingMerryXmas": "Christmas in {}",
+  "pendingNewYear": "New year in {}",
   "friendNew": "Add Friend",
   "friendRequests": "Friend Requests",
   "friendRequestsDescription": {

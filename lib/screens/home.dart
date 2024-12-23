@@ -11,11 +11,13 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:surface/providers/config.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/special_day.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/widget.dart';
 import 'package:surface/types/check_in.dart';
@@ -79,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: constraints.maxWidth > 640 ? MainAxisAlignment.center : MainAxisAlignment.start,
                   children: [
-                    _HomeDashSpecialDayWidget().padding(bottom: 8, horizontal: 8),
                     _HomeDashUpdateWidget(padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8)),
+                    _HomeDashSpecialDayWidget().padding(horizontal: 8),
                     StaggeredGrid.extent(
                       maxCrossAxisExtent: 280,
                       mainAxisSpacing: 8,
@@ -156,36 +158,55 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ua = context.watch<UserProvider>();
-    final today = DateTime.now();
-    final birthday = ua.user?.profile?.birthday?.toLocal();
-    final isBirthday = birthday != null && birthday.day == today.day && birthday.month == today.month;
+    final dayz = context.watch<SpecialDayProvider>();
 
-    return Column(
-      spacing: 8,
-      children: [
-        if (isBirthday)
-          Card(
-            child: ListTile(
-              leading: Text('🎂').fontSize(24),
-              title: Text('happyBirthday').tr(args: [ua.user?.nick ?? 'user']),
-            ),
-          ).padding(bottom: 8),
-        if (today.month == 12 && today.day == 25)
-          Card(
-            child: ListTile(
-              leading: Text('🎄').fontSize(24),
-              title: Text('celebrateMerryXmas').tr(args: [ua.user?.nick ?? 'user']),
-            ),
+    final days = dayz.getSpecialDays();
+
+    if (days.isNotEmpty) {
+      return Column(
+          spacing: 8,
+          children: days.map((ele) {
+            final (name, date) = dayz.getNextSpecialDay()!;
+            return Card(
+              child: ListTile(
+                leading: Text(kSpecialDaysSymbol[name] ?? '🎉').fontSize(24),
+                title: Text('celebrate$name').tr(args: [ua.user?.nick ?? 'user']),
+                subtitle: Text(date.toString()),
+              ),
+            ).padding(bottom: 8);
+          }).toList());
+    }
+
+    final nextOne = dayz.getNextSpecialDay();
+    final lastOne = dayz.getLastSpecialDay();
+
+    if (nextOne != null && lastOne != null) {
+      var (name, date) = nextOne;
+      date = date.add(Duration(days: 1));
+      final progress = dayz.getSpecialDayProgress(lastOne.$2, date);
+      final diff = date.difference(lastOne.$2);
+      return Card(
+        child: ListTile(
+          leading: Text(kSpecialDaysSymbol[name] ?? '🎉').fontSize(24),
+          title: Text('pending$name').tr(args: [RelativeTime(context).format(date)]),
+          subtitle: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('${diff.inDays}d · ${(progress * 100).toStringAsFixed(2)}%'),
+              const Gap(8),
+              Expanded(
+                child: LinearProgressIndicator(
+                  value: progress,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ],
           ),
-        if (today.month == 1 && today.day == 1)
-          Card(
-            child: ListTile(
-              leading: Text('🎉').fontSize(24),
-              title: Text('celebrateNewYear').tr(args: [ua.user?.nick ?? 'user']),
-            ),
-          ),
-      ],
-    );
+        ),
+      ).padding(bottom: 8);
+    }
+
+    return const SizedBox.shrink();
   }
 }
 
