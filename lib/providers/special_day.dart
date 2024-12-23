@@ -6,6 +6,13 @@ import 'package:surface/providers/userinfo.dart';
 const Map<String, (int, int)> kSpecialDays = {
   // Birthday is dynamically generated according to the user's profile
   'NewYear': (1, 1),
+  'ValentineDay': (2, 14),
+  'LaborDay': (5, 1),
+  'MotherDay': (5, 11),
+  'ChildrenDay': (6, 1),
+  'FatherDay': (8, 8),
+  'Halloween': (10, 31),
+  'Thanksgiving': (11, 28),
   'MerryXmas': (12, 25),
 };
 
@@ -13,6 +20,13 @@ const Map<String, String> kSpecialDaysSymbol = {
   'Birthday': '🎂',
   'NewYear': '🎉',
   'MerryXmas': '🎄',
+  'ValentineDay': '💑',
+  'LaborDay': '🏋️',
+  'MotherDay': '👩',
+  'ChildrenDay': '👶',
+  'FatherDay': '👨',
+  'Halloween': '🎃',
+  'Thanksgiving': '🎅',
 };
 
 class SpecialDayProvider {
