@@ -166,12 +166,16 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
       return Column(
           spacing: 8,
           children: days.map((ele) {
-            final (name, date) = dayz.getNextSpecialDay()!;
             return Card(
               child: ListTile(
-                leading: Text(kSpecialDaysSymbol[name] ?? '🎉').fontSize(24),
-                title: Text('celebrate$name').tr(args: [ua.user?.nick ?? 'user']),
-                subtitle: Text(date.toString()),
+                leading: Text(kSpecialDaysSymbol[ele] ?? '🎉').fontSize(24),
+                title: Text('celebrate$ele').tr(args: [ua.user?.nick ?? 'user']),
+                subtitle: Text(
+                  DateFormat('y/M/d').format(DateTime.now().copyWith(
+                    month: kSpecialDays[ele]!.$1,
+                    day: kSpecialDays[ele]!.$2,
+                  )),
+                ),
               ),
             ).padding(bottom: 8);
           }).toList());
@@ -184,7 +188,7 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
       var (name, date) = nextOne;
       date = date.add(Duration(days: 1));
       final progress = dayz.getSpecialDayProgress(lastOne.$2, date);
-      final diff = date.difference(lastOne.$2);
+      final diff = nextOne.$2.add(-const Duration(days: 1)).difference(lastOne.$2);
       return Card(
         child: ListTile(
           leading: Text(kSpecialDaysSymbol[name] ?? '🎉').fontSize(24),
