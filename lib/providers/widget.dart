@@ -13,7 +13,7 @@ class HomeWidgetProvider {
 
   Future<void> initialize() async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
-    if (!kIsWeb && Platform.isIOS) {
+    if (Platform.isIOS) {
       await HomeWidget.setAppGroupId("group.solsynth.solian");
     }
   }

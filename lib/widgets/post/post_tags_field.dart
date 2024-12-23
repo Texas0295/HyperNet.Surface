@@ -282,20 +282,6 @@ class _PostCategoriesFieldState extends State<PostCategoriesField> {
                 : null,
           ),
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-          onChanged: (value) {
-            for (final divider in kTagsDividers) {
-              if (value.endsWith(divider)) {
-                final tagValue = value.substring(0, value.length - 1);
-                if (tagValue.isEmpty) return;
-                if (!_currentCategories.contains(tagValue)) {
-                  setState(() => _currentCategories.add(tagValue));
-                }
-                controller.clear();
-                widget.onUpdate(_currentCategories);
-                break;
-              }
-            }
-          },
           onSubmitted: (_) {
             onSubmitted();
           },

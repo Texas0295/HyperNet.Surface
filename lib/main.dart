@@ -265,6 +265,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
       // The Network initialization will also save initialize the Config, so it not need to be initialized again
       final sn = context.read<SnNetworkProvider>();
       await sn.initializeUserAgent();
+      await sn.setConfigWithNative();
       if (!mounted) return;
       final ua = context.read<UserProvider>();
       await ua.initialize();

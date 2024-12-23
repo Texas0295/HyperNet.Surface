@@ -493,9 +493,7 @@ class _HomeDashRecommendationPostWidgetState extends State<_HomeDashRecommendati
     setState(() => _isBusy = true);
     try {
       final pt = context.read<SnPostContentProvider>();
-      final home = context.read<HomeWidgetProvider>();
       _posts = await pt.listRecommendations();
-      home.saveWidgetData('post_featured', _posts!.first.toJson());
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);

@@ -34,7 +34,6 @@ class UserProvider extends ChangeNotifier {
     refreshUser().then((value) {
       if (value != null) {
         log('Logged in as @${value.name}');
-        _home.saveWidgetData('user', value.toJson());
       }
     });
   }

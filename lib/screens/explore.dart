@@ -22,8 +22,9 @@ const Map<String, IconData> kCategoryIcons = {
   'sports': Symbols.sports_soccer,
   'music': Symbols.music_note,
   'news': Symbols.newspaper,
-  'knowledge': Symbols.book,
+  'knowledge': Symbols.library_books,
   'literature': Symbols.book,
+  'funny': Symbols.attractions,
 };
 
 class ExploreScreen extends StatefulWidget {
@@ -184,26 +185,27 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 preferredSize: const Size.fromHeight(50),
                 child: SizedBox(
                   height: 50,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 12),
+                  child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    itemCount: _categories.length,
-                    itemBuilder: (context, idx) {
-                      final ele = _categories[idx];
-                      return StyledWidget(ChoiceChip(
-                        avatar: Icon(kCategoryIcons[ele.alias] ?? Symbols.question_mark),
-                        label: Text(
-                          'postCategory${ele.alias.capitalize()}'.trExists()
-                              ? 'postCategory${ele.alias.capitalize()}'.tr()
-                              : ele.name,
-                        ),
-                        selected: _selectedCategory == ele.alias,
-                        onSelected: (value) {
-                          _selectedCategory = value ? ele.alias : null;
-                          _refreshPosts();
-                        },
-                      )).padding(horizontal: 4);
-                    },
+                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _categories.map((ele) {
+                        return StyledWidget(ChoiceChip(
+                          avatar: Icon(kCategoryIcons[ele.alias] ?? Symbols.question_mark),
+                          label: Text(
+                            'postCategory${ele.alias.capitalize()}'.trExists()
+                                ? 'postCategory${ele.alias.capitalize()}'.tr()
+                                : ele.name,
+                          ),
+                          selected: _selectedCategory == ele.alias,
+                          onSelected: (value) {
+                            _selectedCategory = value ? ele.alias : null;
+                            _refreshPosts();
+                          },
+                        )).padding(horizontal: 4);
+                      }).toList(),
+                    ),
                   ),
                 ),
               ),

@@ -68,9 +68,8 @@ class SnNetworkProvider {
     _config.initialize().then((_) {
       _prefs = _config.prefs;
       client.options.baseUrl = _config.serverUrl;
-      if (!context.mounted) return;
-      _home.saveWidgetData("nex_server_url", client.options.baseUrl);
     });
+
   }
 
   static Future<Dio> createOffContextClient() async {
@@ -107,6 +106,10 @@ class SnNetworkProvider {
     client.options.baseUrl = prefs.getString(kNetworkServerStoreKey) ?? kNetworkServerDefault;
 
     return client;
+  }
+
+  Future<void> setConfigWithNative() async {
+    _home.saveWidgetData("nex_server_url", client.options.baseUrl);
   }
 
   static Future<String> _getUserAgent() async {
