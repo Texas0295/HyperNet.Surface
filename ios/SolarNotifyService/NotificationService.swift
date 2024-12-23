@@ -80,7 +80,11 @@ class NotificationService: UNNotificationServiceExtension {
         
         let metadataCopy = metadata as? [String: String] ?? [:]
         let avatarUrl = getAttachmentUrl(for: avatarIdentifier)
-        KingfisherManager.shared.retrieveImage(with: URL(string: avatarUrl)!, completionHandler: { result in
+        
+        let targetSize = 640
+        let scaleProcessor = ResizingImageProcessor(referenceSize: CGSize(width: targetSize, height: targetSize), mode: .aspectFit)
+        
+        KingfisherManager.shared.retrieveImage(with: URL(string: avatarUrl)!, options: [.processor(scaleProcessor)], completionHandler: { result in
             var image: Data?
             switch result {
             case .success(let value):
