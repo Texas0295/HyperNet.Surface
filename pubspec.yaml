@@ -80,7 +80,7 @@ dependencies:
   firebase_core: ^3.8.0
   firebase_messaging: ^15.1.5
   firebase_analytics: ^11.3.5
-  flutter_udid: ^3.0.0
+  flutter_udid: ^4.0.0
   media_kit: ^1.1.11
   media_kit_video: ^1.2.5
   media_kit_libs_video: ^1.0.5

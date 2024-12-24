@@ -10,6 +10,7 @@ import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
+import 'package:surface/widgets/context_menu.dart';
 import 'package:surface/widgets/link_preview.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -53,7 +54,7 @@ class ChatMessage extends StatelessWidget {
       swipeSensitivity: 20,
       onLeftSwipe: onReply != null ? (_) => onReply!(data) : null,
       onRightSwipe: onEdit != null ? (_) => onEdit!(data) : null,
-      child: ContextMenuRegion(
+      child: ContextMenuArea(
         contextMenu: ContextMenu(
           entries: [
             MenuHeader(text: "eventResourceTag".tr(args: ['#${data.id}'])),

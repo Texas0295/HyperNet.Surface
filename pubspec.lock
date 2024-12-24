@@ -753,10 +753,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_udid
-      sha256: be464dc5b1fb7ee894f6a32d65c086ca5e177fdcf9375ac08d77495b98150f84
+      sha256: "166bee5989a58c66b8b62000ea65edccc7c8167bbafdbb08022638db330dd030"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "4.0.0"
   flutter_web_plugins:
     dependency: "direct main"
     description: flutter
@@ -766,10 +766,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_webrtc
-      sha256: "430859fb5b763d7556d06ef287cfca582e17d9a2dc36da26017f25a5c0b2523e"
+      sha256: "0e138a0a3bf6830c29c8439b17be0e222d0de27fa72f24e6aee4d34de72f22ef"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.4"
+    version: "0.12.5"
   freezed:
     dependency: "direct dev"
     description:
@@ -934,10 +934,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: fa8141602fde3f7e2f81dbf043613eb44dfa325fa0bcf93c0f142c9f7a2c193e
+      sha256: aa6f1280b670861ac45220cc95adc59bb6ae130259d36f980ccb62220dc5e59f
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+18"
+    version: "0.8.12+19"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -1086,10 +1086,10 @@ packages:
     dependency: "direct main"
     description:
       name: livekit_client
-      sha256: "7802b5de1cae2ee3439db730d24d31c6dcbce173c5e6db2fc5774039a290bc2d"
+      sha256: a3ff529fe6745ee40cdedcd021d81c4a6ad946dd495e782596f2856eeeabc739
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.3"
   logging:
     dependency: transitive
     description:

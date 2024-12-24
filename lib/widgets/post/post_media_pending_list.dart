@@ -14,6 +14,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
+import 'package:surface/widgets/context_menu.dart';
 import 'package:surface/widgets/dialog.dart';
 
 class PostMediaPendingList extends StatelessWidget {
@@ -87,7 +88,7 @@ class PostMediaPendingList extends StatelessWidget {
     }
   }
 
-  ContextMenu _buildContextMenu(BuildContext context, int idx, PostWriteMedia media) {
+  ContextMenu _createContextMenu(BuildContext context, int idx, PostWriteMedia media) {
     return ContextMenu(
       entries: [
         if (media.attachment == null && onUpload != null)
@@ -174,8 +175,8 @@ class PostMediaPendingList extends StatelessWidget {
         children: [
           const Gap(8),
           if (thumbnail != null)
-            ContextMenuRegion(
-              contextMenu: _buildContextMenu(context, -1, thumbnail!),
+            ContextMenuArea(
+              contextMenu: _createContextMenu(context, -1, thumbnail!),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -224,8 +225,8 @@ class PostMediaPendingList extends StatelessWidget {
               itemCount: attachments.length,
               itemBuilder: (context, idx) {
                 final media = attachments[idx];
-                return ContextMenuRegion(
-                  contextMenu: _buildContextMenu(context, idx, media),
+                return ContextMenuArea(
+                  contextMenu: _createContextMenu(context, idx, media),
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(

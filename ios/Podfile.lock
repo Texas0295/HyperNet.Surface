@@ -173,7 +173,7 @@ PODS:
   - in_app_review (2.0.0):
     - Flutter
   - Kingfisher (8.1.3)
-  - livekit_client (2.3.2):
+  - livekit_client (2.3.3):
     - Flutter
     - flutter_webrtc
     - WebRTC-SDK (= 125.6422.06)
@@ -386,7 +386,7 @@ SPEC CHECKSUMS:
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   Kingfisher: f2af9028b16baf9dc6c07c570072bc41cbf009ef
-  livekit_client: 6108dad8b77db3142bafd4c630f471d0a54335cd
+  livekit_client: 02cf2cc4357a655af12ccee70ff5596ae4e6feef
   media_kit_libs_ios_video: a5fe24bc7875ccd6378a0978c13185e1344651c1
   media_kit_native_event_loop: e6b2ab20cf0746eb1c33be961fcf79667304fa2a
   media_kit_video: 5da63f157170e5bf303bf85453b7ef6971218a2e
