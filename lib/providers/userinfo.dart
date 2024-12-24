@@ -31,9 +31,10 @@ class UserProvider extends ChangeNotifier {
     final value = _config.prefs.getString(kAtkStoreKey);
     isAuthorized = value != null;
     notifyListeners();
-    refreshUser().then((value) {
+    refreshUser().then((value) async {
       if (value != null) {
         log('Logged in as @${value.name}');
+        log('Atk: ${await atk}');
       }
     });
   }

@@ -6,12 +6,16 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
+import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/context_menu.dart';
@@ -91,6 +95,12 @@ class PostMediaPendingList extends StatelessWidget {
   ContextMenu _createContextMenu(BuildContext context, int idx, PostWriteMedia media) {
     return ContextMenu(
       entries: [
+        if (media.attachment != null && media.type == PostWriteMediaType.video)
+          MenuItem(
+            label: 'attachmentSetThumbnail'.tr(),
+            icon: Symbols.image,
+            onSelected: () {},
+          ),
         if (media.attachment == null && onUpload != null)
           MenuItem(
               label: 'attachmentUpload'.tr(),
@@ -98,7 +108,10 @@ class PostMediaPendingList extends StatelessWidget {
               onSelected: () {
                 onUpload!(idx);
               }),
-        if (media.attachment != null && onPostSetThumbnail != null && idx != -1)
+        if (media.attachment != null &&
+            media.type == PostWriteMediaType.image &&
+            onPostSetThumbnail != null &&
+            idx != -1)
           MenuItem(
             label: 'attachmentSetAsPostThumbnail'.tr(),
             icon: Symbols.gallery_thumbnail,
@@ -138,6 +151,14 @@ class PostMediaPendingList extends StatelessWidget {
             label: 'crop'.tr(),
             icon: Symbols.crop,
             onSelected: () => _cropImage(context, idx),
+          ),
+        if (media.attachment != null)
+          MenuItem(
+            label: 'attachmentCopyRandomId'.tr(),
+            icon: Symbols.content_copy,
+            onSelected: () {
+              Clipboard.setData(ClipboardData(text: media.attachment!.rid));
+            },
           ),
         if (media.attachment != null && onRemove != null)
           MenuItem(
@@ -191,8 +212,8 @@ class PostMediaPendingList extends StatelessWidget {
                     aspectRatio: 1,
                     child: switch (thumbnail!.type) {
                       PostWriteMediaType.image => Container(
-                        color: Theme.of(context).colorScheme.surfaceContainer,
-                        child: LayoutBuilder(builder: (context, constraints) {
+                          color: Theme.of(context).colorScheme.surfaceContainer,
+                          child: LayoutBuilder(builder: (context, constraints) {
                             return Image(
                               image: thumbnail!.getImageProvider(
                                 context,
@@ -202,7 +223,7 @@ class PostMediaPendingList extends StatelessWidget {
                               fit: BoxFit.contain,
                             );
                           }),
-                      ),
+                        ),
                       _ => Container(
                           color: Theme.of(context).colorScheme.surface,
                           child: const Icon(Symbols.docs).center(),
@@ -241,8 +262,8 @@ class PostMediaPendingList extends StatelessWidget {
                         aspectRatio: 1,
                         child: switch (media.type) {
                           PostWriteMediaType.image => Container(
-                            color: Theme.of(context).colorScheme.surfaceContainer,
-                            child: LayoutBuilder(builder: (context, constraints) {
+                              color: Theme.of(context).colorScheme.surfaceContainer,
+                              child: LayoutBuilder(builder: (context, constraints) {
                                 return Image(
                                   image: media.getImageProvider(
                                     context,
@@ -252,7 +273,11 @@ class PostMediaPendingList extends StatelessWidget {
                                   fit: BoxFit.contain,
                                 );
                               }),
-                          ),
+                            ),
+                          PostWriteMediaType.video => Container(
+                              color: Theme.of(context).colorScheme.surfaceContainer,
+                              child: const Icon(Symbols.videocam).center(),
+                            ),
                           _ => Container(
                               color: Theme.of(context).colorScheme.surfaceContainer,
                               child: const Icon(Symbols.docs).center(),
@@ -267,6 +292,165 @@ class PostMediaPendingList extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AddPostMediaButton extends StatelessWidget {
+  final Function(Iterable<PostWriteMedia>) onAdd;
+
+  const AddPostMediaButton({super.key, required this.onAdd});
+
+  void _takeMedia(bool isVideo) async {
+    final picker = ImagePicker();
+    final result = isVideo
+        ? await picker.pickVideo(source: ImageSource.camera)
+        : await picker.pickImage(source: ImageSource.camera);
+    if (result == null) return;
+    onAdd([PostWriteMedia.fromFile(result)]);
+  }
+
+  void _selectMedia() async {
+    final picker = ImagePicker();
+    final result = await picker.pickMultipleMedia();
+    if (result.isEmpty) return;
+    onAdd(
+      result.map((e) => PostWriteMedia.fromFile(e)),
+    );
+  }
+
+  void _pasteMedia() async {
+    final imageBytes = await Pasteboard.image;
+    if (imageBytes == null) return;
+    onAdd([
+      PostWriteMedia.fromBytes(
+        imageBytes,
+        'attachmentPastedImage'.tr(),
+        PostWriteMediaType.image,
+      ),
+    ]);
+  }
+
+  void _linkRandomId(BuildContext context) async {
+    final randomIdController = TextEditingController();
+    final randomId = await showDialog<String?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('addAttachmentFromRandomId').tr(),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: randomIdController,
+              decoration: InputDecoration(
+                labelText: 'fieldAttachmentRandomId'.tr(),
+                border: const UnderlineInputBorder(),
+              ),
+            ),
+            const Gap(8),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: Text('dialogDismiss').tr(),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            child: Text('dialogConfirm').tr(),
+            onPressed: () {
+              Navigator.pop(context, randomIdController.text);
+            },
+          ),
+        ],
+      ),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      randomIdController.dispose();
+    });
+    if (randomId == null || randomId.isEmpty) return;
+    if (!context.mounted) return;
+
+    final attach = context.read<SnAttachmentProvider>();
+    final attachment = await attach.getOne(randomId);
+
+    onAdd([
+      PostWriteMedia(attachment),
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: Icon(
+        Symbols.add_photo_alternate,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      itemBuilder: (context) => [
+        if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
+          PopupMenuItem(
+            child: Row(
+              children: [
+                const Icon(Symbols.photo_camera),
+                const Gap(16),
+                Text('addAttachmentFromCameraPhoto').tr(),
+              ],
+            ),
+            onTap: () {
+              _takeMedia(false);
+            },
+          ),
+        if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
+          PopupMenuItem(
+            child: Row(
+              children: [
+                const Icon(Symbols.videocam),
+                const Gap(16),
+                Text('addAttachmentFromCameraVideo').tr(),
+              ],
+            ),
+            onTap: () {
+              _takeMedia(true);
+            },
+          ),
+        PopupMenuItem(
+          child: Row(
+            children: [
+              const Icon(Symbols.photo_library),
+              const Gap(16),
+              Text('addAttachmentFromAlbum').tr(),
+            ],
+          ),
+          onTap: () {
+            _selectMedia();
+          },
+        ),
+        PopupMenuItem(
+          child: Row(
+            children: [
+              const Icon(Symbols.link),
+              const Gap(16),
+              Text('addAttachmentFromRandomId').tr(),
+            ],
+          ),
+          onTap: () {
+            _linkRandomId(context);
+          },
+        ),
+        PopupMenuItem(
+          child: Row(
+            children: [
+              const Icon(Symbols.content_paste),
+              const Gap(16),
+              Text('addAttachmentFromClipboard').tr(),
+            ],
+          ),
+          onTap: () {
+            _pasteMedia();
+          },
+        ),
+      ],
     );
   }
 }

@@ -279,15 +279,18 @@
     "one": "{} 个附件",
     "other": "{} 个附件"
   },
+  "fieldAttachmentRandomId": "访问 ID",
   "addAttachmentFromAlbum": "从相册中添加附件",
   "addAttachmentFromClipboard": "粘贴附件",
   "addAttachmentFromCameraPhoto": "拍摄照片",
   "addAttachmentFromCameraVideo": "拍摄视频",
+  "addAttachmentFromRandomId": "通过访问 ID 链接",
   "attachmentPastedImage": "粘贴的图片",
   "attachmentInsertLink": "插入连接",
   "attachmentSetAsPostThumbnail": "设置为帖子缩略图",
   "attachmentUnsetAsPostThumbnail": "取消设置为帖子缩略图",
   "attachmentSetThumbnail": "设置缩略图",
+  "attachmentCopyRandomId": "复制访问 ID",
   "attachmentUpload": "上传",
   "notification": "通知",
   "notificationUnreadCount": {

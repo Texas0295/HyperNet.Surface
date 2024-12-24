@@ -281,15 +281,18 @@
     "one": "{} attachment",
     "other": "{} attachments"
   },
+  "fieldAttachmentRandomId": "Random ID",
   "addAttachmentFromAlbum": "Add from album",
   "addAttachmentFromClipboard": "Paste file",
   "addAttachmentFromCameraPhoto": "Take photo",
   "addAttachmentFromCameraVideo": "Take video",
+  "addAttachmentFromRandomId": "Link via RID",
   "attachmentPastedImage": "Pasted Image",
   "attachmentInsertLink": "Insert Link",
   "attachmentSetAsPostThumbnail": "Set as post thumbnail",
   "attachmentUnsetAsPostThumbnail": "Unset as post thumbnail",
   "attachmentSetThumbnail": "Set thumbnail",
+  "attachmentCopyRandomId": "Copy RID",
   "attachmentUpload": "Upload",
   "notification": "Notification",
   "notificationUnreadCount": {

@@ -123,40 +123,6 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   final List<PostWriteMedia> _attachments = List.empty(growable: true);
-  final _imagePicker = ImagePicker();
-
-  void _takeMedia(bool isVideo) async {
-    final result = isVideo
-        ? await _imagePicker.pickVideo(source: ImageSource.camera)
-        : await _imagePicker.pickImage(source: ImageSource.camera);
-    if (result == null) return;
-    _attachments.add(
-      PostWriteMedia.fromFile(result),
-    );
-    setState(() {});
-  }
-
-  void _selectMedia() async {
-    final result = await _imagePicker.pickMultipleMedia();
-    if (result.isEmpty) return;
-    _attachments.addAll(
-      result.map((e) => PostWriteMedia.fromFile(e)),
-    );
-    setState(() {});
-  }
-
-  void _pasteMedia() async {
-    final imageBytes = await Pasteboard.image;
-    if (imageBytes == null) return;
-    _attachments.add(
-      PostWriteMedia.fromBytes(
-        imageBytes,
-        'attachmentPastedImage'.tr(),
-        PostWriteMediaType.image,
-      ),
-    );
-    setState(() {});
-  }
 
   @override
   void dispose() {
@@ -294,63 +260,12 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                 ),
               ),
               const Gap(8),
-              PopupMenuButton(
-                icon: Icon(
-                  Symbols.add_photo_alternate,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                itemBuilder: (context) => [
-                  if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
-                    PopupMenuItem(
-                      child: Row(
-                        children: [
-                          const Icon(Symbols.photo_camera),
-                          const Gap(16),
-                          Text('addAttachmentFromCameraPhoto').tr(),
-                        ],
-                      ),
-                      onTap: () {
-                        _takeMedia(false);
-                      },
-                    ),
-                  if (!kIsWeb && !Platform.isLinux && !Platform.isMacOS && !Platform.isWindows)
-                    PopupMenuItem(
-                      child: Row(
-                        children: [
-                          const Icon(Symbols.videocam),
-                          const Gap(16),
-                          Text('addAttachmentFromCameraVideo').tr(),
-                        ],
-                      ),
-                      onTap: () {
-                        _takeMedia(true);
-                      },
-                    ),
-                  PopupMenuItem(
-                    child: Row(
-                      children: [
-                        const Icon(Symbols.photo_library),
-                        const Gap(16),
-                        Text('addAttachmentFromAlbum').tr(),
-                      ],
-                    ),
-                    onTap: () {
-                      _selectMedia();
-                    },
-                  ),
-                  PopupMenuItem(
-                    child: Row(
-                      children: [
-                        const Icon(Symbols.content_paste),
-                        const Gap(16),
-                        Text('addAttachmentFromClipboard').tr(),
-                      ],
-                    ),
-                    onTap: () {
-                      _pasteMedia();
-                    },
-                  ),
-                ],
+              AddPostMediaButton(
+                onAdd: (items) {
+                  setState(() {
+                    _attachments.addAll(items);
+                  });
+                },
               ),
               IconButton(
                 onPressed: _isBusy ? null : _sendMessage,
