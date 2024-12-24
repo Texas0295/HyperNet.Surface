@@ -1,0 +1,30 @@
+meta {
+  name: Developer Notify All Users
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{endpoint}}/cgi/id/dev/notify/all
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{atk}}
+}
+
+body:json {
+  {
+    "client_id": "{{third_client_id}}",
+    "client_secret":"{{third_client_tk}}",
+    "type": "general",
+    "subject": "Merry Christmas!",
+    "subtitle": "一条来自 Solar Network 团队的信息",
+    "content": "今天是 12 月 25 日 (UTC+8)，小羊祝您圣诞快乐 🎄",
+    "metadata": {
+      "image": "6EqsYQwmFRCkbmhR"
+    },
+    "priority": 10
+  }
+}
