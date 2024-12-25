@@ -17,9 +17,12 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/attachment.dart';
+import 'package:surface/widgets/attachment/attachment_input.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/context_menu.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/universal_image.dart';
 
 class PostMediaPendingList extends StatelessWidget {
   final PostWriteMedia? thumbnail;
@@ -75,6 +78,32 @@ class PostMediaPendingList extends StatelessWidget {
     }
   }
 
+  Future<void> _setThumbnail(BuildContext context, int idx) async {
+    if (idx == -1) {
+      // Thumbnail only can set on video or audio. And thumbnail of the post must be an image, so it's not possible to set thumbnail on the post thumbnail.
+      return;
+    } else if (attachments[idx].attachment == null) {
+      return;
+    }
+
+    final thumbnail = await showDialog<SnAttachment?>(
+      context: context,
+      builder: (context) => AttachmentInputDialog(
+        title: 'attachmentSetThumbnail'.tr(),
+      ),
+    );
+    if (thumbnail == null) return;
+    if (!context.mounted) return;
+
+    final attach = context.read<SnAttachmentProvider>();
+    final newAttach = await attach.updateOne(attachments[idx].attachment!.id, thumbnail.alt, metadata: {
+      ...attachments[idx].attachment!.metadata,
+      'thumbnail': thumbnail.rid,
+    });
+
+    onUpdate!(idx, PostWriteMedia(newAttach));
+  }
+
   Future<void> _deleteAttachment(BuildContext context, int idx) async {
     final media = idx == -1 ? thumbnail! : attachments[idx];
     if (media.attachment == null) return;
@@ -99,7 +128,9 @@ class PostMediaPendingList extends StatelessWidget {
           MenuItem(
             label: 'attachmentSetThumbnail'.tr(),
             icon: Symbols.image,
-            onSelected: () {},
+            onSelected: () {
+              _setThumbnail(context, idx);
+            },
           ),
         if (media.attachment == null && onUpload != null)
           MenuItem(
@@ -119,7 +150,7 @@ class PostMediaPendingList extends StatelessWidget {
               onPostSetThumbnail!(idx);
             },
           )
-        else if (media.attachment != null && onPostSetThumbnail != null)
+        else if (media.attachment != null && media.type == PostWriteMediaType.image && onPostSetThumbnail != null)
           MenuItem(
             label: 'attachmentUnsetAsPostThumbnail'.tr(),
             icon: Symbols.cancel,
@@ -190,6 +221,8 @@ class PostMediaPendingList extends StatelessWidget {
   Widget build(BuildContext context) {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
+    final sn = context.read<SnNetworkProvider>();
+
     return Container(
       constraints: const BoxConstraints(maxHeight: 120),
       child: Row(
@@ -198,40 +231,7 @@ class PostMediaPendingList extends StatelessWidget {
           if (thumbnail != null)
             ContextMenuArea(
               contextMenu: _createContextMenu(context, -1, thumbnail!),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).dividerColor,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: switch (thumbnail!.type) {
-                      PostWriteMediaType.image => Container(
-                          color: Theme.of(context).colorScheme.surfaceContainer,
-                          child: LayoutBuilder(builder: (context, constraints) {
-                            return Image(
-                              image: thumbnail!.getImageProvider(
-                                context,
-                                width: (constraints.maxWidth * devicePixelRatio).round(),
-                                height: (constraints.maxHeight * devicePixelRatio).round(),
-                              )!,
-                              fit: BoxFit.contain,
-                            );
-                          }),
-                        ),
-                      _ => Container(
-                          color: Theme.of(context).colorScheme.surface,
-                          child: const Icon(Symbols.docs).center(),
-                        ),
-                    },
-                  ),
-                ),
-              ),
+              child: _PostMediaPendingItem(media: thumbnail!),
             ),
           if (thumbnail != null)
             const VerticalDivider(width: 1, thickness: 1).padding(
@@ -248,49 +248,68 @@ class PostMediaPendingList extends StatelessWidget {
                 final media = attachments[idx];
                 return ContextMenuArea(
                   contextMenu: _createContextMenu(context, idx, media),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).dividerColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: switch (media.type) {
-                          PostWriteMediaType.image => Container(
-                              color: Theme.of(context).colorScheme.surfaceContainer,
-                              child: LayoutBuilder(builder: (context, constraints) {
-                                return Image(
-                                  image: media.getImageProvider(
-                                    context,
-                                    width: (constraints.maxWidth * devicePixelRatio).round(),
-                                    height: (constraints.maxHeight * devicePixelRatio).round(),
-                                  )!,
-                                  fit: BoxFit.contain,
-                                );
-                              }),
-                            ),
-                          PostWriteMediaType.video => Container(
-                              color: Theme.of(context).colorScheme.surfaceContainer,
-                              child: const Icon(Symbols.videocam).center(),
-                            ),
-                          _ => Container(
-                              color: Theme.of(context).colorScheme.surfaceContainer,
-                              child: const Icon(Symbols.docs).center(),
-                            ),
-                        },
-                      ),
-                    ),
-                  ),
+                  child: _PostMediaPendingItem(media: media),
                 );
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PostMediaPendingItem extends StatelessWidget {
+  final PostWriteMedia media;
+
+  const _PostMediaPendingItem({
+    required this.media,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    final sn = context.read<SnNetworkProvider>();
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: switch (media.type) {
+            PostWriteMediaType.image => Container(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return Image(
+                    image: media.getImageProvider(
+                      context,
+                      width: (constraints.maxWidth * devicePixelRatio).round(),
+                      height: (constraints.maxHeight * devicePixelRatio).round(),
+                    )!,
+                    fit: BoxFit.contain,
+                  );
+                }),
+              ),
+            PostWriteMediaType.video => Container(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                child: media.attachment?.metadata['thumbnail'] != null
+                    ? AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment?.metadata['thumbnail']))
+                    : const Icon(Symbols.videocam).center(),
+              ),
+            _ => Container(
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                child: const Icon(Symbols.docs).center(),
+              ),
+          },
+        ),
       ),
     );
   }

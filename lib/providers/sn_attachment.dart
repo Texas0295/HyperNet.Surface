@@ -215,4 +215,18 @@ class SnAttachmentProvider {
 
     return place;
   }
+
+  Future<SnAttachment> updateOne(
+    int id,
+    String alt, {
+    required Map<String, dynamic> metadata,
+    bool isMature = false,
+  }) async {
+    final resp = await _sn.client.put('/cgi/uc/attachments/$id', data: {
+      'alt': alt,
+      'metadata': metadata,
+      'is_mature': isMature,
+    });
+    return SnAttachment.fromJson(resp.data);
+  }
 }

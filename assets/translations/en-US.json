@@ -294,6 +294,9 @@
   "attachmentSetThumbnail": "Set thumbnail",
   "attachmentCopyRandomId": "Copy RID",
   "attachmentUpload": "Upload",
+  "attachmentInputDialog": "Upload attachments",
+  "attachmentInputUseRandomId": "Use Random ID",
+  "attachmentInputNew": "New Upload",
   "notification": "Notification",
   "notificationUnreadCount": {
     "zero": "All notifications read",
@@ -509,5 +512,6 @@
   "postCategoryKnowledge": "Knowledge",
   "postCategoryLiterature": "Literature",
   "postCategoryFunny": "Funny",
-  "postCategoryUncategorized": "Uncategorized"
+  "postCategoryUncategorized": "Uncategorized",
+  "waitingForUpload": "Waiting for upload"
 }
