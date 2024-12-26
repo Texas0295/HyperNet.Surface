@@ -136,10 +136,7 @@ class PostMediaPendingList extends StatelessWidget {
               onSelected: () {
                 onUpload!(idx);
               }),
-        if (media.attachment != null &&
-            media.type == SnMediaType.image &&
-            onPostSetThumbnail != null &&
-            idx != -1)
+        if (media.attachment != null && media.type == SnMediaType.image && onPostSetThumbnail != null && idx != -1)
           MenuItem(
             label: 'attachmentSetAsPostThumbnail'.tr(),
             icon: Symbols.gallery_thumbnail,
@@ -293,10 +290,38 @@ class _PostMediaPendingItem extends StatelessWidget {
               ),
             SnMediaType.video => Container(
                 color: Theme.of(context).colorScheme.surfaceContainer,
-                child: media.attachment?.metadata['thumbnail'] != null
-                    ? AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment?.metadata['thumbnail']))
-                    : const Icon(Symbols.videocam).center(),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (media.attachment?.thumbnail != null)
+                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!)),
+                    const Icon(Symbols.videocam, color: Colors.white, shadows: [
+                      Shadow(
+                        offset: Offset(1, 1),
+                        blurRadius: 8.0,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
+            SnMediaType.audio => Container(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  if (media.attachment?.thumbnail != null)
+                    AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!)),
+                  const Icon(Symbols.audio_file, color: Colors.white, shadows: [
+                    Shadow(
+                      offset: Offset(1, 1),
+                      blurRadius: 8.0,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ]),
+                ],
+              ),
+            ),
             _ => Container(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: const Icon(Symbols.docs).center(),

@@ -255,18 +255,13 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       if (_writeController.replyingPost != null)
                         Column(
                           children: [
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                dividerColor: Colors.transparent,
-                              ),
-                              child: ExpansionTile(
-                                minTileHeight: 48,
-                                leading: const Icon(Symbols.reply).padding(left: 4),
-                                title: Text('postReplyingNotice')
-                                    .fontSize(15)
-                                    .tr(args: ['@${_writeController.replyingPost!.publisher.name}']),
-                                children: <Widget>[PostItem(data: _writeController.replyingPost!)],
-                              ),
+                            ExpansionTile(
+                              minTileHeight: 48,
+                              leading: const Icon(Symbols.reply).padding(left: 4),
+                              title: Text('postReplyingNotice')
+                                  .fontSize(15)
+                                  .tr(args: ['@${_writeController.replyingPost!.publisher.name}']),
+                              children: <Widget>[PostItem(data: _writeController.replyingPost!)],
                             ),
                             const Divider(height: 1),
                           ],
@@ -275,22 +270,17 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       if (_writeController.repostingPost != null)
                         Column(
                           children: [
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                dividerColor: Colors.transparent,
-                              ),
-                              child: ExpansionTile(
-                                minTileHeight: 48,
-                                leading: const Icon(Symbols.forward).padding(left: 4),
-                                title: Text('postRepostingNotice')
-                                    .fontSize(15)
-                                    .tr(args: ['@${_writeController.repostingPost!.publisher.name}']),
-                                children: <Widget>[
-                                  PostItem(
-                                    data: _writeController.repostingPost!,
-                                  )
-                                ],
-                              ),
+                            ExpansionTile(
+                              minTileHeight: 48,
+                              leading: const Icon(Symbols.forward).padding(left: 4),
+                              title: Text('postRepostingNotice')
+                                  .fontSize(15)
+                                  .tr(args: ['@${_writeController.repostingPost!.publisher.name}']),
+                              children: <Widget>[
+                                PostItem(
+                                  data: _writeController.repostingPost!,
+                                )
+                              ],
                             ),
                             const Divider(height: 1),
                           ],
@@ -299,18 +289,13 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       if (_writeController.editingPost != null)
                         Column(
                           children: [
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                dividerColor: Colors.transparent,
-                              ),
-                              child: ExpansionTile(
-                                minTileHeight: 48,
-                                leading: const Icon(Symbols.edit_note).padding(left: 4),
-                                title: Text('postEditingNotice')
-                                    .fontSize(15)
-                                    .tr(args: ['@${_writeController.editingPost!.publisher.name}']),
-                                children: <Widget>[PostItem(data: _writeController.editingPost!)],
-                              ),
+                            ExpansionTile(
+                              minTileHeight: 48,
+                              leading: const Icon(Symbols.edit_note).padding(left: 4),
+                              title: Text('postEditingNotice')
+                                  .fontSize(15)
+                                  .tr(args: ['@${_writeController.editingPost!.publisher.name}']),
+                              children: <Widget>[PostItem(data: _writeController.editingPost!)],
                             ),
                             const Divider(height: 1),
                           ],
