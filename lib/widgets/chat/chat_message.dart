@@ -174,7 +174,7 @@ class ChatMessage extends StatelessWidget {
 class _ChatMessageText extends StatelessWidget {
   final SnChatMessage data;
 
-  const _ChatMessageText({super.key, required this.data});
+  const _ChatMessageText({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +214,7 @@ class _ChatMessageText extends StatelessWidget {
 class _ChatMessageSystemNotify extends StatelessWidget {
   final SnChatMessage data;
 
-  const _ChatMessageSystemNotify({super.key, required this.data});
+  const _ChatMessageSystemNotify({required this.data});
 
   String _formatDuration(Duration duration) {
     String negativeSign = duration.isNegative ? '-' : '';

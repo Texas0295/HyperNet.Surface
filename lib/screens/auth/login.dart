@@ -105,6 +105,7 @@ class _LoginCheckScreen extends StatefulWidget {
   final SnAuthFactor? factor;
   final Function(SnAuthTicket?) onTicket;
   final Function onNext;
+
   const _LoginCheckScreen({
     super.key,
     required this.ticket,
@@ -204,9 +205,7 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
           controller: _passwordController,
           obscureText: true,
           autofillHints: [
-            (_factorLabelMap[widget.factor!.type]?.$3 ?? true)
-                ? AutofillHints.password
-                : AutofillHints.oneTimeCode
+            (_factorLabelMap[widget.factor!.type]?.$3 ?? true) ? AutofillHints.password : AutofillHints.oneTimeCode
           ],
           decoration: InputDecoration(
             isDense: true,
@@ -243,6 +242,7 @@ class _LoginPickerScreen extends StatefulWidget {
   final Function(SnAuthTicket?) onTicket;
   final Function(SnAuthFactor) onPickFactor;
   final Function onNext;
+
   const _LoginPickerScreen({
     super.key,
     required this.ticket,
@@ -260,8 +260,7 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
   bool _isBusy = false;
   int? _factorPicked;
 
-  Color get _unFocusColor =>
-      Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.75).round());
+  Color get _unFocusColor => Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.75).round());
 
   void _performGetFactorCode() async {
     if (_factorPicked == null) return;
@@ -373,6 +372,7 @@ class _LoginLookupScreen extends StatefulWidget {
   final Function(SnAuthTicket?) onTicket;
   final Function(List<SnAuthFactor>?) onFactor;
   final Function onNext;
+
   const _LoginLookupScreen({
     super.key,
     required this.ticket,
@@ -401,14 +401,13 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
-      final lookupResp =
-          await sn.client.get('/cgi/id/users/lookup?probe=$username');
+      final lookupResp = await sn.client.get('/cgi/id/users/lookup?probe=$username');
       await sn.client.post('/cgi/id/users/me/password-reset', data: {
         'user_id': lookupResp.data['id'],
       });
-      context.showModalDialog('done'.tr(), 'signinResetPasswordSent'.tr());
+      if (mounted) context.showModalDialog('done'.tr(), 'signinResetPasswordSent'.tr());
     } catch (err) {
-      context.showErrorDialog(err);
+      if (mounted) context.showErrorDialog(err);
     } finally {
       setState(() => _isBusy = false);
     }
@@ -431,8 +430,7 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
       widget.onTicket(result.ticket);
 
       // Pull factors
-      final factorResp =
-          await sn.client.get('/cgi/id/auth/factors', queryParameters: {
+      final factorResp = await sn.client.get('/cgi/id/auth/factors', queryParameters: {
         'ticketId': result.ticket!.id.toString(),
       });
       widget.onFactor(
@@ -443,7 +441,7 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
 
       widget.onNext();
     } catch (err) {
-      context.showErrorDialog(err);
+      if(mounted) context.showErrorDialog(err);
       return;
     } finally {
       setState(() => _isBusy = false);
@@ -526,10 +524,7 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
                     'termAcceptNextWithAgree'.tr(),
                     textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withAlpha((255 * 0.75).round()),
+                          color: Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.75).round()),
                         ),
                   ),
                   Material(

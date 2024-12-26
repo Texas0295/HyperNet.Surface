@@ -80,7 +80,7 @@ class _AttachmentItemSensitiveBlur extends StatefulWidget {
   final Widget child;
   final bool isCompact;
 
-  const _AttachmentItemSensitiveBlur({super.key, required this.child, this.isCompact = false});
+  const _AttachmentItemSensitiveBlur({required this.child, this.isCompact = false});
 
   @override
   State<_AttachmentItemSensitiveBlur> createState() => _AttachmentItemSensitiveBlurState();
@@ -166,7 +166,6 @@ class _AttachmentItemContentVideo extends StatefulWidget {
   final bool isAutoload;
 
   const _AttachmentItemContentVideo({
-    super.key,
     required this.data,
     this.isAutoload = false,
   });
@@ -207,7 +206,7 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
       ),
     ];
 
-    final ratio = widget.data.metadata['ratio'] ?? 16 / 9;
+    final ratio = widget.data.data['ratio'] ?? 16 / 9;
 
     final sn = context.read<SnNetworkProvider>();
 
@@ -216,9 +215,9 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
         behavior: HitTestBehavior.opaque,
         child: Stack(
           children: [
-            if (widget.data.metadata['thumbnail'] != null)
+            if (widget.data.thumbnail != null)
               AutoResizeUniversalImage(
-                sn.getAttachmentUrl(widget.data.metadata['thumbnail']),
+                sn.getAttachmentUrl(widget.data.thumbnail!),
                 fit: BoxFit.cover,
               )
             else
@@ -266,7 +265,7 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
                           ),
                           Text(
                             Duration(
-                              milliseconds: (widget.data.metadata['duration'] ?? 0).toInt() * 1000,
+                              milliseconds: (widget.data.data['duration'] ?? 0).toInt() * 1000,
                             ).toString(),
                             style: GoogleFonts.robotoMono(
                               fontSize: 12,
@@ -316,7 +315,6 @@ class _AttachmentItemContentAudio extends StatefulWidget {
   final bool isAutoload;
 
   const _AttachmentItemContentAudio({
-    super.key,
     required this.data,
     this.isAutoload = false,
   });
@@ -374,11 +372,11 @@ class _AttachmentItemContentAudioState extends State<_AttachmentItemContentAudio
         behavior: HitTestBehavior.opaque,
         child: Stack(
           children: [
-            if (widget.data.metadata['thumbnail'] != null)
+            if (widget.data.thumbnail != null)
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: AutoResizeUniversalImage(
-                  sn.getAttachmentUrl(widget.data.metadata['thumbnail']),
+                  sn.getAttachmentUrl(widget.data.data['thumbnail']),
                   fit: BoxFit.cover,
                 ),
               )
@@ -459,11 +457,11 @@ class _AttachmentItemContentAudioState extends State<_AttachmentItemContentAudio
 
     return Stack(
       children: [
-        if (widget.data.metadata['thumbnail'] != null)
+        if (widget.data.data['thumbnail'] != null)
           AspectRatio(
             aspectRatio: 16 / 9,
             child: AutoResizeUniversalImage(
-              sn.getAttachmentUrl(widget.data.metadata['thumbnail']),
+              sn.getAttachmentUrl(widget.data.data['thumbnail']),
               fit: BoxFit.cover,
             ),
           ),

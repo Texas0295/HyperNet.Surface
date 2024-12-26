@@ -443,7 +443,7 @@ class _ChannelProfileDetailDialogState
 
 class _ChannelMemberListWidget extends StatefulWidget {
   final SnChannel channel;
-  const _ChannelMemberListWidget({super.key, required this.channel});
+  const _ChannelMemberListWidget({required this.channel});
 
   @override
   State<_ChannelMemberListWidget> createState() =>
@@ -580,7 +580,7 @@ class _ChannelMemberListWidgetState extends State<_ChannelMemberListWidget> {
 
 class _NewChannelMemberWidget extends StatefulWidget {
   final SnChannel channel;
-  const _NewChannelMemberWidget({super.key, required this.channel});
+  const _NewChannelMemberWidget({required this.channel});
 
   @override
   State<_NewChannelMemberWidget> createState() =>

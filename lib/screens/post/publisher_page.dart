@@ -580,7 +580,6 @@ class _PublisherPostList extends StatelessWidget {
   final void Function() onDeleted;
 
   const _PublisherPostList({
-    super.key,
     required this.isBusy,
     required this.postCount,
     required this.posts,

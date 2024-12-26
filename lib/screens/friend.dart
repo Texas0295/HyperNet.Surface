@@ -289,7 +289,7 @@ class _FriendScreenState extends State<FriendScreen> {
 }
 
 class _NewFriendWidget extends StatefulWidget {
-  const _NewFriendWidget({super.key});
+  const _NewFriendWidget();
 
   @override
   State<_NewFriendWidget> createState() => _NewFriendWidgetState();
@@ -365,7 +365,7 @@ class _NewFriendWidgetState extends State<_NewFriendWidget> {
 
 class _FriendshipListWidget extends StatefulWidget {
   final List<SnRelationship> relations;
-  const _FriendshipListWidget({super.key, required this.relations});
+  const _FriendshipListWidget({required this.relations});
 
   @override
   State<_FriendshipListWidget> createState() => _FriendshipListWidgetState();

@@ -47,6 +47,7 @@ mixin _$SnAttachment {
   int get accountId => throw _privateConstructorUsedError;
   Map<String, dynamic> get usermeta => throw _privateConstructorUsedError;
   Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
+  String? get thumbnail => throw _privateConstructorUsedError;
 
   /// Serializes this SnAttachment to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -91,7 +92,8 @@ abstract class $SnAttachmentCopyWith<$Res> {
       int poolId,
       int accountId,
       Map<String, dynamic> usermeta,
-      Map<String, dynamic> metadata});
+      Map<String, dynamic> metadata,
+      String? thumbnail});
 
   $SnAttachmentPoolCopyWith<$Res>? get pool;
 }
@@ -138,6 +140,7 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
     Object? accountId = null,
     Object? usermeta = null,
     Object? metadata = null,
+    Object? thumbnail = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -248,6 +251,10 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      thumbnail: freezed == thumbnail
+          ? _value.thumbnail
+          : thumbnail // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -301,7 +308,8 @@ abstract class _$$SnAttachmentImplCopyWith<$Res>
       int poolId,
       int accountId,
       Map<String, dynamic> usermeta,
-      Map<String, dynamic> metadata});
+      Map<String, dynamic> metadata,
+      String? thumbnail});
 
   @override
   $SnAttachmentPoolCopyWith<$Res>? get pool;
@@ -347,6 +355,7 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
     Object? accountId = null,
     Object? usermeta = null,
     Object? metadata = null,
+    Object? thumbnail = freezed,
   }) {
     return _then(_$SnAttachmentImpl(
       id: null == id
@@ -457,6 +466,10 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value._metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      thumbnail: freezed == thumbnail
+          ? _value.thumbnail
+          : thumbnail // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -491,7 +504,8 @@ class _$SnAttachmentImpl extends _SnAttachment {
       required this.poolId,
       required this.accountId,
       final Map<String, dynamic> usermeta = const {},
-      final Map<String, dynamic> metadata = const {}})
+      final Map<String, dynamic> metadata = const {},
+      this.thumbnail})
       : _usermeta = usermeta,
         _metadata = metadata,
         super._();
@@ -570,8 +584,11 @@ class _$SnAttachmentImpl extends _SnAttachment {
   }
 
   @override
+  final String? thumbnail;
+
+  @override
   String toString() {
-    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, fileChunks: $fileChunks, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isUploaded: $isUploaded, isSelfRef: $isSelfRef, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, usermeta: $usermeta, metadata: $metadata)';
+    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, fileChunks: $fileChunks, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isUploaded: $isUploaded, isSelfRef: $isSelfRef, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, usermeta: $usermeta, metadata: $metadata, thumbnail: $thumbnail)';
   }
 
   @override
@@ -617,7 +634,9 @@ class _$SnAttachmentImpl extends _SnAttachment {
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
             const DeepCollectionEquality().equals(other._usermeta, _usermeta) &&
-            const DeepCollectionEquality().equals(other._metadata, _metadata));
+            const DeepCollectionEquality().equals(other._metadata, _metadata) &&
+            (identical(other.thumbnail, thumbnail) ||
+                other.thumbnail == thumbnail));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -650,7 +669,8 @@ class _$SnAttachmentImpl extends _SnAttachment {
         poolId,
         accountId,
         const DeepCollectionEquality().hash(_usermeta),
-        const DeepCollectionEquality().hash(_metadata)
+        const DeepCollectionEquality().hash(_metadata),
+        thumbnail
       ]);
 
   /// Create a copy of SnAttachment
@@ -697,7 +717,8 @@ abstract class _SnAttachment extends SnAttachment {
       required final int poolId,
       required final int accountId,
       final Map<String, dynamic> usermeta,
-      final Map<String, dynamic> metadata}) = _$SnAttachmentImpl;
+      final Map<String, dynamic> metadata,
+      final String? thumbnail}) = _$SnAttachmentImpl;
   const _SnAttachment._() : super._();
 
   factory _SnAttachment.fromJson(Map<String, dynamic> json) =
@@ -757,6 +778,8 @@ abstract class _SnAttachment extends SnAttachment {
   Map<String, dynamic> get usermeta;
   @override
   Map<String, dynamic> get metadata;
+  @override
+  String? get thumbnail;
 
   /// Create a copy of SnAttachment
   /// with the given fields replaced by the non-null parameter values.

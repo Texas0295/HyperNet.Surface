@@ -201,7 +201,7 @@ class _PublisherNewPersonalState extends State<_PublisherNewPersonal> {
 }
 
 class _PublisherNewOrganization extends StatefulWidget {
-  const _PublisherNewOrganization({super.key});
+  const _PublisherNewOrganization();
 
   @override
   State<_PublisherNewOrganization> createState() =>

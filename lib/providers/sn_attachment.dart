@@ -217,15 +217,17 @@ class SnAttachmentProvider {
   }
 
   Future<SnAttachment> updateOne(
-    int id,
-    String alt, {
-    required Map<String, dynamic> metadata,
-    bool isMature = false,
+    int id, {
+    String? alt,
+    String? thumbnail,
+    Map<String, dynamic>? metadata,
+    bool? isIndexable,
   }) async {
     final resp = await _sn.client.put('/cgi/uc/attachments/$id', data: {
       'alt': alt,
+      'thumbnail': thumbnail,
       'metadata': metadata,
-      'is_mature': isMature,
+      'is_indexable': isIndexable,
     });
     return SnAttachment.fromJson(resp.data);
   }

@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HomeDashUpdateWidget extends StatelessWidget {
   final EdgeInsets? padding;
 
-  const _HomeDashUpdateWidget({super.key, this.padding});
+  const _HomeDashUpdateWidget({this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +153,7 @@ class _HomeDashUpdateWidget extends StatelessWidget {
 }
 
 class _HomeDashSpecialDayWidget extends StatelessWidget {
-  const _HomeDashSpecialDayWidget({super.key});
+  const _HomeDashSpecialDayWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +215,7 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
 }
 
 class _HomeDashCheckInWidget extends StatefulWidget {
-  const _HomeDashCheckInWidget({super.key});
+  const _HomeDashCheckInWidget();
 
   @override
   State<_HomeDashCheckInWidget> createState() => _HomeDashCheckInWidgetState();
@@ -433,7 +433,7 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
 }
 
 class _HomeDashNotificationWidget extends StatefulWidget {
-  const _HomeDashNotificationWidget({super.key});
+  const _HomeDashNotificationWidget();
 
   @override
   State<_HomeDashNotificationWidget> createState() => _HomeDashNotificationWidgetState();
@@ -504,7 +504,7 @@ class _HomeDashNotificationWidgetState extends State<_HomeDashNotificationWidget
 }
 
 class _HomeDashRecommendationPostWidget extends StatefulWidget {
-  const _HomeDashRecommendationPostWidget({super.key});
+  const _HomeDashRecommendationPostWidget();
 
   @override
   State<_HomeDashRecommendationPostWidget> createState() => _HomeDashRecommendationPostWidgetState();

@@ -32,7 +32,7 @@ class _AccountSelectState extends State<AccountSelect> {
   final List<SnAccount> _pendingUsers = List.empty(growable: true);
   final List<SnAccount> _selectedUsers = List.empty(growable: true);
 
-  int _accountId = 0;
+  final int _accountId = 0;
 
   Future<void> _revertSelectedUsers() async {
     if (widget.initialSelection?.isEmpty ?? true) return;

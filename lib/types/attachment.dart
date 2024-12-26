@@ -43,6 +43,7 @@ class SnAttachment with _$SnAttachment {
     required int accountId,
     @Default({}) Map<String, dynamic> usermeta,
     @Default({}) Map<String, dynamic> metadata,
+    String? thumbnail,
   }) = _SnAttachment;
 
   factory SnAttachment.fromJson(Map<String, Object?> json) => _$SnAttachmentFromJson(json);

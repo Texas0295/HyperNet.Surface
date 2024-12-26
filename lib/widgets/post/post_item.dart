@@ -549,7 +549,6 @@ class _PostHeadline extends StatelessWidget {
   final bool isEnlarge;
 
   const _PostHeadline({
-    super.key,
     required this.data,
     this.isEnlarge = false,
   });
@@ -894,7 +893,6 @@ class _PostQuoteContent extends StatelessWidget {
   final bool isFlatted;
 
   const _PostQuoteContent({
-    super.key,
     this.isRelativeDate = true,
     this.isFlatted = false,
     required this.child,
@@ -962,7 +960,7 @@ class _PostQuoteContent extends StatelessWidget {
 class _PostTagsList extends StatelessWidget {
   final SnPost data;
 
-  const _PostTagsList({super.key, required this.data});
+  const _PostTagsList({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -1035,7 +1033,7 @@ class _PostTagsList extends StatelessWidget {
 class _PostVisibilityHint extends StatelessWidget {
   final SnPost data;
 
-  const _PostVisibilityHint({super.key, required this.data});
+  const _PostVisibilityHint({required this.data});
 
   static const List<IconData> kVisibilityIcons = [
     Symbols.public,
@@ -1060,7 +1058,7 @@ class _PostVisibilityHint extends StatelessWidget {
 class _PostTruncatedHint extends StatelessWidget {
   final SnPost data;
 
-  const _PostTruncatedHint({super.key, required this.data});
+  const _PostTruncatedHint({required this.data});
 
   static const int kHumanReadSpeed = 238;
 
@@ -1102,7 +1100,7 @@ class _PostTruncatedHint extends StatelessWidget {
 class _PostAbuseReportDialog extends StatefulWidget {
   final SnPost data;
 
-  const _PostAbuseReportDialog({super.key, required this.data});
+  const _PostAbuseReportDialog({required this.data});
 
   @override
   State<_PostAbuseReportDialog> createState() => _PostAbuseReportDialogState();

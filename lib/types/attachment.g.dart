@@ -37,6 +37,7 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       accountId: (json['account_id'] as num).toInt(),
       usermeta: json['usermeta'] as Map<String, dynamic>? ?? const {},
       metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
+      thumbnail: json['thumbnail'] as String?,
     );
 
 Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
@@ -68,6 +69,7 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'account_id': instance.accountId,
       'usermeta': instance.usermeta,
       'metadata': instance.metadata,
+      'thumbnail': instance.thumbnail,
     };
 
 _$SnAttachmentPoolImpl _$$SnAttachmentPoolImplFromJson(

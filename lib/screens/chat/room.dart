@@ -97,7 +97,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       }
     } catch (err) {
       if (!mounted) return;
-      print((err as DioException).response?.data);
       context.showErrorDialog(err);
     } finally {
       setState(() => _isCalling = false);

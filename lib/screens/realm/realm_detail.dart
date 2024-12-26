@@ -119,7 +119,7 @@ class _RealmDetailHomeWidget extends StatelessWidget {
   final SnRealm? realm;
   final List<SnPublisher>? publishers;
 
-  const _RealmDetailHomeWidget({super.key, required this.realm, this.publishers});
+  const _RealmDetailHomeWidget({required this.realm, this.publishers});
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,7 @@ class _RealmDetailHomeWidget extends StatelessWidget {
 class _RealmMemberListWidget extends StatefulWidget {
   final SnRealm? realm;
 
-  const _RealmMemberListWidget({super.key, this.realm});
+  const _RealmMemberListWidget({this.realm});
 
   @override
   State<_RealmMemberListWidget> createState() => _RealmMemberListWidgetState();
@@ -304,7 +304,7 @@ class _RealmMemberListWidgetState extends State<_RealmMemberListWidget> {
 class _NewRealmMemberWidget extends StatefulWidget {
   final SnRealm realm;
 
-  const _NewRealmMemberWidget({super.key, required this.realm});
+  const _NewRealmMemberWidget({required this.realm});
 
   @override
   State<_NewRealmMemberWidget> createState() => _NewRealmMemberWidgetState();
@@ -384,7 +384,7 @@ class _RealmSettingsWidget extends StatefulWidget {
   final SnRealm? realm;
   final Function() onUpdate;
 
-  const _RealmSettingsWidget({super.key, required this.realm, required this.onUpdate});
+  const _RealmSettingsWidget({required this.realm, required this.onUpdate});
 
   @override
   State<_RealmSettingsWidget> createState() => _RealmSettingsWidgetState();

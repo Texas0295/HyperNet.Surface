@@ -22,15 +22,14 @@ import 'package:surface/widgets/universal_image.dart';
 
 class AccountPublisherEditScreen extends StatefulWidget {
   final String name;
+
   const AccountPublisherEditScreen({super.key, required this.name});
 
   @override
-  State<AccountPublisherEditScreen> createState() =>
-      _AccountPublisherEditScreenState();
+  State<AccountPublisherEditScreen> createState() => _AccountPublisherEditScreenState();
 }
 
-class _AccountPublisherEditScreenState
-    extends State<AccountPublisherEditScreen> {
+class _AccountPublisherEditScreenState extends State<AccountPublisherEditScreen> {
   bool _isBusy = false;
 
   SnPublisher? _publisher;
@@ -54,7 +53,7 @@ class _AccountPublisherEditScreenState
       _publisher = SnPublisher.fromJson(resp.data);
       _syncWidget();
     } catch (err) {
-      context.showErrorDialog(err);
+      if (mounted) context.showErrorDialog(err);
     } finally {
       setState(() => _isBusy = false);
     }
@@ -75,9 +74,9 @@ class _AccountPublisherEditScreenState
         'name': _nameController.text,
         'description': _descriptionController.text,
       });
-      Navigator.pop(context, true);
+      if (mounted) Navigator.pop(context, true);
     } catch (err) {
-      context.showErrorDialog(err);
+      if(mounted) context.showErrorDialog(err);
     } finally {
       setState(() => _isBusy = false);
     }
@@ -108,11 +107,9 @@ class _AccountPublisherEditScreenState
     if (image == null) return;
     if (!mounted) return;
 
-    final ImageProvider imageProvider =
-        kIsWeb ? NetworkImage(image.path) : FileImage(File(image.path));
-    final aspectRatios = place == 'banner'
-        ? [CropAspectRatio(width: 16, height: 7)]
-        : [CropAspectRatio(width: 1, height: 1)];
+    final ImageProvider imageProvider = kIsWeb ? NetworkImage(image.path) : FileImage(File(image.path));
+    final aspectRatios =
+        place == 'banner' ? [CropAspectRatio(width: 16, height: 7)] : [CropAspectRatio(width: 1, height: 1)];
     final result = (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
         ? await showCupertinoImageCropper(
             // ignore: use_build_context_synchronously
@@ -134,10 +131,7 @@ class _AccountPublisherEditScreenState
 
     setState(() => _isBusy = true);
 
-    final rawBytes =
-        (await result.uiImage.toByteData(format: ImageByteFormat.png))!
-            .buffer
-            .asUint8List();
+    final rawBytes = (await result.uiImage.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List();
 
     try {
       final attachment = await attach.directUploadOne(
@@ -199,9 +193,7 @@ class _AccountPublisherEditScreenState
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
                         child: Container(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHigh,
+                          color: Theme.of(context).colorScheme.surfaceContainerHigh,
                           child: _banner != null
                               ? AutoResizeUniversalImage(
                                   sn.getAttachmentUrl(_banner!),
@@ -240,8 +232,7 @@ class _AccountPublisherEditScreenState
                 labelText: 'fieldUsername'.tr(),
                 helperText: 'fieldUsernameCannotEditHint'.tr(),
               ),
-              onTapOutside: (_) =>
-                  FocusManager.instance.primaryFocus?.unfocus(),
+              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
             ),
             const Gap(4),
             TextField(
@@ -249,8 +240,7 @@ class _AccountPublisherEditScreenState
               decoration: InputDecoration(
                 labelText: 'fieldNickname'.tr(),
               ),
-              onTapOutside: (_) =>
-                  FocusManager.instance.primaryFocus?.unfocus(),
+              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
             ),
             const Gap(4),
             TextField(
@@ -260,8 +250,7 @@ class _AccountPublisherEditScreenState
               decoration: InputDecoration(
                 labelText: 'fieldDescription'.tr(),
               ),
-              onTapOutside: (_) =>
-                  FocusManager.instance.primaryFocus?.unfocus(),
+              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
             ),
             const Gap(12),
             Row(

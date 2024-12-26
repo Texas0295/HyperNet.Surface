@@ -60,7 +60,6 @@ class _LinkPreviewEntry extends StatelessWidget {
   final SnLinkMeta meta;
 
   const _LinkPreviewEntry({
-    super.key,
     required this.meta,
   });
 
