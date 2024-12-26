@@ -1,18 +1,14 @@
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:pasteboard/pasteboard.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/user_directory.dart';
+import 'package:surface/types/attachment.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/markdown_content.dart';
@@ -80,7 +76,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           media.name,
           'messaging',
           null,
-          mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
+          mimetype: media.raw != null && media.type == SnMediaType.image ? 'image/png' : null,
         );
 
         final item = await attach.chunkedUploadParts(

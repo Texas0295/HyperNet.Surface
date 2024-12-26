@@ -58,7 +58,7 @@ class _AttachmentListState extends State<AttachmentList> {
 
         if (widget.data.isEmpty) return const SizedBox.shrink();
         if (widget.data.length == 1) {
-          final singleAspectRatio = widget.data[0]?.metadata['ratio']?.toDouble() ??
+          final singleAspectRatio = widget.data[0]?.data['ratio']?.toDouble() ??
               switch (widget.data[0]?.mimetype.split('/').firstOrNull) {
                 'audio' => 16 / 9,
                 'video' => 16 / 9,
@@ -114,6 +114,7 @@ class _AttachmentListState extends State<AttachmentList> {
                   },
                 ),
                 onTap: () {
+                  if (widget.data.firstOrNull?.mediaType != SnMediaType.image) return;
                   context.pushTransparentRoute(
                     AttachmentZoomView(
                       data: widget.data.where((ele) => ele != null).cast(),
@@ -136,7 +137,7 @@ class _AttachmentListState extends State<AttachmentList> {
             children: widget.data
                 .mapIndexed(
                   (idx, ele) => AspectRatio(
-                    aspectRatio: (ele?.metadata['ratio'] ?? 1).toDouble(),
+                    aspectRatio: (ele?.data['ratio'] ?? 1).toDouble(),
                     child: Container(
                       decoration: BoxDecoration(
                         color: backgroundColor,
@@ -161,7 +162,7 @@ class _AttachmentListState extends State<AttachmentList> {
         }
 
         return AspectRatio(
-          aspectRatio: (widget.data.firstOrNull?.metadata['ratio'] ?? 1).toDouble(),
+          aspectRatio: (widget.data.firstOrNull?.data['ratio'] ?? 1).toDouble(),
           child: Container(
             constraints: BoxConstraints(maxHeight: constraints.maxHeight),
             child: ScrollConfiguration(
@@ -173,12 +174,14 @@ class _AttachmentListState extends State<AttachmentList> {
                   return Container(
                     constraints: constraints,
                     child: AspectRatio(
-                      aspectRatio: (widget.data[idx]?.metadata['ratio'] ?? 1).toDouble(),
+                      aspectRatio: (widget.data[idx]?.data['ratio'] ?? 1).toDouble(),
                       child: GestureDetector(
                         onTap: () {
+                          if (widget.data[idx]?.mediaType != SnMediaType.image) return;
                           context.pushTransparentRoute(
                             AttachmentZoomView(
-                              data: widget.data.where((ele) => ele != null).cast(),
+                              data:
+                                  widget.data.where((ele) => ele != null && ele.mediaType == SnMediaType.image).cast(),
                               initialIndex: idx,
                               heroTags: heroTags,
                             ),

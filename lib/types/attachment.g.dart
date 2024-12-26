@@ -21,9 +21,10 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       hash: json['hash'] as String,
       destination: (json['destination'] as num).toInt(),
       refCount: (json['ref_count'] as num).toInt(),
+      contentRating: (json['content_rating'] as num?)?.toInt() ?? 0,
+      qualityRating: (json['quality_rating'] as num?)?.toInt() ?? 0,
       fileChunks: json['file_chunks'],
       cleanedAt: json['cleaned_at'],
-      isMature: json['is_mature'] as bool,
       isAnalyzed: json['is_analyzed'] as bool,
       isUploaded: json['is_uploaded'] as bool,
       isSelfRef: json['is_self_ref'] as bool,
@@ -34,6 +35,7 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
           : SnAttachmentPool.fromJson(json['pool'] as Map<String, dynamic>),
       poolId: (json['pool_id'] as num).toInt(),
       accountId: (json['account_id'] as num).toInt(),
+      usermeta: json['usermeta'] as Map<String, dynamic>? ?? const {},
       metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
     );
 
@@ -52,9 +54,10 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'hash': instance.hash,
       'destination': instance.destination,
       'ref_count': instance.refCount,
+      'content_rating': instance.contentRating,
+      'quality_rating': instance.qualityRating,
       'file_chunks': instance.fileChunks,
       'cleaned_at': instance.cleanedAt,
-      'is_mature': instance.isMature,
       'is_analyzed': instance.isAnalyzed,
       'is_uploaded': instance.isUploaded,
       'is_self_ref': instance.isSelfRef,
@@ -63,6 +66,7 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'pool': instance.pool?.toJson(),
       'pool_id': instance.poolId,
       'account_id': instance.accountId,
+      'usermeta': instance.usermeta,
       'metadata': instance.metadata,
     };
 

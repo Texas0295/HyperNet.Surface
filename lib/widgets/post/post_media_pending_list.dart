@@ -124,7 +124,7 @@ class PostMediaPendingList extends StatelessWidget {
   ContextMenu _createContextMenu(BuildContext context, int idx, PostWriteMedia media) {
     return ContextMenu(
       entries: [
-        if (media.attachment != null && media.type == PostWriteMediaType.video)
+        if (media.attachment != null && media.type == SnMediaType.video)
           MenuItem(
             label: 'attachmentSetThumbnail'.tr(),
             icon: Symbols.image,
@@ -140,7 +140,7 @@ class PostMediaPendingList extends StatelessWidget {
                 onUpload!(idx);
               }),
         if (media.attachment != null &&
-            media.type == PostWriteMediaType.image &&
+            media.type == SnMediaType.image &&
             onPostSetThumbnail != null &&
             idx != -1)
           MenuItem(
@@ -150,7 +150,7 @@ class PostMediaPendingList extends StatelessWidget {
               onPostSetThumbnail!(idx);
             },
           )
-        else if (media.attachment != null && media.type == PostWriteMediaType.image && onPostSetThumbnail != null)
+        else if (media.attachment != null && media.type == SnMediaType.image && onPostSetThumbnail != null)
           MenuItem(
             label: 'attachmentUnsetAsPostThumbnail'.tr(),
             icon: Symbols.cancel,
@@ -166,7 +166,7 @@ class PostMediaPendingList extends StatelessWidget {
               onInsertLink!(idx);
             },
           ),
-        if (media.type == PostWriteMediaType.image && media.attachment != null)
+        if (media.type == SnMediaType.image && media.attachment != null)
           MenuItem(
             label: 'preview'.tr(),
             icon: Symbols.preview,
@@ -177,7 +177,7 @@ class PostMediaPendingList extends StatelessWidget {
               );
             },
           ),
-        if (media.type == PostWriteMediaType.image && media.attachment == null)
+        if (media.type == SnMediaType.image && media.attachment == null)
           MenuItem(
             label: 'crop'.tr(),
             icon: Symbols.crop,
@@ -219,10 +219,6 @@ class PostMediaPendingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-
-    final sn = context.read<SnNetworkProvider>();
-
     return Container(
       constraints: const BoxConstraints(maxHeight: 120),
       child: Row(
@@ -285,7 +281,7 @@ class _PostMediaPendingItem extends StatelessWidget {
         child: AspectRatio(
           aspectRatio: 1,
           child: switch (media.type) {
-            PostWriteMediaType.image => Container(
+            SnMediaType.image => Container(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: LayoutBuilder(builder: (context, constraints) {
                   return Image(
@@ -298,7 +294,7 @@ class _PostMediaPendingItem extends StatelessWidget {
                   );
                 }),
               ),
-            PostWriteMediaType.video => Container(
+            SnMediaType.video => Container(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: media.attachment?.metadata['thumbnail'] != null
                     ? AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment?.metadata['thumbnail']))
@@ -345,7 +341,7 @@ class AddPostMediaButton extends StatelessWidget {
       PostWriteMedia.fromBytes(
         imageBytes,
         'attachmentPastedImage'.tr(),
-        PostWriteMediaType.image,
+        SnMediaType.image,
       ),
     ]);
   }

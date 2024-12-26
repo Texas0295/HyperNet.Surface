@@ -15,16 +15,9 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
 
-enum PostWriteMediaType {
-  image,
-  video,
-  audio,
-  file,
-}
-
 class PostWriteMedia {
   late String name;
-  late PostWriteMediaType type;
+  late SnMediaType type;
   final SnAttachment? attachment;
   final XFile? file;
   final Uint8List? raw;
@@ -36,16 +29,16 @@ class PostWriteMedia {
 
     switch (attachment?.mimetype.split('/').firstOrNull) {
       case 'image':
-        type = PostWriteMediaType.image;
+        type = SnMediaType.image;
         break;
       case 'video':
-        type = PostWriteMediaType.video;
+        type = SnMediaType.video;
         break;
       case 'audio':
-        type = PostWriteMediaType.audio;
+        type = SnMediaType.audio;
         break;
       default:
-        type = PostWriteMediaType.file;
+        type = SnMediaType.file;
     }
   }
 
@@ -57,16 +50,16 @@ class PostWriteMedia {
 
     switch (mimetype?.split('/').firstOrNull) {
       case 'image':
-        type = PostWriteMediaType.image;
+        type = SnMediaType.image;
         break;
       case 'video':
-        type = PostWriteMediaType.video;
+        type = SnMediaType.video;
         break;
       case 'audio':
-        type = PostWriteMediaType.audio;
+        type = SnMediaType.audio;
         break;
       default:
-        type = PostWriteMediaType.file;
+        type = SnMediaType.file;
     }
   }
 
@@ -244,7 +237,7 @@ class PostWriteController extends ChangeNotifier {
       media.name,
       'interactive',
       null,
-      mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
+      mimetype: media.raw != null && media.type == SnMediaType.image ? 'image/png' : null,
     );
 
     final item = await attach.chunkedUploadParts(
@@ -301,7 +294,7 @@ class PostWriteController extends ChangeNotifier {
           media.name,
           'interactive',
           null,
-          mimetype: media.raw != null && media.type == PostWriteMediaType.image ? 'image/png' : null,
+          mimetype: media.raw != null && media.type == SnMediaType.image ? 'image/png' : null,
         );
 
         final item = await attach.chunkedUploadParts(

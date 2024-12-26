@@ -1,10 +1,20 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'attachment.freezed.dart';
+
 part 'attachment.g.dart';
+
+enum SnMediaType {
+  image,
+  video,
+  audio,
+  file,
+}
 
 @freezed
 class SnAttachment with _$SnAttachment {
+  const SnAttachment._();
+
   const factory SnAttachment({
     required int id,
     required DateTime createdAt,
@@ -19,9 +29,10 @@ class SnAttachment with _$SnAttachment {
     required String hash,
     required int destination,
     required int refCount,
+    @Default(0) int contentRating,
+    @Default(0) int qualityRating,
     required dynamic fileChunks,
     required dynamic cleanedAt,
-    required bool isMature,
     required bool isAnalyzed,
     required bool isUploaded,
     required bool isSelfRef,
@@ -30,11 +41,23 @@ class SnAttachment with _$SnAttachment {
     required SnAttachmentPool? pool,
     required int poolId,
     required int accountId,
+    @Default({}) Map<String, dynamic> usermeta,
     @Default({}) Map<String, dynamic> metadata,
   }) = _SnAttachment;
 
-  factory SnAttachment.fromJson(Map<String, Object?> json) =>
-      _$SnAttachmentFromJson(json);
+  factory SnAttachment.fromJson(Map<String, Object?> json) => _$SnAttachmentFromJson(json);
+
+  Map<String, dynamic> get data => {
+        ...metadata,
+        ...usermeta,
+      };
+
+  SnMediaType get mediaType => switch (mimetype.split('/').firstOrNull) {
+        'image' => SnMediaType.image,
+        'video' => SnMediaType.video,
+        'audio' => SnMediaType.audio,
+        _ => SnMediaType.file,
+      };
 }
 
 @freezed
@@ -51,6 +74,5 @@ class SnAttachmentPool with _$SnAttachmentPool {
     required int? accountId,
   }) = _SnAttachmentPool;
 
-  factory SnAttachmentPool.fromJson(Map<String, Object?> json) =>
-      _$SnAttachmentPoolFromJson(json);
+  factory SnAttachmentPool.fromJson(Map<String, Object?> json) => _$SnAttachmentPoolFromJson(json);
 }

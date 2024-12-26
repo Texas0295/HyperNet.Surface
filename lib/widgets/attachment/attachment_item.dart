@@ -18,6 +18,7 @@ import 'package:uuid/uuid.dart';
 class AttachmentItem extends StatelessWidget {
   final SnAttachment? data;
   final String? heroTag;
+
   const AttachmentItem({
     super.key,
     required this.data,
@@ -60,9 +61,14 @@ class AttachmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data!.isMature) {
-      return _AttachmentItemSensitiveBlur(
-        child: _buildContent(context),
+    if (data!.contentRating > 0) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return _AttachmentItemSensitiveBlur(
+            isCompact: constraints.maxHeight < 360,
+            child: _buildContent(context),
+          );
+        }
       );
     }
 
@@ -72,15 +78,15 @@ class AttachmentItem extends StatelessWidget {
 
 class _AttachmentItemSensitiveBlur extends StatefulWidget {
   final Widget child;
-  const _AttachmentItemSensitiveBlur({super.key, required this.child});
+  final bool isCompact;
+
+  const _AttachmentItemSensitiveBlur({super.key, required this.child, this.isCompact = false});
 
   @override
-  State<_AttachmentItemSensitiveBlur> createState() =>
-      _AttachmentItemSensitiveBlurState();
+  State<_AttachmentItemSensitiveBlur> createState() => _AttachmentItemSensitiveBlurState();
 }
 
-class _AttachmentItemSensitiveBlurState
-    extends State<_AttachmentItemSensitiveBlur> {
+class _AttachmentItemSensitiveBlurState extends State<_AttachmentItemSensitiveBlur> {
   bool _doesShow = false;
 
   @override
@@ -104,24 +110,21 @@ class _AttachmentItemSensitiveBlurState
                       color: Colors.white,
                       size: 32,
                     ),
-                    const Gap(8),
-                    Text('sensitiveContent', textAlign: TextAlign.center)
-                        .tr()
-                        .fontSize(20)
-                        .textColor(Colors.white)
-                        .bold(),
-                    Text(
-                      'sensitiveContentDescription',
-                      textAlign: TextAlign.center,
-                    )
-                        .tr()
-                        .fontSize(14)
-                        .textColor(Colors.white.withOpacity(0.8)),
-                    const Gap(16),
-                    InkWell(
-                      child: Text('sensitiveContentReveal')
+                    if (!widget.isCompact) const Gap(8),
+                    if (!widget.isCompact)
+                      Text('sensitiveContent', textAlign: TextAlign.center)
                           .tr()
-                          .textColor(Colors.white),
+                          .fontSize(20)
+                          .textColor(Colors.white)
+                          .bold(),
+                    if (!widget.isCompact)
+                      Text(
+                        'sensitiveContentDescription',
+                        textAlign: TextAlign.center,
+                      ).tr().fontSize(14).textColor(Colors.white.withOpacity(0.8)),
+                    if (!widget.isCompact) const Gap(16),
+                    InkWell(
+                      child: Text('sensitiveContentReveal').tr().textColor(Colors.white),
                       onTap: () {
                         setState(() => _doesShow = !_doesShow);
                       },
@@ -131,9 +134,7 @@ class _AttachmentItemSensitiveBlurState
               ).center(),
             ),
           ),
-        )
-            .opacity(_doesShow ? 0 : 1, animate: true)
-            .animate(const Duration(milliseconds: 300), Curves.easeInOut),
+        ).opacity(_doesShow ? 0 : 1, animate: true).animate(const Duration(milliseconds: 300), Curves.easeInOut),
         if (_doesShow)
           Positioned(
             top: 0,
@@ -163,6 +164,7 @@ class _AttachmentItemSensitiveBlurState
 class _AttachmentItemContentVideo extends StatefulWidget {
   final SnAttachment data;
   final bool isAutoload;
+
   const _AttachmentItemContentVideo({
     super.key,
     required this.data,
@@ -170,12 +172,10 @@ class _AttachmentItemContentVideo extends StatefulWidget {
   });
 
   @override
-  State<_AttachmentItemContentVideo> createState() =>
-      _AttachmentItemContentVideoState();
+  State<_AttachmentItemContentVideo> createState() => _AttachmentItemContentVideoState();
 }
 
-class _AttachmentItemContentVideoState
-    extends State<_AttachmentItemContentVideo> {
+class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo> {
   bool _showContent = false;
 
   Player? _videoPlayer;
@@ -266,10 +266,7 @@ class _AttachmentItemContentVideoState
                           ),
                           Text(
                             Duration(
-                              milliseconds:
-                                  (widget.data.metadata['duration'] ?? 0)
-                                          .toInt() *
-                                      1000,
+                              milliseconds: (widget.data.metadata['duration'] ?? 0).toInt() * 1000,
                             ).toString(),
                             style: GoogleFonts.robotoMono(
                               fontSize: 12,
@@ -317,6 +314,7 @@ class _AttachmentItemContentVideoState
 class _AttachmentItemContentAudio extends StatefulWidget {
   final SnAttachment data;
   final bool isAutoload;
+
   const _AttachmentItemContentAudio({
     super.key,
     required this.data,
@@ -324,12 +322,10 @@ class _AttachmentItemContentAudio extends StatefulWidget {
   });
 
   @override
-  State<_AttachmentItemContentAudio> createState() =>
-      _AttachmentItemContentAudioState();
+  State<_AttachmentItemContentAudio> createState() => _AttachmentItemContentAudioState();
 }
 
-class _AttachmentItemContentAudioState
-    extends State<_AttachmentItemContentAudio> {
+class _AttachmentItemContentAudioState extends State<_AttachmentItemContentAudio> {
   bool _showContent = false;
 
   double? _draggingValue;
@@ -499,12 +495,8 @@ class _AttachmentItemContentAudioState
                             overlayShape: SliderComponentShape.noOverlay,
                           ),
                           child: Slider(
-                            secondaryTrackValue: _bufferedPosition
-                                .inMilliseconds
-                                .abs()
-                                .toDouble(),
-                            value: _draggingValue?.abs() ??
-                                _position.inMilliseconds.toDouble().abs(),
+                            secondaryTrackValue: _bufferedPosition.inMilliseconds.abs().toDouble(),
+                            value: _draggingValue?.abs() ?? _position.inMilliseconds.toDouble().abs(),
                             min: 0,
                             max: math
                                 .max(
@@ -544,9 +536,7 @@ class _AttachmentItemContentAudioState
                   ),
                   const Gap(16),
                   IconButton.filled(
-                    icon: _isPlaying
-                        ? const Icon(Symbols.pause)
-                        : const Icon(Symbols.play_arrow),
+                    icon: _isPlaying ? const Icon(Symbols.pause) : const Icon(Symbols.play_arrow),
                     onPressed: () {
                       _audioPlayer!.playOrPause();
                     },

@@ -99,10 +99,10 @@ class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('dialogDismiss').tr(),
           onPressed: _isBusy ? null : () {
             Navigator.pop(context);
           },
+          child: Text('dialogDismiss').tr(),
         ),
         TextButton(
           onPressed: _isBusy ? null : () => _finishUp(),

@@ -33,7 +33,6 @@ Future<ThemeData> createAppTheme(
     brightness: brightness,
   );
 
-  final hasBackground = prefs.getBool(kAppBackgroundStoreKey) ?? false;
   final hasAppBarBlurry = prefs.getBool(kAppbarTransparentStoreKey) ?? false;
 
   return ThemeData(

@@ -279,16 +279,22 @@
     "one": "{} 個附件",
     "other": "{} 個附件"
   },
+  "fieldAttachmentRandomId": "訪問 ID",
   "addAttachmentFromAlbum": "從相冊中添加附件",
   "addAttachmentFromClipboard": "粘貼附件",
   "addAttachmentFromCameraPhoto": "拍攝照片",
   "addAttachmentFromCameraVideo": "拍攝視頻",
+  "addAttachmentFromRandomId": "通過訪問 ID 鏈接",
   "attachmentPastedImage": "粘貼的圖片",
   "attachmentInsertLink": "插入連接",
   "attachmentSetAsPostThumbnail": "設置為帖子縮略圖",
   "attachmentUnsetAsPostThumbnail": "取消設置為帖子縮略圖",
   "attachmentSetThumbnail": "設置縮略圖",
+  "attachmentCopyRandomId": "複製訪問 ID",
   "attachmentUpload": "上傳",
+  "attachmentInputDialog": "上傳附件",
+  "attachmentInputUseRandomId": "使用訪問 ID",
+  "attachmentInputNew": "新上傳附件",
   "notification": "通知",
   "notificationUnreadCount": {
     "zero": "無未讀通知",
@@ -504,5 +510,6 @@
   "postCategoryKnowledge": "知識",
   "postCategoryLiterature": "文學",
   "postCategoryFunny": "搞笑",
-  "postCategoryUncategorized": "未分類"
+  "postCategoryUncategorized": "未分類",
+  "waitingForUpload": "等待上傳"
 }

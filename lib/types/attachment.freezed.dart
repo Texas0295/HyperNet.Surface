@@ -33,9 +33,10 @@ mixin _$SnAttachment {
   String get hash => throw _privateConstructorUsedError;
   int get destination => throw _privateConstructorUsedError;
   int get refCount => throw _privateConstructorUsedError;
+  int get contentRating => throw _privateConstructorUsedError;
+  int get qualityRating => throw _privateConstructorUsedError;
   dynamic get fileChunks => throw _privateConstructorUsedError;
   dynamic get cleanedAt => throw _privateConstructorUsedError;
-  bool get isMature => throw _privateConstructorUsedError;
   bool get isAnalyzed => throw _privateConstructorUsedError;
   bool get isUploaded => throw _privateConstructorUsedError;
   bool get isSelfRef => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ mixin _$SnAttachment {
   SnAttachmentPool? get pool => throw _privateConstructorUsedError;
   int get poolId => throw _privateConstructorUsedError;
   int get accountId => throw _privateConstructorUsedError;
+  Map<String, dynamic> get usermeta => throw _privateConstructorUsedError;
   Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
 
   /// Serializes this SnAttachment to a JSON map.
@@ -76,9 +78,10 @@ abstract class $SnAttachmentCopyWith<$Res> {
       String hash,
       int destination,
       int refCount,
+      int contentRating,
+      int qualityRating,
       dynamic fileChunks,
       dynamic cleanedAt,
-      bool isMature,
       bool isAnalyzed,
       bool isUploaded,
       bool isSelfRef,
@@ -87,6 +90,7 @@ abstract class $SnAttachmentCopyWith<$Res> {
       SnAttachmentPool? pool,
       int poolId,
       int accountId,
+      Map<String, dynamic> usermeta,
       Map<String, dynamic> metadata});
 
   $SnAttachmentPoolCopyWith<$Res>? get pool;
@@ -120,9 +124,10 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
     Object? hash = null,
     Object? destination = null,
     Object? refCount = null,
+    Object? contentRating = null,
+    Object? qualityRating = null,
     Object? fileChunks = freezed,
     Object? cleanedAt = freezed,
-    Object? isMature = null,
     Object? isAnalyzed = null,
     Object? isUploaded = null,
     Object? isSelfRef = null,
@@ -131,6 +136,7 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
     Object? pool = freezed,
     Object? poolId = null,
     Object? accountId = null,
+    Object? usermeta = null,
     Object? metadata = null,
   }) {
     return _then(_value.copyWith(
@@ -186,6 +192,14 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
           ? _value.refCount
           : refCount // ignore: cast_nullable_to_non_nullable
               as int,
+      contentRating: null == contentRating
+          ? _value.contentRating
+          : contentRating // ignore: cast_nullable_to_non_nullable
+              as int,
+      qualityRating: null == qualityRating
+          ? _value.qualityRating
+          : qualityRating // ignore: cast_nullable_to_non_nullable
+              as int,
       fileChunks: freezed == fileChunks
           ? _value.fileChunks
           : fileChunks // ignore: cast_nullable_to_non_nullable
@@ -194,10 +208,6 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
           ? _value.cleanedAt
           : cleanedAt // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      isMature: null == isMature
-          ? _value.isMature
-          : isMature // ignore: cast_nullable_to_non_nullable
-              as bool,
       isAnalyzed: null == isAnalyzed
           ? _value.isAnalyzed
           : isAnalyzed // ignore: cast_nullable_to_non_nullable
@@ -230,6 +240,10 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
               as int,
+      usermeta: null == usermeta
+          ? _value.usermeta
+          : usermeta // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -274,9 +288,10 @@ abstract class _$$SnAttachmentImplCopyWith<$Res>
       String hash,
       int destination,
       int refCount,
+      int contentRating,
+      int qualityRating,
       dynamic fileChunks,
       dynamic cleanedAt,
-      bool isMature,
       bool isAnalyzed,
       bool isUploaded,
       bool isSelfRef,
@@ -285,6 +300,7 @@ abstract class _$$SnAttachmentImplCopyWith<$Res>
       SnAttachmentPool? pool,
       int poolId,
       int accountId,
+      Map<String, dynamic> usermeta,
       Map<String, dynamic> metadata});
 
   @override
@@ -317,9 +333,10 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
     Object? hash = null,
     Object? destination = null,
     Object? refCount = null,
+    Object? contentRating = null,
+    Object? qualityRating = null,
     Object? fileChunks = freezed,
     Object? cleanedAt = freezed,
-    Object? isMature = null,
     Object? isAnalyzed = null,
     Object? isUploaded = null,
     Object? isSelfRef = null,
@@ -328,6 +345,7 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
     Object? pool = freezed,
     Object? poolId = null,
     Object? accountId = null,
+    Object? usermeta = null,
     Object? metadata = null,
   }) {
     return _then(_$SnAttachmentImpl(
@@ -383,6 +401,14 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value.refCount
           : refCount // ignore: cast_nullable_to_non_nullable
               as int,
+      contentRating: null == contentRating
+          ? _value.contentRating
+          : contentRating // ignore: cast_nullable_to_non_nullable
+              as int,
+      qualityRating: null == qualityRating
+          ? _value.qualityRating
+          : qualityRating // ignore: cast_nullable_to_non_nullable
+              as int,
       fileChunks: freezed == fileChunks
           ? _value.fileChunks
           : fileChunks // ignore: cast_nullable_to_non_nullable
@@ -391,10 +417,6 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value.cleanedAt
           : cleanedAt // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      isMature: null == isMature
-          ? _value.isMature
-          : isMature // ignore: cast_nullable_to_non_nullable
-              as bool,
       isAnalyzed: null == isAnalyzed
           ? _value.isAnalyzed
           : isAnalyzed // ignore: cast_nullable_to_non_nullable
@@ -427,6 +449,10 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
               as int,
+      usermeta: null == usermeta
+          ? _value._usermeta
+          : usermeta // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
       metadata: null == metadata
           ? _value._metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -437,7 +463,7 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SnAttachmentImpl implements _SnAttachment {
+class _$SnAttachmentImpl extends _SnAttachment {
   const _$SnAttachmentImpl(
       {required this.id,
       required this.createdAt,
@@ -452,9 +478,10 @@ class _$SnAttachmentImpl implements _SnAttachment {
       required this.hash,
       required this.destination,
       required this.refCount,
+      this.contentRating = 0,
+      this.qualityRating = 0,
       required this.fileChunks,
       required this.cleanedAt,
-      required this.isMature,
       required this.isAnalyzed,
       required this.isUploaded,
       required this.isSelfRef,
@@ -463,8 +490,11 @@ class _$SnAttachmentImpl implements _SnAttachment {
       required this.pool,
       required this.poolId,
       required this.accountId,
+      final Map<String, dynamic> usermeta = const {},
       final Map<String, dynamic> metadata = const {}})
-      : _metadata = metadata;
+      : _usermeta = usermeta,
+        _metadata = metadata,
+        super._();
 
   factory _$SnAttachmentImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnAttachmentImplFromJson(json);
@@ -496,11 +526,15 @@ class _$SnAttachmentImpl implements _SnAttachment {
   @override
   final int refCount;
   @override
+  @JsonKey()
+  final int contentRating;
+  @override
+  @JsonKey()
+  final int qualityRating;
+  @override
   final dynamic fileChunks;
   @override
   final dynamic cleanedAt;
-  @override
-  final bool isMature;
   @override
   final bool isAnalyzed;
   @override
@@ -517,6 +551,15 @@ class _$SnAttachmentImpl implements _SnAttachment {
   final int poolId;
   @override
   final int accountId;
+  final Map<String, dynamic> _usermeta;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get usermeta {
+    if (_usermeta is EqualUnmodifiableMapView) return _usermeta;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_usermeta);
+  }
+
   final Map<String, dynamic> _metadata;
   @override
   @JsonKey()
@@ -528,7 +571,7 @@ class _$SnAttachmentImpl implements _SnAttachment {
 
   @override
   String toString() {
-    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, fileChunks: $fileChunks, cleanedAt: $cleanedAt, isMature: $isMature, isAnalyzed: $isAnalyzed, isUploaded: $isUploaded, isSelfRef: $isSelfRef, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, metadata: $metadata)';
+    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, fileChunks: $fileChunks, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isUploaded: $isUploaded, isSelfRef: $isSelfRef, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, usermeta: $usermeta, metadata: $metadata)';
   }
 
   @override
@@ -554,11 +597,13 @@ class _$SnAttachmentImpl implements _SnAttachment {
                 other.destination == destination) &&
             (identical(other.refCount, refCount) ||
                 other.refCount == refCount) &&
+            (identical(other.contentRating, contentRating) ||
+                other.contentRating == contentRating) &&
+            (identical(other.qualityRating, qualityRating) ||
+                other.qualityRating == qualityRating) &&
             const DeepCollectionEquality()
                 .equals(other.fileChunks, fileChunks) &&
             const DeepCollectionEquality().equals(other.cleanedAt, cleanedAt) &&
-            (identical(other.isMature, isMature) ||
-                other.isMature == isMature) &&
             (identical(other.isAnalyzed, isAnalyzed) ||
                 other.isAnalyzed == isAnalyzed) &&
             (identical(other.isUploaded, isUploaded) ||
@@ -571,6 +616,7 @@ class _$SnAttachmentImpl implements _SnAttachment {
             (identical(other.poolId, poolId) || other.poolId == poolId) &&
             (identical(other.accountId, accountId) ||
                 other.accountId == accountId) &&
+            const DeepCollectionEquality().equals(other._usermeta, _usermeta) &&
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
 
@@ -591,9 +637,10 @@ class _$SnAttachmentImpl implements _SnAttachment {
         hash,
         destination,
         refCount,
+        contentRating,
+        qualityRating,
         const DeepCollectionEquality().hash(fileChunks),
         const DeepCollectionEquality().hash(cleanedAt),
-        isMature,
         isAnalyzed,
         isUploaded,
         isSelfRef,
@@ -602,6 +649,7 @@ class _$SnAttachmentImpl implements _SnAttachment {
         pool,
         poolId,
         accountId,
+        const DeepCollectionEquality().hash(_usermeta),
         const DeepCollectionEquality().hash(_metadata)
       ]);
 
@@ -621,7 +669,7 @@ class _$SnAttachmentImpl implements _SnAttachment {
   }
 }
 
-abstract class _SnAttachment implements SnAttachment {
+abstract class _SnAttachment extends SnAttachment {
   const factory _SnAttachment(
       {required final int id,
       required final DateTime createdAt,
@@ -636,9 +684,10 @@ abstract class _SnAttachment implements SnAttachment {
       required final String hash,
       required final int destination,
       required final int refCount,
+      final int contentRating,
+      final int qualityRating,
       required final dynamic fileChunks,
       required final dynamic cleanedAt,
-      required final bool isMature,
       required final bool isAnalyzed,
       required final bool isUploaded,
       required final bool isSelfRef,
@@ -647,7 +696,9 @@ abstract class _SnAttachment implements SnAttachment {
       required final SnAttachmentPool? pool,
       required final int poolId,
       required final int accountId,
+      final Map<String, dynamic> usermeta,
       final Map<String, dynamic> metadata}) = _$SnAttachmentImpl;
+  const _SnAttachment._() : super._();
 
   factory _SnAttachment.fromJson(Map<String, dynamic> json) =
       _$SnAttachmentImpl.fromJson;
@@ -679,11 +730,13 @@ abstract class _SnAttachment implements SnAttachment {
   @override
   int get refCount;
   @override
+  int get contentRating;
+  @override
+  int get qualityRating;
+  @override
   dynamic get fileChunks;
   @override
   dynamic get cleanedAt;
-  @override
-  bool get isMature;
   @override
   bool get isAnalyzed;
   @override
@@ -700,6 +753,8 @@ abstract class _SnAttachment implements SnAttachment {
   int get poolId;
   @override
   int get accountId;
+  @override
+  Map<String, dynamic> get usermeta;
   @override
   Map<String, dynamic> get metadata;
 
