@@ -291,6 +291,7 @@
   "attachmentInsertLink": "Insert Link",
   "attachmentSetAsPostThumbnail": "Set as post thumbnail",
   "attachmentUnsetAsPostThumbnail": "Unset as post thumbnail",
+  "attachmentCompressVideo": "Re-encode video",
   "attachmentSetThumbnail": "Set thumbnail",
   "attachmentCopyRandomId": "Copy RID",
   "attachmentUpload": "Upload",
@@ -513,5 +514,11 @@
   "postCategoryLiterature": "Literature",
   "postCategoryFunny": "Funny",
   "postCategoryUncategorized": "Uncategorized",
-  "waitingForUpload": "Waiting for upload"
+  "waitingForUpload": "Waiting for upload",
+  "attachmentCompressQuality": "Compress quality",
+  "attachmentCompressQualityHighest": "Highest",
+  "attachmentCompressQualityDefault": "Default",
+  "attachmentCompressQualityMedium": "Medium",
+  "attachmentCompressQualityLow": "Low",
+  "attachmentCompressQualityHint": "Solar Network doesn't prevent you from uploading large files, high resolution, high bitrate videos. But for your network conditions, we suggest you choose a suitable compression quality."
 }

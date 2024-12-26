@@ -24,6 +24,8 @@ import 'package:surface/widgets/context_menu.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
 
+import '../attachment/pending_attachment_compress.dart';
+
 class PostMediaPendingList extends StatelessWidget {
   final PostWriteMedia? thumbnail;
   final List<PostWriteMedia> attachments;
@@ -118,9 +120,28 @@ class PostMediaPendingList extends StatelessWidget {
     }
   }
 
+  Future<void> _compressVideo(BuildContext context, int idx) async {
+    final result = await showDialog<PostWriteMedia?>(
+      context: context,
+      builder: (context) => PendingVideoCompressDialog(media: attachments[idx]),
+    );
+    if (result == null) return;
+
+    onUpdate!(idx, result);
+  }
+
   ContextMenu _createContextMenu(BuildContext context, int idx, PostWriteMedia media) {
+    final canCompressVideo = !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
     return ContextMenu(
       entries: [
+        if (media.attachment == null && media.type == SnMediaType.video && canCompressVideo)
+          MenuItem(
+            label: 'attachmentCompressVideo'.tr(),
+            icon: Symbols.compress,
+            onSelected: () {
+              _compressVideo(context, idx);
+            },
+          ),
         if (media.attachment != null && media.type == SnMediaType.video)
           MenuItem(
             label: 'attachmentSetThumbnail'.tr(),
@@ -306,22 +327,22 @@ class _PostMediaPendingItem extends StatelessWidget {
                 ),
               ),
             SnMediaType.audio => Container(
-              color: Theme.of(context).colorScheme.surfaceContainer,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  if (media.attachment?.thumbnail != null)
-                    AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!)),
-                  const Icon(Symbols.audio_file, color: Colors.white, shadows: [
-                    Shadow(
-                      offset: Offset(1, 1),
-                      blurRadius: 8.0,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ]),
-                ],
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (media.attachment?.thumbnail != null)
+                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!)),
+                    const Icon(Symbols.audio_file, color: Colors.white, shadows: [
+                      Shadow(
+                        offset: Offset(1, 1),
+                        blurRadius: 8.0,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
-            ),
             _ => Container(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 child: const Icon(Symbols.docs).center(),

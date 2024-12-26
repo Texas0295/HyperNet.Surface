@@ -289,6 +289,7 @@
   "attachmentInsertLink": "插入連接",
   "attachmentSetAsPostThumbnail": "設置為帖子縮略圖",
   "attachmentUnsetAsPostThumbnail": "取消設置為帖子縮略圖",
+  "attachmentCompressVideo": "重新編碼視頻",
   "attachmentSetThumbnail": "設置縮略圖",
   "attachmentCopyRandomId": "複製訪問 ID",
   "attachmentUpload": "上傳",
@@ -511,5 +512,11 @@
   "postCategoryLiterature": "文學",
   "postCategoryFunny": "搞笑",
   "postCategoryUncategorized": "未分類",
-  "waitingForUpload": "等待上傳"
+  "waitingForUpload": "等待上傳",
+  "attachmentCompressQuality": "壓縮質量",
+  "attachmentCompressQualityHighest": "最高",
+  "attachmentCompressQualityDefault": "默認",
+  "attachmentCompressQualityMedium": "中等",
+  "attachmentCompressQualityLow": "低",
+  "attachmentCompressQualityHint": "Solar Network 並沒有阻止你上傳大文件、高分辨率、高碼率的視頻，但是為了你的網絡情況觀眾考慮，我們建議你選擇一個合適的壓縮質量。"
 }
