@@ -129,7 +129,7 @@ class SpecialDayProvider {
   }
 
   double getSpecialDayProgress(DateTime last, DateTime next) {
-    final totalDuration = next.difference(last).inSeconds.toDouble();
+    final totalDuration = next.add(-const Duration(days: 1)).difference(last).inSeconds.toDouble();
     final elapsedDuration = DateTime.now().difference(last).inSeconds.toDouble();
     return (elapsedDuration / totalDuration).clamp(0.0, 1.0);
   }

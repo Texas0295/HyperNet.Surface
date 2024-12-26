@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
+import 'package:slide_countdown/slide_countdown.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:surface/providers/config.dart';
@@ -188,7 +189,7 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
       var (name, date) = nextOne;
       date = date.add(Duration(days: 1));
       final progress = dayz.getSpecialDayProgress(lastOne.$2, date);
-      final diff = nextOne.$2.add(-const Duration(days: 1)).difference(lastOne.$2);
+      final diff = nextOne.$2.difference(DateTime.now());
       return Card(
         child: ListTile(
           leading: Text(kSpecialDaysSymbol[name] ?? '🎉').fontSize(24),
@@ -196,8 +197,15 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
           subtitle: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('${diff.inDays}d · ${(progress * 100).toStringAsFixed(2)}%'),
-              const Gap(8),
+              SlideCountdown(
+                duration: diff,
+                style: GoogleFonts.robotoMono(fontSize: 13),
+                separatorStyle: GoogleFonts.robotoMono(fontSize: 13),
+                separatorType: SeparatorType.symbol,
+                decoration: BoxDecoration(),
+                padding: EdgeInsets.zero,
+              ),
+              const Gap(12),
               Expanded(
                 child: LinearProgressIndicator(
                   value: progress,
