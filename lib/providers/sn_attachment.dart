@@ -178,7 +178,7 @@ class SnAttachmentProvider {
     Function(double progress)? onProgress,
   }) async {
     final Map<String, dynamic> chunks = place.fileChunks;
-    var currentTask = 0;
+    var completedTasks = 0;
 
     final queue = Queue<Future<void>>();
     final activeTasks = <Future<void>>[];
@@ -199,13 +199,13 @@ class SnAttachmentProvider {
           place.rid,
           entry.key,
           onProgress: (progress) {
-            final overallProgress = (currentTask + progress) / chunks.length;
+            final overallProgress = (completedTasks + progress) / chunks.length;
             onProgress?.call(overallProgress);
           },
         );
 
-        currentTask++;
-        final overallProgress = currentTask / chunks.length;
+        completedTasks++;
+        final overallProgress = completedTasks / chunks.length;
         onProgress?.call(overallProgress);
 
         if (result is SnAttachmentFragment) {

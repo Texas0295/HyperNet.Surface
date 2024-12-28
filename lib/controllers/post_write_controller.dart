@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,7 @@ import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
+import 'package:video_compress/video_compress.dart';
 
 class PostWriteMedia {
   late String name;
@@ -229,7 +231,7 @@ class PostWriteController extends ChangeNotifier {
     }
   }
 
-  Future<SnAttachment> _uploadAttachment(BuildContext context, PostWriteMedia media) async {
+  Future<SnAttachment> _uploadAttachment(BuildContext context, PostWriteMedia media, {bool isCompressed = false}) async {
     final attach = context.read<SnAttachmentProvider>();
 
     final place = await attach.chunkedUploadInitialize(
@@ -244,13 +246,50 @@ class PostWriteController extends ChangeNotifier {
       media.toFile()!,
       place.$1,
       place.$2,
-      onProgress: (progress) {
-        progress = progress;
+      onProgress: (value) {
+        progress = value;
         notifyListeners();
       },
     );
 
+    if (media.type == SnMediaType.video && !isCompressed && context.mounted) {
+      final compressedAttachment = await _tryCompressVideoCopy(context, media);
+      if (compressedAttachment != null) {
+        await attach.updateOne(item, compressedId: compressedAttachment.id);
+      }
+    }
+
     return item;
+  }
+
+  Future<SnAttachment?> _tryCompressVideoCopy(BuildContext context, PostWriteMedia media) async {
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) return null;
+    if (media.type != SnMediaType.video) return null;
+    if (media.file == null) return null;
+    if (VideoCompress.isCompressing) return null;
+
+    final confirm = await context.showConfirmDialog(
+      'attachmentVideoCompressHint'.tr(),
+      'attachmentVideoCompressHintDescription'.tr(args: [media.file!.name]),
+    );
+    if (!confirm) return null;
+
+    progress = null;
+    notifyListeners();
+
+    final mediaInfo = await VideoCompress.compressVideo(
+      media.file!.path,
+      quality: VideoQuality.LowQuality,
+      frameRate: 30,
+      deleteOrigin: false,
+    );
+    if (mediaInfo == null) return null;
+    if (!context.mounted) return null;
+
+    final compressedMedia = PostWriteMedia.fromFile(XFile(mediaInfo.path!));
+    final compressedAttachment = await _uploadAttachment(context, compressedMedia, isCompressed: true);
+
+    return compressedAttachment;
   }
 
   Future<void> uploadSingleAttachment(BuildContext context, int idx) async {
@@ -301,12 +340,19 @@ class PostWriteController extends ChangeNotifier {
           media.toFile()!,
           place.$1,
           place.$2,
-          onProgress: (progress) {
+          onProgress: (value) {
             // Calculate overall progress for attachments
-            progress = math.max(((i + progress) / attachments.length) * kAttachmentProgressWeight, progress);
+            progress = math.max(((i + value) / attachments.length) * kAttachmentProgressWeight, value);
             notifyListeners();
           },
         );
+
+        if (media.type == SnMediaType.video && context.mounted) {
+          final compressedAttachment = await _tryCompressVideoCopy(context, media);
+          if (compressedAttachment != null) {
+            await attach.updateOne(item, compressedId: compressedAttachment.id);
+          }
+        }
 
         progress = (i + 1) / attachments.length * kAttachmentProgressWeight;
         attachments[i] = PostWriteMedia(item);

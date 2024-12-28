@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:pasteboard/pasteboard.dart';
@@ -293,64 +294,129 @@ class _PostMediaPendingItem extends StatelessWidget {
           width: 1,
         ),
         borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).colorScheme.surfaceContainer,
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: switch (media.type) {
-            SnMediaType.image => Container(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return Image(
-                    image: media.getImageProvider(
-                      context,
-                      width: (constraints.maxWidth * devicePixelRatio).round(),
-                      height: (constraints.maxHeight * devicePixelRatio).round(),
-                    )!,
-                    fit: BoxFit.contain,
-                  );
-                }),
-              ),
-            SnMediaType.video => Container(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                child: Stack(
-                  fit: StackFit.expand,
+        child: Row(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: switch (media.type) {
+                SnMediaType.image => LayoutBuilder(builder: (context, constraints) {
+                    return Image(
+                      image: media.getImageProvider(
+                        context,
+                        width: (constraints.maxWidth * devicePixelRatio).round(),
+                        height: (constraints.maxHeight * devicePixelRatio).round(),
+                      )!,
+                      fit: BoxFit.contain,
+                    );
+                  }),
+                SnMediaType.video => Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      if (media.attachment?.thumbnail != null)
+                        AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!.rid)),
+                      const Icon(Symbols.videocam, color: Colors.white, shadows: [
+                        Shadow(
+                          offset: Offset(1, 1),
+                          blurRadius: 8.0,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ]),
+                    ],
+                  ),
+                SnMediaType.audio => Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      if (media.attachment?.thumbnail != null)
+                        AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!.rid)),
+                      const Icon(Symbols.audio_file, color: Colors.white, shadows: [
+                        Shadow(
+                          offset: Offset(1, 1),
+                          blurRadius: 8.0,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ]),
+                    ],
+                  ),
+                _ => Container(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    child: const Icon(Symbols.docs).center(),
+                  ),
+              },
+            ),
+            if (media.type != SnMediaType.image) const VerticalDivider(width: 1, thickness: 1),
+            if (media.type != SnMediaType.image)
+              SizedBox(
+                width: 160,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (media.attachment?.thumbnail != null)
-                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!.rid)),
-                    const Icon(Symbols.videocam, color: Colors.white, shadows: [
-                      Shadow(
-                        offset: Offset(1, 1),
-                        blurRadius: 8.0,
-                        color: Color.fromARGB(255, 0, 0, 0),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (media.attachment != null)
+                            Text(
+                              media.attachment!.alt,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          else if (media.file != null)
+                            Text(media.file!.name, maxLines: 1, overflow: TextOverflow.ellipsis)
+                          else
+                            Text('unknown'.tr()),
+                          if (media.attachment != null)
+                            Text(
+                              media.attachment!.size.formatBytes(),
+                              style: GoogleFonts.robotoMono(fontSize: 13),
+                              maxLines: 1,
+                            )
+                          else if (media.file != null)
+                            FutureBuilder<int?>(
+                              future: media.length(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) return const SizedBox.shrink();
+                                return Text(
+                                  snapshot.data!.formatBytes(),
+                                  style: GoogleFonts.robotoMono(fontSize: 13),
+                                  maxLines: 1,
+                                );
+                              },
+                            ),
+                        ],
                       ),
-                    ]),
+                    ),
+                    if (media.attachment != null && media.attachment!.compressedId != null)
+                      Row(
+                        children: [
+                          Icon(Symbols.bolt, size: 16),
+                          const Gap(4),
+                          Text('attachmentCopyCompressed').tr().fontSize(13),
+                        ],
+                      ),
+                    if (media.attachment != null)
+                      Row(
+                        children: [
+                          Icon(Symbols.cloud, size: 16),
+                          const Gap(4),
+                          Text('attachmentUploaded').tr().fontSize(13),
+                        ],
+                      )
+                    else
+                      Row(
+                        children: [
+                          Icon(Symbols.cloud_off, size: 16),
+                          const Gap(4),
+                          Text('attachmentPending').tr().fontSize(13),
+                        ],
+                      ),
                   ],
                 ),
-              ),
-            SnMediaType.audio => Container(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (media.attachment?.thumbnail != null)
-                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!.rid)),
-                    const Icon(Symbols.audio_file, color: Colors.white, shadows: [
-                      Shadow(
-                        offset: Offset(1, 1),
-                        blurRadius: 8.0,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                    ]),
-                  ],
-                ),
-              ),
-            _ => Container(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                child: const Icon(Symbols.docs).center(),
-              ),
-          },
+              ).padding(horizontal: 12, vertical: 12),
+          ],
         ),
       ),
     );

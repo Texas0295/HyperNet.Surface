@@ -296,6 +296,18 @@
   "attachmentInputDialog": "上传附件",
   "attachmentInputUseRandomId": "使用访问 ID",
   "attachmentInputNew": "新上传附件",
+  "waitingForUpload": "等待上传",
+  "attachmentVideoCompressHint": "压缩一份视频的副本",
+  "attachmentVideoCompressHintDescription": "你想上传压缩视频 {} 的副本吗？它将帮助你的观众快速预览视频，并且他们仍然可以观看原始视频。这将会在在你的设备上处理视频，所以需要一些时间，所以请耐心等待。",
+  "attachmentCompressQuality": "压缩质量",
+  "attachmentCompressQualityHighest": "最高",
+  "attachmentCompressQualityDefault": "默认",
+  "attachmentCompressQualityMedium": "中等",
+  "attachmentCompressQualityLow": "低",
+  "attachmentCompressQualityHint": "Solar Network 并没有阻止你上传大文件、高分辨率、高码率的视频，但是为了你的网络情况观众考虑，我们建议你选择一个合适的压缩质量。",
+  "attachmentUploaded": "已上传",
+  "attachmentPending": "未上传",
+  "attachmentCopyCompressed": "有压缩副本",
   "notification": "通知",
   "notificationUnreadCount": {
     "zero": "无未读通知",
@@ -511,12 +523,5 @@
   "postCategoryKnowledge": "知识",
   "postCategoryLiterature": "文学",
   "postCategoryFunny": "搞笑",
-  "postCategoryUncategorized": "未分类",
-  "waitingForUpload": "等待上传",
-  "attachmentCompressQuality": "压缩质量",
-  "attachmentCompressQualityHighest": "最高",
-  "attachmentCompressQualityDefault": "默认",
-  "attachmentCompressQualityMedium": "中等",
-  "attachmentCompressQualityLow": "低",
-  "attachmentCompressQualityHint": "Solar Network 并没有阻止你上传大文件、高分辨率、高码率的视频，但是为了你的网络情况观众考虑，我们建议你选择一个合适的压缩质量。"
+  "postCategoryUncategorized": "未分类"
 }

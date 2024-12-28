@@ -296,6 +296,18 @@
   "attachmentInputDialog": "上傳附件",
   "attachmentInputUseRandomId": "使用訪問 ID",
   "attachmentInputNew": "新上傳附件",
+  "waitingForUpload": "等待上傳",
+  "attachmentVideoCompressHint": "壓縮一份視頻的副本",
+  "attachmentVideoCompressHintDescription": "你想上傳壓縮視頻 {} 的副本嗎？它將幫助你的觀眾快速預覽視頻，並且他們仍然可以觀看原始視頻。這將會在在你的設備上處理視頻，所以需要一些時間，所以請耐心等待。",
+  "attachmentCompressQuality": "壓縮質量",
+  "attachmentCompressQualityHighest": "最高",
+  "attachmentCompressQualityDefault": "默認",
+  "attachmentCompressQualityMedium": "中等",
+  "attachmentCompressQualityLow": "低",
+  "attachmentCompressQualityHint": "Solar Network 並沒有阻止你上傳大文件、高分辨率、高碼率的視頻，但是為了你的網絡情況觀眾考慮，我們建議你選擇一個合適的壓縮質量。",
+  "attachmentUploaded": "已上傳",
+  "attachmentPending": "未上傳",
+  "attachmentCopyCompressed": "有壓縮副本",
   "notification": "通知",
   "notificationUnreadCount": {
     "zero": "無未讀通知",
@@ -511,12 +523,5 @@
   "postCategoryKnowledge": "知識",
   "postCategoryLiterature": "文學",
   "postCategoryFunny": "搞笑",
-  "postCategoryUncategorized": "未分類",
-  "waitingForUpload": "等待上傳",
-  "attachmentCompressQuality": "壓縮質量",
-  "attachmentCompressQualityHighest": "最高",
-  "attachmentCompressQualityDefault": "默認",
-  "attachmentCompressQualityMedium": "中等",
-  "attachmentCompressQualityLow": "低",
-  "attachmentCompressQualityHint": "Solar Network 並沒有阻止你上傳大文件、高分辨率、高碼率的視頻，但是為了你的網絡情況觀眾考慮，我們建議你選擇一個合適的壓縮質量。"
+  "postCategoryUncategorized": "未分類"
 }
