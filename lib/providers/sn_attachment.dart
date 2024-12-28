@@ -233,19 +233,19 @@ class SnAttachmentProvider {
   }
 
   Future<SnAttachment> updateOne(
-    int id, {
+    SnAttachment item, {
     String? alt,
     int? thumbnailId,
     int? compressedId,
     Map<String, dynamic>? metadata,
     bool? isIndexable,
   }) async {
-    final resp = await _sn.client.put('/cgi/uc/attachments/$id', data: {
-      'alt': alt,
-      'thumbnail': thumbnailId,
-      'compressed': compressedId,
-      'metadata': metadata,
-      'is_indexable': isIndexable,
+    final resp = await _sn.client.put('/cgi/uc/attachments/${item.id}', data: {
+      'alt': alt ?? item.alt,
+      'thumbnail': thumbnailId ?? item.thumbnailId,
+      'compressed': compressedId ?? item.compressedId,
+      'metadata': metadata ?? item.usermeta,
+      'is_indexable': isIndexable ?? item.isIndexable,
     });
     return SnAttachment.fromJson(resp.data);
   }

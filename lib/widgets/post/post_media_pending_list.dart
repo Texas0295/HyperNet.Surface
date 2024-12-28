@@ -99,7 +99,7 @@ class PostMediaPendingList extends StatelessWidget {
 
     final attach = context.read<SnAttachmentProvider>();
     final newAttach = await attach.updateOne(
-      attachments[idx].attachment!.id,
+      attachments[idx].attachment!,
       thumbnailId: thumbnail.id,
     );
 

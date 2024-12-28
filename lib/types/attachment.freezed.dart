@@ -38,6 +38,7 @@ mixin _$SnAttachment {
   DateTime? get cleanedAt => throw _privateConstructorUsedError;
   bool get isAnalyzed => throw _privateConstructorUsedError;
   bool get isSelfRef => throw _privateConstructorUsedError;
+  bool get isIndexable => throw _privateConstructorUsedError;
   SnAttachment? get ref => throw _privateConstructorUsedError;
   int? get refId => throw _privateConstructorUsedError;
   SnAttachmentPool? get pool => throw _privateConstructorUsedError;
@@ -85,6 +86,7 @@ abstract class $SnAttachmentCopyWith<$Res> {
       DateTime? cleanedAt,
       bool isAnalyzed,
       bool isSelfRef,
+      bool isIndexable,
       SnAttachment? ref,
       int? refId,
       SnAttachmentPool? pool,
@@ -136,6 +138,7 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
     Object? cleanedAt = freezed,
     Object? isAnalyzed = null,
     Object? isSelfRef = null,
+    Object? isIndexable = null,
     Object? ref = freezed,
     Object? refId = freezed,
     Object? pool = freezed,
@@ -220,6 +223,10 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
       isSelfRef: null == isSelfRef
           ? _value.isSelfRef
           : isSelfRef // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isIndexable: null == isIndexable
+          ? _value.isIndexable
+          : isIndexable // ignore: cast_nullable_to_non_nullable
               as bool,
       ref: freezed == ref
           ? _value.ref
@@ -352,6 +359,7 @@ abstract class _$$SnAttachmentImplCopyWith<$Res>
       DateTime? cleanedAt,
       bool isAnalyzed,
       bool isSelfRef,
+      bool isIndexable,
       SnAttachment? ref,
       int? refId,
       SnAttachmentPool? pool,
@@ -405,6 +413,7 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
     Object? cleanedAt = freezed,
     Object? isAnalyzed = null,
     Object? isSelfRef = null,
+    Object? isIndexable = null,
     Object? ref = freezed,
     Object? refId = freezed,
     Object? pool = freezed,
@@ -490,6 +499,10 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value.isSelfRef
           : isSelfRef // ignore: cast_nullable_to_non_nullable
               as bool,
+      isIndexable: null == isIndexable
+          ? _value.isIndexable
+          : isIndexable // ignore: cast_nullable_to_non_nullable
+              as bool,
       ref: freezed == ref
           ? _value.ref
           : ref // ignore: cast_nullable_to_non_nullable
@@ -560,6 +573,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
       required this.cleanedAt,
       required this.isAnalyzed,
       required this.isSelfRef,
+      required this.isIndexable,
       required this.ref,
       required this.refId,
       required this.pool,
@@ -617,6 +631,8 @@ class _$SnAttachmentImpl extends _SnAttachment {
   @override
   final bool isSelfRef;
   @override
+  final bool isIndexable;
+  @override
   final SnAttachment? ref;
   @override
   final int? refId;
@@ -654,7 +670,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
 
   @override
   String toString() {
-    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isSelfRef: $isSelfRef, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, thumbnailId: $thumbnailId, thumbnail: $thumbnail, compressedId: $compressedId, compressed: $compressed, usermeta: $usermeta, metadata: $metadata)';
+    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isSelfRef: $isSelfRef, isIndexable: $isIndexable, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, thumbnailId: $thumbnailId, thumbnail: $thumbnail, compressedId: $compressedId, compressed: $compressed, usermeta: $usermeta, metadata: $metadata)';
   }
 
   @override
@@ -691,6 +707,8 @@ class _$SnAttachmentImpl extends _SnAttachment {
                 other.isAnalyzed == isAnalyzed) &&
             (identical(other.isSelfRef, isSelfRef) ||
                 other.isSelfRef == isSelfRef) &&
+            (identical(other.isIndexable, isIndexable) ||
+                other.isIndexable == isIndexable) &&
             (identical(other.ref, ref) || other.ref == ref) &&
             (identical(other.refId, refId) || other.refId == refId) &&
             (identical(other.pool, pool) || other.pool == pool) &&
@@ -731,6 +749,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
         cleanedAt,
         isAnalyzed,
         isSelfRef,
+        isIndexable,
         ref,
         refId,
         pool,
@@ -780,6 +799,7 @@ abstract class _SnAttachment extends SnAttachment {
       required final DateTime? cleanedAt,
       required final bool isAnalyzed,
       required final bool isSelfRef,
+      required final bool isIndexable,
       required final SnAttachment? ref,
       required final int? refId,
       required final SnAttachmentPool? pool,
@@ -832,6 +852,8 @@ abstract class _SnAttachment extends SnAttachment {
   bool get isAnalyzed;
   @override
   bool get isSelfRef;
+  @override
+  bool get isIndexable;
   @override
   SnAttachment? get ref;
   @override

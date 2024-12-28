@@ -30,6 +30,7 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['cleaned_at'] as String),
       isAnalyzed: json['is_analyzed'] as bool,
       isSelfRef: json['is_self_ref'] as bool,
+      isIndexable: json['is_indexable'] as bool,
       ref: json['ref'] == null
           ? null
           : SnAttachment.fromJson(json['ref'] as Map<String, dynamic>),
@@ -71,6 +72,7 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'cleaned_at': instance.cleanedAt?.toIso8601String(),
       'is_analyzed': instance.isAnalyzed,
       'is_self_ref': instance.isSelfRef,
+      'is_indexable': instance.isIndexable,
       'ref': instance.ref?.toJson(),
       'ref_id': instance.refId,
       'pool': instance.pool?.toJson(),

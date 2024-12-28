@@ -34,6 +34,7 @@ class SnAttachment with _$SnAttachment {
     required DateTime? cleanedAt,
     required bool isAnalyzed,
     required bool isSelfRef,
+    required bool isIndexable,
     required SnAttachment? ref,
     required int? refId,
     required SnAttachmentPool? pool,
