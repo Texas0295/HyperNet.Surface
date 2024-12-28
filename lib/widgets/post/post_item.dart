@@ -85,7 +85,6 @@ class PostItem extends StatelessWidget {
             child: MultiProvider(
               providers: [
                 Provider<SnNetworkProvider>(create: (_) => context.read()),
-                Provider<SnLinkPreviewProvider>(create: (_) => context.read()),
                 ChangeNotifierProvider<ConfigProvider>(create: (_) => context.read()),
               ],
               child: ResponsiveBreakpoints.builder(
@@ -256,10 +255,6 @@ class PostItem extends StatelessWidget {
             maxHeight: 560,
             listPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
-        if (data.body['content'] != null)
-          LinkPreviewWidget(
-            text: data.body['content'],
-          ).padding(horizontal: 4),
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
           child: Column(
