@@ -10,8 +10,8 @@ import 'package:surface/widgets/dialog.dart';
 
 class AttachmentInputDialog extends StatefulWidget {
   final String? title;
-
-  const AttachmentInputDialog({super.key, required this.title});
+final bool? analyzeNow;
+  const AttachmentInputDialog({super.key, required this.title, this.analyzeNow = false});
 
   @override
   State<AttachmentInputDialog> createState() => _AttachmentInputDialogState();
@@ -53,6 +53,7 @@ class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
           _thumbnailFile!.path,
           'interactive',
           null,
+          analyzeNow: widget.analyzeNow ?? false,
         );
         if (!mounted) return;
         Navigator.pop(context, attachment);
@@ -77,7 +78,8 @@ class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
             controller: _randomIdController,
             decoration: InputDecoration(
               labelText: 'fieldAttachmentRandomId'.tr(),
-              border: const OutlineInputBorder(),
+              border: const UnderlineInputBorder(),
+              isDense: true,
             ),
             onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           ),

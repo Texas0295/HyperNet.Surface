@@ -38,12 +38,13 @@ class SnAttachment with _$SnAttachment {
     required SnAttachment? ref,
     required int? refId,
     required SnAttachmentPool? pool,
-    required int poolId,
+    required int? poolId,
     required int accountId,
     int? thumbnailId,
     SnAttachment? thumbnail,
     int? compressedId,
     SnAttachment? compressed,
+    @Default([]) List<SnAttachmentBoost> boosts,
     @Default({}) Map<String, dynamic> usermeta,
     @Default({}) Map<String, dynamic> metadata,
   }) = _SnAttachment;
@@ -109,4 +110,34 @@ class SnAttachmentPool with _$SnAttachmentPool {
   }) = _SnAttachmentPool;
 
   factory SnAttachmentPool.fromJson(Map<String, Object?> json) => _$SnAttachmentPoolFromJson(json);
+}
+
+@freezed
+class SnAttachmentDestination with _$SnAttachmentDestination {
+  const factory SnAttachmentDestination({
+    @Default(0) int id,
+    required String type,
+    required String label,
+    required String region,
+    required bool isBoost,
+  }) = _SnAttachmentDestination;
+
+  factory SnAttachmentDestination.fromJson(Map<String, Object?> json) => _$SnAttachmentDestinationFromJson(json);
+}
+
+@freezed
+class SnAttachmentBoost with _$SnAttachmentBoost {
+  const factory SnAttachmentBoost({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required int status,
+    required int destination,
+    required int attachmentId,
+    required SnAttachment attachment,
+    required int account,
+  }) = _SnAttachmentBoost;
+
+  factory SnAttachmentBoost.fromJson(Map<String, Object?> json) => _$SnAttachmentBoostFromJson(json);
 }

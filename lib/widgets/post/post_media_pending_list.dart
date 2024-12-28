@@ -21,6 +21,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_input.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
+import 'package:surface/widgets/attachment/pending_attachment_boost.dart';
 import 'package:surface/widgets/context_menu.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -93,18 +94,23 @@ class PostMediaPendingList extends StatelessWidget {
       context: context,
       builder: (context) => AttachmentInputDialog(
         title: 'attachmentSetThumbnail'.tr(),
+        analyzeNow: true,
       ),
     );
     if (thumbnail == null) return;
     if (!context.mounted) return;
 
-    final attach = context.read<SnAttachmentProvider>();
-    final newAttach = await attach.updateOne(
-      attachments[idx].attachment!,
-      thumbnailId: thumbnail.id,
-    );
-
-    onUpdate!(idx, PostWriteMedia(newAttach));
+    try {
+      final attach = context.read<SnAttachmentProvider>();
+      final newAttach = await attach.updateOne(
+        attachments[idx].attachment!,
+        thumbnailId: thumbnail.id,
+      );
+      onUpdate!(idx, PostWriteMedia(newAttach));
+    } catch (err) {
+      if (!context.mounted) return;
+      context.showErrorDialog(err);
+    }
   }
 
   Future<void> _deleteAttachment(BuildContext context, int idx) async {
@@ -122,6 +128,23 @@ class PostMediaPendingList extends StatelessWidget {
     } finally {
       onUpdateBusy?.call(false);
     }
+  }
+
+  Future<void> _createBoost(BuildContext context, int idx) async {
+    if (attachments[idx].attachment == null) return;
+
+    final result = await showDialog<SnAttachmentBoost?>(
+      context: context,
+      builder: (context) => PendingAttachmentBoostDialog(media: attachments[idx]),
+    );
+    if (result == null) return;
+
+    final newAttach = attachments[idx].attachment!.copyWith(
+      boosts: [...attachments[idx].attachment!.boosts, result],
+    );
+    final newMedia = PostWriteMedia(newAttach);
+
+    onUpdate!(idx, newMedia);
   }
 
   Future<void> _compressVideo(BuildContext context, int idx) async {
@@ -144,6 +167,14 @@ class PostMediaPendingList extends StatelessWidget {
             icon: Symbols.compress,
             onSelected: () {
               _compressVideo(context, idx);
+            },
+          ),
+        if (media.attachment != null)
+          MenuItem(
+            label: 'attachmentBoost'.tr(),
+            icon: Symbols.bolt,
+            onSelected: () {
+              _createBoost(context, idx);
             },
           ),
         if (media.attachment != null && media.type == SnMediaType.video)
@@ -389,10 +420,18 @@ class _PostMediaPendingItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (media.attachment != null && media.attachment!.compressedId != null)
+                    if (media.attachment != null && media.attachment!.boosts.isNotEmpty)
                       Row(
                         children: [
                           Icon(Symbols.bolt, size: 16),
+                          const Gap(4),
+                          Text('attachmentGotBoosted').tr().fontSize(13),
+                        ],
+                      ),
+                    if (media.attachment != null && media.attachment!.compressedId != null)
+                      Row(
+                        children: [
+                          Icon(Symbols.compress, size: 16),
                           const Gap(4),
                           Text('attachmentCopyCompressed').tr().fontSize(13),
                         ],

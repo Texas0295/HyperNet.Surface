@@ -42,12 +42,13 @@ mixin _$SnAttachment {
   SnAttachment? get ref => throw _privateConstructorUsedError;
   int? get refId => throw _privateConstructorUsedError;
   SnAttachmentPool? get pool => throw _privateConstructorUsedError;
-  int get poolId => throw _privateConstructorUsedError;
+  int? get poolId => throw _privateConstructorUsedError;
   int get accountId => throw _privateConstructorUsedError;
   int? get thumbnailId => throw _privateConstructorUsedError;
   SnAttachment? get thumbnail => throw _privateConstructorUsedError;
   int? get compressedId => throw _privateConstructorUsedError;
   SnAttachment? get compressed => throw _privateConstructorUsedError;
+  List<SnAttachmentBoost> get boosts => throw _privateConstructorUsedError;
   Map<String, dynamic> get usermeta => throw _privateConstructorUsedError;
   Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
 
@@ -90,12 +91,13 @@ abstract class $SnAttachmentCopyWith<$Res> {
       SnAttachment? ref,
       int? refId,
       SnAttachmentPool? pool,
-      int poolId,
+      int? poolId,
       int accountId,
       int? thumbnailId,
       SnAttachment? thumbnail,
       int? compressedId,
       SnAttachment? compressed,
+      List<SnAttachmentBoost> boosts,
       Map<String, dynamic> usermeta,
       Map<String, dynamic> metadata});
 
@@ -142,12 +144,13 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
     Object? ref = freezed,
     Object? refId = freezed,
     Object? pool = freezed,
-    Object? poolId = null,
+    Object? poolId = freezed,
     Object? accountId = null,
     Object? thumbnailId = freezed,
     Object? thumbnail = freezed,
     Object? compressedId = freezed,
     Object? compressed = freezed,
+    Object? boosts = null,
     Object? usermeta = null,
     Object? metadata = null,
   }) {
@@ -240,10 +243,10 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
           ? _value.pool
           : pool // ignore: cast_nullable_to_non_nullable
               as SnAttachmentPool?,
-      poolId: null == poolId
+      poolId: freezed == poolId
           ? _value.poolId
           : poolId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       accountId: null == accountId
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
@@ -264,6 +267,10 @@ class _$SnAttachmentCopyWithImpl<$Res, $Val extends SnAttachment>
           ? _value.compressed
           : compressed // ignore: cast_nullable_to_non_nullable
               as SnAttachment?,
+      boosts: null == boosts
+          ? _value.boosts
+          : boosts // ignore: cast_nullable_to_non_nullable
+              as List<SnAttachmentBoost>,
       usermeta: null == usermeta
           ? _value.usermeta
           : usermeta // ignore: cast_nullable_to_non_nullable
@@ -363,12 +370,13 @@ abstract class _$$SnAttachmentImplCopyWith<$Res>
       SnAttachment? ref,
       int? refId,
       SnAttachmentPool? pool,
-      int poolId,
+      int? poolId,
       int accountId,
       int? thumbnailId,
       SnAttachment? thumbnail,
       int? compressedId,
       SnAttachment? compressed,
+      List<SnAttachmentBoost> boosts,
       Map<String, dynamic> usermeta,
       Map<String, dynamic> metadata});
 
@@ -417,12 +425,13 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
     Object? ref = freezed,
     Object? refId = freezed,
     Object? pool = freezed,
-    Object? poolId = null,
+    Object? poolId = freezed,
     Object? accountId = null,
     Object? thumbnailId = freezed,
     Object? thumbnail = freezed,
     Object? compressedId = freezed,
     Object? compressed = freezed,
+    Object? boosts = null,
     Object? usermeta = null,
     Object? metadata = null,
   }) {
@@ -515,10 +524,10 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value.pool
           : pool // ignore: cast_nullable_to_non_nullable
               as SnAttachmentPool?,
-      poolId: null == poolId
+      poolId: freezed == poolId
           ? _value.poolId
           : poolId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       accountId: null == accountId
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
@@ -539,6 +548,10 @@ class __$$SnAttachmentImplCopyWithImpl<$Res>
           ? _value.compressed
           : compressed // ignore: cast_nullable_to_non_nullable
               as SnAttachment?,
+      boosts: null == boosts
+          ? _value._boosts
+          : boosts // ignore: cast_nullable_to_non_nullable
+              as List<SnAttachmentBoost>,
       usermeta: null == usermeta
           ? _value._usermeta
           : usermeta // ignore: cast_nullable_to_non_nullable
@@ -583,9 +596,11 @@ class _$SnAttachmentImpl extends _SnAttachment {
       this.thumbnail,
       this.compressedId,
       this.compressed,
+      final List<SnAttachmentBoost> boosts = const [],
       final Map<String, dynamic> usermeta = const {},
       final Map<String, dynamic> metadata = const {}})
-      : _usermeta = usermeta,
+      : _boosts = boosts,
+        _usermeta = usermeta,
         _metadata = metadata,
         super._();
 
@@ -639,7 +654,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
   @override
   final SnAttachmentPool? pool;
   @override
-  final int poolId;
+  final int? poolId;
   @override
   final int accountId;
   @override
@@ -650,6 +665,15 @@ class _$SnAttachmentImpl extends _SnAttachment {
   final int? compressedId;
   @override
   final SnAttachment? compressed;
+  final List<SnAttachmentBoost> _boosts;
+  @override
+  @JsonKey()
+  List<SnAttachmentBoost> get boosts {
+    if (_boosts is EqualUnmodifiableListView) return _boosts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_boosts);
+  }
+
   final Map<String, dynamic> _usermeta;
   @override
   @JsonKey()
@@ -670,7 +694,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
 
   @override
   String toString() {
-    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isSelfRef: $isSelfRef, isIndexable: $isIndexable, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, thumbnailId: $thumbnailId, thumbnail: $thumbnail, compressedId: $compressedId, compressed: $compressed, usermeta: $usermeta, metadata: $metadata)';
+    return 'SnAttachment(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, rid: $rid, uuid: $uuid, size: $size, name: $name, alt: $alt, mimetype: $mimetype, hash: $hash, destination: $destination, refCount: $refCount, contentRating: $contentRating, qualityRating: $qualityRating, cleanedAt: $cleanedAt, isAnalyzed: $isAnalyzed, isSelfRef: $isSelfRef, isIndexable: $isIndexable, ref: $ref, refId: $refId, pool: $pool, poolId: $poolId, accountId: $accountId, thumbnailId: $thumbnailId, thumbnail: $thumbnail, compressedId: $compressedId, compressed: $compressed, boosts: $boosts, usermeta: $usermeta, metadata: $metadata)';
   }
 
   @override
@@ -723,6 +747,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
                 other.compressedId == compressedId) &&
             (identical(other.compressed, compressed) ||
                 other.compressed == compressed) &&
+            const DeepCollectionEquality().equals(other._boosts, _boosts) &&
             const DeepCollectionEquality().equals(other._usermeta, _usermeta) &&
             const DeepCollectionEquality().equals(other._metadata, _metadata));
   }
@@ -759,6 +784,7 @@ class _$SnAttachmentImpl extends _SnAttachment {
         thumbnail,
         compressedId,
         compressed,
+        const DeepCollectionEquality().hash(_boosts),
         const DeepCollectionEquality().hash(_usermeta),
         const DeepCollectionEquality().hash(_metadata)
       ]);
@@ -803,12 +829,13 @@ abstract class _SnAttachment extends SnAttachment {
       required final SnAttachment? ref,
       required final int? refId,
       required final SnAttachmentPool? pool,
-      required final int poolId,
+      required final int? poolId,
       required final int accountId,
       final int? thumbnailId,
       final SnAttachment? thumbnail,
       final int? compressedId,
       final SnAttachment? compressed,
+      final List<SnAttachmentBoost> boosts,
       final Map<String, dynamic> usermeta,
       final Map<String, dynamic> metadata}) = _$SnAttachmentImpl;
   const _SnAttachment._() : super._();
@@ -861,7 +888,7 @@ abstract class _SnAttachment extends SnAttachment {
   @override
   SnAttachmentPool? get pool;
   @override
-  int get poolId;
+  int? get poolId;
   @override
   int get accountId;
   @override
@@ -872,6 +899,8 @@ abstract class _SnAttachment extends SnAttachment {
   int? get compressedId;
   @override
   SnAttachment? get compressed;
+  @override
+  List<SnAttachmentBoost> get boosts;
   @override
   Map<String, dynamic> get usermeta;
   @override
@@ -1674,5 +1703,572 @@ abstract class _SnAttachmentPool implements SnAttachmentPool {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SnAttachmentPoolImplCopyWith<_$SnAttachmentPoolImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SnAttachmentDestination _$SnAttachmentDestinationFromJson(
+    Map<String, dynamic> json) {
+  return _SnAttachmentDestination.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnAttachmentDestination {
+  int get id => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  String get label => throw _privateConstructorUsedError;
+  String get region => throw _privateConstructorUsedError;
+  bool get isBoost => throw _privateConstructorUsedError;
+
+  /// Serializes this SnAttachmentDestination to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnAttachmentDestination
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnAttachmentDestinationCopyWith<SnAttachmentDestination> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnAttachmentDestinationCopyWith<$Res> {
+  factory $SnAttachmentDestinationCopyWith(SnAttachmentDestination value,
+          $Res Function(SnAttachmentDestination) then) =
+      _$SnAttachmentDestinationCopyWithImpl<$Res, SnAttachmentDestination>;
+  @useResult
+  $Res call({int id, String type, String label, String region, bool isBoost});
+}
+
+/// @nodoc
+class _$SnAttachmentDestinationCopyWithImpl<$Res,
+        $Val extends SnAttachmentDestination>
+    implements $SnAttachmentDestinationCopyWith<$Res> {
+  _$SnAttachmentDestinationCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnAttachmentDestination
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? type = null,
+    Object? label = null,
+    Object? region = null,
+    Object? isBoost = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      label: null == label
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
+              as String,
+      region: null == region
+          ? _value.region
+          : region // ignore: cast_nullable_to_non_nullable
+              as String,
+      isBoost: null == isBoost
+          ? _value.isBoost
+          : isBoost // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SnAttachmentDestinationImplCopyWith<$Res>
+    implements $SnAttachmentDestinationCopyWith<$Res> {
+  factory _$$SnAttachmentDestinationImplCopyWith(
+          _$SnAttachmentDestinationImpl value,
+          $Res Function(_$SnAttachmentDestinationImpl) then) =
+      __$$SnAttachmentDestinationImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int id, String type, String label, String region, bool isBoost});
+}
+
+/// @nodoc
+class __$$SnAttachmentDestinationImplCopyWithImpl<$Res>
+    extends _$SnAttachmentDestinationCopyWithImpl<$Res,
+        _$SnAttachmentDestinationImpl>
+    implements _$$SnAttachmentDestinationImplCopyWith<$Res> {
+  __$$SnAttachmentDestinationImplCopyWithImpl(
+      _$SnAttachmentDestinationImpl _value,
+      $Res Function(_$SnAttachmentDestinationImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnAttachmentDestination
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? type = null,
+    Object? label = null,
+    Object? region = null,
+    Object? isBoost = null,
+  }) {
+    return _then(_$SnAttachmentDestinationImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      label: null == label
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
+              as String,
+      region: null == region
+          ? _value.region
+          : region // ignore: cast_nullable_to_non_nullable
+              as String,
+      isBoost: null == isBoost
+          ? _value.isBoost
+          : isBoost // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnAttachmentDestinationImpl implements _SnAttachmentDestination {
+  const _$SnAttachmentDestinationImpl(
+      {this.id = 0,
+      required this.type,
+      required this.label,
+      required this.region,
+      required this.isBoost});
+
+  factory _$SnAttachmentDestinationImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnAttachmentDestinationImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int id;
+  @override
+  final String type;
+  @override
+  final String label;
+  @override
+  final String region;
+  @override
+  final bool isBoost;
+
+  @override
+  String toString() {
+    return 'SnAttachmentDestination(id: $id, type: $type, label: $label, region: $region, isBoost: $isBoost)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnAttachmentDestinationImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.label, label) || other.label == label) &&
+            (identical(other.region, region) || other.region == region) &&
+            (identical(other.isBoost, isBoost) || other.isBoost == isBoost));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, type, label, region, isBoost);
+
+  /// Create a copy of SnAttachmentDestination
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnAttachmentDestinationImplCopyWith<_$SnAttachmentDestinationImpl>
+      get copyWith => __$$SnAttachmentDestinationImplCopyWithImpl<
+          _$SnAttachmentDestinationImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnAttachmentDestinationImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnAttachmentDestination implements SnAttachmentDestination {
+  const factory _SnAttachmentDestination(
+      {final int id,
+      required final String type,
+      required final String label,
+      required final String region,
+      required final bool isBoost}) = _$SnAttachmentDestinationImpl;
+
+  factory _SnAttachmentDestination.fromJson(Map<String, dynamic> json) =
+      _$SnAttachmentDestinationImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  String get type;
+  @override
+  String get label;
+  @override
+  String get region;
+  @override
+  bool get isBoost;
+
+  /// Create a copy of SnAttachmentDestination
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnAttachmentDestinationImplCopyWith<_$SnAttachmentDestinationImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+SnAttachmentBoost _$SnAttachmentBoostFromJson(Map<String, dynamic> json) {
+  return _SnAttachmentBoost.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SnAttachmentBoost {
+  int get id => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get deletedAt => throw _privateConstructorUsedError;
+  int get status => throw _privateConstructorUsedError;
+  int get destination => throw _privateConstructorUsedError;
+  int get attachmentId => throw _privateConstructorUsedError;
+  SnAttachment get attachment => throw _privateConstructorUsedError;
+  int get account => throw _privateConstructorUsedError;
+
+  /// Serializes this SnAttachmentBoost to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SnAttachmentBoost
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SnAttachmentBoostCopyWith<SnAttachmentBoost> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SnAttachmentBoostCopyWith<$Res> {
+  factory $SnAttachmentBoostCopyWith(
+          SnAttachmentBoost value, $Res Function(SnAttachmentBoost) then) =
+      _$SnAttachmentBoostCopyWithImpl<$Res, SnAttachmentBoost>;
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      int status,
+      int destination,
+      int attachmentId,
+      SnAttachment attachment,
+      int account});
+
+  $SnAttachmentCopyWith<$Res> get attachment;
+}
+
+/// @nodoc
+class _$SnAttachmentBoostCopyWithImpl<$Res, $Val extends SnAttachmentBoost>
+    implements $SnAttachmentBoostCopyWith<$Res> {
+  _$SnAttachmentBoostCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SnAttachmentBoost
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? status = null,
+    Object? destination = null,
+    Object? attachmentId = null,
+    Object? attachment = null,
+    Object? account = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+      destination: null == destination
+          ? _value.destination
+          : destination // ignore: cast_nullable_to_non_nullable
+              as int,
+      attachmentId: null == attachmentId
+          ? _value.attachmentId
+          : attachmentId // ignore: cast_nullable_to_non_nullable
+              as int,
+      attachment: null == attachment
+          ? _value.attachment
+          : attachment // ignore: cast_nullable_to_non_nullable
+              as SnAttachment,
+      account: null == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  /// Create a copy of SnAttachmentBoost
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnAttachmentCopyWith<$Res> get attachment {
+    return $SnAttachmentCopyWith<$Res>(_value.attachment, (value) {
+      return _then(_value.copyWith(attachment: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$SnAttachmentBoostImplCopyWith<$Res>
+    implements $SnAttachmentBoostCopyWith<$Res> {
+  factory _$$SnAttachmentBoostImplCopyWith(_$SnAttachmentBoostImpl value,
+          $Res Function(_$SnAttachmentBoostImpl) then) =
+      __$$SnAttachmentBoostImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      DateTime createdAt,
+      DateTime updatedAt,
+      DateTime? deletedAt,
+      int status,
+      int destination,
+      int attachmentId,
+      SnAttachment attachment,
+      int account});
+
+  @override
+  $SnAttachmentCopyWith<$Res> get attachment;
+}
+
+/// @nodoc
+class __$$SnAttachmentBoostImplCopyWithImpl<$Res>
+    extends _$SnAttachmentBoostCopyWithImpl<$Res, _$SnAttachmentBoostImpl>
+    implements _$$SnAttachmentBoostImplCopyWith<$Res> {
+  __$$SnAttachmentBoostImplCopyWithImpl(_$SnAttachmentBoostImpl _value,
+      $Res Function(_$SnAttachmentBoostImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SnAttachmentBoost
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? deletedAt = freezed,
+    Object? status = null,
+    Object? destination = null,
+    Object? attachmentId = null,
+    Object? attachment = null,
+    Object? account = null,
+  }) {
+    return _then(_$SnAttachmentBoostImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      deletedAt: freezed == deletedAt
+          ? _value.deletedAt
+          : deletedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+      destination: null == destination
+          ? _value.destination
+          : destination // ignore: cast_nullable_to_non_nullable
+              as int,
+      attachmentId: null == attachmentId
+          ? _value.attachmentId
+          : attachmentId // ignore: cast_nullable_to_non_nullable
+              as int,
+      attachment: null == attachment
+          ? _value.attachment
+          : attachment // ignore: cast_nullable_to_non_nullable
+              as SnAttachment,
+      account: null == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SnAttachmentBoostImpl implements _SnAttachmentBoost {
+  const _$SnAttachmentBoostImpl(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.status,
+      required this.destination,
+      required this.attachmentId,
+      required this.attachment,
+      required this.account});
+
+  factory _$SnAttachmentBoostImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SnAttachmentBoostImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
+  final DateTime? deletedAt;
+  @override
+  final int status;
+  @override
+  final int destination;
+  @override
+  final int attachmentId;
+  @override
+  final SnAttachment attachment;
+  @override
+  final int account;
+
+  @override
+  String toString() {
+    return 'SnAttachmentBoost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, status: $status, destination: $destination, attachmentId: $attachmentId, attachment: $attachment, account: $account)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SnAttachmentBoostImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.deletedAt, deletedAt) ||
+                other.deletedAt == deletedAt) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.destination, destination) ||
+                other.destination == destination) &&
+            (identical(other.attachmentId, attachmentId) ||
+                other.attachmentId == attachmentId) &&
+            (identical(other.attachment, attachment) ||
+                other.attachment == attachment) &&
+            (identical(other.account, account) || other.account == account));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, createdAt, updatedAt,
+      deletedAt, status, destination, attachmentId, attachment, account);
+
+  /// Create a copy of SnAttachmentBoost
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SnAttachmentBoostImplCopyWith<_$SnAttachmentBoostImpl> get copyWith =>
+      __$$SnAttachmentBoostImplCopyWithImpl<_$SnAttachmentBoostImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SnAttachmentBoostImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SnAttachmentBoost implements SnAttachmentBoost {
+  const factory _SnAttachmentBoost(
+      {required final int id,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
+      required final DateTime? deletedAt,
+      required final int status,
+      required final int destination,
+      required final int attachmentId,
+      required final SnAttachment attachment,
+      required final int account}) = _$SnAttachmentBoostImpl;
+
+  factory _SnAttachmentBoost.fromJson(Map<String, dynamic> json) =
+      _$SnAttachmentBoostImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  DateTime? get deletedAt;
+  @override
+  int get status;
+  @override
+  int get destination;
+  @override
+  int get attachmentId;
+  @override
+  SnAttachment get attachment;
+  @override
+  int get account;
+
+  /// Create a copy of SnAttachmentBoost
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SnAttachmentBoostImplCopyWith<_$SnAttachmentBoostImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

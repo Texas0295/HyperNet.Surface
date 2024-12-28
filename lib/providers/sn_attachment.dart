@@ -86,6 +86,7 @@ class SnAttachmentProvider {
     Map<String, dynamic>? metadata, {
     String? mimetype,
     Function(double progress)? onProgress,
+    bool analyzeNow = false,
   }) async {
     final filePayload = MultipartFile.fromBytes(data, filename: filename);
     final fileAlt = filename.contains('.') ? filename.substring(0, filename.lastIndexOf('.')) : filename;
@@ -108,6 +109,7 @@ class SnAttachmentProvider {
     final resp = await _sn.client.post(
       '/cgi/uc/attachments',
       data: formData,
+      queryParameters: {'analyzeNow': analyzeNow},
       onSendProgress: (count, total) {
         if (onProgress != null) {
           onProgress(count / total);

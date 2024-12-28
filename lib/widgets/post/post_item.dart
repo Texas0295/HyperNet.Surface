@@ -18,7 +18,6 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/config.dart';
-import 'package:surface/providers/link_preview.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
@@ -255,6 +254,10 @@ class PostItem extends StatelessWidget {
             maxHeight: 560,
             listPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
+        if (data.body['content'] != null)
+          LinkPreviewWidget(
+            text: data.body['content'],
+          ).padding(horizontal: 4),
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
           child: Column(
@@ -336,10 +339,6 @@ class PostShareImageWidget extends StatelessWidget {
               data: data.preload!.attachments!,
               isFlatted: true,
             ).padding(horizontal: 16, bottom: 8),
-          if (data.body['content'] != null)
-            LinkPreviewWidget(
-              text: data.body['content'],
-            ).padding(horizontal: 4),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

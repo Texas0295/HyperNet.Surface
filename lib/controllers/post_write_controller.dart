@@ -231,7 +231,8 @@ class PostWriteController extends ChangeNotifier {
     }
   }
 
-  Future<SnAttachment> _uploadAttachment(BuildContext context, PostWriteMedia media, {bool isCompressed = false}) async {
+  Future<SnAttachment> _uploadAttachment(BuildContext context, PostWriteMedia media,
+      {bool isCompressed = false}) async {
     final attach = context.read<SnAttachmentProvider>();
 
     final place = await attach.chunkedUploadInitialize(
@@ -242,7 +243,7 @@ class PostWriteController extends ChangeNotifier {
       mimetype: media.raw != null && media.type == SnMediaType.image ? 'image/png' : null,
     );
 
-    final item = await attach.chunkedUploadParts(
+    var item = await attach.chunkedUploadParts(
       media.toFile()!,
       place.$1,
       place.$2,
@@ -253,9 +254,13 @@ class PostWriteController extends ChangeNotifier {
     );
 
     if (media.type == SnMediaType.video && !isCompressed && context.mounted) {
-      final compressedAttachment = await _tryCompressVideoCopy(context, media);
-      if (compressedAttachment != null) {
-        await attach.updateOne(item, compressedId: compressedAttachment.id);
+      try {
+        final compressedAttachment = await _tryCompressVideoCopy(context, media);
+        if (compressedAttachment != null) {
+          item = await attach.updateOne(item, compressedId: compressedAttachment.id);
+        }
+      } catch (err) {
+        if (context.mounted) context.showErrorDialog(err);
       }
     }
 
@@ -336,7 +341,7 @@ class PostWriteController extends ChangeNotifier {
           mimetype: media.raw != null && media.type == SnMediaType.image ? 'image/png' : null,
         );
 
-        final item = await attach.chunkedUploadParts(
+        var item = await attach.chunkedUploadParts(
           media.toFile()!,
           place.$1,
           place.$2,
@@ -347,11 +352,13 @@ class PostWriteController extends ChangeNotifier {
           },
         );
 
-        if (media.type == SnMediaType.video && context.mounted) {
+        try {
           final compressedAttachment = await _tryCompressVideoCopy(context, media);
           if (compressedAttachment != null) {
-            await attach.updateOne(item, compressedId: compressedAttachment.id);
+            item = await attach.updateOne(item, compressedId: compressedAttachment.id);
           }
+        } catch (err) {
+          if (context.mounted) context.showErrorDialog(err);
         }
 
         progress = (i + 1) / attachments.length * kAttachmentProgressWeight;

@@ -38,7 +38,7 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       pool: json['pool'] == null
           ? null
           : SnAttachmentPool.fromJson(json['pool'] as Map<String, dynamic>),
-      poolId: (json['pool_id'] as num).toInt(),
+      poolId: (json['pool_id'] as num?)?.toInt(),
       accountId: (json['account_id'] as num).toInt(),
       thumbnailId: (json['thumbnail_id'] as num?)?.toInt(),
       thumbnail: json['thumbnail'] == null
@@ -48,6 +48,11 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       compressed: json['compressed'] == null
           ? null
           : SnAttachment.fromJson(json['compressed'] as Map<String, dynamic>),
+      boosts: (json['boosts'] as List<dynamic>?)
+              ?.map(
+                  (e) => SnAttachmentBoost.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       usermeta: json['usermeta'] as Map<String, dynamic>? ?? const {},
       metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
     );
@@ -82,6 +87,7 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'thumbnail': instance.thumbnail?.toJson(),
       'compressed_id': instance.compressedId,
       'compressed': instance.compressed?.toJson(),
+      'boosts': instance.boosts.map((e) => e.toJson()).toList(),
       'usermeta': instance.usermeta,
       'metadata': instance.metadata,
     };
@@ -160,4 +166,55 @@ Map<String, dynamic> _$$SnAttachmentPoolImplToJson(
       'description': instance.description,
       'config': instance.config,
       'account_id': instance.accountId,
+    };
+
+_$SnAttachmentDestinationImpl _$$SnAttachmentDestinationImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SnAttachmentDestinationImpl(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      type: json['type'] as String,
+      label: json['label'] as String,
+      region: json['region'] as String,
+      isBoost: json['is_boost'] as bool,
+    );
+
+Map<String, dynamic> _$$SnAttachmentDestinationImplToJson(
+        _$SnAttachmentDestinationImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'label': instance.label,
+      'region': instance.region,
+      'is_boost': instance.isBoost,
+    };
+
+_$SnAttachmentBoostImpl _$$SnAttachmentBoostImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SnAttachmentBoostImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      status: (json['status'] as num).toInt(),
+      destination: (json['destination'] as num).toInt(),
+      attachmentId: (json['attachment_id'] as num).toInt(),
+      attachment:
+          SnAttachment.fromJson(json['attachment'] as Map<String, dynamic>),
+      account: (json['account'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$SnAttachmentBoostImplToJson(
+        _$SnAttachmentBoostImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'status': instance.status,
+      'destination': instance.destination,
+      'attachment_id': instance.attachmentId,
+      'attachment': instance.attachment.toJson(),
+      'account': instance.account,
     };
