@@ -198,12 +198,15 @@ class SnAttachmentProvider {
           data,
           place.rid,
           entry.key,
+          onProgress: (progress) {
+            final overallProgress = (currentTask + progress) / chunks.length;
+            onProgress?.call(overallProgress);
+          },
         );
 
+        currentTask++;
         final overallProgress = currentTask / chunks.length;
         onProgress?.call(overallProgress);
-
-        currentTask++;
 
         if (result is SnAttachmentFragment) {
           place = result;
@@ -232,13 +235,15 @@ class SnAttachmentProvider {
   Future<SnAttachment> updateOne(
     int id, {
     String? alt,
-    String? thumbnail,
+    int? thumbnailId,
+    int? compressedId,
     Map<String, dynamic>? metadata,
     bool? isIndexable,
   }) async {
     final resp = await _sn.client.put('/cgi/uc/attachments/$id', data: {
       'alt': alt,
-      'thumbnail': thumbnail,
+      'thumbnail': thumbnailId,
+      'compressed': compressedId,
       'metadata': metadata,
       'is_indexable': isIndexable,
     });
