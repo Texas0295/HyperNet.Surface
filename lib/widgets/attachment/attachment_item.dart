@@ -215,9 +215,9 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
         behavior: HitTestBehavior.opaque,
         child: Stack(
           children: [
-            if (widget.data.thumbnail?.isNotEmpty ?? false)
+            if (widget.data.thumbnail != null)
               AutoResizeUniversalImage(
-                sn.getAttachmentUrl(widget.data.thumbnail!),
+                sn.getAttachmentUrl(widget.data.thumbnail!.rid),
                 fit: BoxFit.cover,
               )
             else

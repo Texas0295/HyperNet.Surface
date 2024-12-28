@@ -19,7 +19,7 @@ class SnAttachment with _$SnAttachment {
     required int id,
     required DateTime createdAt,
     required DateTime updatedAt,
-    required dynamic deletedAt,
+    required DateTime? deletedAt,
     required String rid,
     required String uuid,
     required int size,
@@ -31,19 +31,20 @@ class SnAttachment with _$SnAttachment {
     required int refCount,
     @Default(0) int contentRating,
     @Default(0) int qualityRating,
-    required dynamic fileChunks,
-    required dynamic cleanedAt,
+    required DateTime? cleanedAt,
     required bool isAnalyzed,
-    required bool isUploaded,
     required bool isSelfRef,
-    required dynamic ref,
-    required dynamic refId,
+    required SnAttachment? ref,
+    required int? refId,
     required SnAttachmentPool? pool,
     required int poolId,
     required int accountId,
+    int? thumbnailId,
+    SnAttachment? thumbnail,
+    int? compressedId,
+    SnAttachment? compressed,
     @Default({}) Map<String, dynamic> usermeta,
     @Default({}) Map<String, dynamic> metadata,
-    String? thumbnail,
   }) = _SnAttachment;
 
   factory SnAttachment.fromJson(Map<String, Object?> json) => _$SnAttachmentFromJson(json);
@@ -52,6 +53,37 @@ class SnAttachment with _$SnAttachment {
         ...metadata,
         ...usermeta,
       };
+
+  SnMediaType get mediaType => switch (mimetype.split('/').firstOrNull) {
+        'image' => SnMediaType.image,
+        'video' => SnMediaType.video,
+        'audio' => SnMediaType.audio,
+        _ => SnMediaType.file,
+      };
+}
+
+@freezed
+class SnAttachmentFragment with _$SnAttachmentFragment {
+  const SnAttachmentFragment._();
+
+  const factory SnAttachmentFragment({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required String rid,
+    required String uuid,
+    required int size,
+    required String name,
+    required String alt,
+    required String mimetype,
+    required String hash,
+    String? fingerprint,
+    @Default({}) Map<String, int> fileChunks,
+    @Default([]) List<String> fileChunksMissing,
+  }) = _SnAttachmentFragment;
+
+  factory SnAttachmentFragment.fromJson(Map<String, Object?> json) => _$SnAttachmentFragmentFromJson(json);
 
   SnMediaType get mediaType => switch (mimetype.split('/').firstOrNull) {
         'image' => SnMediaType.image,

@@ -11,7 +11,9 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      deletedAt: json['deleted_at'],
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
       rid: json['rid'] as String,
       uuid: json['uuid'] as String,
       size: (json['size'] as num).toInt(),
@@ -23,21 +25,30 @@ _$SnAttachmentImpl _$$SnAttachmentImplFromJson(Map<String, dynamic> json) =>
       refCount: (json['ref_count'] as num).toInt(),
       contentRating: (json['content_rating'] as num?)?.toInt() ?? 0,
       qualityRating: (json['quality_rating'] as num?)?.toInt() ?? 0,
-      fileChunks: json['file_chunks'],
-      cleanedAt: json['cleaned_at'],
+      cleanedAt: json['cleaned_at'] == null
+          ? null
+          : DateTime.parse(json['cleaned_at'] as String),
       isAnalyzed: json['is_analyzed'] as bool,
-      isUploaded: json['is_uploaded'] as bool,
       isSelfRef: json['is_self_ref'] as bool,
-      ref: json['ref'],
-      refId: json['ref_id'],
+      ref: json['ref'] == null
+          ? null
+          : SnAttachment.fromJson(json['ref'] as Map<String, dynamic>),
+      refId: (json['ref_id'] as num?)?.toInt(),
       pool: json['pool'] == null
           ? null
           : SnAttachmentPool.fromJson(json['pool'] as Map<String, dynamic>),
       poolId: (json['pool_id'] as num).toInt(),
       accountId: (json['account_id'] as num).toInt(),
+      thumbnailId: (json['thumbnail_id'] as num?)?.toInt(),
+      thumbnail: json['thumbnail'] == null
+          ? null
+          : SnAttachment.fromJson(json['thumbnail'] as Map<String, dynamic>),
+      compressedId: (json['compressed_id'] as num?)?.toInt(),
+      compressed: json['compressed'] == null
+          ? null
+          : SnAttachment.fromJson(json['compressed'] as Map<String, dynamic>),
       usermeta: json['usermeta'] as Map<String, dynamic>? ?? const {},
       metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
-      thumbnail: json['thumbnail'] as String?,
     );
 
 Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
@@ -45,7 +56,7 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'id': instance.id,
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
-      'deleted_at': instance.deletedAt,
+      'deleted_at': instance.deletedAt?.toIso8601String(),
       'rid': instance.rid,
       'uuid': instance.uuid,
       'size': instance.size,
@@ -57,19 +68,66 @@ Map<String, dynamic> _$$SnAttachmentImplToJson(_$SnAttachmentImpl instance) =>
       'ref_count': instance.refCount,
       'content_rating': instance.contentRating,
       'quality_rating': instance.qualityRating,
-      'file_chunks': instance.fileChunks,
-      'cleaned_at': instance.cleanedAt,
+      'cleaned_at': instance.cleanedAt?.toIso8601String(),
       'is_analyzed': instance.isAnalyzed,
-      'is_uploaded': instance.isUploaded,
       'is_self_ref': instance.isSelfRef,
-      'ref': instance.ref,
+      'ref': instance.ref?.toJson(),
       'ref_id': instance.refId,
       'pool': instance.pool?.toJson(),
       'pool_id': instance.poolId,
       'account_id': instance.accountId,
+      'thumbnail_id': instance.thumbnailId,
+      'thumbnail': instance.thumbnail?.toJson(),
+      'compressed_id': instance.compressedId,
+      'compressed': instance.compressed?.toJson(),
       'usermeta': instance.usermeta,
       'metadata': instance.metadata,
-      'thumbnail': instance.thumbnail,
+    };
+
+_$SnAttachmentFragmentImpl _$$SnAttachmentFragmentImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SnAttachmentFragmentImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      rid: json['rid'] as String,
+      uuid: json['uuid'] as String,
+      size: (json['size'] as num).toInt(),
+      name: json['name'] as String,
+      alt: json['alt'] as String,
+      mimetype: json['mimetype'] as String,
+      hash: json['hash'] as String,
+      fingerprint: json['fingerprint'] as String?,
+      fileChunks: (json['file_chunks'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, (e as num).toInt()),
+          ) ??
+          const {},
+      fileChunksMissing: (json['file_chunks_missing'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$$SnAttachmentFragmentImplToJson(
+        _$SnAttachmentFragmentImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'rid': instance.rid,
+      'uuid': instance.uuid,
+      'size': instance.size,
+      'name': instance.name,
+      'alt': instance.alt,
+      'mimetype': instance.mimetype,
+      'hash': instance.hash,
+      'fingerprint': instance.fingerprint,
+      'file_chunks': instance.fileChunks,
+      'file_chunks_missing': instance.fileChunksMissing,
     };
 
 _$SnAttachmentPoolImpl _$$SnAttachmentPoolImplFromJson(

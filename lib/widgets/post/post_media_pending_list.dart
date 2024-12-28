@@ -315,7 +315,7 @@ class _PostMediaPendingItem extends StatelessWidget {
                   fit: StackFit.expand,
                   children: [
                     if (media.attachment?.thumbnail != null)
-                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!)),
+                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!.rid)),
                     const Icon(Symbols.videocam, color: Colors.white, shadows: [
                       Shadow(
                         offset: Offset(1, 1),
@@ -332,7 +332,7 @@ class _PostMediaPendingItem extends StatelessWidget {
                   fit: StackFit.expand,
                   children: [
                     if (media.attachment?.thumbnail != null)
-                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!)),
+                      AutoResizeUniversalImage(sn.getAttachmentUrl(media.attachment!.thumbnail!.rid)),
                     const Icon(Symbols.audio_file, color: Colors.white, shadows: [
                       Shadow(
                         offset: Offset(1, 1),
