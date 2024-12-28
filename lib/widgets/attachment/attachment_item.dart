@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,14 +64,12 @@ class AttachmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data!.contentRating > 0) {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          return _AttachmentItemSensitiveBlur(
-            isCompact: constraints.maxHeight < 360,
-            child: _buildContent(context),
-          );
-        }
-      );
+      return LayoutBuilder(builder: (context, constraints) {
+        return _AttachmentItemSensitiveBlur(
+          isCompact: constraints.maxHeight < 360,
+          child: _buildContent(context),
+        );
+      });
     }
 
     return _buildContent(context);
@@ -176,6 +176,7 @@ class _AttachmentItemContentVideo extends StatefulWidget {
 
 class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo> {
   bool _showContent = false;
+  bool _showOriginal = false;
 
   Player? _videoPlayer;
   VideoController? _videoController;
@@ -184,15 +185,29 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
     setState(() => _showContent = true);
     MediaKit.ensureInitialized();
     final sn = context.read<SnNetworkProvider>();
-    final url = sn.getAttachmentUrl(widget.data.rid);
+    final url = _showOriginal ? sn.getAttachmentUrl(widget.data.rid) : sn.getAttachmentUrl(widget.data.compressed!.rid);
     _videoPlayer = Player();
     _videoController = VideoController(_videoPlayer!);
     _videoPlayer!.open(Media(url), play: !widget.isAutoload);
   }
 
+  void _toggleOriginal() {
+    if (!mounted) return;
+    if (widget.data.compressedId == null) return;
+    setState(() => _showOriginal = !_showOriginal);
+    final sn = context.read<SnNetworkProvider>();
+    _videoPlayer?.open(
+      Media(
+        _showOriginal ? sn.getAttachmentUrl(widget.data.rid) : sn.getAttachmentUrl(widget.data.compressed!.rid),
+      ),
+      play: true,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    _showOriginal = widget.data.compressedId == null;
     if (widget.isAutoload) _startLoad();
   }
 
@@ -297,9 +312,43 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
       );
     }
 
-    return Video(
-      controller: _videoController!,
-      aspectRatio: ratio,
+    return MaterialDesktopVideoControlsTheme(
+      normal: MaterialDesktopVideoControlsThemeData(
+        buttonBarButtonSize: 24,
+        buttonBarButtonColor: Colors.white,
+        topButtonBarMargin: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        topButtonBar: [
+          const Spacer(),
+          MaterialDesktopCustomButton(
+            iconSize: 24,
+            onPressed: _toggleOriginal,
+            icon: _showOriginal ? const Icon(Symbols.high_quality, size: 24) : const Icon(Symbols.sd, size: 24),
+          ),
+        ],
+      ),
+      fullscreen: const MaterialDesktopVideoControlsThemeData(),
+      child: MaterialVideoControlsTheme(
+        normal: MaterialVideoControlsThemeData(
+          buttonBarButtonSize: 24,
+          buttonBarButtonColor: Colors.white,
+          topButtonBarMargin: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          topButtonBar: [
+            const Spacer(),
+            MaterialDesktopCustomButton(
+              iconSize: 24,
+              onPressed: _toggleOriginal,
+              icon: _showOriginal ? const Icon(Symbols.high_quality, size: 24) : const Icon(Symbols.sd, size: 24),
+            ),
+          ],
+        ),
+        fullscreen: const MaterialVideoControlsThemeData(),
+        child: Video(
+          controller: _videoController!,
+          aspectRatio: ratio,
+          controls:
+              !kIsWeb && (Platform.isAndroid || Platform.isIOS) ? MaterialVideoControls : MaterialDesktopVideoControls,
+        ),
+      ),
     );
   }
 
