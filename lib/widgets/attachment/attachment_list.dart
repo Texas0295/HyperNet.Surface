@@ -65,8 +65,9 @@ class _AttachmentListState extends State<AttachmentList> {
               }
                   .toDouble();
 
-          return Padding(
+          return Container(
             padding: widget.padding ?? EdgeInsets.zero,
+            constraints: BoxConstraints(maxHeight: constraints.maxHeight),
             child: Container(
               constraints: constraints,
               width: double.infinity,
@@ -132,7 +133,7 @@ class _AttachmentListState extends State<AttachmentList> {
                             child: AttachmentItem(
                               data: ele,
                               heroTag: heroTags[idx],
-                              fit: widget.fit,
+                              fit: BoxFit.cover,
                             ),
                           ),
                           onTap: () {

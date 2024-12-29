@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -7,7 +7,6 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 // Keep this import to make the web image render work
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:surface/providers/config.dart';
 
 class UniversalImage extends StatelessWidget {
@@ -34,64 +33,54 @@ class UniversalImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final double? resizeHeight = cacheHeight != null ? (cacheHeight! * devicePixelRatio) : null;
-    final double? resizeWidth = cacheWidth != null ? (cacheWidth! * devicePixelRatio) : null;
+    final quality = filterQuality ?? context.read<ConfigProvider>().imageQuality;
 
-    return Image(
-      filterQuality: filterQuality ?? context.read<ConfigProvider>().imageQuality,
-      image: kIsWeb
-          ? UniversalImage.provider(url)
-          : ResizeImage(
-              UniversalImage.provider(url),
-              width: resizeWidth?.round(),
-              height: resizeHeight?.round(),
-              policy: ResizeImagePolicy.fit,
-            ),
+    return ExtendedImage.network(
+      url,
       width: width,
       height: height,
       fit: fit,
-      loadingBuilder: noProgressIndicator
-          ? null
-          : (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: TweenAnimationBuilder(
-                  tween: Tween(
-                    begin: 0,
-                    end: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                        : 0,
+      cache: true,
+      compressionRatio: kIsWeb ? 1 : switch(quality) {
+        FilterQuality.high => 1,
+        FilterQuality.medium => 0.75,
+        FilterQuality.low => 0.5,
+        FilterQuality.none => 0.25,
+      },
+      filterQuality: quality,
+      enableLoadState: true,
+      retries: 3,
+      loadStateChanged: (ExtendedImageState state) {
+        if (state.extendedImageLoadState == LoadState.completed) {
+          return state.completedWidget;
+        } else if (state.extendedImageLoadState == LoadState.failed) {
+          return Material(
+            color: Theme.of(context).colorScheme.surface,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 280),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimateWidgetExtensions(Icon(Symbols.close, size: 24))
+                      .animate(onPlay: (e) => e.repeat(reverse: true))
+                      .fade(duration: 500.ms),
+                  Text(
+                    state.lastException.toString(),
+                    textAlign: TextAlign.center,
                   ),
-                  duration: const Duration(milliseconds: 300),
-                  builder: (context, value, _) => CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null ? value.toDouble() : null,
-                  ),
-                ),
-              );
-            },
-      errorBuilder: noErrorWidget
-          ? null
-          : (context, error, stackTrace) {
-              return Material(
-                color: Theme.of(context).colorScheme.surface,
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 280),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AnimateWidgetExtensions(Icon(Symbols.close, size: 24))
-                          .animate(onPlay: (e) => e.repeat(reverse: true))
-                          .fade(duration: 500.ms),
-                      Text(
-                        error.toString(),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ).center(),
-                ),
-              );
-            },
+                ],
+              ).center(),
+            ),
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(
+            value: state.loadingProgress != null
+                ? state.loadingProgress!.cumulativeBytesLoaded / state.loadingProgress!.expectedTotalBytes!
+                : null,
+          ),
+        );
+      },
     );
   }
 
@@ -99,9 +88,10 @@ class UniversalImage extends StatelessWidget {
     // This place used to use network image or cached network image depending on the platform.
     // But now the cached network image is working on every platform.
     // So we just use it now.
-    return CachedNetworkImageProvider(
+    return ExtendedNetworkImageProvider(
       url,
-      imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+      cache: true,
+      retries: 3,
     );
   }
 }
