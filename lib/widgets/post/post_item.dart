@@ -253,6 +253,7 @@ class PostItem extends StatelessWidget {
             bordered: true,
             gridded: true,
             maxHeight: showFullPost ? null : 480,
+            minWidth: 640,
             fit: showFullPost ? BoxFit.cover : BoxFit.contain,
             padding: const EdgeInsets.symmetric(horizontal: 12),
           ),
@@ -930,6 +931,7 @@ class _PostQuoteContent extends StatelessWidget {
                 child: AttachmentList(
                   data: child.preload!.attachments!,
                   maxHeight: 360,
+                  minWidth: 640,
                   fit: BoxFit.contain,
                   gridded: true,
                   padding: const EdgeInsets.symmetric(horizontal: 12),

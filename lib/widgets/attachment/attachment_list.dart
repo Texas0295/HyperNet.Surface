@@ -18,6 +18,7 @@ class AttachmentList extends StatefulWidget {
   final bool noGrow;
   final BoxFit fit;
   final double? maxHeight;
+  final double? minWidth;
   final EdgeInsets? padding;
 
   const AttachmentList({
@@ -28,6 +29,7 @@ class AttachmentList extends StatefulWidget {
     this.noGrow = false,
     this.fit = BoxFit.cover,
     this.maxHeight,
+    this.minWidth,
     this.padding,
   });
 
@@ -51,7 +53,7 @@ class _AttachmentListState extends State<AttachmentList> {
             widget.bordered ? BorderSide(width: 1, color: Theme.of(context).dividerColor) : BorderSide.none;
         final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
         final constraints = BoxConstraints(
-          minWidth: 80,
+          minWidth: widget.minWidth ?? 80,
           maxHeight: widget.maxHeight ?? MediaQuery.of(context).size.height,
         );
 
@@ -67,42 +69,38 @@ class _AttachmentListState extends State<AttachmentList> {
 
           return Container(
             padding: widget.padding ?? EdgeInsets.zero,
-            constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-            child: Container(
-              constraints: constraints,
-              width: double.infinity,
-              child: GestureDetector(
-                child: AspectRatio(
-                  aspectRatio: singleAspectRatio,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      border: Border.fromBorderSide(borderSide),
-                      borderRadius: AttachmentList.kDefaultRadius,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: AttachmentList.kDefaultRadius,
-                      child: AttachmentItem(
-                        data: widget.data[0],
-                        heroTag: heroTags[0],
-                        fit: widget.fit,
-                      ),
+            constraints: constraints,
+            child: GestureDetector(
+              child: AspectRatio(
+                aspectRatio: singleAspectRatio,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    border: Border.fromBorderSide(borderSide),
+                    borderRadius: AttachmentList.kDefaultRadius,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: AttachmentList.kDefaultRadius,
+                    child: AttachmentItem(
+                      data: widget.data[0],
+                      heroTag: heroTags[0],
+                      fit: widget.fit,
                     ),
                   ),
                 ),
-                onTap: () {
-                  if (widget.data.firstOrNull?.mediaType != SnMediaType.image) return;
-                  context.pushTransparentRoute(
-                    AttachmentZoomView(
-                      data: widget.data.where((ele) => ele != null).cast(),
-                      initialIndex: 0,
-                      heroTags: heroTags,
-                    ),
-                    backgroundColor: Colors.black.withOpacity(0.7),
-                    rootNavigator: true,
-                  );
-                },
               ),
+              onTap: () {
+                if (widget.data.firstOrNull?.mediaType != SnMediaType.image) return;
+                context.pushTransparentRoute(
+                  AttachmentZoomView(
+                    data: widget.data.where((ele) => ele != null).cast(),
+                    initialIndex: 0,
+                    heroTags: heroTags,
+                  ),
+                  backgroundColor: Colors.black.withOpacity(0.7),
+                  rootNavigator: true,
+                );
+              },
             ),
           );
         }
