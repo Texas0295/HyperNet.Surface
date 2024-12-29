@@ -315,6 +315,7 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
     }
 
     return MaterialDesktopVideoControlsTheme(
+      key: Key('material-desktop-video-controls-theme-$_showOriginal'),
       normal: MaterialDesktopVideoControlsThemeData(
         buttonBarButtonSize: 24,
         buttonBarButtonColor: Colors.white,
@@ -324,14 +325,16 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
           MaterialDesktopCustomButton(
             iconSize: 24,
             onPressed: _toggleOriginal,
-            icon: Builder(builder: (context) {
-              return _showOriginal ? const Icon(Symbols.high_quality, size: 24) : const Icon(Symbols.sd, size: 24);
-            }),
+            icon: Icon(
+              _showOriginal ? Symbols.high_quality : Symbols.sd,
+              size: 24,
+            ),
           ),
         ],
       ),
       fullscreen: const MaterialDesktopVideoControlsThemeData(),
       child: MaterialVideoControlsTheme(
+        key: Key('material-video-controls-theme-$_showOriginal'),
         normal: MaterialVideoControlsThemeData(
           buttonBarButtonSize: 24,
           buttonBarButtonColor: Colors.white,
