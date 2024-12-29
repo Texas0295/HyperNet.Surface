@@ -161,75 +161,84 @@ class ChatMessageInputState extends State<ChatMessageInput> {
             .animate(const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          child: Padding(
-            padding: _replyingMessage != null ? const EdgeInsets.only(top: 8) : EdgeInsets.zero,
-            child: _replyingMessage != null
-                ? MaterialBanner(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    leading: const Icon(Symbols.reply),
-                    backgroundColor: Colors.transparent,
-                    content: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (_replyingMessage?.body['text'] != null)
-                            MarkdownTextContent(
-                              content: _replyingMessage?.body['text'],
-                            ),
-                        ],
+          child: _replyingMessage != null
+              ? Container(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 1 / MediaQuery.of(context).devicePixelRatio,
                       ),
                     ),
-                    actions: [
-                      TextButton(
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Symbols.reply, size: 20),
+                      const Gap(8),
+                      Expanded(
+                        child: Text(
+                          _replyingMessage?.body['text'] ?? '${_replyingMessage?.sender.nick}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Gap(16),
+                      InkWell(
                         child: Text('cancel'.tr()),
-                        onPressed: () {
+                        onTap: () {
                           setState(() => _replyingMessage = null);
                         },
                       ),
                     ],
-                  )
-                : const SizedBox.shrink(),
-          ),
+                  ).padding(vertical: 8),
+                )
+              : const SizedBox.shrink(),
         )
-            .height(_replyingMessage != null ? 54 + 8 : 0, animate: true)
+            .height(_replyingMessage != null ? 38 : 0, animate: true)
             .animate(const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          child: Padding(
-            padding: _editingMessage != null ? const EdgeInsets.only(top: 8) : EdgeInsets.zero,
-            child: _editingMessage != null
-                ? MaterialBanner(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    leading: const Icon(Symbols.edit),
-                    backgroundColor: Colors.transparent,
-                    content: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (_editingMessage?.body['text'] != null)
-                            MarkdownTextContent(
-                              content: _editingMessage?.body['text'],
-                            ),
-                        ],
+          child: _editingMessage != null
+              ? Container(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 1 / MediaQuery.of(context).devicePixelRatio,
                       ),
                     ),
-                    actions: [
-                      TextButton(
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Symbols.edit, size: 20),
+                      const Gap(8),
+                      Expanded(
+                        child: Text(
+                          _editingMessage?.body['text'] ?? '${_editingMessage?.sender.nick}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Gap(16),
+                      InkWell(
                         child: Text('cancel'.tr()),
-                        onPressed: () {
+                        onTap: () {
+                          _contentController.clear();
                           setState(() => _editingMessage = null);
                         },
                       ),
                     ],
-                  )
-                : const SizedBox.shrink(),
-          ),
+                  ).padding(vertical: 8),
+                )
+              : const SizedBox.shrink(),
         )
-            .height(_editingMessage != null ? 54 + 8 : 0, animate: true)
+            .height(_editingMessage != null ? 38 : 0, animate: true)
             .animate(const Duration(milliseconds: 300), Curves.fastEaseInToSlowEaseOut),
         SizedBox(
           height: 56,

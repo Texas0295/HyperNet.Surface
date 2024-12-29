@@ -109,11 +109,11 @@ class ChatMessage extends StatelessWidget {
                               AccountImage(
                                 content: user?.avatar,
                                 radius: 12,
-                              ).padding(right: 6),
+                              ).padding(right: 8),
                             Text(
                               (data.sender.nick?.isNotEmpty ?? false) ? data.sender.nick! : user?.nick ?? 'unknown',
                             ).bold(),
-                            const Gap(6),
+                            const Gap(8),
                             Text(
                               dateFormatter.format(data.createdAt.toLocal()),
                             ).fontSize(13),
