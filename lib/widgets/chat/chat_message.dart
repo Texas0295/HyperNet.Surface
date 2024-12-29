@@ -53,7 +53,7 @@ class ChatMessage extends StatelessWidget {
       iconOnRightSwipe: Symbols.edit,
       swipeSensitivity: 20,
       onLeftSwipe: onReply != null ? (_) => onReply!(data) : null,
-      onRightSwipe: onEdit != null ? (_) => onEdit!(data) : null,
+      onRightSwipe: (onEdit != null && isOwner) ? (_) => onEdit!(data) : null,
       child: ContextMenuArea(
         contextMenu: ContextMenu(
           entries: [
@@ -103,8 +103,7 @@ class ChatMessage extends StatelessWidget {
                     children: [
                       if (!isMerged)
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             if (isCompact)
                               AccountImage(
@@ -153,7 +152,7 @@ class ChatMessage extends StatelessWidget {
                 )
               ],
             ).opacity(isPending ? 0.5 : 1),
-            if (data.body['text'] != null && (data.body['text']?.isNotEmpty ?? false))
+            if (data.body['text'] != null && data.type == 'messages.new' && (data.body['text']?.isNotEmpty ?? false))
               LinkPreviewWidget(text: data.body['text']!),
             if (data.preload?.attachments?.isNotEmpty ?? false)
               AttachmentList(
@@ -161,7 +160,8 @@ class ChatMessage extends StatelessWidget {
                 bordered: true,
                 gridded: true,
                 noGrow: true,
-                maxHeight: 520,
+                maxHeight: 560,
+                minWidth: 480,
                 padding: const EdgeInsets.only(top: 8),
               ),
             if (!hasMerged && !isCompact) const Gap(12) else if (!isCompact) const Gap(6),

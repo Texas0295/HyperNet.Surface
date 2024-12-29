@@ -213,11 +213,11 @@ class PostWriteController extends ChangeNotifier {
         aliasController.text = post.alias ?? '';
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
-        visibleUsers = List.from(post.visibleUsersList ?? []);
-        invisibleUsers = List.from(post.invisibleUsersList ?? []);
+        visibleUsers = List.from(post.visibleUsersList ?? [], growable: true);
+        invisibleUsers = List.from(post.invisibleUsersList ?? [], growable: true);
         visibility = post.visibility;
-        tags = List.from(post.tags.map((ele) => ele.alias));
-        categories = List.from(post.categories.map((ele) => ele.alias));
+        tags = List.from(post.tags.map((ele) => ele.alias), growable: true);
+        categories = List.from(post.categories.map((ele) => ele.alias), growable: true);
         attachments.addAll(post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? []);
 
         if (post.preload?.thumbnail != null && (post.preload?.thumbnail?.rid.isNotEmpty ?? false)) {
@@ -344,9 +344,10 @@ class PostWriteController extends ChangeNotifier {
           if (titleController.text.isNotEmpty) 'title': titleController.text,
           if (descriptionController.text.isNotEmpty) 'description': descriptionController.text,
           if (thumbnail != null && thumbnail!.attachment != null) 'thumbnail': thumbnail!.attachment!.toJson(),
-          'attachments': attachments.where((e) => e.attachment != null).map((e) => e.attachment!.toJson()).toList(),
-          'tags': tags.map((ele) => {'alias': ele}).toList(),
-          'categories': categories.map((ele) => {'alias': ele}).toList(),
+          'attachments':
+              attachments.where((e) => e.attachment != null).map((e) => e.attachment!.toJson()).toList(growable: true),
+          'tags': tags.map((ele) => {'alias': ele}).toList(growable: true),
+          'categories': categories.map((ele) => {'alias': ele}).toList(growable: true),
           'visibility': visibility,
           'visible_users_list': visibleUsers,
           'invisible_users_list': invisibleUsers,
