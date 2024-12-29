@@ -134,7 +134,7 @@ PODS:
     - GoogleUtilities/Privacy
   - in_app_review (2.0.0):
     - FlutterMacOS
-  - livekit_client (2.3.3):
+  - livekit_client (2.3.4):
     - flutter_webrtc
     - FlutterMacOS
     - WebRTC-SDK (= 125.6422.06)
@@ -304,7 +304,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   in_app_review: a6a031b9acd03c7d103e341aa334adf2c493fb93
-  livekit_client: 8b1b90a6f2445d127a018ce93cc8cf6d8ab62982
+  livekit_client: b7ab91e79e657d7d40da16cb2f90d517cb72d406
   media_kit_libs_macos_video: b3e2bbec2eef97c285f2b1baa7963c67c753fb82
   media_kit_native_event_loop: 81fd5b45192b72f8b5b69eaf5b540f45777eb8d5
   media_kit_video: c75b07f14d59706c775778e4dd47dd027de8d1e5
