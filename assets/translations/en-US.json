@@ -458,6 +458,7 @@
   "accountJoinedAt": "Joined at {}",
   "accountBirthday": "Born on {}",
   "accountBadge": "Badge",
+  "accountCheckInNoRecords": "No check-in records",
   "badgeCompanyStaff": "Solsynth Staff",
   "badgeSiteMigration": "Solar Network Native",
   "accountStatus": "Status",

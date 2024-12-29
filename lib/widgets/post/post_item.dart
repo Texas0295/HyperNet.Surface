@@ -251,7 +251,9 @@ class PostItem extends StatelessWidget {
           AttachmentList(
             data: data.preload!.attachments!,
             bordered: true,
-            maxHeight: 560,
+            gridded: true,
+            maxHeight: showFullPost ? null : 480,
+            fit: showFullPost ? BoxFit.cover : BoxFit.contain,
             listPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
         if (data.body['content'] != null)
@@ -337,7 +339,7 @@ class PostShareImageWidget extends StatelessWidget {
           if (data.type != 'article' && (data.preload?.attachments?.isNotEmpty ?? false))
             AttachmentList(
               data: data.preload!.attachments!,
-              isFlatted: true,
+              gridded: true,
             ).padding(horizontal: 16, bottom: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -930,12 +932,12 @@ class _PostQuoteContent extends StatelessWidget {
                 ),
                 child: AttachmentList(
                   data: child.preload!.attachments!,
-                  isFlatted: isFlatted,
+                  gridded: isFlatted,
                   listPadding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               ).padding(
                 top: 8,
-                bottom: (child.preload?.attachments?.length ?? 0) > 1 ? 12 : 0,
+                bottom: 12,
               )
             else
               const Gap(8),

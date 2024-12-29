@@ -456,6 +456,7 @@
   "accountJoinedAt": "加入于 {}",
   "accountBirthday": "出生于 {}",
   "accountBadge": "徽章",
+  "accountCheckInNoRecords": "暂无运势记录",
   "badgeCompanyStaff": "索尔辛茨士大夫 · 员工",
   "badgeSiteMigration": "Solar Network 原住民",
   "accountStatus": "状态",

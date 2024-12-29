@@ -517,6 +517,12 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
               future: _getCheckInRecords(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const SizedBox.shrink();
+                if (snapshot.data!.length <= 1) {
+                  return Text(
+                    'accountCheckInNoRecords',
+                    textAlign: TextAlign.center,
+                  ).tr().fontWeight(FontWeight.bold).center().padding(horizontal: 20, vertical: 8);
+                }
                 final records = snapshot.data!;
                 return SizedBox(
                   width: double.infinity,

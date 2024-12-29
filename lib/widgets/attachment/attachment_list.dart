@@ -4,8 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
@@ -14,8 +14,9 @@ import 'package:uuid/uuid.dart';
 class AttachmentList extends StatefulWidget {
   final List<SnAttachment?> data;
   final bool bordered;
+  final bool gridded;
   final bool noGrow;
-  final bool isFlatted;
+  final BoxFit fit;
   final double? maxHeight;
   final EdgeInsets? listPadding;
 
@@ -23,8 +24,9 @@ class AttachmentList extends StatefulWidget {
     super.key,
     required this.data,
     this.bordered = false,
+    this.gridded = false,
     this.noGrow = false,
-    this.isFlatted = false,
+    this.fit = BoxFit.cover,
     this.maxHeight,
     this.listPadding,
   });
@@ -53,7 +55,6 @@ class _AttachmentListState extends State<AttachmentList> {
         final constraints = BoxConstraints(
           minWidth: 80,
           maxHeight: widget.maxHeight ?? double.infinity,
-          maxWidth: layoutConstraints.maxWidth - 20,
         );
 
         if (widget.data.isEmpty) return const SizedBox.shrink();
@@ -66,52 +67,29 @@ class _AttachmentListState extends State<AttachmentList> {
               }
                   .toDouble();
 
-          return Container(
-            constraints: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                ? constraints.copyWith(
-                    maxWidth: math.min(
-                      constraints.maxWidth,
-                      kAttachmentMaxWidth,
-                    ),
-                  )
-                : null,
-            child: AspectRatio(
-              aspectRatio: singleAspectRatio,
+          return Padding(
+            padding: widget.listPadding ?? EdgeInsets.zero,
+            child: Container(
+              constraints: constraints,
+              width: double.infinity,
               child: GestureDetector(
-                child: Builder(
-                  builder: (context) {
-                    if (ResponsiveBreakpoints.of(context).largerThan(MOBILE) || widget.noGrow) {
-                      return Padding(
-                        // Single child list-like displaying
-                        padding: widget.listPadding ?? EdgeInsets.zero,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: backgroundColor,
-                            border: Border(top: borderSide, bottom: borderSide),
-                            borderRadius: AttachmentList.kDefaultRadius,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: AttachmentList.kDefaultRadius,
-                            child: AttachmentItem(
-                              data: widget.data[0],
-                              heroTag: heroTags[0],
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
-                        border: Border(top: borderSide, bottom: borderSide),
-                      ),
+                child: AspectRatio(
+                  aspectRatio: singleAspectRatio,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      border: Border.fromBorderSide(borderSide),
+                      borderRadius: AttachmentList.kDefaultRadius,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: AttachmentList.kDefaultRadius,
                       child: AttachmentItem(
                         data: widget.data[0],
-                        heroTag: heroTags.first,
+                        heroTag: heroTags[0],
+                        fit: widget.fit,
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
                 onTap: () {
                   if (widget.data.firstOrNull?.mediaType != SnMediaType.image) return;
@@ -130,34 +108,53 @@ class _AttachmentListState extends State<AttachmentList> {
           );
         }
 
-        if (widget.isFlatted) {
-          return Wrap(
-            spacing: 4,
-            runSpacing: 4,
-            children: widget.data
-                .mapIndexed(
-                  (idx, ele) => AspectRatio(
-                    aspectRatio: (ele?.data['ratio'] ?? 1).toDouble(),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
-                        border: Border(
-                          top: borderSide,
-                          bottom: borderSide,
+        if (widget.gridded) {
+          return Padding(
+            padding: widget.listPadding ?? EdgeInsets.zero,
+            child: Container(
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                border: Border(
+                  top: borderSide,
+                  bottom: borderSide,
+                ),
+                borderRadius: AttachmentList.kDefaultRadius,
+              ),
+              child: ClipRRect(
+                borderRadius: AttachmentList.kDefaultRadius,
+                child: StaggeredGrid.count(
+                  crossAxisCount: math.min(widget.data.length, 2),
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                  children: widget.data
+                      .mapIndexed(
+                        (idx, ele) => GestureDetector(
+                          child: Container(
+                            constraints: constraints,
+                            child: AttachmentItem(
+                              data: ele,
+                              heroTag: heroTags[idx],
+                              fit: widget.fit,
+                            ),
+                          ),
+                          onTap: () {
+                            if (widget.data[idx]!.mediaType != SnMediaType.image) return;
+                            context.pushTransparentRoute(
+                              AttachmentZoomView(
+                                data: widget.data.where((ele) => ele != null).cast(),
+                                initialIndex: idx,
+                                heroTags: heroTags,
+                              ),
+                              backgroundColor: Colors.black.withOpacity(0.7),
+                              rootNavigator: true,
+                            );
+                          },
                         ),
-                        borderRadius: AttachmentList.kDefaultRadius,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: AttachmentList.kDefaultRadius,
-                        child: AttachmentItem(
-                          data: ele,
-                          heroTag: heroTags[idx],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
           );
         }
 

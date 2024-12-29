@@ -20,9 +20,11 @@ import 'package:uuid/uuid.dart';
 class AttachmentItem extends StatelessWidget {
   final SnAttachment? data;
   final String? heroTag;
+  final BoxFit fit;
 
   const AttachmentItem({
     super.key,
+    this.fit = BoxFit.cover,
     required this.data,
     required this.heroTag,
   });
@@ -43,7 +45,7 @@ class AttachmentItem extends StatelessWidget {
           child: AutoResizeUniversalImage(
             sn.getAttachmentUrl(data!.rid),
             key: Key('attachment-${data!.rid}-$tag'),
-            fit: BoxFit.cover,
+            fit: fit,
           ),
         );
       case 'video':

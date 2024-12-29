@@ -159,6 +159,7 @@ class ChatMessage extends StatelessWidget {
               AttachmentList(
                 data: data.preload!.attachments!,
                 bordered: true,
+                gridded: true,
                 noGrow: true,
                 maxHeight: 520,
                 listPadding: const EdgeInsets.only(top: 8),
