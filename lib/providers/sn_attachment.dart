@@ -154,10 +154,12 @@ class SnAttachmentProvider {
     String rid,
     String cid, {
     Function(double progress)? onProgress,
+    bool analyzeNow = false,
   }) async {
     final resp = await _sn.client.post(
       '/cgi/uc/fragments/$rid/$cid',
       data: data,
+      queryParameters: {'analyzeNow': analyzeNow},
       options: Options(headers: {'Content-Type': 'application/octet-stream'}),
       onSendProgress: (count, total) {
         if (onProgress != null) {
@@ -178,6 +180,7 @@ class SnAttachmentProvider {
     SnAttachmentFragment place,
     int chunkSize, {
     Function(double progress)? onProgress,
+    bool analyzeNow = false,
   }) async {
     final Map<String, dynamic> chunks = place.fileChunks;
     var completedTasks = 0;
@@ -200,6 +203,7 @@ class SnAttachmentProvider {
           data,
           place.rid,
           entry.key,
+          analyzeNow: analyzeNow,
           onProgress: (progress) {
             final overallProgress = (completedTasks + progress) / chunks.length;
             onProgress?.call(overallProgress);

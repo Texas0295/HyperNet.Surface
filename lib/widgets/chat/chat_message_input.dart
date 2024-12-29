@@ -83,6 +83,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           media.toFile()!,
           place.$1,
           place.$2,
+          analyzeNow: media.type == SnMediaType.image,
           onProgress: (progress) {
             // Calculate overall progress for attachments
             setState(() {

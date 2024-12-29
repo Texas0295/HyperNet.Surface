@@ -247,6 +247,7 @@ class PostWriteController extends ChangeNotifier {
       media.toFile()!,
       place.$1,
       place.$2,
+      analyzeNow: media.type == SnMediaType.image,
       onProgress: (value) {
         progress = value;
         notifyListeners();
