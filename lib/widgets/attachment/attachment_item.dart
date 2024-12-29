@@ -324,7 +324,9 @@ class _AttachmentItemContentVideoState extends State<_AttachmentItemContentVideo
           MaterialDesktopCustomButton(
             iconSize: 24,
             onPressed: _toggleOriginal,
-            icon: _showOriginal ? const Icon(Symbols.high_quality, size: 24) : const Icon(Symbols.sd, size: 24),
+            icon: Builder(builder: (context) {
+              return _showOriginal ? const Icon(Symbols.high_quality, size: 24) : const Icon(Symbols.sd, size: 24);
+            }),
           ),
         ],
       ),

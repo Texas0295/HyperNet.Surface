@@ -334,7 +334,6 @@ class PostShareImageWidget extends StatelessWidget {
             _PostQuoteContent(
               child: data.repostTo!,
               isRelativeDate: false,
-              isFlatted: true,
             ).padding(horizontal: 16, bottom: 8),
           if (data.type != 'article' && (data.preload?.attachments?.isNotEmpty ?? false))
             AttachmentList(
@@ -886,11 +885,9 @@ class _PostContentBody extends StatelessWidget {
 class _PostQuoteContent extends StatelessWidget {
   final SnPost child;
   final bool isRelativeDate;
-  final bool isFlatted;
 
   const _PostQuoteContent({
     this.isRelativeDate = true,
-    this.isFlatted = false,
     required this.child,
   });
 
@@ -932,7 +929,9 @@ class _PostQuoteContent extends StatelessWidget {
                 ),
                 child: AttachmentList(
                   data: child.preload!.attachments!,
-                  gridded: isFlatted,
+                  maxHeight: 360,
+                  fit: BoxFit.contain,
+                  gridded: true,
                   listPadding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               ).padding(
