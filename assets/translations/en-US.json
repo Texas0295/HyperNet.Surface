@@ -467,6 +467,7 @@
   "accountStatusLastSeen": "Last seen at {}",
   "postArticle": "Article on the Solar Network",
   "postStory": "Story on the Solar Network",
+  "postLocalDraftRestored": "Restored from device",
   "articleWrittenAt": "Written at {}",
   "articleEditedAt": "Edited at {}",
   "attachmentSaved": "Saved to album",

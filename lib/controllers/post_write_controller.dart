@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -8,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -151,8 +155,18 @@ class PostWriteController extends ChangeNotifier {
   final TextEditingController aliasController = TextEditingController();
 
   PostWriteController() {
-    titleController.addListener(() => notifyListeners());
-    descriptionController.addListener(() => notifyListeners());
+    titleController.addListener(() {
+      _temporaryPlanSave();
+      notifyListeners();
+    });
+    descriptionController.addListener(() {
+      _temporaryPlanSave();
+      notifyListeners();
+    });
+    contentController.addListener(() {
+      _temporaryPlanSave();
+    });
+    _temporaryLoad();
   }
 
   String mode = kTitleMap.keys.first;
@@ -298,6 +312,81 @@ class PostWriteController extends ChangeNotifier {
     return compressedAttachment;
   }
 
+  static const kTemporaryStorageKey = 'int_draft_post';
+
+  Timer? _temporarySaveTimer;
+
+  void _temporaryPlanSave() {
+    _temporarySaveTimer?.cancel();
+    _temporarySaveTimer = Timer(const Duration(seconds: 1), () {
+      _temporarySave();
+      log("[PostWriter] Temporary save saved.");
+    });
+  }
+
+  void _temporarySave() {
+    SharedPreferences.getInstance().then((prefs) {
+      if (titleController.text.isEmpty &&
+          descriptionController.text.isEmpty &&
+          contentController.text.isEmpty &&
+          thumbnail == null &&
+          attachments.isEmpty) {
+        prefs.remove(kTemporaryStorageKey);
+        return;
+      }
+
+      prefs.setString(
+        kTemporaryStorageKey,
+        jsonEncode({
+          'publisher': publisher,
+          'content': contentController.text,
+          if (aliasController.text.isNotEmpty) 'alias': aliasController.text,
+          if (titleController.text.isNotEmpty) 'title': titleController.text,
+          if (descriptionController.text.isNotEmpty) 'description': descriptionController.text,
+          if (thumbnail != null && thumbnail!.attachment != null) 'thumbnail': thumbnail!.attachment!.toJson(),
+          'attachments': attachments.where((e) => e.attachment != null).map((e) => e.attachment!.toJson()).toList(),
+          'tags': tags.map((ele) => {'alias': ele}).toList(),
+          'categories': categories.map((ele) => {'alias': ele}).toList(),
+          'visibility': visibility,
+          'visible_users_list': visibleUsers,
+          'invisible_users_list': invisibleUsers,
+          if (publishedAt != null) 'published_at': publishedAt!.toUtc().toIso8601String(),
+          if (publishedUntil != null) 'published_until': publishedAt!.toUtc().toIso8601String(),
+          if (replyingPost != null) 'reply_to': replyingPost!.toJson(),
+          if (repostingPost != null) 'repost_to': repostingPost!.toJson(),
+        }),
+      );
+    });
+  }
+
+  bool temporaryRestored = false;
+
+  void _temporaryLoad() {
+    SharedPreferences.getInstance().then((prefs) {
+      final raw = prefs.getString(kTemporaryStorageKey);
+      if (raw == null) return;
+      final data = jsonDecode(raw);
+      contentController.text = data['content'];
+      aliasController.text = data['alias'] ?? '';
+      titleController.text = data['title'] ?? '';
+      descriptionController.text = data['description'] ?? '';
+      if (data['thumbnail'] != null) thumbnail = PostWriteMedia(SnAttachment.fromJson(data['thumbnail']));
+      attachments
+          .addAll(data['attachments'].map((ele) => PostWriteMedia(SnAttachment.fromJson(ele))).cast<PostWriteMedia>());
+      tags = List.from(data['tags'].map((ele) => ele['alias']));
+      categories = List.from(data['categories'].map((ele) => ele['alias']));
+      visibility = data['visibility'];
+      visibleUsers = List.from(data['visible_users_list'] ?? []);
+      invisibleUsers = List.from(data['invisible_users_list'] ?? []);
+      if (data['published_at'] != null) publishedAt = DateTime.tryParse(data['published_at'])?.toLocal();
+      if (data['published_until'] != null) publishedUntil = DateTime.tryParse(data['published_until'])?.toLocal();
+      replyingPost = data['reply_to'] != null ? SnPost.fromJson(data['reply_to']) : null;
+      repostingPost = data['repost_to'] != null ? SnPost.fromJson(data['repost_to']) : null;
+      temporaryRestored = true;
+      notifyListeners();
+    });
+  }
+
   Future<void> uploadSingleAttachment(BuildContext context, int idx) async {
     if (isBusy) return;
 
@@ -417,6 +506,7 @@ class PostWriteController extends ChangeNotifier {
           method: editingPost != null ? 'PUT' : 'POST',
         ),
       );
+      reset();
     } catch (err) {
       if (!context.mounted) return;
       context.showErrorDialog(err);
@@ -465,56 +555,67 @@ class PostWriteController extends ChangeNotifier {
 
   void setPublisher(SnPublisher? item) {
     publisher = item;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setPublishedAt(DateTime? value) {
     publishedAt = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setPublishedUntil(DateTime? value) {
     publishedUntil = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setTags(List<String> value) {
     tags = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setCategories(List<String> value) {
     categories = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setVisibility(int value) {
     visibility = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setVisibleUsers(List<int> value) {
     visibleUsers = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setInvisibleUsers(List<int> value) {
     invisibleUsers = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setProgress(double? value) {
     progress = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setIsBusy(bool value) {
     isBusy = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
   void setMode(String value) {
     mode = value;
+    _temporaryPlanSave();
     notifyListeners();
   }
 
@@ -532,6 +633,8 @@ class PostWriteController extends ChangeNotifier {
     replyingPost = null;
     repostingPost = null;
     mode = kTitleMap.keys.first;
+    temporaryRestored = false;
+    SharedPreferences.getInstance().then((prefs) => prefs.remove(kTemporaryStorageKey));
     notifyListeners();
   }
 

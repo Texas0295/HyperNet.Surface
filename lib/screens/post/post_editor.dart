@@ -364,6 +364,35 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      padding: const EdgeInsets.only(top: 4, bottom: 4, left: 28, right: 22),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Theme.of(context).dividerColor,
+                            width: 1 / MediaQuery.of(context).devicePixelRatio,
+                          ),
+                        ),
+                      ),
+                      child: _writeController.temporaryRestored
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.restore, size: 20),
+                                const Gap(8),
+                                Expanded(child: Text('postLocalDraftRestored').tr()),
+                                InkWell(
+                                  child: Text('dialogDismiss').tr(),
+                                  onTap: () {
+                                    _writeController.reset();
+                                  },
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                    )
+                        .height(_writeController.temporaryRestored ? 32 : 0, animate: true)
+                        .animate(const Duration(milliseconds: 300), Curves.fastLinearToSlowEaseIn),
                     LoadingIndicator(isActive: _isLoading),
                     if (_writeController.isBusy && _writeController.progress != null)
                       TweenAnimationBuilder<double>(

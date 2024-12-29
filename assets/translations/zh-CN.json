@@ -465,6 +465,7 @@
   "accountStatusLastSeen": "最后一次上线于 {}",
   "postArticle": "Solar Network 上的文章",
   "postStory": "Solar Network 上的故事",
+  "postLocalDraftRestored": "从本地恢复草稿",
   "articleWrittenAt": "发表于 {}",
   "articleEditedAt": "编辑于 {}",
   "attachmentSaved": "已保存到相册",
