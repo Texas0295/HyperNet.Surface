@@ -254,7 +254,7 @@ class PostItem extends StatelessWidget {
             gridded: true,
             maxHeight: showFullPost ? null : 480,
             fit: showFullPost ? BoxFit.cover : BoxFit.contain,
-            listPadding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
           ),
         if (data.body['content'] != null)
           LinkPreviewWidget(
@@ -336,10 +336,10 @@ class PostShareImageWidget extends StatelessWidget {
               isRelativeDate: false,
             ).padding(horizontal: 16, bottom: 8),
           if (data.type != 'article' && (data.preload?.attachments?.isNotEmpty ?? false))
-            AttachmentList(
+            StyledWidget(AttachmentList(
               data: data.preload!.attachments!,
               gridded: true,
-            ).padding(horizontal: 16, bottom: 8),
+            )).padding(horizontal: 16, bottom: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -932,7 +932,7 @@ class _PostQuoteContent extends StatelessWidget {
                   maxHeight: 360,
                   fit: BoxFit.contain,
                   gridded: true,
-                  listPadding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               ).padding(
                 top: 8,

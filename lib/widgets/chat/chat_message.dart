@@ -162,7 +162,7 @@ class ChatMessage extends StatelessWidget {
                 gridded: true,
                 noGrow: true,
                 maxHeight: 520,
-                listPadding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(top: 8),
               ),
             if (!hasMerged && !isCompact) const Gap(12) else if (!isCompact) const Gap(6),
           ],

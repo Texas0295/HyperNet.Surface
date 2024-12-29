@@ -354,9 +354,11 @@ class PostWriteController extends ChangeNotifier {
         );
 
         try {
-          final compressedAttachment = await _tryCompressVideoCopy(context, media);
-          if (compressedAttachment != null) {
-            item = await attach.updateOne(item, compressedId: compressedAttachment.id);
+          if (context.mounted) {
+            final compressedAttachment = await _tryCompressVideoCopy(context, media);
+            if (compressedAttachment != null) {
+              item = await attach.updateOne(item, compressedId: compressedAttachment.id);
+            }
           }
         } catch (err) {
           if (context.mounted) context.showErrorDialog(err);

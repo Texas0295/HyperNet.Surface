@@ -18,7 +18,7 @@ class AttachmentList extends StatefulWidget {
   final bool noGrow;
   final BoxFit fit;
   final double? maxHeight;
-  final EdgeInsets? listPadding;
+  final EdgeInsets? padding;
 
   const AttachmentList({
     super.key,
@@ -28,7 +28,7 @@ class AttachmentList extends StatefulWidget {
     this.noGrow = false,
     this.fit = BoxFit.cover,
     this.maxHeight,
-    this.listPadding,
+    this.padding,
   });
 
   static const BorderRadius kDefaultRadius = BorderRadius.all(Radius.circular(8));
@@ -43,8 +43,6 @@ class _AttachmentListState extends State<AttachmentList> {
     (_) => const Uuid().v4(),
   );
 
-  static const double kAttachmentMaxWidth = 640;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -54,7 +52,7 @@ class _AttachmentListState extends State<AttachmentList> {
         final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
         final constraints = BoxConstraints(
           minWidth: 80,
-          maxHeight: widget.maxHeight ?? double.infinity,
+          maxHeight: widget.maxHeight ?? MediaQuery.of(context).size.height,
         );
 
         if (widget.data.isEmpty) return const SizedBox.shrink();
@@ -68,7 +66,7 @@ class _AttachmentListState extends State<AttachmentList> {
                   .toDouble();
 
           return Padding(
-            padding: widget.listPadding ?? EdgeInsets.zero,
+            padding: widget.padding ?? EdgeInsets.zero,
             child: Container(
               constraints: constraints,
               width: double.infinity,
@@ -110,7 +108,7 @@ class _AttachmentListState extends State<AttachmentList> {
 
         if (widget.gridded) {
           return Padding(
-            padding: widget.listPadding ?? EdgeInsets.zero,
+            padding: widget.padding ?? EdgeInsets.zero,
             child: Container(
               decoration: BoxDecoration(
                 color: backgroundColor,
@@ -220,7 +218,7 @@ class _AttachmentListState extends State<AttachmentList> {
                   );
                 },
                 separatorBuilder: (context, index) => const Gap(8),
-                padding: widget.listPadding,
+                padding: widget.padding,
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
               ),
