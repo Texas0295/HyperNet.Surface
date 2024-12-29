@@ -282,6 +282,7 @@
     "other": "{} attachments"
   },
   "fieldAttachmentRandomId": "Random ID",
+  "fieldAttachmentAlt": "Alternative text",
   "addAttachmentFromAlbum": "Add from album",
   "addAttachmentFromClipboard": "Paste file",
   "addAttachmentFromCameraPhoto": "Take photo",
@@ -293,6 +294,7 @@
   "attachmentUnsetAsPostThumbnail": "Unset as post thumbnail",
   "attachmentCompressVideo": "Re-encode video",
   "attachmentSetThumbnail": "Set thumbnail",
+  "attachmentSetAlt": "Set alternative text",
   "attachmentCopyRandomId": "Copy RID",
   "attachmentUpload": "Upload",
   "attachmentInputDialog": "Upload attachments",

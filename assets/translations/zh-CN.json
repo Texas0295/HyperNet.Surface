@@ -280,6 +280,7 @@
     "other": "{} 个附件"
   },
   "fieldAttachmentRandomId": "访问 ID",
+  "fieldAttachmentAlt": "概述文字",
   "addAttachmentFromAlbum": "从相册中添加附件",
   "addAttachmentFromClipboard": "粘贴附件",
   "addAttachmentFromCameraPhoto": "拍摄照片",
@@ -291,6 +292,7 @@
   "attachmentUnsetAsPostThumbnail": "取消设置为帖子缩略图",
   "attachmentCompressVideo": "重新编码视频",
   "attachmentSetThumbnail": "设置缩略图",
+  "attachmentSetAlt": "设置概述文字",
   "attachmentCopyRandomId": "复制访问 ID",
   "attachmentUpload": "上传",
   "attachmentInputDialog": "上传附件",

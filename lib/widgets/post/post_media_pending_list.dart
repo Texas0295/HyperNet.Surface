@@ -21,6 +21,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_input.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
+import 'package:surface/widgets/attachment/pending_attachment_alt.dart';
 import 'package:surface/widgets/attachment/pending_attachment_boost.dart';
 import 'package:surface/widgets/context_menu.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -157,6 +158,16 @@ class PostMediaPendingList extends StatelessWidget {
     onUpdate!(idx, result);
   }
 
+  Future<void> _setAlt(BuildContext context, int idx) async {
+    final result = await showDialog<SnAttachment?>(
+      context: context,
+      builder: (context) => PendingAttachmentAltDialog(media: attachments[idx]),
+    );
+    if (result == null) return;
+
+    onUpdate!(idx, PostWriteMedia(result));
+  }
+
   ContextMenu _createContextMenu(BuildContext context, int idx, PostWriteMedia media) {
     final canCompressVideo = !kIsWeb && (Platform.isAndroid || Platform.isIOS || Platform.isMacOS);
     return ContextMenu(
@@ -167,6 +178,14 @@ class PostMediaPendingList extends StatelessWidget {
             icon: Symbols.compress,
             onSelected: () {
               _compressVideo(context, idx);
+            },
+          ),
+        if (media.attachment != null)
+          MenuItem(
+            label: 'attachmentSetAlt'.tr(),
+            icon: Symbols.description,
+            onSelected: () {
+              _setAlt(context, idx);
             },
           ),
         if (media.attachment != null)
