@@ -15,10 +15,10 @@ class AttachmentList extends StatefulWidget {
   final List<SnAttachment?> data;
   final bool bordered;
   final bool gridded;
-  final bool noGrow;
   final BoxFit fit;
   final double? maxHeight;
   final double? minWidth;
+  final double? maxWidth;
   final EdgeInsets? padding;
 
   const AttachmentList({
@@ -26,10 +26,10 @@ class AttachmentList extends StatefulWidget {
     required this.data,
     this.bordered = false,
     this.gridded = false,
-    this.noGrow = false,
     this.fit = BoxFit.cover,
     this.maxHeight,
     this.minWidth,
+    this.maxWidth,
     this.padding,
   });
 

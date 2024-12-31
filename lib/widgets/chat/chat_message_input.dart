@@ -11,7 +11,6 @@ import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/dialog.dart';
-import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 
 class ChatMessageInput extends StatefulWidget {
