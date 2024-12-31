@@ -88,9 +88,9 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
                   title: Text(_realm?.name ?? 'loading'.tr()),
                   bottom: TabBar(
                     tabs: [
-                      Tab(icon: const Icon(Symbols.home)),
-                      Tab(icon: const Icon(Symbols.group)),
-                      Tab(icon: const Icon(Symbols.settings)),
+                      Tab(icon: Icon(Symbols.home, color: Theme.of(context).appBarTheme.foregroundColor)),
+                      Tab(icon: Icon(Symbols.group, color: Theme.of(context).appBarTheme.foregroundColor)),
+                      Tab(icon: Icon(Symbols.settings, color: Theme.of(context).appBarTheme.foregroundColor)),
                     ],
                   ),
                 ),
