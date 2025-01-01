@@ -82,24 +82,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
     if (!mounted) return;
     setState(() => _isSubmitting = true);
 
-    List<int> markList = List.empty(growable: true);
-    for (final element in _notifications) {
-      if (element.id <= 0) continue;
-      if (element.readAt != null) continue;
-      markList.add(element.id);
-    }
-
     try {
       final sn = context.read<SnNetworkProvider>();
-      await sn.client.put('/cgi/id/notifications/read', data: {
-        'messages': markList,
-      });
+      final resp = await sn.client.put('/cgi/id/notifications/read/all');
       _notifications.clear();
       _fetchNotifications();
 
       if (!mounted) return;
       context.showSnackbar(
-        'notificationMarkAllReadPrompt'.plural(markList.length),
+        'notificationMarkAllReadPrompt'.plural(resp.data['count']),
       );
     } catch (err) {
       if (!mounted) return;
