@@ -153,9 +153,14 @@ class _HomeDashUpdateWidget extends StatelessWidget {
   }
 }
 
-class _HomeDashSpecialDayWidget extends StatelessWidget {
+class _HomeDashSpecialDayWidget extends StatefulWidget {
   const _HomeDashSpecialDayWidget();
 
+  @override
+  State<_HomeDashSpecialDayWidget> createState() => _HomeDashSpecialDayWidgetState();
+}
+
+class _HomeDashSpecialDayWidgetState extends State<_HomeDashSpecialDayWidget> {
   @override
   Widget build(BuildContext context) {
     final ua = context.watch<UserProvider>();
@@ -165,21 +170,20 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
 
     if (days.isNotEmpty) {
       return Column(
-          spacing: 8,
           children: days.map((ele) {
-            return Card(
-              child: ListTile(
-                leading: Text(kSpecialDaysSymbol[ele] ?? '🎉').fontSize(24),
-                title: Text('celebrate$ele').tr(args: [ua.user?.nick ?? 'user']),
-                subtitle: Text(
-                  DateFormat('y/M/d').format(DateTime.now().copyWith(
-                    month: kSpecialDays[ele]?.$1,
-                    day: kSpecialDays[ele]?.$2,
-                  )),
-                ),
-              ),
-            ).padding(bottom: 8);
-          }).toList());
+        return Card(
+          child: ListTile(
+            leading: Text(kSpecialDaysSymbol[ele] ?? '🎉').fontSize(24),
+            title: Text('celebrate$ele').tr(args: [ua.user?.nick ?? 'user']),
+            subtitle: Text(
+              DateFormat('y/M/d').format(DateTime.now().copyWith(
+                month: kSpecialDays[ele]?.$1,
+                day: kSpecialDays[ele]?.$2,
+              )),
+            ),
+          ),
+        ).padding(bottom: 8);
+      }).toList());
     }
 
     final nextOne = dayz.getNextSpecialDay();
@@ -204,6 +208,9 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
                 separatorType: SeparatorType.symbol,
                 decoration: BoxDecoration(),
                 padding: EdgeInsets.zero,
+                onDone: () {
+                  setState(() {});
+                },
               ),
               const Gap(12),
               Expanded(

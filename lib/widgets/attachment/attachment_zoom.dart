@@ -231,7 +231,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                           children: [
                             IgnorePointer(
                               child: AccountImage(
-                                content: account!.avatar,
+                                content: account?.avatar,
                                 radius: 19,
                               ),
                             ),
@@ -246,7 +246,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                                       style: Theme.of(context).textTheme.bodySmall,
                                     ),
                                     Text(
-                                      account.nick,
+                                      account?.nick ?? 'unknown'.tr(),
                                       style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                   ],

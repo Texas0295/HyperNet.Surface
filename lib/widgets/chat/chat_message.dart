@@ -24,6 +24,7 @@ class ChatMessage extends StatelessWidget {
   final Function(SnChatMessage)? onReply;
   final Function(SnChatMessage)? onEdit;
   final Function(SnChatMessage)? onDelete;
+  final EdgeInsets padding;
 
   const ChatMessage({
     super.key,
@@ -35,6 +36,7 @@ class ChatMessage extends StatelessWidget {
     this.onReply,
     this.onEdit,
     this.onDelete,
+    this.padding = const EdgeInsets.only(left: 12, right: 12),
   });
 
   @override
@@ -87,83 +89,89 @@ class ChatMessage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (!isMerged && !isCompact)
-                  AccountImage(
-                    content: user?.avatar,
-                  )
-                else if (isMerged)
-                  const Gap(40),
-                const Gap(8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (!isMerged)
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (isCompact)
-                              AccountImage(
-                                content: user?.avatar,
-                                radius: 12,
-                              ).padding(right: 8),
-                            Text(
-                              (data.sender.nick?.isNotEmpty ?? false) ? data.sender.nick! : user?.nick ?? 'unknown',
-                            ).bold(),
-                            const Gap(8),
-                            Text(
-                              dateFormatter.format(data.createdAt.toLocal()),
-                            ).fontSize(13),
-                          ],
-                        ),
-                      if (isCompact) const Gap(4),
-                      if (data.preload?.quoteEvent != null)
-                        StyledWidget(Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: Theme.of(context).dividerColor,
-                              width: 1,
+            Padding(
+              padding: isCompact ? EdgeInsets.zero : padding,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isMerged && !isCompact)
+                    AccountImage(
+                      content: user?.avatar,
+                    )
+                  else if (isMerged)
+                    const Gap(40),
+                  const Gap(8),
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 480),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!isMerged)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                if (isCompact)
+                                  AccountImage(
+                                    content: user?.avatar,
+                                    radius: 12,
+                                  ).padding(right: 8),
+                                Text(
+                                  (data.sender.nick?.isNotEmpty ?? false) ? data.sender.nick! : user?.nick ?? 'unknown',
+                                ).bold(),
+                                const Gap(8),
+                                Text(
+                                  dateFormatter.format(data.createdAt.toLocal()),
+                                ).fontSize(13),
+                              ],
                             ),
-                          ),
-                          padding: const EdgeInsets.only(
-                            left: 4,
-                            right: 4,
-                            top: 8,
-                            bottom: 6,
-                          ),
-                          child: ChatMessage(
-                            data: data.preload!.quoteEvent!,
-                            isCompact: true,
-                            onReply: onReply,
-                            onEdit: onEdit,
-                            onDelete: onDelete,
-                          ),
-                        )).padding(bottom: 4, top: 4),
-                      switch (data.type) {
-                        'messages.new' => _ChatMessageText(data: data),
-                        _ => _ChatMessageSystemNotify(data: data),
-                      },
-                    ],
-                  ),
-                )
-              ],
-            ).opacity(isPending ? 0.5 : 1),
+                          if (isCompact) const Gap(8),
+                          if (data.preload?.quoteEvent != null)
+                            StyledWidget(Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                border: Border.all(
+                                  color: Theme.of(context).dividerColor,
+                                  width: 1,
+                                ),
+                              ),
+                              padding: const EdgeInsets.only(
+                                left: 4,
+                                right: 4,
+                                top: 8,
+                                bottom: 6,
+                              ),
+                              child: ChatMessage(
+                                data: data.preload!.quoteEvent!,
+                                isCompact: true,
+                                onReply: onReply,
+                                onEdit: onEdit,
+                                onDelete: onDelete,
+                              ),
+                            )).padding(bottom: 4, top: 4),
+                          switch (data.type) {
+                            'messages.new' => _ChatMessageText(data: data),
+                            _ => _ChatMessageSystemNotify(data: data),
+                          },
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ).opacity(isPending ? 0.5 : 1),
+            ),
             if (data.body['text'] != null && data.type == 'messages.new' && (data.body['text']?.isNotEmpty ?? false))
               LinkPreviewWidget(text: data.body['text']!),
             if (data.preload?.attachments?.isNotEmpty ?? false)
               AttachmentList(
                 data: data.preload!.attachments!,
                 bordered: true,
-                // gridded: true,
                 maxHeight: 560,
+                maxWidth: 480,
                 minWidth: 480,
-                padding: const EdgeInsets.only(top: 8),
+                padding: padding.copyWith(top: 8),
               ),
-            if (!hasMerged && !isCompact) const Gap(12) else if (!isCompact) const Gap(6),
+            if (!hasMerged && !isCompact) const Gap(12) else if (!isCompact) const Gap(8),
           ],
         ),
       ),

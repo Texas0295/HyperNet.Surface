@@ -281,11 +281,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 Expanded(
                   child: InfiniteList(
                     reverse: true,
-                    padding: const EdgeInsets.only(
-                      left: 12,
-                      right: 12,
-                      top: 12,
-                    ),
+                    padding: const EdgeInsets.only(top: 12),
                     hasReachedMax: _messageController.isAllLoaded,
                     itemCount: _messageController.messages.length,
                     isLoading: _messageController.isLoading,
@@ -311,23 +307,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
                       return Align(
                         alignment: Alignment.centerLeft,
-                        child: Container(
-                          constraints: BoxConstraints(maxWidth: 480),
-                          child: ChatMessage(
-                            data: message,
-                            isMerged: canMerge,
-                            hasMerged: canMergePrevious,
-                            isPending: _messageController.unconfirmedMessages.contains(message.uuid),
-                            onReply: (value) {
-                              _inputGlobalKey.currentState?.setReply(value);
-                            },
-                            onEdit: (value) {
-                              _inputGlobalKey.currentState?.setEdit(value);
-                            },
-                            onDelete: (value) {
-                              _inputGlobalKey.currentState?.deleteMessage(value);
-                            },
-                          ),
+                        child: ChatMessage(
+                          data: message,
+                          isMerged: canMerge,
+                          hasMerged: canMergePrevious,
+                          isPending: _messageController.unconfirmedMessages.contains(message.uuid),
+                          onReply: (value) {
+                            _inputGlobalKey.currentState?.setReply(value);
+                          },
+                          onEdit: (value) {
+                            _inputGlobalKey.currentState?.setEdit(value);
+                          },
+                          onDelete: (value) {
+                            _inputGlobalKey.currentState?.deleteMessage(value);
+                          },
                         ),
                       );
                     },

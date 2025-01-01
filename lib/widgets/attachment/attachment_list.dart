@@ -106,76 +106,38 @@ class _AttachmentListState extends State<AttachmentList> {
         }
 
         if (widget.gridded) {
-          return Padding(
-            padding: widget.padding ?? EdgeInsets.zero,
-            child: Container(
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                border: Border(
-                  top: borderSide,
-                  bottom: borderSide,
-                ),
-                borderRadius: AttachmentList.kDefaultRadius,
+          return Container(
+            margin: widget.padding ?? EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              border: Border(
+                top: borderSide,
+                bottom: borderSide,
               ),
-              child: ClipRRect(
-                borderRadius: AttachmentList.kDefaultRadius,
-                child: StaggeredGrid.count(
-                  crossAxisCount: math.min(widget.data.length, 2),
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 4,
-                  children: widget.data
-                      .mapIndexed(
-                        (idx, ele) => GestureDetector(
-                          child: Container(
-                            constraints: constraints,
-                            child: AttachmentItem(
-                              data: ele,
-                              heroTag: heroTags[idx],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          onTap: () {
-                            if (widget.data[idx]!.mediaType != SnMediaType.image) return;
-                            context.pushTransparentRoute(
-                              AttachmentZoomView(
-                                data: widget.data.where((ele) => ele != null).cast(),
-                                initialIndex: idx,
-                                heroTags: heroTags,
-                              ),
-                              backgroundColor: Colors.black.withOpacity(0.7),
-                              rootNavigator: true,
-                            );
-                          },
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
+              borderRadius: AttachmentList.kDefaultRadius,
             ),
-          );
-        }
-
-        return AspectRatio(
-          aspectRatio: (widget.data.firstOrNull?.data['ratio'] ?? 1).toDouble(),
-          child: Container(
-            constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-            child: ScrollConfiguration(
-              behavior: _AttachmentListScrollBehavior(),
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: widget.data.length,
-                itemBuilder: (context, idx) {
-                  return Container(
-                    constraints: constraints,
-                    child: AspectRatio(
-                      aspectRatio: (widget.data[idx]?.data['ratio'] ?? 1).toDouble(),
-                      child: GestureDetector(
+            child: ClipRRect(
+              borderRadius: AttachmentList.kDefaultRadius,
+              child: StaggeredGrid.count(
+                crossAxisCount: math.min(widget.data.length, 2),
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                children: widget.data
+                    .mapIndexed(
+                      (idx, ele) => GestureDetector(
+                        child: Container(
+                          constraints: constraints,
+                          child: AttachmentItem(
+                            data: ele,
+                            heroTag: heroTags[idx],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         onTap: () {
-                          if (widget.data[idx]?.mediaType != SnMediaType.image) return;
+                          if (widget.data[idx]!.mediaType != SnMediaType.image) return;
                           context.pushTransparentRoute(
                             AttachmentZoomView(
-                              data:
-                                  widget.data.where((ele) => ele != null && ele.mediaType == SnMediaType.image).cast(),
+                              data: widget.data.where((ele) => ele != null).cast(),
                               initialIndex: idx,
                               heroTags: heroTags,
                             ),
@@ -183,44 +145,76 @@ class _AttachmentListState extends State<AttachmentList> {
                             rootNavigator: true,
                           );
                         },
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: backgroundColor,
-                                border: Border(
-                                  top: borderSide,
-                                  bottom: borderSide,
-                                ),
-                                borderRadius: AttachmentList.kDefaultRadius,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
+        }
+
+        return Container(
+          constraints: BoxConstraints(maxHeight: constraints.maxHeight),
+          child: ScrollConfiguration(
+            behavior: _AttachmentListScrollBehavior(),
+            child: ListView.separated(
+              padding: widget.padding,
+              shrinkWrap: true,
+              itemCount: widget.data.length,
+              itemBuilder: (context, idx) {
+                return Container(
+                  constraints: constraints.copyWith(maxWidth: widget.maxWidth),
+                  child: AspectRatio(
+                    aspectRatio: (widget.data[idx]?.data['ratio'] ?? 1).toDouble(),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (widget.data[idx]?.mediaType != SnMediaType.image) return;
+                        context.pushTransparentRoute(
+                          AttachmentZoomView(
+                            data: widget.data.where((ele) => ele != null && ele.mediaType == SnMediaType.image).cast(),
+                            initialIndex: idx,
+                            heroTags: heroTags,
+                          ),
+                          backgroundColor: Colors.black.withOpacity(0.7),
+                          rootNavigator: true,
+                        );
+                      },
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              border: Border(
+                                top: borderSide,
+                                bottom: borderSide,
                               ),
-                              child: ClipRRect(
-                                borderRadius: AttachmentList.kDefaultRadius,
-                                child: AttachmentItem(
-                                  data: widget.data[idx],
-                                  heroTag: heroTags[idx],
-                                ),
+                              borderRadius: AttachmentList.kDefaultRadius,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: AttachmentList.kDefaultRadius,
+                              child: AttachmentItem(
+                                data: widget.data[idx],
+                                heroTag: heroTags[idx],
                               ),
                             ),
-                            Positioned(
-                              right: 8,
-                              bottom: 8,
-                              child: Chip(
-                                label: Text('${idx + 1}/${widget.data.length}'),
-                              ),
+                          ),
+                          Positioned(
+                            right: 8,
+                            bottom: 8,
+                            child: Chip(
+                              label: Text('${idx + 1}/${widget.data.length}'),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) => const Gap(8),
-                padding: widget.padding,
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-              ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const Gap(8),
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
             ),
           ),
         );
