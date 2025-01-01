@@ -173,8 +173,8 @@ class _HomeDashSpecialDayWidget extends StatelessWidget {
                 title: Text('celebrate$ele').tr(args: [ua.user?.nick ?? 'user']),
                 subtitle: Text(
                   DateFormat('y/M/d').format(DateTime.now().copyWith(
-                    month: kSpecialDays[ele]!.$1,
-                    day: kSpecialDays[ele]!.$2,
+                    month: kSpecialDays[ele]?.$1,
+                    day: kSpecialDays[ele]?.$2,
                   )),
                 ),
               ),

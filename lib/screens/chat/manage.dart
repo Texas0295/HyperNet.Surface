@@ -87,7 +87,7 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
     try {
       final resp = await sn.client.request(
         widget.editingChannelAlias != null
-            ? '/cgi/im/channels/$scope/${widget.editingChannelAlias}'
+            ? '/cgi/im/channels/$scope/${_editingChannel!.id}'
             : '/cgi/im/channels/$scope',
         data: payload,
         options: Options(

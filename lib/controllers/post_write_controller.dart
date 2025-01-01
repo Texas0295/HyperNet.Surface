@@ -104,7 +104,7 @@ class PostWriteMedia {
     if (attachment != null) {
       final sn = context.read<SnNetworkProvider>();
       final ImageProvider provider = UniversalImage.provider(sn.getAttachmentUrl(attachment!.rid));
-      if (width != null && height != null) {
+      if (width != null && height != null && !kIsWeb) {
         return ResizeImage(
           provider,
           width: width,

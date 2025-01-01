@@ -17,6 +17,7 @@ import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/chat/call/call_prejoin.dart';
 import 'package:surface/widgets/chat/chat_message.dart';
 import 'package:surface/widgets/chat/chat_message_input.dart';
+import 'package:surface/widgets/chat/chat_typing_indicator.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
@@ -335,11 +336,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               if (!_messageController.isPending)
                 Material(
                   elevation: 2,
-                  child: ChatMessageInput(
-                    key: _inputGlobalKey,
-                    otherMember: _otherMember,
-                    controller: _messageController,
-                  ).padding(bottom: MediaQuery.of(context).padding.bottom),
+                  child: Column(
+                    children: [
+                      ChatTypingIndicator(controller: _messageController),
+                      ChatMessageInput(
+                        key: _inputGlobalKey,
+                        otherMember: _otherMember,
+                        controller: _messageController,
+                      ),
+                      Gap(MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
                 ),
             ],
           );

@@ -32,6 +32,16 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   final TextEditingController _contentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
+  @override
+  void initState() {
+    super.initState();
+    _contentController.addListener(() {
+      if (_contentController.text.isNotEmpty) {
+        widget.controller.pingTypingStatus();
+      }
+    });
+  }
+
   void setReply(SnChatMessage? value) {
     setState(() => _replyingMessage = value);
   }
@@ -164,7 +174,6 @@ class ChatMessageInputState extends State<ChatMessageInput> {
               ? Container(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                     border: Border(
                       bottom: BorderSide(
                         color: Theme.of(context).dividerColor,
@@ -204,7 +213,6 @@ class ChatMessageInputState extends State<ChatMessageInput> {
               ? Container(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                     border: Border(
                       bottom: BorderSide(
                         color: Theme.of(context).dividerColor,

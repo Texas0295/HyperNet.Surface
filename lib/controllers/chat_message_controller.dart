@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
@@ -11,6 +12,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/websocket.dart';
 import 'package:surface/types/chat.dart';
+import 'package:surface/types/websocket.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatMessageController extends ChangeNotifier {
@@ -36,8 +38,7 @@ class ChatMessageController extends ChangeNotifier {
 
   int? messageTotal;
 
-  bool get isAllLoaded =>
-      messageTotal != null && messages.length >= messageTotal!;
+  bool get isAllLoaded => messageTotal != null && messages.length >= messageTotal!;
 
   String? _boxKey;
   SnChannel? channel;
@@ -50,8 +51,10 @@ class ChatMessageController extends ChangeNotifier {
   /// Stored as a list of nonce to provide the loading state
   final List<String> unconfirmedMessages = List.empty(growable: true);
 
-  Box<SnChatMessage>? get _box =>
-      (_boxKey == null || isPending) ? null : Hive.box<SnChatMessage>(_boxKey!);
+  Box<SnChatMessage>? get _box => (_boxKey == null || isPending) ? null : Hive.box<SnChatMessage>(_boxKey!);
+
+  final List<SnChannelMember> typingMembers = List.empty(growable: true);
+  final Map<int, Timer> typingInactiveTimer = {};
 
   Future<void> initialize(SnChannel chan) async {
     channel = chan;
@@ -78,27 +81,51 @@ class ChatMessageController extends ChangeNotifier {
           if (event.payload?['channel_id'] != channel?.id) break;
           final member = SnChannelMember.fromJson(event.payload!['member']);
           if (member.id == profile?.id) break;
-        // TODO impl typing users
-        // if (!_typingUsers.any((x) => x.id == member.id)) {
-        //   setState(() {
-        //     _typingUsers.add(member);
-        //   });
-        // }
-        // _typingInactiveTimer[member.id]?.cancel();
-        // _typingInactiveTimer[member.id] = Timer(
-        //   const Duration(seconds: 3),
-        //   () {
-        //     setState(() {
-        //       _typingUsers.removeWhere((x) => x.id == member.id);
-        //       _typingInactiveTimer.remove(member.id);
-        //     });
-        //   },
-        // );
+          if (!typingMembers.any((x) => x.id == member.id)) {
+            typingMembers.add(member);
+            print('Typing member: ${typingMembers.map((ele) => member.id)}');
+            notifyListeners();
+          }
+          typingInactiveTimer[member.id]?.cancel();
+          typingInactiveTimer[member.id] = Timer(const Duration(seconds: 3), () {
+            typingMembers.removeWhere((x) => x.id == member.id);
+            typingInactiveTimer.remove(member.id);
+            notifyListeners();
+          });
       }
     });
 
     isPending = false;
     notifyListeners();
+  }
+
+  Timer? _typingNotifyTimer;
+  bool _typingStatus = false;
+
+  Future<void> _sendTypingStatusPackage() async {
+    _ws.conn?.sink.add(jsonEncode(
+      WebSocketPackage(
+        method: 'status.typing',
+        endpoint: 'im',
+        payload: {
+          'channel_id': channel!.id,
+        },
+      ).toJson(),
+    ));
+  }
+
+  void pingTypingStatus() {
+    if (!_typingStatus) {
+      _sendTypingStatusPackage();
+      _typingStatus = true;
+    }
+
+    if (_typingNotifyTimer == null || !_typingNotifyTimer!.isActive) {
+      _typingNotifyTimer?.cancel();
+      _typingNotifyTimer = Timer(const Duration(milliseconds: 1850), () {
+        _typingStatus = false;
+      });
+    }
   }
 
   Future<void> _saveMessageToLocal(Iterable<SnChatMessage> messages) async {
@@ -167,8 +194,7 @@ class ChatMessageController extends ChangeNotifier {
     switch (message.type) {
       case 'messages.edit':
         if (message.relatedEventId != null) {
-          final idx =
-              messages.indexWhere((x) => x.id == message.relatedEventId);
+          final idx = messages.indexWhere((x) => x.id == message.relatedEventId);
           if (idx != -1) {
             final newBody = message.body;
             newBody.remove('related_event');
@@ -207,8 +233,7 @@ class ChatMessageController extends ChangeNotifier {
       'algorithm': 'plain',
       if (quoteId != null) 'quote_event': quoteId,
       if (relatedId != null) 'related_event': relatedId,
-      if (attachments != null && attachments.isNotEmpty)
-        'attachments': attachments,
+      if (attachments != null && attachments.isNotEmpty) 'attachments': attachments,
     };
 
     // Mock the message locally
@@ -305,8 +330,7 @@ class ChatMessageController extends ChangeNotifier {
 
     if (out == null) {
       try {
-        final resp = await _sn.client
-            .get('/cgi/im/channels/${channel!.keyPath}/events/$id');
+        final resp = await _sn.client.get('/cgi/im/channels/${channel!.keyPath}/events/$id');
         out = SnChatMessage.fromJson(resp.data);
         _saveMessageToLocal([out]);
       } catch (_) {
@@ -341,9 +365,7 @@ class ChatMessageController extends ChangeNotifier {
     bool forceRemote = false,
   }) async {
     late List<SnChatMessage> out;
-    if (_box != null &&
-        (_box!.length >= take + offset || forceLocal) &&
-        !forceRemote) {
+    if (_box != null && (_box!.length >= take + offset || forceLocal) && !forceRemote) {
       out = _box!.keys
           .toList()
           .cast<int>()
@@ -386,8 +408,7 @@ class ChatMessageController extends ChangeNotifier {
           quoteEvent: quoteEvent,
           attachments: attachments
               .where(
-                (ele) =>
-                    out[i].body['attachments']?.contains(ele?.rid) ?? false,
+                (ele) => out[i].body['attachments']?.contains(ele?.rid) ?? false,
               )
               .toList(),
         ),
@@ -395,10 +416,7 @@ class ChatMessageController extends ChangeNotifier {
     }
 
     // Preload sender accounts
-    final accountId = out
-        .where((ele) => ele.sender.accountId >= 0)
-        .map((ele) => ele.sender.accountId)
-        .toSet();
+    final accountId = out.where((ele) => ele.sender.accountId >= 0).map((ele) => ele.sender.accountId).toSet();
     await _ud.listAccount(accountId);
 
     return out;

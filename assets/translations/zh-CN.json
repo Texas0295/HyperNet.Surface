@@ -279,6 +279,10 @@
     "one": "{} 个附件",
     "other": "{} 个附件"
   },
+  "messageTyping": {
+    "one": "{} 正在输入",
+    "other": "{} 正在输入"
+  },
   "fieldAttachmentRandomId": "访问 ID",
   "fieldAttachmentAlt": "概述文字",
   "addAttachmentFromAlbum": "从相册中添加附件",
