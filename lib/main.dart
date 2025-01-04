@@ -210,8 +210,6 @@ class _AppSplashScreen extends StatefulWidget {
 }
 
 class _AppSplashScreenState extends State<_AppSplashScreen> {
-  bool _isReady = false;
-
   void _tryRequestRating() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('first_boot_time')) {
@@ -284,8 +282,6 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
     } catch (err) {
       if (!mounted) return;
       await context.showErrorDialog(err);
-    } finally {
-      setState(() => _isReady = true);
     }
   }
 
@@ -305,32 +301,6 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isReady) {
-      return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: Container(
-          constraints: const BoxConstraints(maxWidth: 180),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (MediaQuery.of(context).platformBrightness == Brightness.dark)
-                Image.asset("assets/icon/icon-dark.png", width: 64, height: 64)
-              else
-                Image.asset("assets/icon/icon.png", width: 64, height: 64),
-              const Gap(6),
-              LinearProgressIndicator(
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-              ),
-              const Gap(20),
-              Text('appInitializing'.tr(), textAlign: TextAlign.center),
-              AppVersionLabel(),
-            ],
-          ),
-        ).center(),
-      );
-    }
-
     return widget.child;
   }
 }
