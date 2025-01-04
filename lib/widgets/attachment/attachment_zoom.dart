@@ -312,11 +312,6 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                                 ]),
                                 style: metaTextStyle,
                               ).padding(right: 2),
-                            if (item.metadata['exif']?['ShutterSpeed'] != null)
-                              Text(
-                                item.metadata['exif']?['ShutterSpeed'],
-                                style: metaTextStyle,
-                              ).padding(right: 2),
                             if (item.metadata['exif']?['ISO'] != null)
                               Text(
                                 'ISO${item.metadata['exif']?['ISO']}',
