@@ -30,6 +30,7 @@ import 'package:surface/providers/post.dart';
 import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/sn_sticker.dart';
 import 'package:surface/providers/special_day.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/providers/user_directory.dart';
@@ -144,6 +145,7 @@ class SolianApp extends StatelessWidget {
             Provider(create: (ctx) => SnPostContentProvider(ctx)),
             Provider(create: (ctx) => SnRelationshipProvider(ctx)),
             Provider(create: (ctx) => SnLinkPreviewProvider(ctx)),
+            Provider(create: (ctx) => SnStickerProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => UserProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => WebSocketProvider(ctx)),
             ChangeNotifierProvider(create: (ctx) => NotificationProvider(ctx)),

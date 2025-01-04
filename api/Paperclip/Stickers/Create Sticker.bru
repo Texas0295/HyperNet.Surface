@@ -1,0 +1,20 @@
+meta {
+  name: Create Sticker
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{endpoint}}/cgi/uc/stickers
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "alias": "AteChip",
+    "name": "Cat ate chips",
+    "attachment_id": "d0b692cc64054463",
+    "pack_id": 2
+  }
+}

@@ -6,7 +6,10 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as markdown;
+import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/sn_sticker.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -21,6 +24,7 @@ class MarkdownTextContent extends StatelessWidget {
   final String content;
   final bool isSelectable;
   final bool isAutoWarp;
+  final bool isEnlargeSticker;
   final TextScaler? textScaler;
   final List<SnAttachment?>? attachments;
 
@@ -29,6 +33,7 @@ class MarkdownTextContent extends StatelessWidget {
     required this.content,
     this.isSelectable = false,
     this.isAutoWarp = false,
+    this.isEnlargeSticker = false,
     this.textScaler,
     this.attachments,
   });
@@ -78,6 +83,7 @@ class MarkdownTextContent extends StatelessWidget {
         <markdown.InlineSyntax>[
           if (isAutoWarp) markdown.LineBreakSyntax(),
           _UserNameCardInlineSyntax(),
+          _CustomEmoteInlineSyntax(context),
           markdown.AutolinkSyntax(),
           markdown.AutolinkExtensionSyntax(),
           markdown.CodeSyntax(),
@@ -108,6 +114,38 @@ class MarkdownTextContent extends StatelessWidget {
         if (url.startsWith('solink://')) {
           final segments = url.replaceFirst('solink://', '').split('/');
           switch (segments[0]) {
+            case 'stickers':
+              final alias = segments[1];
+              final st = context.read<SnStickerProvider>();
+              final sn = context.read<SnNetworkProvider>();
+              final double size = isEnlargeSticker ? 128 : 32;
+              return Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: FutureBuilder<SnSticker?>(
+                    future: st.lookupSticker(alias),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return UniversalImage(
+                          sn.getAttachmentUrl(snapshot.data!.attachment.rid),
+                          fit: BoxFit.cover,
+                          width: size,
+                          height: size,
+                          cacheHeight: size,
+                          cacheWidth: size,
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+              );
             case 'attachments':
               final attachment = attachments?.firstWhere(
                 (ele) => ele?.rid == segments[1],
@@ -189,6 +227,28 @@ class _UserNameCardInlineSyntax extends markdown.InlineSyntax {
         'solink://account/${alias.substring(1)}',
       );
     parser.addNode(anchor);
+
+    return true;
+  }
+}
+
+class _CustomEmoteInlineSyntax extends markdown.InlineSyntax {
+  final BuildContext context;
+
+  _CustomEmoteInlineSyntax(this.context) : super(r':([-\w]+):');
+
+  @override
+  bool onMatch(markdown.InlineParser parser, Match match) {
+    final SnStickerProvider st = context.read<SnStickerProvider>();
+    final alias = match[1]!.toUpperCase();
+    if (st.hasNotSticker(alias)) {
+      parser.advanceBy(1);
+      return false;
+    }
+
+    final element = markdown.Element.empty('img');
+    element.attributes['src'] = 'solink://stickers/$alias';
+    parser.addNode(element);
 
     return true;
   }

@@ -218,3 +218,66 @@ Map<String, dynamic> _$$SnAttachmentBoostImplToJson(
       'attachment': instance.attachment.toJson(),
       'account': instance.account,
     };
+
+_$SnStickerImpl _$$SnStickerImplFromJson(Map<String, dynamic> json) =>
+    _$SnStickerImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      alias: json['alias'] as String,
+      name: json['name'] as String,
+      attachmentId: (json['attachment_id'] as num).toInt(),
+      attachment:
+          SnAttachment.fromJson(json['attachment'] as Map<String, dynamic>),
+      packId: (json['pack_id'] as num).toInt(),
+      pack: SnStickerPack.fromJson(json['pack'] as Map<String, dynamic>),
+      accountId: (json['account_id'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$SnStickerImplToJson(_$SnStickerImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'alias': instance.alias,
+      'name': instance.name,
+      'attachment_id': instance.attachmentId,
+      'attachment': instance.attachment.toJson(),
+      'pack_id': instance.packId,
+      'pack': instance.pack.toJson(),
+      'account_id': instance.accountId,
+    };
+
+_$SnStickerPackImpl _$$SnStickerPackImplFromJson(Map<String, dynamic> json) =>
+    _$SnStickerPackImpl(
+      id: (json['id'] as num).toInt(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+      prefix: json['prefix'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      stickers: (json['stickers'] as List<dynamic>?)
+          ?.map((e) => SnSticker.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      accountId: (json['account_id'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$SnStickerPackImplToJson(_$SnStickerPackImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'prefix': instance.prefix,
+      'name': instance.name,
+      'description': instance.description,
+      'stickers': instance.stickers?.map((e) => e.toJson()).toList(),
+      'account_id': instance.accountId,
+    };

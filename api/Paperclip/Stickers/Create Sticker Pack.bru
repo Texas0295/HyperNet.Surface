@@ -1,0 +1,19 @@
+meta {
+  name: Create Sticker Pack
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{endpoint}}/cgi/uc/stickers/packs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "prefix": "cat",
+    "name": "Solar Network full of Cats!",
+    "description": "The sticker packs is full of stickers which related with cats!"
+  }
+}

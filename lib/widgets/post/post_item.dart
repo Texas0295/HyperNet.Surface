@@ -876,6 +876,7 @@ class _PostContentBody extends StatelessWidget {
     if (data.body['content'] == null) return const SizedBox.shrink();
     return MarkdownTextContent(
       isSelectable: isSelectable,
+      isEnlargeSticker: true,
       textScaler: isEnlarge ? TextScaler.linear(1.1) : null,
       content: data.body['content'],
       attachments: data.preload?.attachments,

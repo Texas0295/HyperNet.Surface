@@ -7,11 +7,7 @@ meta {
 post {
   url: {{endpoint}}/cgi/uc/boosts/1/activate
   body: none
-  auth: bearer
-}
-
-auth:bearer {
-  token: {{atk}}
+  auth: inherit
 }
 
 body:json {

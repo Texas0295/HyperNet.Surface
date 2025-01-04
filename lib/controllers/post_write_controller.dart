@@ -627,9 +627,9 @@ class PostWriteController extends ChangeNotifier {
     descriptionController.clear();
     contentController.clear();
     aliasController.clear();
-    tags.clear();
-    categories.clear();
-    attachments.clear();
+    tags = List.empty(growable: true);
+    categories = List.empty(growable: true);
+    attachments = List.empty(growable: true);
     editingPost = null;
     replyingPost = null;
     repostingPost = null;

@@ -141,3 +141,39 @@ class SnAttachmentBoost with _$SnAttachmentBoost {
 
   factory SnAttachmentBoost.fromJson(Map<String, Object?> json) => _$SnAttachmentBoostFromJson(json);
 }
+
+@freezed
+class SnSticker with _$SnSticker {
+  const factory SnSticker({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required String alias,
+    required String name,
+    required int attachmentId,
+    required SnAttachment attachment,
+    required int packId,
+    required SnStickerPack pack,
+    required int accountId,
+  }) = _SnSticker;
+
+  factory SnSticker.fromJson(Map<String, Object?> json) => _$SnStickerFromJson(json);
+}
+
+@freezed
+class SnStickerPack with _$SnStickerPack {
+  const factory SnStickerPack({
+    required int id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    required DateTime? deletedAt,
+    required String prefix,
+    required String name,
+    required String description,
+    required List<SnSticker>? stickers,
+    required int accountId,
+  }) = _SnStickerPack;
+
+  factory SnStickerPack.fromJson(Map<String, Object?> json) => _$SnStickerPackFromJson(json);
+}
