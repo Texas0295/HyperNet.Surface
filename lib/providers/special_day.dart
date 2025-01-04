@@ -3,9 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:surface/providers/userinfo.dart';
 
 // Stored as key: month, day
-const Map<String, (int, int)> kSpecialDays = {
+final Map<String, (int, int)> kSpecialDays = {
   // Birthday is dynamically generated according to the user's profile
   'NewYear': (1, 1),
+  'LunarNewYear': (lunarToGregorian(null, 1, 1).month, lunarToGregorian(null, 1, 1).day),
+  'MidAutumn': (lunarToGregorian(null, 8, 15).month, lunarToGregorian(null, 8, 15).day),
+  'DragonBoat': (lunarToGregorian(null, 5, 5).month, lunarToGregorian(null, 5, 5).day),
   'ValentineDay': (2, 14),
   'LaborDay': (5, 1),
   'MotherDay': (5, 11),
@@ -19,6 +22,9 @@ const Map<String, (int, int)> kSpecialDays = {
 const Map<String, String> kSpecialDaysSymbol = {
   'Birthday': '🎂',
   'NewYear': '🎉',
+  'LunarNewYear': '🎉',
+  'MidAutumn': '🥮',
+  'DragonBoat': '🐲',
   'MerryXmas': '🎄',
   'ValentineDay': '💑',
   'LaborDay': '🏋️',
@@ -133,4 +139,46 @@ class SpecialDayProvider {
     final elapsedDuration = DateTime.now().difference(last).inSeconds.toDouble();
     return (elapsedDuration / totalDuration).clamp(0.0, 1.0);
   }
+}
+
+final Map<int, LunarYear> lunarYearData = {
+  2025: LunarYear(
+    startDate: DateTime(2025, 1, 29),
+    months: [29, 30, 30, 29, 30, 29, 29, 30, 30, 29, 30, 29],
+    leapMonth: 0,
+  ),
+};
+
+class LunarYear {
+  final DateTime startDate;
+  final List<int> months;
+  final int leapMonth;
+
+  LunarYear({required this.startDate, required this.months, required this.leapMonth});
+}
+
+DateTime lunarToGregorian(int? year, int month, int day, {bool isLeapMonth = false}) {
+  year = year ?? DateTime.now().year;
+  final lunarYear = lunarYearData[year];
+  if (lunarYear == null) {
+    throw Exception('Lunar data for year $year not found');
+  }
+
+  int leapMonth = lunarYear.leapMonth;
+  if (isLeapMonth && (leapMonth == 0 || leapMonth != month)) {
+    throw Exception('Invalid leap month for year $year');
+  }
+
+  int daysFromStart = 0;
+  for (int i = 0; i < month - 1; i++) {
+    daysFromStart += lunarYear.months[i];
+  }
+
+  if (isLeapMonth) {
+    daysFromStart += lunarYear.months[month - 1];
+  }
+
+  daysFromStart += day - 1;
+
+  return lunarYear.startDate.add(Duration(days: daysFromStart));
 }

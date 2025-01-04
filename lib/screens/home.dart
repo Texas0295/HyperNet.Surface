@@ -197,7 +197,7 @@ class _HomeDashSpecialDayWidgetState extends State<_HomeDashSpecialDayWidget> {
       return Card(
         child: ListTile(
           leading: Text(kSpecialDaysSymbol[name] ?? '🎉').fontSize(24),
-          title: Text('pending$name').tr(args: [RelativeTime(context).format(date)]),
+          title: Text('pending$name').tr(args: [RelativeTime(context).format(date).replaceFirst('in', '').trim()]),
           subtitle: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

@@ -279,6 +279,10 @@
     "one": "{} 個附件",
     "other": "{} 個附件"
   },
+  "messageTyping": {
+    "one": "{} 正在輸入",
+    "other": "{} 正在輸入"
+  },
   "fieldAttachmentRandomId": "訪問 ID",
   "fieldAttachmentAlt": "概述文字",
   "addAttachmentFromAlbum": "從相冊中添加附件",
@@ -406,6 +410,9 @@
   "dailyCheckNegativeHint6": "出門",
   "dailyCheckNegativeHint6Description": "忘帶傘遇上大雨",
   "celebrateBirthday": "生日快樂，{}！",
+  "celebrateLunarNewYear": "春節快樂，{}！",
+  "celebrateMidAutumn": "中秋節快樂，{}！",
+  "celebrateDragonBoat": "端午節快樂，{}！",
   "celebrateMerryXmas": "聖誕快樂，{}！",
   "celebrateNewYear": "新年快樂，{}！",
   "celebrateValentineDay": "今天是情人節，{}！",
@@ -415,6 +422,9 @@
   "celebrateFatherDay": "今天是父親節，{}。",
   "celebrateHalloween": "快樂在聖誕節，{}！",
   "celebrateThanksgiving": "今天是感恩節，{}！",
+  "pendingLunarNewYear": "{} 過春節",
+  "pendingMidAutumn": "{} 過中秋節",
+  "pendingDragonBoat": "{} 過端午節",
   "pendingBirthday": "{} 過生日",
   "pendingMerryXmas": "{} 過聖誕節",
   "pendingNewYear": "{} 跨年",
