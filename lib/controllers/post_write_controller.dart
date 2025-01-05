@@ -623,6 +623,8 @@ class PostWriteController extends ChangeNotifier {
   void reset() {
     publishedAt = null;
     publishedUntil = null;
+    thumbnail = null;
+    visibility = 0;
     titleController.clear();
     descriptionController.clear();
     contentController.clear();
