@@ -96,6 +96,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         ),
                   ),
                 ]),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               )
             : Text('postDetail').tr(),
       ),

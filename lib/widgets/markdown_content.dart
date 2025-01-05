@@ -47,32 +47,33 @@ class MarkdownTextContent extends StatelessWidget {
       styleSheet: MarkdownStyleSheet.fromTheme(
         Theme.of(context),
       ).copyWith(
-          textScaler: textScaler,
-          blockquote: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-          blockquoteDecoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerHigh,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
-          horizontalRuleDecoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                width: 1.0,
-                color: Theme.of(context).dividerColor,
-              ),
-            ),
-          ),
-          codeblockDecoration: BoxDecoration(
-            border: Border.all(
+        textScaler: textScaler,
+        blockquote: TextStyle(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        blockquoteDecoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+        ),
+        horizontalRuleDecoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              width: 1.0,
               color: Theme.of(context).dividerColor,
-              width: 0.3,
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
-          )),
+          ),
+        ),
+        codeblockDecoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+            width: 0.3,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+        ),
+        code: GoogleFonts.robotoMono(height: 1),
+      ),
       builders: {
-        'code': _MarkdownTextCodeElement(),
       },
       softLineBreak: true,
       extensionSet: markdown.ExtensionSet(
@@ -251,48 +252,5 @@ class _CustomEmoteInlineSyntax extends markdown.InlineSyntax {
     parser.addNode(element);
 
     return true;
-  }
-}
-
-class _MarkdownTextCodeElement extends MarkdownElementBuilder {
-  @override
-  Widget? visitElementAfter(
-    markdown.Element element,
-    TextStyle? preferredStyle,
-  ) {
-    var language = '';
-
-    if (element.attributes['class'] != null) {
-      String lg = element.attributes['class'] as String;
-      language = lg.substring(9).trim();
-    }
-    return SizedBox(
-      child: FutureBuilder(
-        future: (() async {
-          final docPath = '../../../';
-          final highlightingPath = join(docPath, 'assets/highlighting', language);
-          await Highlighter.initialize([highlightingPath]);
-          return Highlighter(
-            language: highlightingPath,
-            theme: PlatformDispatcher.instance.platformBrightness == Brightness.light
-                ? await HighlighterTheme.loadLightTheme()
-                : await HighlighterTheme.loadDarkTheme(),
-          );
-        })(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final highlighter = snapshot.data!;
-            return Text.rich(
-              highlighter.highlight(element.textContent.trim()),
-              style: GoogleFonts.robotoMono(),
-            );
-          }
-          return Text(
-            element.textContent.trim(),
-            style: GoogleFonts.robotoMono(),
-          );
-        },
-      ),
-    ).padding(all: 8);
   }
 }
