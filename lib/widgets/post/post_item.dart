@@ -20,6 +20,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/types/reaction.dart';
 import 'package:surface/widgets/account/account_image.dart';
@@ -198,6 +199,10 @@ class PostItem extends StatelessWidget {
       ).center();
     }
 
+    final displayableAttachments = data.preload?.attachments
+        ?.where((ele) => ele?.mediaType != SnMediaType.image || data.type != 'article')
+        .toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -247,9 +252,9 @@ class PostItem extends StatelessWidget {
             ],
           ),
         ),
-        if ((data.preload?.attachments?.isNotEmpty ?? false) && data.type != 'article')
+        if (displayableAttachments?.isNotEmpty ?? false)
           AttachmentList(
-            data: data.preload!.attachments!,
+            data: displayableAttachments!,
             bordered: true,
             gridded: true,
             maxHeight: showFullPost ? null : 480,

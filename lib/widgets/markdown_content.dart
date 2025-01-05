@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -7,15 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as markdown;
 import 'package:provider/provider.dart';
-import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/sn_sticker.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/universal_image.dart';
-import 'package:syntax_highlight/syntax_highlight.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import 'attachment/attachment_zoom.dart';

@@ -35,7 +35,7 @@ class WebSocketProvider extends ChangeNotifier {
 
   Future<void> connect({noRetry = false}) async {
     if (!_ua.isAuthorized) return;
-    if (isConnected) {
+    if (isConnected || conn != null) {
       disconnect();
     }
 
@@ -97,7 +97,7 @@ class WebSocketProvider extends ChangeNotifier {
       onError: (err) {
         isConnected = false;
         notifyListeners();
-        Future.delayed(const Duration(seconds: 11), () => connect());
+        Future.delayed(const Duration(seconds: 1), () => connect());
       },
     );
   }

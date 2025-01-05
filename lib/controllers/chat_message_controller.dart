@@ -83,7 +83,6 @@ class ChatMessageController extends ChangeNotifier {
           if (member.id == profile?.id) break;
           if (!typingMembers.any((x) => x.id == member.id)) {
             typingMembers.add(member);
-            print('Typing member: ${typingMembers.map((ele) => member.id)}');
             notifyListeners();
           }
           typingInactiveTimer[member.id]?.cancel();
