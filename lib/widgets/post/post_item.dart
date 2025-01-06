@@ -879,13 +879,17 @@ class _PostContentBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.body['content'] == null) return const SizedBox.shrink();
-    return MarkdownTextContent(
-      isSelectable: isSelectable,
+    final content = MarkdownTextContent(
       isEnlargeSticker: true,
       textScaler: isEnlarge ? TextScaler.linear(1.1) : null,
       content: data.body['content'],
       attachments: data.preload?.attachments,
     );
+
+    if (isSelectable) {
+      return SelectionArea(child: content);
+    }
+    return content;
   }
 }
 

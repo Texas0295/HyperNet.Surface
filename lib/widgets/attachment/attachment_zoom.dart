@@ -329,7 +329,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                               )
                             else
                               Text(
-                                '${item.size} Bytes',
+                                item.size.formatBytes(),
                                 style: metaTextStyle,
                               ),
                             if (item.metadata['width'] != null && item.metadata['height'] != null)

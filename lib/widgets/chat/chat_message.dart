@@ -150,7 +150,12 @@ class ChatMessage extends StatelessWidget {
                               ),
                             )).padding(bottom: 4, top: 4),
                           switch (data.type) {
-                            'messages.new' => _ChatMessageText(data: data),
+                            'messages.new' => _ChatMessageText(
+                                data: data,
+                                onReply: onReply,
+                                onEdit: onEdit,
+                                onDelete: onDelete,
+                              ),
                             _ => _ChatMessageSystemNotify(data: data),
                           },
                         ],
@@ -181,8 +186,11 @@ class ChatMessage extends StatelessWidget {
 
 class _ChatMessageText extends StatelessWidget {
   final SnChatMessage data;
+  final Function(SnChatMessage)? onReply;
+  final Function(SnChatMessage)? onEdit;
+  final Function(SnChatMessage)? onDelete;
 
-  const _ChatMessageText({required this.data});
+  const _ChatMessageText({required this.data, this.onReply, this.onEdit, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -190,10 +198,48 @@ class _ChatMessageText extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MarkdownTextContent(
-            content: data.body['text'],
-            isSelectable: true,
-            isAutoWarp: true,
+          SelectionArea(
+            contextMenuBuilder: (context, editableTextState) {
+              final List<ContextMenuButtonItem> items = editableTextState.contextMenuButtonItems;
+              items.insert(
+                0,
+                ContextMenuButtonItem(
+                  label: 'reply'.tr(),
+                  onPressed: () {
+                    ContextMenuController.removeAny();
+                    onReply?.call(data);
+                  },
+                ),
+              );
+              items.insert(
+                1,
+                ContextMenuButtonItem(
+                  label: 'edit'.tr(),
+                  onPressed: () {
+                    ContextMenuController.removeAny();
+                    onEdit?.call(data);
+                  },
+                ),
+              );
+              items.insert(
+                2,
+                ContextMenuButtonItem(
+                  label: 'delete'.tr(),
+                  onPressed: () {
+                    ContextMenuController.removeAny();
+                    onDelete?.call(data);
+                  },
+                ),
+              );
+              return AdaptiveTextSelectionToolbar.buttonItems(
+                anchors: editableTextState.contextMenuAnchors,
+                buttonItems: items,
+              );
+            },
+            child: MarkdownTextContent(
+              content: data.body['text'],
+              isAutoWarp: true,
+            ),
           ),
           if (data.updatedAt != data.createdAt)
             Text(

@@ -206,10 +206,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                             if (nty.subtitle != null) const Gap(4),
-                            MarkdownTextContent(
-                              content: nty.body,
-                              isAutoWarp: true,
-                              isSelectable: true,
+                            SelectionArea(
+                              child: MarkdownTextContent(
+                                content: nty.body,
+                                isAutoWarp: true,
+                              ),
                             ),
                             if ([
                                   'interactive.feedback',

@@ -17,7 +17,6 @@ import 'attachment/attachment_zoom.dart';
 
 class MarkdownTextContent extends StatelessWidget {
   final String content;
-  final bool isSelectable;
   final bool isAutoWarp;
   final bool isEnlargeSticker;
   final TextScaler? textScaler;
@@ -26,14 +25,14 @@ class MarkdownTextContent extends StatelessWidget {
   const MarkdownTextContent({
     super.key,
     required this.content,
-    this.isSelectable = false,
     this.isAutoWarp = false,
     this.isEnlargeSticker = false,
     this.textScaler,
     this.attachments,
   });
 
-  Widget _buildContent(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Markdown(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -68,8 +67,7 @@ class MarkdownTextContent extends StatelessWidget {
         ),
         code: GoogleFonts.robotoMono(height: 1),
       ),
-      builders: {
-      },
+      builders: {},
       softLineBreak: true,
       extensionSet: markdown.ExtensionSet(
         <markdown.BlockSyntax>[
@@ -144,7 +142,7 @@ class MarkdownTextContent extends StatelessWidget {
               );
             case 'attachments':
               final attachment = attachments?.firstWhere(
-                (ele) => ele?.rid == segments[1],
+                    (ele) => ele?.rid == segments[1],
                 orElse: () => null,
               );
               if (attachment != null) {
@@ -201,14 +199,6 @@ class MarkdownTextContent extends StatelessWidget {
         );
       },
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (isSelectable) {
-      return SelectionArea(child: _buildContent(context));
-    }
-    return _buildContent(context);
   }
 }
 
