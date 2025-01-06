@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:surface/providers/config.dart';
 
 class ContextMenuArea extends StatelessWidget {
   final ContextMenu contextMenu;
@@ -22,11 +24,10 @@ class ContextMenuArea extends StatelessWidget {
     return Listener(
       onPointerDown: (event) {
         mousePosition = event.position;
-        final isCollapseDrawer = ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
-        if (!isCollapseDrawer) {
-          final isExpandDrawer = ResponsiveBreakpoints.of(context).largerThan(TABLET);
+        final cfg = context.read<ConfigProvider>();
+        if (!cfg.drawerIsCollapsed) {
           // Leave padding for side navigation
-          mousePosition = isExpandDrawer
+          mousePosition = cfg.drawerIsExpanded
               ? mousePosition.copyWith(dx: mousePosition.dx - 304 * 2)
               : mousePosition.copyWith(dx: mousePosition.dx - 72 * 2);
         }

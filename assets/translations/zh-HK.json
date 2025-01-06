@@ -185,6 +185,8 @@
   "settingsThemeMaterial3Description": "將應用主題設置為 Material 3 設計範式的主題。",
   "settingsAppBarTransparent": "透明頂欄",
   "settingsAppBarTransparentDescription": "為頂欄啓用透明效果。",
+  "settingsDrawerPreferCollapse": "側邊欄偏好摺疊",
+  "settingsDrawerPreferCollapseDescription": "將側邊欄優先摺疊，即使屏幕寬度足夠大去放下整個側邊欄。",
   "settingsColorScheme": "主題色",
   "settingsColorSchemeDescription": "設置應用主題色。",
   "settingsColorSeed": "預設色彩主題",

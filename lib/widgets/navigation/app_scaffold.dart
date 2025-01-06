@@ -6,8 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/navigation.dart';
 import 'package:surface/widgets/connection_indicator.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -57,10 +59,11 @@ class AppRootScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cfg = context.watch<ConfigProvider>();
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
-    final isCollapseDrawer = ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
-    final isExpandDrawer = ResponsiveBreakpoints.of(context).largerThan(TABLET);
+    final isCollapseDrawer = cfg.drawerIsCollapsed;
+    final isExpandedDrawer = cfg.drawerIsExpanded;
 
     final routeName = GoRouter.of(context).routerDelegate.currentConfiguration.last.route.name;
     final isShowBottomNavigation = NavigationProvider.kShowBottomNavScreen.contains(routeName)
@@ -81,7 +84,7 @@ class AppRootScaffold extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: isExpandDrawer ? AppNavigationDrawer(elevation: 0) : AppRailNavigation(),
+                child: isExpandedDrawer ? AppNavigationDrawer(elevation: 0) : AppRailNavigation(),
               ),
               Expanded(child: body),
             ],
@@ -147,7 +150,7 @@ class AppRootScaffold extends StatelessWidget {
             Expanded(child: innerWidget),
           ],
         ),
-        drawer: !isExpandDrawer ? AppNavigationDrawer() : null,
+        drawer: !isExpandedDrawer ? AppNavigationDrawer() : null,
         drawerEdgeDragWidth: isPopable ? 0 : null,
         bottomNavigationBar: isShowBottomNavigation ? AppBottomNavigationBar() : null,
       ),

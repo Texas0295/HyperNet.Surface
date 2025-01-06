@@ -258,6 +258,10 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
 
   Future<void> _initialize() async {
     try {
+      final cfg = context.read<ConfigProvider>();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        cfg.calcDrawerSize(context);
+      });
       final home = context.read<HomeWidgetProvider>();
       await home.initialize();
       if (!mounted) return;
@@ -298,6 +302,17 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    final cfg = context.read<ConfigProvider>();
+    return NotificationListener<SizeChangedLayoutNotification>(
+      onNotification: (notification) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          cfg.calcDrawerSize(context);
+        });
+        return false;
+      },
+      child: SizeChangedLayoutNotifier(
+        child: widget.child,
+      ),
+    );
   }
 }

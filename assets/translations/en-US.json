@@ -181,6 +181,8 @@
   "settingsAppearance": "Appearance",
   "settingsAppBarTransparent": "Transparent App Bar",
   "settingsAppBarTransparentDescription": "Enable transparent effect for the app bar.",
+  "settingsDrawerPreferCollapse": "Prefer Drawer Collapse",
+  "settingsDrawerPreferCollapseDescription": "Make the drawer to collapse even when the screen is wide enough.",
   "settingsBackgroundImage": "Background Image",
   "settingsBackgroundImageDescription": "Set the background image that will be applied globally.",
   "settingsBackgroundImageClear": "Clear Existing Background Image",

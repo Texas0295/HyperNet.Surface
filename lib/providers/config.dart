@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surface/providers/widget.dart';
 
@@ -12,6 +13,7 @@ const kNetworkServerStoreKey = 'app_server_url';
 const kAppbarTransparentStoreKey = 'app_bar_transparent';
 const kAppBackgroundStoreKey = 'app_has_background';
 const kAppColorSchemeStoreKey = 'app_color_scheme';
+const kAppDrawerPreferCollapse = 'app_drawer_prefer_collapse';
 
 const Map<String, FilterQuality> kImageQualityLevel = {
   'settingsImageQualityLowest': FilterQuality.none,
@@ -31,6 +33,24 @@ class ConfigProvider extends ChangeNotifier {
 
   Future<void> initialize() async {
     prefs = await SharedPreferences.getInstance();
+  }
+
+  bool drawerIsCollapsed = false;
+  bool drawerIsExpanded = false;
+
+  void calcDrawerSize(BuildContext context) {
+    final rpb = ResponsiveBreakpoints.of(context);
+    final newDrawerIsCollapsed = rpb.smallerOrEqualTo(MOBILE);
+    final newDrawerIsExpanded = rpb.largerThan(TABLET)
+        ? (prefs.getBool(kAppDrawerPreferCollapse) ?? false)
+            ? false
+            : true
+        : false;
+    if (newDrawerIsExpanded != drawerIsExpanded || newDrawerIsCollapsed != drawerIsCollapsed) {
+      drawerIsExpanded = newDrawerIsExpanded;
+      drawerIsCollapsed = newDrawerIsCollapsed;
+      notifyListeners();
+    }
   }
 
   FilterQuality get imageQuality {

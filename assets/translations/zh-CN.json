@@ -185,6 +185,8 @@
   "settingsThemeMaterial3Description": "将应用主题设置为 Material 3 设计范式的主题。",
   "settingsAppBarTransparent": "透明顶栏",
   "settingsAppBarTransparentDescription": "为顶栏启用透明效果。",
+  "settingsDrawerPreferCollapse": "侧边栏偏好折叠",
+  "settingsDrawerPreferCollapseDescription": "将侧边栏优先折叠，即使屏幕宽度足够大去放下整个侧边栏。",
   "settingsColorScheme": "主题色",
   "settingsColorSchemeDescription": "设置应用主题色。",
   "settingsColorSeed": "预设色彩主题",
