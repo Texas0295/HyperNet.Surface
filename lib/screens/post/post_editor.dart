@@ -54,7 +54,9 @@ class PostEditorScreen extends StatefulWidget {
 }
 
 class _PostEditorScreenState extends State<PostEditorScreen> {
-  final PostWriteController _writeController = PostWriteController();
+  late final PostWriteController _writeController = PostWriteController(
+    doLoadFromTemporary: widget.postEditId == null,
+  );
 
   bool _isFetching = false;
 

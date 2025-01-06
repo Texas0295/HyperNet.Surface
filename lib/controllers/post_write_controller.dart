@@ -154,7 +154,10 @@ class PostWriteController extends ChangeNotifier {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController aliasController = TextEditingController();
 
-  PostWriteController() {
+  bool _temporarySaveActive = false;
+
+  PostWriteController({bool doLoadFromTemporary = true}) {
+    _temporarySaveActive = doLoadFromTemporary;
     titleController.addListener(() {
       _temporaryPlanSave();
       notifyListeners();
@@ -166,7 +169,7 @@ class PostWriteController extends ChangeNotifier {
     contentController.addListener(() {
       _temporaryPlanSave();
     });
-    _temporaryLoad();
+    if (doLoadFromTemporary) _temporaryLoad();
   }
 
   String mode = kTitleMap.keys.first;
@@ -317,6 +320,7 @@ class PostWriteController extends ChangeNotifier {
   Timer? _temporarySaveTimer;
 
   void _temporaryPlanSave() {
+    if (!_temporarySaveActive) return;
     _temporarySaveTimer?.cancel();
     _temporarySaveTimer = Timer(const Duration(seconds: 1), () {
       _temporarySave();

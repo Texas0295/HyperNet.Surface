@@ -25,7 +25,7 @@ class PostMiniEditor extends StatefulWidget {
 }
 
 class _PostMiniEditorState extends State<PostMiniEditor> {
-  final PostWriteController _writeController = PostWriteController();
+  final PostWriteController _writeController = PostWriteController(doLoadFromTemporary: false);
 
   bool _isFetching = false;
 
