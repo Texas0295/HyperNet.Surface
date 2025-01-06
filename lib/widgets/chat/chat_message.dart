@@ -194,6 +194,10 @@ class _ChatMessageText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ua = context.read<UserProvider>();
+
+    final isOwner = ua.isAuthorized && data.sender.accountId == ua.user?.id;
+
     if (data.body['text'] != null && data.body['text'].isNotEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,36 +205,44 @@ class _ChatMessageText extends StatelessWidget {
           SelectionArea(
             contextMenuBuilder: (context, editableTextState) {
               final List<ContextMenuButtonItem> items = editableTextState.contextMenuButtonItems;
-              items.insert(
-                0,
-                ContextMenuButtonItem(
-                  label: 'reply'.tr(),
-                  onPressed: () {
-                    ContextMenuController.removeAny();
-                    onReply?.call(data);
-                  },
-                ),
-              );
-              items.insert(
-                1,
-                ContextMenuButtonItem(
-                  label: 'edit'.tr(),
-                  onPressed: () {
-                    ContextMenuController.removeAny();
-                    onEdit?.call(data);
-                  },
-                ),
-              );
-              items.insert(
-                2,
-                ContextMenuButtonItem(
-                  label: 'delete'.tr(),
-                  onPressed: () {
-                    ContextMenuController.removeAny();
-                    onDelete?.call(data);
-                  },
-                ),
-              );
+
+              if (onReply != null) {
+                items.insert(
+                  0,
+                  ContextMenuButtonItem(
+                    label: 'reply'.tr(),
+                    onPressed: () {
+                      ContextMenuController.removeAny();
+                      onReply?.call(data);
+                    },
+                  ),
+                );
+              }
+              if (isOwner && onEdit != null) {
+                items.insert(
+                  1,
+                  ContextMenuButtonItem(
+                    label: 'edit'.tr(),
+                    onPressed: () {
+                      ContextMenuController.removeAny();
+                      onEdit?.call(data);
+                    },
+                  ),
+                );
+              }
+              if (isOwner && onDelete != null) {
+                items.insert(
+                  2,
+                  ContextMenuButtonItem(
+                    label: 'delete'.tr(),
+                    onPressed: () {
+                      ContextMenuController.removeAny();
+                      onDelete?.call(data);
+                    },
+                  ),
+                );
+              }
+
               return AdaptiveTextSelectionToolbar.buttonItems(
                 anchors: editableTextState.contextMenuAnchors,
                 buttonItems: items,
