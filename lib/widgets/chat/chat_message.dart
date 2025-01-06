@@ -124,7 +124,7 @@ class ChatMessage extends StatelessWidget {
                                   dateFormatter.format(data.createdAt.toLocal()),
                                 ).fontSize(13),
                               ],
-                            ),
+                            ).height(21),
                           if (isCompact) const Gap(8),
                           if (data.preload?.quoteEvent != null)
                             StyledWidget(Container(
