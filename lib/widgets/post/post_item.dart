@@ -113,7 +113,7 @@ class PostItem extends StatelessWidget {
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
     } else {
-      await FileSaver.instance.saveFile(name: 'Solar Network Post #${data.id}', file: imageFile);
+      await FileSaver.instance.saveFile(name: 'Solar Network Post #${data.id}.png', file: imageFile);
     }
 
     await imageFile.delete();
