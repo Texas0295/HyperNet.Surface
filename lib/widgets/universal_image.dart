@@ -55,17 +55,20 @@ class UniversalImage extends StatelessWidget {
           ? null
           : (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
               if (loadingProgress == null) return child;
-              return Center(
-                child: TweenAnimationBuilder(
-                  tween: Tween(
-                    begin: 0,
-                    end: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                        : 0,
-                  ),
-                  duration: const Duration(milliseconds: 300),
-                  builder: (context, value, _) => CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null ? value.toDouble() : null,
+              return Container(
+                constraints: BoxConstraints(maxHeight: 80),
+                child: Center(
+                  child: TweenAnimationBuilder(
+                    tween: Tween(
+                      begin: 0,
+                      end: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                          : 0,
+                    ),
+                    duration: const Duration(milliseconds: 300),
+                    builder: (context, value, _) => CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null ? value.toDouble() : null,
+                    ),
                   ),
                 ),
               );

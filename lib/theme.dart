@@ -48,7 +48,7 @@ Future<ThemeData> createAppTheme(
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: hasAppBarBlurry ? 0 : null,
-      backgroundColor: hasAppBarBlurry ? colorScheme.surfaceContainer.withAlpha(200) : colorScheme.primary,
+      backgroundColor: hasAppBarBlurry ? colorScheme.primary.withAlpha(200) : colorScheme.primary,
       foregroundColor: hasAppBarBlurry ? colorScheme.onSurface : colorScheme.onPrimary,
     ),
     scaffoldBackgroundColor: Colors.transparent,
