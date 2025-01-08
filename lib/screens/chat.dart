@@ -236,7 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             'alias': channel.alias,
                           },
                         ).then((value) {
-                          if (value == true) _refreshChannels();
+                          if (mounted) _refreshChannels();
                         });
                       },
                     );

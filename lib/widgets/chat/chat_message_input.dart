@@ -101,7 +101,9 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           },
         );
 
-        _attachments[i] = PostWriteMedia(item);
+        setState(() {
+          _attachments[i] = PostWriteMedia(item);
+        });
       }
     } catch (err) {
       if (!mounted) return;

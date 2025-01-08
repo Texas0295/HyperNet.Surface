@@ -49,7 +49,7 @@ class _AppNavigationDrawerState extends State<AppNavigationDrawer> {
           backgroundColor: backgroundColor,
           selectedIndex: nav.currentIndex,
           children: [
-            if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+            if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS) && !cfg.drawerIsExpanded)
               Container(
                 decoration: BoxDecoration(
                   border: Border(

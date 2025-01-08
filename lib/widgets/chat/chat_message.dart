@@ -128,6 +128,9 @@ class ChatMessage extends StatelessWidget {
                           if (isCompact) const Gap(8),
                           if (data.preload?.quoteEvent != null)
                             StyledWidget(Container(
+                              constraints: BoxConstraints(
+                                maxWidth: 480,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                                 border: Border.all(
