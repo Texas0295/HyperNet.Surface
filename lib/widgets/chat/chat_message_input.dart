@@ -48,6 +48,8 @@ class ChatMessageInputState extends State<ChatMessageInput> {
 
   void setEdit(SnChatMessage? value) {
     _contentController.text = value?.body['text'] ?? '';
+    _attachments.clear();
+    _attachments.addAll(value?.preload?.attachments?.map((e) => PostWriteMedia(e)) ?? []);
     setState(() => _editingMessage = value);
   }
 
@@ -199,6 +201,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                       InkWell(
                         child: Text('cancel'.tr()),
                         onTap: () {
+                          _attachments.clear();
                           setState(() => _replyingMessage = null);
                         },
                       ),
@@ -238,6 +241,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                       InkWell(
                         child: Text('cancel'.tr()),
                         onTap: () {
+                          _attachments.clear();
                           _contentController.clear();
                           setState(() => _editingMessage = null);
                         },
