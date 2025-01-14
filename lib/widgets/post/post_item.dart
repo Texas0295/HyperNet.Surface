@@ -880,6 +880,7 @@ class _PostContentBody extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data.body['content'] == null) return const SizedBox.shrink();
     final content = MarkdownTextContent(
+      isAutoWarp: data.type == 'story',
       isEnlargeSticker: true,
       textScaler: isEnlarge ? TextScaler.linear(1.1) : null,
       content: data.body['content'],
