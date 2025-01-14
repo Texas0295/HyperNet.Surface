@@ -1,9 +1,9 @@
-id = "solian-next"
+id = "solian"
 
 [[locations]]
-id = "solian-next"
-host = ["sn-next.solsynth.dev"]
+id = "solian"
+host = ["sn.solsynth.dev"]
 path = ["/"]
 [[locations.destinations]]
-id = "solian-next-web"
-uri = "files:///workdir/solian-next?fallback=index.html&index=index.html"
+id = "solian-web"
+uri = "files:///workdir/solian?fallback=index.html&index=index.html"

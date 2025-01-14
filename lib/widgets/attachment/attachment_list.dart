@@ -106,6 +106,44 @@ class _AttachmentListState extends State<AttachmentList> {
         }
 
         if (widget.gridded) {
+          final fullOfImage =
+              widget.data.where((ele) => ele?.mediaType == SnMediaType.image).length == widget.data.length;
+          if(!fullOfImage) {
+            return Container(
+              margin: widget.padding ?? EdgeInsets.zero,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                border: Border(
+                  top: borderSide,
+                  bottom: borderSide,
+                ),
+                borderRadius: AttachmentList.kDefaultRadius,
+              ),
+              child: ClipRRect(
+                borderRadius: AttachmentList.kDefaultRadius,
+                child: Column(
+                  spacing: 4,
+                  children: widget.data
+                      .mapIndexed(
+                        (idx, ele) => GestureDetector(
+                          child: AspectRatio(
+                            aspectRatio: ele?.data['ratio']?.toDouble() ?? 1,
+                            child: Container(
+                              constraints: constraints,
+                              child: AttachmentItem(
+                                data: ele,
+                                heroTag: heroTags[idx],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            );
+          }
           return Container(
             margin: widget.padding ?? EdgeInsets.zero,
             decoration: BoxDecoration(

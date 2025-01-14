@@ -1,6 +1,6 @@
 {
   "sync": {
-    "region": "solian-next",
+    "region": "solian",
     "configPath": "roadsign.toml"
   },
   "deployments": [
