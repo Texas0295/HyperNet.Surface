@@ -251,9 +251,12 @@ class _ChatMessageText extends StatelessWidget {
                 buttonItems: items,
               );
             },
-            child: MarkdownTextContent(
-              content: data.body['text'],
-              isAutoWarp: true,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: MarkdownTextContent(
+                content: data.body['text'],
+                isAutoWarp: true,
+              ),
             ),
           ),
           if (data.updatedAt != data.createdAt)
