@@ -74,6 +74,7 @@ class ChatMessageController extends ChangeNotifier {
     _wsSubscription = _ws.stream.stream.listen((event) {
       switch (event.method) {
         case 'events.new':
+          if (event.payload?['channel_id'] != channel?.id) break;
           final payload = SnChatMessage.fromJson(event.payload!);
           _addMessage(payload);
           break;
