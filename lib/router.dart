@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:surface/screens/abuse_report.dart';
 import 'package:surface/screens/account.dart';
-import 'package:surface/screens/account/pfp.dart';
+import 'package:surface/screens/account/profile_page.dart';
 import 'package:surface/screens/account/profile_edit.dart';
 import 'package:surface/screens/account/publishers/publisher_edit.dart';
 import 'package:surface/screens/account/publishers/publisher_new.dart';
