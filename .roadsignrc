@@ -5,8 +5,8 @@
   },
   "deployments": [
     {
-      "region": "solian-next",
-      "site": "solian-next-web",
+      "region": "solian",
+      "site": "solian-web",
       "path": "build/web"
     }
   ]
