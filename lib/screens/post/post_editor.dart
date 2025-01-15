@@ -303,19 +303,22 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           ],
                         ),
                       // Content Input Area
-                      TextField(
-                        controller: _writeController.contentController,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          hintText: 'fieldPostContent'.tr(),
-                          hintStyle: TextStyle(fontSize: 14),
-                          isCollapsed: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
+                      Container(
+                        constraints: const BoxConstraints(maxWidth: 640),
+                        child: TextField(
+                          controller: _writeController.contentController,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: 'fieldPostContent'.tr(),
+                            hintStyle: TextStyle(fontSize: 14),
+                            isCollapsed: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            border: InputBorder.none,
                           ),
-                          border: InputBorder.none,
+                          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                         ),
-                        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                       ),
                     ]
                         .expandIndexed(
@@ -366,6 +369,15 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    LoadingIndicator(isActive: _isLoading),
+                    if (_writeController.isBusy && _writeController.progress != null)
+                      TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: _writeController.progress),
+                        duration: Duration(milliseconds: 300),
+                        builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 2),
+                      )
+                    else if (_writeController.isBusy)
+                      const LinearProgressIndicator(value: null, minHeight: 2),
                     Container(
                       child: _writeController.temporaryRestored
                           ? Container(
@@ -396,15 +408,6 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     )
                         .height(_writeController.temporaryRestored ? 32 : 0, animate: true)
                         .animate(const Duration(milliseconds: 300), Curves.fastLinearToSlowEaseIn),
-                    LoadingIndicator(isActive: _isLoading),
-                    if (_writeController.isBusy && _writeController.progress != null)
-                      TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0, end: _writeController.progress),
-                        duration: Duration(milliseconds: 300),
-                        builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 2),
-                      )
-                    else if (_writeController.isBusy)
-                      const LinearProgressIndicator(value: null, minHeight: 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
