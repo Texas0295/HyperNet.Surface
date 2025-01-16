@@ -2,8 +2,8 @@ id = "solian"
 
 [[locations]]
 id = "solian"
-host = ["sn.solsynth.dev"]
-path = ["/"]
+hosts = ["sn.solsynth.dev"]
+paths = ["/"]
 [[locations.destinations]]
 id = "solian-web"
 uri = "files:///workdir/solian?fallback=index.html&index=index.html"
