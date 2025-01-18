@@ -36,7 +36,7 @@ Future<ThemeData> createAppTheme(
   final hasAppBarBlurry = prefs.getBool(kAppbarTransparentStoreKey) ?? false;
 
   return ThemeData(
-    useMaterial3: useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? false),
+    useMaterial3: useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? true),
     colorScheme: colorScheme,
     brightness: brightness,
     iconTheme: IconThemeData(

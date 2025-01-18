@@ -120,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: Text('settingsThemeMaterial3Description').tr(),
                   contentPadding: const EdgeInsets.only(left: 24, right: 17),
                   secondary: const Icon(Symbols.new_releases),
-                  value: _prefs.getBool(kMaterialYouToggleStoreKey) ?? false,
+                  value: _prefs.getBool(kMaterialYouToggleStoreKey) ?? true,
                   onChanged: (value) {
                     setState(() {
                       _prefs.setBool(
