@@ -18,9 +18,7 @@ class _AppRailNavigationState extends State<AppRailNavigation> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<NavigationProvider>()
-          .autoDetectIndex(GoRouter.maybeOf(context));
+      context.read<NavigationProvider>().autoDetectIndex(GoRouter.maybeOf(context));
     });
   }
 
@@ -31,11 +29,11 @@ class _AppRailNavigationState extends State<AppRailNavigation> {
     return ListenableBuilder(
       listenable: nav,
       builder: (context, _) {
-        final destinations =
-            nav.destinations.where((ele) => ele.isPinned).toList();
+        final destinations = nav.destinations.where((ele) => ele.isPinned).toList();
 
         return NavigationRail(
-          selectedIndex: nav.currentIndex,
+          selectedIndex:
+              nav.currentIndex != null && nav.currentIndex! < nav.pinnedDestinationCount ? nav.currentIndex : null,
           destinations: [
             ...destinations.where((ele) => ele.isPinned).map((ele) {
               return NavigationRailDestination(
