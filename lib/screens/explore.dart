@@ -217,27 +217,48 @@ class _ExploreScreenState extends State<ExploreScreen> {
               hasReachedMax: _postCount != null && _posts.length >= _postCount!,
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
-                return GestureDetector(
-                  child: PostItem(
-                    data: _posts[idx],
-                    maxWidth: 640,
-                    onChanged: (data) {
-                      setState(() => _posts[idx] = data);
-                    },
-                    onDeleted: () {
-                      _refreshPosts();
-                    },
+                return Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 1 / MediaQuery.of(context).devicePixelRatio,
+                        ),
+                        right: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 1 / MediaQuery.of(context).devicePixelRatio,
+                        ),
+                      ),
+                    ),
+                    constraints: const BoxConstraints(maxWidth: 640),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          child: PostItem(
+                            data: _posts[idx],
+                            maxWidth: 640,
+                            onChanged: (data) {
+                              setState(() => _posts[idx] = data);
+                            },
+                            onDeleted: () {
+                              _refreshPosts();
+                            },
+                          ),
+                          onTap: () {
+                            GoRouter.of(context).pushNamed(
+                              'postDetail',
+                              pathParameters: {'slug': _posts[idx].id.toString()},
+                              extra: _posts[idx],
+                            );
+                          },
+                        ),
+                        const Divider(height: 1),
+                      ],
+                    ),
                   ),
-                  onTap: () {
-                    GoRouter.of(context).pushNamed(
-                      'postDetail',
-                      pathParameters: {'slug': _posts[idx].id.toString()},
-                      extra: _posts[idx],
-                    );
-                  },
                 );
               },
-              separatorBuilder: (context, index) => const Divider(height: 1),
             ),
           ],
         ),
