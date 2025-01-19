@@ -129,6 +129,8 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
 
   Color get _unFocusColor => Theme.of(context).colorScheme.onSurface.withOpacity(0.75);
 
+  bool _showDetail = false;
+
   @override
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
@@ -266,7 +268,8 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                                 onTap: _isDownloading
                                     ? null
-                                    : () => _saveToAlbum(widget.data.length > 1 ? _pageController.page?.round() ?? 0 : 0),
+                                    : () =>
+                                        _saveToAlbum(widget.data.length > 1 ? _pageController.page?.round() ?? 0 : 0),
                                 child: Container(
                                   padding: const EdgeInsets.all(6),
                                   child: !_isDownloading
@@ -324,7 +327,8 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
                                   'f/${item.metadata['exif']?['Aperture']}',
                                   style: metaTextStyle,
                                 ).padding(right: 2),
-                              if (item.metadata['exif']?['Megapixels'] != null && item.metadata['exif']?['Model'] != null)
+                              if (item.metadata['exif']?['Megapixels'] != null &&
+                                  item.metadata['exif']?['Model'] != null)
                                 Text(
                                   '${item.metadata['exif']?['Megapixels']}MP',
                                   style: metaTextStyle,
@@ -359,9 +363,131 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
             ],
           ),
         ),
+        onVerticalDragUpdate: (details) {
+          if (_showDetail) return;
+          if (details.delta.dy < 0) {
+            _showDetail = true;
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => _AttachmentZoomDetailPopup(
+                data: widget.data.elementAt(widget.data.length > 1 ? _pageController.page?.round() ?? 0 : 0),
+              ),
+            ).then((_) {
+              _showDetail = false;
+            });
+          }
+        },
         onTap: () {
           Navigator.of(context).pop();
         },
+      ),
+    );
+  }
+}
+
+class _AttachmentZoomDetailPopup extends StatelessWidget {
+  final SnAttachment data;
+
+  const _AttachmentZoomDetailPopup({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final ud = context.read<UserDirectoryProvider>();
+    final account = ud.getAccountFromCache(data.accountId);
+
+    const tableGap = TableRow(
+      children: [
+        TableCell(child: SizedBox(height: 16)),
+        TableCell(child: SizedBox(height: 16)),
+      ],
+    );
+
+    return SizedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Symbols.info, size: 24),
+              const Gap(16),
+              Text('attachmentDetailInfo').tr().textStyle(Theme.of(context).textTheme.titleLarge!),
+            ],
+          ).padding(horizontal: 20, top: 16, bottom: 12),
+          Expanded(
+            child: Table(
+              columnWidths: {
+                0: IntrinsicColumnWidth(),
+                1: FlexColumnWidth(),
+              },
+              children: [
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Text('attachmentUploadBy').tr().padding(right: 16),
+                    ),
+                    TableCell(
+                      child: Row(
+                        children: [
+                          if (data.accountId > 0)
+                            AccountImage(
+                              content: account?.avatar,
+                              radius: 8,
+                            ),
+                          const Gap(8),
+                          Text(data.accountId > 0 ? account?.nick ?? 'unknown'.tr() : 'unknown'.tr()),
+                          const Gap(8),
+                          Text('#${data.accountId}', style: GoogleFonts.robotoMono()).opacity(0.75),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                tableGap,
+                TableRow(
+                  children: [
+                    TableCell(child: Text('Mimetype').padding(right: 16)),
+                    TableCell(child: Text(data.mimetype)),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(child: Text('Size').padding(right: 16)),
+                    TableCell(
+                        child: Row(
+                      children: [
+                        Text(data.size.formatBytes()),
+                        const Gap(12),
+                        Text('${data.size} Bytes', style: GoogleFonts.robotoMono()).opacity(0.75),
+                      ],
+                    )),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    TableCell(child: Text('Name').padding(right: 16)),
+                    TableCell(child: Text(data.name)),
+                  ],
+                ),
+                if (data.hash.isNotEmpty)
+                  TableRow(
+                    children: [
+                      TableCell(child: Text('Hash').padding(right: 16)),
+                      TableCell(child: Text(data.hash, style: GoogleFonts.robotoMono(fontSize: 11)).opacity(0.9)),
+                    ],
+                  ),
+                tableGap,
+                ...(data.metadata['exif']?.keys.map((k) => TableRow(
+                      children: [
+                        TableCell(child: Text(k).padding(right: 16)),
+                        TableCell(child: Text(data.metadata['exif'][k].toString())),
+                      ],
+                    )) ??
+                    []),
+              ],
+            ).padding(horizontal: 20, vertical: 8),
+          ),
+        ],
       ),
     );
   }

@@ -292,6 +292,7 @@
   "addAttachmentFromCameraPhoto": "拍摄照片",
   "addAttachmentFromCameraVideo": "拍摄视频",
   "addAttachmentFromRandomId": "通过访问 ID 链接",
+  "attachmentDetailInfo": "附件详细信息",
   "attachmentPastedImage": "粘贴的图片",
   "attachmentInsertLink": "插入连接",
   "attachmentSetAsPostThumbnail": "设置为帖子缩略图",

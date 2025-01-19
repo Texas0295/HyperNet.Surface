@@ -10,7 +10,6 @@ import 'package:surface/providers/experience.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/screens/account/profile_page.dart';
 import 'package:surface/types/account.dart';
-import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/universal_image.dart';
 

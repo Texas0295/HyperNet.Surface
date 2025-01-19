@@ -294,6 +294,7 @@
   "addAttachmentFromCameraPhoto": "Take photo",
   "addAttachmentFromCameraVideo": "Take video",
   "addAttachmentFromRandomId": "Link via RID",
+  "attachmentDetailInfo": "Attachment details",
   "attachmentPastedImage": "Pasted Image",
   "attachmentInsertLink": "Insert Link",
   "attachmentSetAsPostThumbnail": "Set as post thumbnail",
