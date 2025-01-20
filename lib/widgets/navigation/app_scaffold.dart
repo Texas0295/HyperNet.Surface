@@ -98,56 +98,58 @@ class AppRootScaffold extends StatelessWidget {
       iconMouseDown: Theme.of(context).colorScheme.primary,
     );
 
+    final safeTop = MediaQuery.of(context).padding.top;
+
     return AppBackground(
       isRoot: true,
       child: Scaffold(
         key: globalRootScaffoldKey,
-        body: Column(
+        body: Stack(
           children: [
-            if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Theme.of(context).dividerColor,
-                      width: 1 / devicePixelRatio,
-                    ),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
-                  children: [
-                    WindowTitleBarBox(
-                      child: MoveWindow(
-                        child: Text(
-                          'Solar Network',
-                          style: GoogleFonts.spaceGrotesk(),
-                        ).padding(horizontal: 12, vertical: 5),
+            Column(
+              children: [
+                if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 1 / devicePixelRatio,
+                        ),
                       ),
                     ),
-                    if (!Platform.isMacOS)
-                      Expanded(
-                        child: WindowTitleBarBox(
-                          child: Row(
-                            children: [
-                              Expanded(child: MoveWindow()),
-                              Row(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
+                      children: [
+                        WindowTitleBarBox(
+                          child: MoveWindow(
+                            child: Text(
+                              'Solar Network',
+                              style: GoogleFonts.spaceGrotesk(),
+                            ).padding(horizontal: 12, vertical: 5),
+                          ),
+                        ),
+                        if (!Platform.isMacOS)
+                          MoveWindow(
+                            child: WindowTitleBarBox(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   MinimizeWindowButton(colors: windowButtonColor),
                                   MaximizeWindowButton(colors: windowButtonColor),
                                   CloseWindowButton(colors: windowButtonColor),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ConnectionIndicator(),
-            Expanded(child: innerWidget),
+                      ],
+                    ),
+                  ),
+                Expanded(child: innerWidget),
+              ],
+            ),
+            Positioned(top: safeTop > 0 ? safeTop : 16, right: 8, child: ConnectionIndicator()),
           ],
         ),
         drawer: !isExpandedDrawer ? AppNavigationDrawer() : null,
