@@ -17,6 +17,7 @@ import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_bottom_navigation.dart';
 import 'package:surface/widgets/navigation/app_drawer_navigation.dart';
 import 'package:surface/widgets/navigation/app_rail_navigation.dart';
+import 'package:surface/widgets/notify_indicator.dart';
 
 final globalRootScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -131,14 +132,18 @@ class AppRootScaffold extends StatelessWidget {
                           ),
                         ),
                         if (!Platform.isMacOS)
-                          MoveWindow(
+                          Expanded(
                             child: WindowTitleBarBox(
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  MinimizeWindowButton(colors: windowButtonColor),
-                                  MaximizeWindowButton(colors: windowButtonColor),
-                                  CloseWindowButton(colors: windowButtonColor),
+                                  Expanded(child: MoveWindow()),
+                                  Row(
+                                    children: [
+                                      MinimizeWindowButton(colors: windowButtonColor),
+                                      MaximizeWindowButton(colors: windowButtonColor),
+                                      CloseWindowButton(colors: windowButtonColor),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -149,7 +154,8 @@ class AppRootScaffold extends StatelessWidget {
                 Expanded(child: innerWidget),
               ],
             ),
-            Positioned(top: safeTop > 0 ? safeTop : 16, right: 8, child: ConnectionIndicator()),
+            Positioned(top: safeTop > 0 ? safeTop : 16, right: 8, child: NotifyIndicator()),
+            Positioned(top: safeTop > 0 ? safeTop : 16, left: 8, child: ConnectionIndicator()),
           ],
         ),
         drawer: !isExpandedDrawer ? AppNavigationDrawer() : null,

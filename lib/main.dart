@@ -279,6 +279,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
       await ws.tryConnect();
       if (!mounted) return;
       final notify = context.read<NotificationProvider>();
+      notify.listen();
       await notify.registerPushNotifications();
     } catch (err) {
       if (!mounted) return;
