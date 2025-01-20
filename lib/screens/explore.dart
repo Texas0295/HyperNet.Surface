@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -210,6 +212,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
               ),
             ),
+            const SliverGap(8),
             SliverInfiniteList(
               itemCount: _posts.length,
               isLoading: _isBusy,
@@ -218,47 +221,36 @@ class _ExploreScreenState extends State<ExploreScreen> {
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
                 return Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                          width: 1 / MediaQuery.of(context).devicePixelRatio,
-                        ),
-                        right: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                          width: 1 / MediaQuery.of(context).devicePixelRatio,
-                        ),
+                  child: OpenContainer(
+                    closedBuilder: (_, __) => Container(
+                      constraints: const BoxConstraints(maxWidth: 640),
+                      child: PostItem(
+                        data: _posts[idx],
+                        maxWidth: 640,
+                        onChanged: (data) {
+                          setState(() => _posts[idx] = data);
+                        },
+                        onDeleted: () {
+                          _refreshPosts();
+                        },
                       ),
                     ),
-                    constraints: const BoxConstraints(maxWidth: 640),
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          child: PostItem(
-                            data: _posts[idx],
-                            maxWidth: 640,
-                            onChanged: (data) {
-                              setState(() => _posts[idx] = data);
-                            },
-                            onDeleted: () {
-                              _refreshPosts();
-                            },
-                          ),
-                          onTap: () {
-                            GoRouter.of(context).pushNamed(
-                              'postDetail',
-                              pathParameters: {'slug': _posts[idx].id.toString()},
-                              extra: _posts[idx],
-                            );
-                          },
-                        ),
-                        const Divider(height: 1),
-                      ],
+                    openBuilder: (_, close) => PostDetailScreen(
+                      slug: _posts[idx].id.toString(),
+                      preload: _posts[idx],
+                      onBack: close,
+                    ),
+                    openColor: Colors.transparent,
+                    openElevation: 0,
+                    closedColor: Theme.of(context).colorScheme.surface,
+                    transitionType: ContainerTransitionType.fade,
+                    closedShape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
                   ),
                 );
               },
+              separatorBuilder: (_, __) => const Gap(8),
             ),
           ],
         ),

@@ -13,6 +13,7 @@ import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_mini_editor.dart';
@@ -20,12 +21,9 @@ import 'package:surface/widgets/post/post_mini_editor.dart';
 class PostDetailScreen extends StatefulWidget {
   final String slug;
   final SnPost? preload;
+  final Function? onBack;
 
-  const PostDetailScreen({
-    super.key,
-    required this.slug,
-    this.preload,
-  });
+  const PostDetailScreen({super.key, required this.slug, this.preload, this.onBack});
 
   @override
   State<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -67,123 +65,129 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     final ua = context.watch<UserProvider>();
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () {
-            if (GoRouter.of(context).canPop()) {
-              GoRouter.of(context).pop(context);
-              return;
-            }
-            GoRouter.of(context).replaceNamed('explore');
-          },
-        ),
-        title: _data?.body['title'] != null
-            ? RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: _data?.body['title'] ?? 'postNoun'.tr(),
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: Theme.of(context).appBarTheme.foregroundColor!,
-                        ),
-                  ),
-                  const TextSpan(text: '\n'),
-                  TextSpan(
-                    text: 'postDetail'.tr(),
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).appBarTheme.foregroundColor!,
-                        ),
-                  ),
-                ]),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              )
-            : Text('postDetail').tr(),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: LoadingIndicator(isActive: _isBusy),
+    return AppBackground(
+      isRoot: widget.onBack != null,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              if (widget.onBack != null) {
+                widget.onBack!.call();
+              }
+              if (GoRouter.of(context).canPop()) {
+                GoRouter.of(context).pop(context);
+                return;
+              }
+              GoRouter.of(context).replaceNamed('explore');
+            },
           ),
-          if (_data != null)
-            SliverToBoxAdapter(
-              child: PostItem(
-                data: _data!,
-                maxWidth: 640,
-                showComments: false,
-                showFullPost: true,
-                onChanged: (data) {
-                  setState(() => _data = data);
-                },
-                onDeleted: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          const SliverToBoxAdapter(child: Divider(height: 1)),
-          if (_data != null)
-            SliverToBoxAdapter(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 640),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(Symbols.comment, size: 24),
-                    const Gap(16),
-                    Text('postCommentsDetailed')
-                        .plural(_data!.metric.replyCount)
-                        .textStyle(Theme.of(context).textTheme.titleLarge!),
-                  ],
-                ).padding(horizontal: 20, vertical: 12).center(),
-              ),
-            ),
-          if (_data != null && ua.isAuthorized)
-            SliverToBoxAdapter(
-              child: Container(
-                height: 240,
-                constraints: const BoxConstraints(maxWidth: 640),
-                margin:
-                    ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? const EdgeInsets.all(8) : EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  borderRadius: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                      ? const BorderRadius.all(Radius.circular(8))
-                      : BorderRadius.zero,
-                  border: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                      ? Border.all(
-                          color: Theme.of(context).dividerColor,
-                          width: 1 / devicePixelRatio,
-                        )
-                      : Border.symmetric(
-                          horizontal: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                            width: 1 / devicePixelRatio,
+          title: _data?.body['title'] != null
+              ? RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: _data?.body['title'] ?? 'postNoun'.tr(),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).appBarTheme.foregroundColor!,
                           ),
-                        ),
-                ),
-                child: PostMiniEditor(
-                  postReplyId: _data!.id,
-                  onPost: () {
-                    setState(() {
-                      _data = _data!.copyWith(
-                        metric: _data!.metric.copyWith(
-                          replyCount: _data!.metric.replyCount + 1,
-                        ),
-                      );
-                    });
-                    _childListKey.currentState!.refresh();
+                    ),
+                    const TextSpan(text: '\n'),
+                    TextSpan(
+                      text: 'postDetail'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Theme.of(context).appBarTheme.foregroundColor!,
+                          ),
+                    ),
+                  ]),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                )
+              : Text('postDetail').tr(),
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: LoadingIndicator(isActive: _isBusy),
+            ),
+            if (_data != null)
+              SliverToBoxAdapter(
+                child: PostItem(
+                  data: _data!,
+                  maxWidth: 640,
+                  showComments: false,
+                  showFullPost: true,
+                  onChanged: (data) {
+                    setState(() => _data = data);
+                  },
+                  onDeleted: () {
+                    Navigator.pop(context);
                   },
                 ),
-              ).center(),
-            ),
-          if (_data != null)
-            PostCommentSliverList(
-              key: _childListKey,
-              parentPostId: _data!.id,
-              maxWidth: 640,
-            ),
-          SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
-        ],
+              ),
+            const SliverToBoxAdapter(child: Divider(height: 1)),
+            if (_data != null)
+              SliverToBoxAdapter(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Symbols.comment, size: 24),
+                      const Gap(16),
+                      Text('postCommentsDetailed')
+                          .plural(_data!.metric.replyCount)
+                          .textStyle(Theme.of(context).textTheme.titleLarge!),
+                    ],
+                  ).padding(horizontal: 20, vertical: 12).center(),
+                ),
+              ),
+            if (_data != null && ua.isAuthorized)
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 240,
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  margin:
+                      ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? const EdgeInsets.all(8) : EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                        ? const BorderRadius.all(Radius.circular(8))
+                        : BorderRadius.zero,
+                    border: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                        ? Border.all(
+                            color: Theme.of(context).dividerColor,
+                            width: 1 / devicePixelRatio,
+                          )
+                        : Border.symmetric(
+                            horizontal: BorderSide(
+                              color: Theme.of(context).dividerColor,
+                              width: 1 / devicePixelRatio,
+                            ),
+                          ),
+                  ),
+                  child: PostMiniEditor(
+                    postReplyId: _data!.id,
+                    onPost: () {
+                      setState(() {
+                        _data = _data!.copyWith(
+                          metric: _data!.metric.copyWith(
+                            replyCount: _data!.metric.replyCount + 1,
+                          ),
+                        );
+                      });
+                      _childListKey.currentState!.refresh();
+                    },
+                  ),
+                ).center(),
+              ),
+            if (_data != null)
+              PostCommentSliverList(
+                key: _childListKey,
+                parentPostId: _data!.id,
+                maxWidth: 640,
+              ),
+            SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
+          ],
+        ),
       ),
     );
   }
