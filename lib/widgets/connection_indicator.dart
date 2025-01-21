@@ -18,45 +18,49 @@ class ConnectionIndicator extends StatelessWidget {
       listenable: ws,
       builder: (context, _) {
         final ua = context.read<UserProvider>();
+        final show = (ws.isBusy || !ws.isConnected) && ua.isAuthorized;
 
-        return GestureDetector(
-          child: Material(
-            elevation: 2,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            child: ua.isAuthorized
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (ws.isBusy)
-                        Text('serverConnecting').tr().textColor(Theme.of(context).colorScheme.onSecondaryContainer)
-                      else if (!ws.isConnected)
-                        Text('serverDisconnected').tr().textColor(Theme.of(context).colorScheme.onSecondaryContainer)
-                      else
-                        Text('serverConnected').tr().textColor(Theme.of(context).colorScheme.onSecondaryContainer),
-                      const Gap(8),
-                      if (ws.isBusy)
-                        const CircularProgressIndicator(strokeWidth: 2.5)
-                            .width(12)
-                            .height(12)
-                            .padding(horizontal: 4, right: 4)
-                      else if (!ws.isConnected)
-                        const Icon(Symbols.power_off, size: 18)
-                      else
-                        const Icon(Symbols.power, size: 18),
-                    ],
-                  ).padding(horizontal: 8, vertical: 4)
-                : const SizedBox.shrink(),
-          ).opacity((ws.isBusy || !ws.isConnected) && ua.isAuthorized ? 1 : 0, animate: true).animate(
-                const Duration(milliseconds: 300),
-                Curves.easeInOut,
-              ),
-          onTap: () {
-            if (!ws.isConnected && !ws.isBusy) {
-              ws.connect();
-            }
-          },
+        return IgnorePointer(
+          ignoring: !show,
+          child: GestureDetector(
+            child: Material(
+              elevation: 2,
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: ua.isAuthorized
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (ws.isBusy)
+                          Text('serverConnecting').tr().textColor(Theme.of(context).colorScheme.onSecondaryContainer)
+                        else if (!ws.isConnected)
+                          Text('serverDisconnected').tr().textColor(Theme.of(context).colorScheme.onSecondaryContainer)
+                        else
+                          Text('serverConnected').tr().textColor(Theme.of(context).colorScheme.onSecondaryContainer),
+                        const Gap(8),
+                        if (ws.isBusy)
+                          const CircularProgressIndicator(strokeWidth: 2.5)
+                              .width(12)
+                              .height(12)
+                              .padding(horizontal: 4, right: 4)
+                        else if (!ws.isConnected)
+                          const Icon(Symbols.power_off, size: 18)
+                        else
+                          const Icon(Symbols.power, size: 18),
+                      ],
+                    ).padding(horizontal: 8, vertical: 4)
+                  : const SizedBox.shrink(),
+            ).opacity(show ? 1 : 0, animate: true).animate(
+                  const Duration(milliseconds: 300),
+                  Curves.easeInOut,
+                ),
+            onTap: () {
+              if (!ws.isConnected && !ws.isBusy) {
+                ws.connect();
+              }
+            },
+          ),
         );
       },
     );

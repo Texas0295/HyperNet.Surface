@@ -15,43 +15,48 @@ class NotifyIndicator extends StatelessWidget {
     final ua = context.read<UserProvider>();
     final nty = context.watch<NotificationProvider>();
 
+    final show = nty.notifications.isNotEmpty && ua.isAuthorized;
+
     return ListenableBuilder(
         listenable: nty,
         builder: (context, _) {
-          return GestureDetector(
-            child: Material(
-              elevation: 2,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              child: ua.isAuthorized
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          nty.notifications.lastOrNull?.title ??
-                              'notificationUnreadCount'.plural(nty.notifications.length),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (nty.notifications.lastOrNull?.body != null)
+          return IgnorePointer(
+            ignoring: !show,
+            child: GestureDetector(
+              child: Material(
+                elevation: 2,
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                child: ua.isAuthorized
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
                           Text(
-                            nty.notifications.lastOrNull!.body,
+                            nty.notifications.lastOrNull?.title ??
+                                'notificationUnreadCount'.plural(nty.notifications.length),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                          ).padding(left: 4),
-                        const Gap(8),
-                        const Icon(Symbols.notifications_unread, size: 18),
-                      ],
-                    ).padding(horizontal: 8, vertical: 4)
-                  : const SizedBox.shrink(),
-            ).opacity(nty.notifications.isNotEmpty && ua.isAuthorized ? 1 : 0, animate: true).animate(
-                  const Duration(milliseconds: 300),
-                  Curves.easeInOut,
-                ),
-            onTap: () {
-              nty.clear();
-            },
+                          ),
+                          if (nty.notifications.lastOrNull?.body != null)
+                            Text(
+                              nty.notifications.lastOrNull!.body,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ).padding(left: 4),
+                          const Gap(8),
+                          const Icon(Symbols.notifications_unread, size: 18),
+                        ],
+                      ).padding(horizontal: 8, vertical: 4)
+                    : const SizedBox.shrink(),
+              ).opacity(show ? 1 : 0, animate: true).animate(
+                    const Duration(milliseconds: 300),
+                    Curves.easeInOut,
+                  ),
+              onTap: () {
+                nty.clear();
+              },
+            ),
           );
         });
   }
