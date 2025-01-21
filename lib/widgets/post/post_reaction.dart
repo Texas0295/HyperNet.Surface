@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ import 'package:surface/widgets/dialog.dart';
 class PostReactionPopup extends StatefulWidget {
   final SnPost data;
   final Function(Map<String, int> value, int attr, int delta)? onChanged;
+
   const PostReactionPopup({super.key, required this.data, this.onChanged});
 
   @override
@@ -59,6 +61,7 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
           );
         }
       }
+      HapticFeedback.mediumImpact();
     } catch (err) {
       // ignore: use_build_context_synchronously
       if (context.mounted) context.showErrorDialog(err);
@@ -84,9 +87,7 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
             children: [
               const Icon(Symbols.mood, size: 24),
               const Gap(16),
-              Text('postReactions')
-                  .tr()
-                  .textStyle(Theme.of(context).textTheme.titleLarge!),
+              Text('postReactions').tr().textStyle(Theme.of(context).textTheme.titleLarge!),
             ],
           ).padding(horizontal: 20, top: 16, bottom: 12),
           Container(
@@ -102,9 +103,7 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
                 Text('postReactionDownvote').plural(widget.data.totalDownvote),
                 const Gap(24),
                 Icon(
-                  widget.data.totalUpvote >= widget.data.totalDownvote
-                      ? Symbols.trending_up
-                      : Symbols.trending_down,
+                  widget.data.totalUpvote >= widget.data.totalDownvote ? Symbols.trending_up : Symbols.trending_down,
                   size: 16,
                 ),
                 const Gap(8),
