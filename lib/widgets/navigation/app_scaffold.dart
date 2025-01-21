@@ -110,31 +110,28 @@ class AppRootScaffold extends StatelessWidget {
             Column(
               children: [
                 if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Theme.of(context).dividerColor,
-                          width: 1 / devicePixelRatio,
+                  WindowTitleBarBox(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Theme.of(context).dividerColor,
+                            width: 1 / devicePixelRatio,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
-                      children: [
-                        WindowTitleBarBox(
-                          child: MoveWindow(
-                            child: Text(
+                      child: MoveWindow(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
+                          children: [
+                            Text(
                               'Solar Network',
                               style: GoogleFonts.spaceGrotesk(),
                             ).padding(horizontal: 12, vertical: 5),
-                          ),
-                        ),
-                        if (!Platform.isMacOS)
-                          Expanded(
-                            child: WindowTitleBarBox(
-                              child: Row(
+                            if (!Platform.isMacOS)
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Expanded(child: MoveWindow()),
                                   Row(
@@ -146,9 +143,9 @@ class AppRootScaffold extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 Expanded(child: innerWidget),

@@ -196,72 +196,68 @@ class _AttachmentListState extends State<AttachmentList> {
           );
         }
 
-        return AspectRatio(
-          aspectRatio: widget.data.isNotEmpty ? widget.data.first?.data['ratio']?.toDouble() ?? 1 : 1,
-          child: Container(
-            constraints: constraints,
-            child: ScrollConfiguration(
-              behavior: _AttachmentListScrollBehavior(),
-              child: ListView.separated(
-                padding: widget.padding,
-                shrinkWrap: true,
-                itemCount: widget.data.length,
-                itemBuilder: (context, idx) {
-                  return Container(
-                    constraints: constraints.copyWith(maxWidth: widget.maxWidth),
-                    child: AspectRatio(
-                      aspectRatio: (widget.data[idx]?.data['ratio'] ?? 1).toDouble(),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (widget.data[idx]?.mediaType != SnMediaType.image) return;
-                          context.pushTransparentRoute(
-                            AttachmentZoomView(
-                              data:
-                                  widget.data.where((ele) => ele != null && ele.mediaType == SnMediaType.image).cast(),
-                              initialIndex: idx,
-                              heroTags: heroTags,
-                            ),
-                            backgroundColor: Colors.black.withOpacity(0.7),
-                            rootNavigator: true,
-                          );
-                        },
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: backgroundColor,
-                                border: Border(
-                                  top: borderSide,
-                                  bottom: borderSide,
-                                ),
-                                borderRadius: AttachmentList.kDefaultRadius,
+        return Container(
+          constraints: BoxConstraints(maxHeight: constraints.maxHeight),
+          child: ScrollConfiguration(
+            behavior: _AttachmentListScrollBehavior(),
+            child: ListView.separated(
+              padding: widget.padding,
+              shrinkWrap: true,
+              itemCount: widget.data.length,
+              itemBuilder: (context, idx) {
+                return Container(
+                  constraints: constraints.copyWith(maxWidth: widget.maxWidth),
+                  child: AspectRatio(
+                    aspectRatio: (widget.data[idx]?.data['ratio'] ?? 1).toDouble(),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (widget.data[idx]?.mediaType != SnMediaType.image) return;
+                        context.pushTransparentRoute(
+                          AttachmentZoomView(
+                            data: widget.data.where((ele) => ele != null && ele.mediaType == SnMediaType.image).cast(),
+                            initialIndex: idx,
+                            heroTags: heroTags,
+                          ),
+                          backgroundColor: Colors.black.withOpacity(0.7),
+                          rootNavigator: true,
+                        );
+                      },
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              border: Border(
+                                top: borderSide,
+                                bottom: borderSide,
                               ),
-                              child: ClipRRect(
-                                borderRadius: AttachmentList.kDefaultRadius,
-                                child: AttachmentItem(
-                                  data: widget.data[idx],
-                                  heroTag: heroTags[idx],
-                                ),
+                              borderRadius: AttachmentList.kDefaultRadius,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: AttachmentList.kDefaultRadius,
+                              child: AttachmentItem(
+                                data: widget.data[idx],
+                                heroTag: heroTags[idx],
                               ),
                             ),
-                            Positioned(
-                              right: 8,
-                              bottom: 8,
-                              child: Chip(
-                                label: Text('${idx + 1}/${widget.data.length}'),
-                              ),
+                          ),
+                          Positioned(
+                            right: 8,
+                            bottom: 8,
+                            child: Chip(
+                              label: Text('${idx + 1}/${widget.data.length}'),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) => const Gap(8),
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-              ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const Gap(8),
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
             ),
           ),
         );
