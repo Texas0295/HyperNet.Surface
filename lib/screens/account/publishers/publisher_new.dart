@@ -10,6 +10,7 @@ import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class AccountPublisherNewScreen extends StatefulWidget {
   const AccountPublisherNewScreen({super.key});
@@ -24,7 +25,11 @@ class _AccountPublisherNewScreenState extends State<AccountPublisherNewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  AppScaffold(
+      appBar: AppBar(
+        leading: const PageBackButton(),
+        title: Text('screenAccountPublisherNew').tr(),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

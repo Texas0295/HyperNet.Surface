@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 import '../types/account.dart';
 
@@ -56,7 +57,11 @@ class _AbuseReportScreenState extends State<AbuseReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
+      appBar: AppBar(
+        leading: const PageBackButton(),
+        title: Text('screenAbuseReport').tr(),
+      ),
       body: Column(
         children: [
           ListTile(
@@ -73,6 +78,7 @@ class _AbuseReportScreenState extends State<AbuseReportScreen> {
           else
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.only(top: 8),
                 itemCount: _reports.length,
                 itemBuilder: (context, idx) {
                   return ListTile(

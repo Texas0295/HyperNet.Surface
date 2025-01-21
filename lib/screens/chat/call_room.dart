@@ -9,6 +9,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/chat_call.dart';
 import 'package:surface/widgets/chat/call/call_controls.dart';
 import 'package:surface/widgets/chat/call/call_participant.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class CallRoomScreen extends StatefulWidget {
   final String scope;
@@ -152,7 +153,7 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
     return ListenableBuilder(
         listenable: call,
         builder: (context, _) {
-          return Scaffold(
+          return AppScaffold(
             appBar: AppBar(
               title: RichText(
                 textAlign: TextAlign.center,

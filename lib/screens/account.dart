@@ -12,6 +12,7 @@ import 'package:surface/providers/websocket.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -20,7 +21,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ua = context.watch<UserProvider>();
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text("screenAccount").tr(),

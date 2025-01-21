@@ -13,6 +13,7 @@ import 'package:surface/widgets/account/account_select.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/unauthorized_hint.dart';
 import 'package:uuid/uuid.dart';
 
@@ -120,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final ua = context.read<UserProvider>();
 
     if (!ua.isAuthorized) {
-      return Scaffold(
+      return AppScaffold(
         appBar: AppBar(
           leading: AutoAppBarLeading(),
           title: Text('screenChat').tr(),
@@ -131,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     }
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text('screenChat').tr(),
@@ -195,22 +196,58 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           LoadingIndicator(isActive: _isBusy),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => Future.sync(() => _refreshChannels()),
-              child: ListView.builder(
-                itemCount: _channels?.length ?? 0,
-                itemBuilder: (context, idx) {
-                  final channel = _channels![idx];
-                  final lastMessage = _lastMessages?[channel.id];
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                onRefresh: () => Future.sync(() => _refreshChannels()),
+                child: ListView.builder(
+                  itemCount: _channels?.length ?? 0,
+                  itemBuilder: (context, idx) {
+                    final channel = _channels![idx];
+                    final lastMessage = _lastMessages?[channel.id];
 
-                  if (channel.type == 1) {
-                    final otherMember = channel.members?.cast<SnChannelMember?>().firstWhere(
-                          (ele) => ele?.accountId != ua.user?.id,
-                          orElse: () => null,
-                        );
+                    if (channel.type == 1) {
+                      final otherMember = channel.members?.cast<SnChannelMember?>().firstWhere(
+                            (ele) => ele?.accountId != ua.user?.id,
+                            orElse: () => null,
+                          );
+
+                      return ListTile(
+                        title: Text(ud.getAccountFromCache(otherMember?.accountId)?.nick ?? channel.name),
+                        subtitle: lastMessage != null
+                            ? Text(
+                                '${ud.getAccountFromCache(lastMessage.sender.accountId)?.nick}: ${lastMessage.body['text'] ?? 'Unable preview'}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : Text(
+                                'channelDirectMessageDescription'.tr(args: [
+                                  '@${ud.getAccountFromCache(otherMember?.accountId)?.name}',
+                                ]),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                        leading: AccountImage(
+                          content: ud.getAccountFromCache(otherMember?.accountId)?.avatar,
+                        ),
+                        onTap: () {
+                          GoRouter.of(context).pushNamed(
+                            'chatRoom',
+                            pathParameters: {
+                              'scope': channel.realm?.alias ?? 'global',
+                              'alias': channel.alias,
+                            },
+                          ).then((value) {
+                            if (mounted) _refreshChannels();
+                          });
+                        },
+                      );
+                    }
 
                     return ListTile(
-                      title: Text(ud.getAccountFromCache(otherMember?.accountId)?.nick ?? channel.name),
+                      title: Text(channel.name),
                       subtitle: lastMessage != null
                           ? Text(
                               '${ud.getAccountFromCache(lastMessage.sender.accountId)?.nick}: ${lastMessage.body['text'] ?? 'Unable preview'}',
@@ -218,15 +255,14 @@ class _ChatScreenState extends State<ChatScreen> {
                               overflow: TextOverflow.ellipsis,
                             )
                           : Text(
-                              'channelDirectMessageDescription'.tr(args: [
-                                '@${ud.getAccountFromCache(otherMember?.accountId)?.name}',
-                              ]),
+                              channel.description,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       leading: AccountImage(
-                        content: ud.getAccountFromCache(otherMember?.accountId)?.avatar,
+                        content: null,
+                        fallbackWidget: const Icon(Symbols.chat, size: 20),
                       ),
                       onTap: () {
                         GoRouter.of(context).pushNamed(
@@ -236,43 +272,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             'alias': channel.alias,
                           },
                         ).then((value) {
-                          if (mounted) _refreshChannels();
+                          if (value == true) _refreshChannels();
                         });
                       },
                     );
-                  }
-
-                  return ListTile(
-                    title: Text(channel.name),
-                    subtitle: lastMessage != null
-                        ? Text(
-                            '${ud.getAccountFromCache(lastMessage.sender.accountId)?.nick}: ${lastMessage.body['text'] ?? 'Unable preview'}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        : Text(
-                            channel.description,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    leading: AccountImage(
-                      content: null,
-                      fallbackWidget: const Icon(Symbols.chat, size: 20),
-                    ),
-                    onTap: () {
-                      GoRouter.of(context).pushNamed(
-                        'chatRoom',
-                        pathParameters: {
-                          'scope': channel.realm?.alias ?? 'global',
-                          'alias': channel.alias,
-                        },
-                      ).then((value) {
-                        if (value == true) _refreshChannels();
-                      });
-                    },
-                  );
-                },
+                  },
+                ),
               ),
             ),
           ),

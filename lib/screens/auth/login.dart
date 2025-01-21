@@ -9,6 +9,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/auth.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../providers/websocket.dart';
@@ -35,67 +36,73 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-      child: SingleChildScrollView(
-        child: PageTransitionSwitcher(
-          transitionBuilder: (
-            Widget child,
-            Animation<double> primaryAnimation,
-            Animation<double> secondaryAnimation,
-          ) {
-            return SharedAxisTransition(
-              animation: primaryAnimation,
-              secondaryAnimation: secondaryAnimation,
-              transitionType: SharedAxisTransitionType.horizontal,
-              child: Container(
-                constraints: BoxConstraints(maxWidth: 380),
-                child: child,
-              ),
-            );
-          },
-          child: switch (_period % 3) {
-            1 => _LoginPickerScreen(
-                key: const ValueKey(1),
-                ticket: _currentTicket,
-                factors: _factors,
-                onTicket: (p0) => setState(() {
-                  _currentTicket = p0;
-                }),
-                onPickFactor: (p0) => setState(() {
-                  _factorPicked = p0;
-                }),
-                onNext: () => setState(() {
-                  _period++;
-                }),
-              ),
-            2 => _LoginCheckScreen(
-                key: const ValueKey(2),
-                ticket: _currentTicket,
-                factor: _factorPicked,
-                onTicket: (p0) => setState(() {
-                  _currentTicket = p0;
-                }),
-                onNext: () => setState(() {
-                  _period = 1;
-                }),
-              ),
-            _ => _LoginLookupScreen(
-                key: const ValueKey(0),
-                ticket: _currentTicket,
-                onTicket: (p0) => setState(() {
-                  _currentTicket = p0;
-                }),
-                onFactor: (p0) => setState(() {
-                  _factors = p0;
-                }),
-                onNext: () => setState(() {
-                  _period++;
-                }),
-              ),
-          },
-        ).padding(all: 24),
-      ).center(),
+    return AppScaffold(
+      appBar: AppBar(
+        leading: const PageBackButton(),
+        title: Text('screenAuthLogin').tr(),
+      ),
+      body: Theme(
+        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+        child: SingleChildScrollView(
+          child: PageTransitionSwitcher(
+            transitionBuilder: (
+              Widget child,
+              Animation<double> primaryAnimation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return SharedAxisTransition(
+                animation: primaryAnimation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.horizontal,
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 380),
+                  child: child,
+                ),
+              );
+            },
+            child: switch (_period % 3) {
+              1 => _LoginPickerScreen(
+                  key: const ValueKey(1),
+                  ticket: _currentTicket,
+                  factors: _factors,
+                  onTicket: (p0) => setState(() {
+                    _currentTicket = p0;
+                  }),
+                  onPickFactor: (p0) => setState(() {
+                    _factorPicked = p0;
+                  }),
+                  onNext: () => setState(() {
+                    _period++;
+                  }),
+                ),
+              2 => _LoginCheckScreen(
+                  key: const ValueKey(2),
+                  ticket: _currentTicket,
+                  factor: _factorPicked,
+                  onTicket: (p0) => setState(() {
+                    _currentTicket = p0;
+                  }),
+                  onNext: () => setState(() {
+                    _period = 1;
+                  }),
+                ),
+              _ => _LoginLookupScreen(
+                  key: const ValueKey(0),
+                  ticket: _currentTicket,
+                  onTicket: (p0) => setState(() {
+                    _currentTicket = p0;
+                  }),
+                  onFactor: (p0) => setState(() {
+                    _factors = p0;
+                  }),
+                  onNext: () => setState(() {
+                    _period++;
+                  }),
+                ),
+            },
+          ).padding(all: 24),
+        ).center(),
+      ),
     );
   }
 }
@@ -441,7 +448,7 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
 
       widget.onNext();
     } catch (err) {
-      if(mounted) context.showErrorDialog(err);
+      if (mounted) context.showErrorDialog(err);
       return;
     } finally {
       setState(() => _isBusy = false);

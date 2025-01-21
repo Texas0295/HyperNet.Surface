@@ -11,6 +11,7 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 import '../providers/userinfo.dart';
 import '../widgets/unauthorized_hint.dart';
@@ -180,7 +181,7 @@ class _FriendScreenState extends State<FriendScreen> {
     final ua = context.read<UserProvider>();
 
     if (!ua.isAuthorized) {
-      return Scaffold(
+      return AppScaffold(
         appBar: AppBar(
           leading: AutoAppBarLeading(),
           title: Text('screenFriend').tr(),
@@ -191,7 +192,7 @@ class _FriendScreenState extends State<FriendScreen> {
       );
     }
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text('screenFriend').tr(),

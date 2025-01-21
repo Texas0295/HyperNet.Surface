@@ -36,10 +36,7 @@ import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 final _appRoutes = [
   ShellRoute(
-    builder: (context, state, child) => AppPageScaffold(
-      body: child,
-      showAppBar: false,
-    ),
+    builder: (context, state, child) => child,
     routes: [
       GoRoute(
         path: '/',
@@ -58,47 +55,39 @@ final _appRoutes = [
           GoRoute(
             path: '/write/:mode',
             name: 'postEditor',
-            builder: (context, state) => AppBackground(
-              child: PostEditorScreen(
-                mode: state.pathParameters['mode']!,
-                postEditId: int.tryParse(
-                  state.uri.queryParameters['editing'] ?? '',
-                ),
-                postReplyId: int.tryParse(
-                  state.uri.queryParameters['replying'] ?? '',
-                ),
-                postRepostId: int.tryParse(
-                  state.uri.queryParameters['reposting'] ?? '',
-                ),
-                extraProps: state.extra as PostEditorExtraProps?,
+            builder: (context, state) => PostEditorScreen(
+              mode: state.pathParameters['mode']!,
+              postEditId: int.tryParse(
+                state.uri.queryParameters['editing'] ?? '',
               ),
+              postReplyId: int.tryParse(
+                state.uri.queryParameters['replying'] ?? '',
+              ),
+              postRepostId: int.tryParse(
+                state.uri.queryParameters['reposting'] ?? '',
+              ),
+              extraProps: state.extra as PostEditorExtraProps?,
             ),
           ),
           GoRoute(
             path: '/search',
             name: 'postSearch',
-            builder: (context, state) => AppBackground(
-              child: PostSearchScreen(
-                initialTags: state.uri.queryParameters['tags']?.split(','),
-                initialCategories: state.uri.queryParameters['categories']?.split(','),
-              ),
+            builder: (context, state) => PostSearchScreen(
+              initialTags: state.uri.queryParameters['tags']?.split(','),
+              initialCategories: state.uri.queryParameters['categories']?.split(','),
             ),
           ),
           GoRoute(
             path: '/publishers/:name',
             name: 'postPublisher',
-            builder: (context, state) => AppBackground(
-              child: PostPublisherScreen(name: state.pathParameters['name']!),
-            ),
+            builder: (context, state) => PostPublisherScreen(name: state.pathParameters['name']!),
           ),
           GoRoute(
             path: '/:slug',
             name: 'postDetail',
-            builder: (context, state) => AppBackground(
-              child: PostDetailScreen(
-                slug: state.pathParameters['slug']!,
-                preload: state.extra as SnPost?,
-              ),
+            builder: (context, state) => PostDetailScreen(
+              slug: state.pathParameters['slug']!,
+              preload: state.extra as SnPost?,
             ),
           ),
         ],
@@ -106,7 +95,15 @@ final _appRoutes = [
       GoRoute(
         path: '/account',
         name: 'account',
-        pageBuilder: (context, state) => NoTransitionPage(
+        pageBuilder: (context, state) => CustomTransitionPage(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              fillColor: Colors.transparent,
+              child: child,
+            );
+          },
           child: const AccountScreen(),
         ),
         routes: [],
@@ -114,7 +111,15 @@ final _appRoutes = [
       GoRoute(
         path: '/chat',
         name: 'chat',
-        pageBuilder: (context, state) => NoTransitionPage(
+        pageBuilder: (context, state) => CustomTransitionPage(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              fillColor: Colors.transparent,
+              child: child,
+            );
+          },
           child: const ChatScreen(),
         ),
         routes: [
@@ -228,57 +233,43 @@ final _appRoutes = [
     ],
   ),
   ShellRoute(
-    builder: (context, state, child) => AppPageScaffold(body: child),
+    builder: (context, state, child) => child,
     routes: [
       GoRoute(
         path: '/auth/login',
         name: 'authLogin',
-        builder: (context, state) => const AppBackground(
-          child: LoginScreen(),
-        ),
+        builder: (context, state) => LoginScreen(),
       ),
       GoRoute(
         path: '/auth/register',
         name: 'authRegister',
-        builder: (context, state) => const AppBackground(
-          child: RegisterScreen(),
-        ),
+        builder: (context, state) => RegisterScreen(),
       ),
       GoRoute(
         path: '/reports',
         name: 'abuseReport',
-        builder: (context, state) => const AppBackground(
-          child: AbuseReportScreen(),
-        ),
+        builder: (context, state) => AbuseReportScreen(),
       ),
       GoRoute(
         path: '/account/profile/edit',
         name: 'accountProfileEdit',
-        builder: (context, state) => const AppBackground(
-          child: ProfileEditScreen(),
-        ),
+        builder: (context, state) => ProfileEditScreen(),
       ),
       GoRoute(
         path: '/account/publishers',
         name: 'accountPublishers',
-        builder: (context, state) => const AppBackground(
-          child: PublisherScreen(),
-        ),
+        builder: (context, state) => PublisherScreen(),
       ),
       GoRoute(
         path: '/account/publishers/new',
         name: 'accountPublisherNew',
-        builder: (context, state) => const AppBackground(
-          child: AccountPublisherNewScreen(),
-        ),
+        builder: (context, state) => AccountPublisherNewScreen(),
       ),
       GoRoute(
         path: '/account/publishers/edit/:name',
         name: 'accountPublisherEdit',
-        builder: (context, state) => AppBackground(
-          child: AccountPublisherEditScreen(
-            name: state.pathParameters['name']!,
-          ),
+        builder: (context, state) => AccountPublisherEditScreen(
+          name: state.pathParameters['name']!,
         ),
       ),
     ],
@@ -296,9 +287,7 @@ final _appRoutes = [
       GoRoute(
         path: '/settings',
         name: 'settings',
-        builder: (context, state) => const AppBackground(
-          child: SettingsScreen(),
-        ),
+        builder: (context, state) => SettingsScreen(),
       ),
     ],
   ),
@@ -308,9 +297,7 @@ final _appRoutes = [
       GoRoute(
         path: '/about',
         name: 'about',
-        builder: (context, state) => const AppBackground(
-          child: AboutScreen(),
-        ),
+        builder: (context, state) => AboutScreen(),
       ),
     ],
   ),

@@ -25,6 +25,7 @@ import 'package:surface/types/check_in.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 
 class HomeScreenDashEntry {
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text("screenHome").tr(),
@@ -387,6 +388,8 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
                         Text(
                           'dailyCheckInNone',
                           style: Theme.of(context).textTheme.bodyLarge,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ).tr(),
                       ],
                     )

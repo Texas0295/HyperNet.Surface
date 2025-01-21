@@ -21,18 +21,90 @@ import 'package:surface/widgets/notify_indicator.dart';
 
 final globalRootScaffoldKey = GlobalKey<ScaffoldState>();
 
+class AppScaffold extends StatelessWidget {
+  final Widget? body;
+  final PreferredSizeWidget? bottomNavigationBar;
+  final PreferredSizeWidget? bottomSheet;
+  final Drawer? drawer;
+  final Widget? endDrawer;
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final Widget? floatingActionButton;
+  final AppBar? appBar;
+  final DrawerCallback? onDrawerChanged;
+  final DrawerCallback? onEndDrawerChanged;
+
+  const AppScaffold({
+    super.key,
+    this.appBar,
+    this.body,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.floatingActionButtonAnimator,
+    this.bottomNavigationBar,
+    this.bottomSheet,
+    this.drawer,
+    this.endDrawer,
+    this.onDrawerChanged,
+    this.onEndDrawerChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appBarHeight = appBar?.preferredSize.height ?? 0;
+    final safeTop = MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SizedBox.expand(
+        child: AppBackground(
+          child: Column(
+            children: [
+              IgnorePointer(child: SizedBox(height: appBar != null ? appBarHeight + safeTop : 0)),
+              if (body != null) Expanded(child: body!),
+            ],
+          ),
+        ),
+      ),
+      appBar: appBar,
+      bottomNavigationBar: bottomNavigationBar,
+      bottomSheet: bottomSheet,
+      drawer: drawer,
+      endDrawer: endDrawer,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonAnimator: floatingActionButtonAnimator,
+      floatingActionButtonLocation: floatingActionButtonLocation,
+      onDrawerChanged: onDrawerChanged,
+      onEndDrawerChanged: onEndDrawerChanged,
+    );
+  }
+}
+
+class PageBackButton extends StatelessWidget {
+  const PageBackButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BackButton(
+      onPressed: () {
+        GoRouter.of(context).pop();
+      },
+    );
+  }
+}
+
 class AppPageScaffold extends StatelessWidget {
   final String? title;
   final Widget? body;
   final bool showAppBar;
-  final bool showBottomNavigation;
 
   const AppPageScaffold({
     super.key,
     this.title,
     this.body,
     this.showAppBar = true,
-    this.showBottomNavigation = false,
   });
 
   @override
@@ -42,7 +114,7 @@ class AppPageScaffold extends StatelessWidget {
 
     final autoTitle = state != null ? 'screen${routeName?.capitalize()}' : 'screen';
 
-    return Scaffold(
+    return AppScaffold(
       appBar: showAppBar
           ? AppBar(
               title: Text(title ?? autoTitle.tr()),
@@ -101,64 +173,62 @@ class AppRootScaffold extends StatelessWidget {
 
     final safeTop = MediaQuery.of(context).padding.top;
 
-    return AppBackground(
-      isRoot: true,
-      child: Scaffold(
-        key: globalRootScaffoldKey,
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
-                  WindowTitleBarBox(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Theme.of(context).dividerColor,
-                            width: 1 / devicePixelRatio,
-                          ),
-                        ),
-                      ),
-                      child: MoveWindow(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Solar Network',
-                              style: GoogleFonts.spaceGrotesk(),
-                            ).padding(horizontal: 12, vertical: 5),
-                            if (!Platform.isMacOS)
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(child: MoveWindow()),
-                                  Row(
-                                    children: [
-                                      MinimizeWindowButton(colors: windowButtonColor),
-                                      MaximizeWindowButton(colors: windowButtonColor),
-                                      CloseWindowButton(colors: windowButtonColor),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                          ],
+    return Scaffold(
+      key: globalRootScaffoldKey,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+                WindowTitleBarBox(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 1 / devicePixelRatio,
                         ),
                       ),
                     ),
+                    child: MoveWindow(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Solar Network',
+                            style: GoogleFonts.spaceGrotesk(),
+                          ).padding(horizontal: 12, vertical: 5),
+                          if (!Platform.isMacOS)
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(child: MoveWindow()),
+                                Row(
+                                  children: [
+                                    MinimizeWindowButton(colors: windowButtonColor),
+                                    MaximizeWindowButton(colors: windowButtonColor),
+                                    CloseWindowButton(colors: windowButtonColor),
+                                  ],
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                Expanded(child: innerWidget),
-              ],
-            ),
-            Positioned(top: safeTop > 0 ? safeTop : 16, right: 8, child: NotifyIndicator()),
-            Positioned(top: safeTop > 0 ? safeTop : 16, left: 8, child: ConnectionIndicator()),
-          ],
-        ),
-        drawer: !isExpandedDrawer ? AppNavigationDrawer() : null,
-        drawerEdgeDragWidth: isPopable ? 0 : null,
-        bottomNavigationBar: isShowBottomNavigation ? AppBottomNavigationBar() : null,
+                ),
+              Expanded(child: innerWidget),
+            ],
+          ),
+          Positioned(top: safeTop > 0 ? safeTop : 16, right: 8, child: NotifyIndicator()),
+          Positioned(top: safeTop > 0 ? safeTop : 16, left: 8, child: ConnectionIndicator()),
+        ],
       ),
+      drawer: !isExpandedDrawer ? AppNavigationDrawer() : null,
+      drawerEdgeDragWidth: isPopable ? 0 : null,
+      bottomNavigationBar: isShowBottomNavigation ? AppBottomNavigationBar() : null,
     );
   }
 }

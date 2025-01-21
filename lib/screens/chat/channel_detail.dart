@@ -14,6 +14,7 @@ import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class ChannelDetailScreen extends StatefulWidget {
@@ -189,7 +190,7 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
 
     final isOwned = ua.isAuthorized && _channel?.accountId == ua.user?.id;
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: _channel != null ? Text(_channel!.name) : Text('loading').tr(),
       ),

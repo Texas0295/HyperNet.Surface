@@ -14,6 +14,7 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_mini_editor.dart';
@@ -67,7 +68,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
     return AppBackground(
       isRoot: widget.onBack != null,
-      child: Scaffold(
+      child: AppScaffold(
         appBar: AppBar(
           leading: BackButton(
             onPressed: () {

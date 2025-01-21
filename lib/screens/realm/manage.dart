@@ -18,6 +18,7 @@ import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:uuid/uuid.dart';
 
@@ -179,7 +180,7 @@ class _RealmManageScreenState extends State<RealmManageScreen> {
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: widget.editingRealmAlias != null
             ? Text('screenRealmManage').tr()

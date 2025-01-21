@@ -13,6 +13,7 @@ import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
@@ -95,7 +96,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         key: _fabKey,
@@ -212,7 +213,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
               ),
             ),
-            const SliverGap(8),
+            const SliverGap(12),
             SliverInfiniteList(
               itemCount: _posts.length,
               isLoading: _isBusy,
@@ -242,10 +243,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                     openColor: Colors.transparent,
                     openElevation: 0,
-                    closedColor: Theme.of(context).colorScheme.surface,
+                    closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(0.75),
                     transitionType: ContainerTransitionType.fade,
                     closedShape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),
                   ),
                 );

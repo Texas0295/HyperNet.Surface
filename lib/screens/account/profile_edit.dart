@@ -18,6 +18,7 @@ import 'package:surface/providers/userinfo.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/universal_image.dart';
 
 class ProfileEditScreen extends StatefulWidget {
@@ -81,8 +82,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             onDateTimeChanged: (DateTime newDate) {
               setState(() {
                 _birthday = newDate;
-                _birthdayController.text =
-                    DateFormat(_kDateFormat).format(_birthday!);
+                _birthdayController.text = DateFormat(_kDateFormat).format(_birthday!);
               });
             },
           ),
@@ -96,11 +96,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     if (image == null) return;
     if (!mounted) return;
 
-    final ImageProvider imageProvider =
-        kIsWeb ? NetworkImage(image.path) : FileImage(File(image.path));
-    final aspectRatios = place == 'banner'
-        ? [CropAspectRatio(width: 16, height: 7)]
-        : [CropAspectRatio(width: 1, height: 1)];
+    final ImageProvider imageProvider = kIsWeb ? NetworkImage(image.path) : FileImage(File(image.path));
+    final aspectRatios =
+        place == 'banner' ? [CropAspectRatio(width: 16, height: 7)] : [CropAspectRatio(width: 1, height: 1)];
     final result = (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
         ? await showCupertinoImageCropper(
             // ignore: use_build_context_synchronously
@@ -122,10 +120,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
     setState(() => _isBusy = true);
 
-    final rawBytes =
-        (await result.uiImage.toByteData(format: ImageByteFormat.png))!
-            .buffer
-            .asUint8List();
+    final rawBytes = (await result.uiImage.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List();
 
     try {
       final attachment = await attach.directUploadOne(
@@ -212,136 +207,141 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
     final sn = context.read<SnNetworkProvider>();
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LoadingIndicator(isActive: _isBusy),
-          const Gap(24),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Material(
-                elevation: 0,
-                child: InkWell(
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Container(
-                        color:
-                            Theme.of(context).colorScheme.surfaceContainerHigh,
-                        child: _banner != null
-                            ? AutoResizeUniversalImage(
-                                sn.getAttachmentUrl(_banner!),
-                                fit: BoxFit.cover,
-                              )
-                            : const SizedBox.shrink(),
+    return AppScaffold(
+      appBar: AppBar(
+        leading: const PageBackButton(),
+        title: Text('screenProfileEdit').tr(),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LoadingIndicator(isActive: _isBusy),
+            const Gap(24),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Material(
+                  elevation: 0,
+                  child: InkWell(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Container(
+                          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                          child: _banner != null
+                              ? AutoResizeUniversalImage(
+                                  sn.getAttachmentUrl(_banner!),
+                                  fit: BoxFit.cover,
+                                )
+                              : const SizedBox.shrink(),
+                        ),
                       ),
                     ),
-                  ),
-                  onTap: () {
-                    _updateImage('banner');
-                  },
-                ),
-              ),
-              Positioned(
-                bottom: -28,
-                left: 16,
-                child: Material(
-                  elevation: 2,
-                  borderRadius: const BorderRadius.all(Radius.circular(40)),
-                  child: InkWell(
-                    child: AccountImage(content: _avatar, radius: 40),
                     onTap: () {
-                      _updateImage('avatar');
+                      _updateImage('banner');
                     },
                   ),
                 ),
-              ),
-            ],
-          ).padding(horizontal: padding),
-          const Gap(8 + 28),
-          Column(
-            children: [
-              TextField(
-                readOnly: true,
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelText: 'fieldUsername'.tr(),
-                  helperText: 'fieldUsernameCannotEditHint'.tr(),
-                ),
-              ),
-              const Gap(4),
-              TextField(
-                controller: _nicknameController,
-                decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelText: 'fieldNickname'.tr(),
-                ),
-              ),
-              const Gap(4),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: TextField(
-                      controller: _firstNameController,
-                      decoration: InputDecoration(
-                        border: const UnderlineInputBorder(),
-                        labelText: 'fieldFirstName'.tr(),
-                      ),
+                Positioned(
+                  bottom: -28,
+                  left: 16,
+                  child: Material(
+                    elevation: 2,
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                    child: InkWell(
+                      child: AccountImage(content: _avatar, radius: 40),
+                      onTap: () {
+                        _updateImage('avatar');
+                      },
                     ),
                   ),
-                  const Gap(8),
-                  Flexible(
-                    flex: 1,
-                    child: TextField(
-                      controller: _lastNameController,
-                      decoration: InputDecoration(
-                        border: const UnderlineInputBorder(),
-                        labelText: 'fieldLastName'.tr(),
+                ),
+              ],
+            ).padding(horizontal: padding),
+            const Gap(8 + 28),
+            Column(
+              children: [
+                TextField(
+                  readOnly: true,
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldUsername'.tr(),
+                    helperText: 'fieldUsernameCannotEditHint'.tr(),
+                  ),
+                ),
+                const Gap(4),
+                TextField(
+                  controller: _nicknameController,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldNickname'.tr(),
+                  ),
+                ),
+                const Gap(4),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: TextField(
+                        controller: _firstNameController,
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: 'fieldFirstName'.tr(),
+                        ),
                       ),
                     ),
+                    const Gap(8),
+                    Flexible(
+                      flex: 1,
+                      child: TextField(
+                        controller: _lastNameController,
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: 'fieldLastName'.tr(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(4),
+                TextField(
+                  controller: _descriptionController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 3,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldDescription'.tr(),
                   ),
-                ],
-              ),
-              const Gap(4),
-              TextField(
-                controller: _descriptionController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                minLines: 3,
-                decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelText: 'fieldDescription'.tr(),
                 ),
-              ),
-              const Gap(4),
-              TextField(
-                controller: _birthdayController,
-                readOnly: true,
-                decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelText: 'fieldBirthday'.tr(),
+                const Gap(4),
+                TextField(
+                  controller: _birthdayController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: 'fieldBirthday'.tr(),
+                  ),
+                  onTap: () => _selectBirthday(),
                 ),
-                onTap: () => _selectBirthday(),
-              ),
-            ],
-          ).padding(horizontal: padding + 8),
-          const Gap(12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                onPressed: _isBusy ? null : _updateUserInfo,
-                icon: const Icon(Symbols.save),
-                label: Text('apply').tr(),
-              ),
-            ],
-          ).padding(horizontal: padding),
-        ],
+              ],
+            ).padding(horizontal: padding + 8),
+            const Gap(12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: _isBusy ? null : _updateUserInfo,
+                  icon: const Icon(Symbols.save),
+                  label: Text('apply').tr(),
+                ),
+              ],
+            ).padding(horizontal: padding),
+          ],
+        ),
       ),
     );
   }

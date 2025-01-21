@@ -18,6 +18,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/theme.dart';
 import 'package:surface/theme.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 const Map<String, Color> kColorSchemes = {
   'colorSchemeIndigo': Colors.indigo,
@@ -68,6 +69,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final sn = context.read<SnNetworkProvider>();
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Column(
           spacing: 16,
@@ -251,6 +253,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     final cfg = context.read<ConfigProvider>();
                     cfg.calcDrawerSize(context);
                     setState(() {});
+                  },
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('settingsFeatures').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
+                CheckboxListTile(
+                  secondary: const Icon(Symbols.vibration),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  title: Text('settingsNotifyWithHaptic').tr(),
+                  subtitle: Text('settingsNotifyWithHapticDescription').tr(),
+                  value: _prefs.getBool(kAppNotifyWithHaptic) ?? true,
+                  onChanged: (value) {
+                    setState(() {
+                      _prefs.setBool(kAppNotifyWithHaptic, value ?? false);
+                    });
                   },
                 ),
               ],

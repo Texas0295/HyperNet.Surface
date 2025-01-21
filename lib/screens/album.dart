@@ -11,6 +11,7 @@ import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/attachment/attachment_zoom.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:uuid/uuid.dart';
 
 class AlbumScreen extends StatefulWidget {
@@ -82,7 +83,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [

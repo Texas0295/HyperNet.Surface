@@ -365,7 +365,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
         ),
         onVerticalDragUpdate: (details) {
           if (_showDetail) return;
-          if (details.delta.dy < 0) {
+          if (details.delta.dy <= -40) {
             _showDetail = true;
             showModalBottomSheet(
               context: context,

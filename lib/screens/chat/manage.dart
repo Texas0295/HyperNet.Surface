@@ -12,6 +12,7 @@ import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatManageScreen extends StatefulWidget {
@@ -121,7 +122,7 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: widget.editingChannelAlias != null
             ? Text('screenChatManage').tr()

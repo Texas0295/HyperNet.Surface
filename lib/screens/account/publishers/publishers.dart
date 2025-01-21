@@ -10,6 +10,7 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 class PublisherScreen extends StatefulWidget {
   const PublisherScreen({super.key});
@@ -32,8 +33,7 @@ class _PublisherScreenState extends State<PublisherScreen> {
 
     try {
       final resp = await sn.client.get('/cgi/co/publishers/me');
-      final List<SnPublisher> out = List<SnPublisher>.from(
-          resp.data?.map((e) => SnPublisher.fromJson(e)) ?? []);
+      final List<SnPublisher> out = List<SnPublisher>.from(resp.data?.map((e) => SnPublisher.fromJson(e)) ?? []);
 
       if (!mounted) return;
 
@@ -53,7 +53,11 @@ class _PublisherScreenState extends State<PublisherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
+      appBar: AppBar(
+        leading: const PageBackButton(),
+        title: Text('screenAccountPublishers').tr(),
+      ),
       body: Column(
         children: [
           ListTile(
@@ -62,9 +66,7 @@ class _PublisherScreenState extends State<PublisherScreen> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 24),
             leading: const Icon(Symbols.add_circle),
             onTap: () {
-              GoRouter.of(context)
-                  .pushNamed('accountPublisherNew')
-                  .then((value) {
+              GoRouter.of(context).pushNamed('accountPublisherNew').then((value) {
                 if (value == true) {
                   _publishers.clear();
                   _fetchPublishers();
@@ -75,48 +77,52 @@ class _PublisherScreenState extends State<PublisherScreen> {
           const Divider(height: 1),
           LoadingIndicator(isActive: _isBusy),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () {
-                _publishers.clear();
-                return _fetchPublishers();
-              },
-              child: ListView.builder(
-                itemCount: _publishers.length,
-                itemBuilder: (context, idx) {
-                  final publisher = _publishers[idx];
-                  return ListTile(
-                    title: Text(publisher.nick),
-                    subtitle: Text('@${publisher.name}'),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    leading: AccountImage(content: publisher.avatar),
-                    trailing: PopupMenuButton(
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              const Icon(Symbols.edit),
-                              const Gap(16),
-                              Text('edit').tr(),
-                            ],
-                          ),
-                          onTap: () {
-                            GoRouter.of(context).pushNamed(
-                              'accountPublisherEdit',
-                              pathParameters: {
-                                'name': publisher.name,
-                              },
-                            ).then((value) {
-                              if (value == true) {
-                                _publishers.clear();
-                                _fetchPublishers();
-                              }
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  );
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                onRefresh: () {
+                  _publishers.clear();
+                  return _fetchPublishers();
                 },
+                child: ListView.builder(
+                  itemCount: _publishers.length,
+                  itemBuilder: (context, idx) {
+                    final publisher = _publishers[idx];
+                    return ListTile(
+                      title: Text(publisher.nick),
+                      subtitle: Text('@${publisher.name}'),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                      leading: AccountImage(content: publisher.avatar),
+                      trailing: PopupMenuButton(
+                        itemBuilder: (BuildContext context) => [
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                const Icon(Symbols.edit),
+                                const Gap(16),
+                                Text('edit').tr(),
+                              ],
+                            ),
+                            onTap: () {
+                              GoRouter.of(context).pushNamed(
+                                'accountPublisherEdit',
+                                pathParameters: {
+                                  'name': publisher.name,
+                                },
+                              ).then((value) {
+                                if (value == true) {
+                                  _publishers.clear();
+                                  _fetchPublishers();
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),

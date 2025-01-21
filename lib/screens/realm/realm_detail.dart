@@ -11,6 +11,7 @@ import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 import '../../types/post.dart';
@@ -70,19 +71,11 @@ class _RealmDetailScreenState extends State<RealmDetailScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
+      child: AppScaffold(
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            // These are the slivers that show up in the "outer" scroll view.
             return <Widget>[
               SliverOverlapAbsorber(
-                // This widget takes the overlapping behavior of the SliverAppBar,
-                // and redirects it to the SliverOverlapInjector below. If it is
-                // missing, then it is possible for the nested "inner" scroll view
-                // below to end up under the SliverAppBar even when the inner
-                // scroll view thinks it has not been scrolled.
-                // This is not necessary if the "headerSliverBuilder" only builds
-                // widgets that do not overlap the next sliver.
                 handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   title: Text(_realm?.name ?? 'loading'.tr()),

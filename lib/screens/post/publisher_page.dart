@@ -17,6 +17,7 @@ import 'package:surface/types/post.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
@@ -274,7 +275,7 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
 
     final sn = context.read<SnNetworkProvider>();
 
-    return Scaffold(
+    return AppScaffold(
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

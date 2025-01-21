@@ -14,6 +14,7 @@ import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/markdown_content.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
@@ -137,7 +138,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     final ua = context.read<UserProvider>();
 
     if (!ua.isAuthorized) {
-      return Scaffold(
+      return AppScaffold(
         appBar: AppBar(
           leading: AutoAppBarLeading(),
           title: Text('screenNotification').tr(),
@@ -148,7 +149,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       );
     }
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text('screenNotification').tr(),

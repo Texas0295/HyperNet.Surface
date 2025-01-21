@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:provider/provider.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
@@ -15,11 +17,13 @@ class NotificationProvider extends ChangeNotifier {
   late final SnNetworkProvider _sn;
   late final UserProvider _ua;
   late final WebSocketProvider _ws;
+  late final ConfigProvider _cfg;
 
   NotificationProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
     _ua = context.read<UserProvider>();
     _ws = context.read<WebSocketProvider>();
+    _cfg = context.read<ConfigProvider>();
   }
 
   Future<void> registerPushNotifications() async {
@@ -75,6 +79,8 @@ class NotificationProvider extends ChangeNotifier {
         final notification = SnNotification.fromJson(event.payload!);
         notifications.add(notification);
         notifyListeners();
+        final doHaptic = _cfg.prefs.getBool(kAppNotifyWithHaptic) ?? true;
+        if (doHaptic) HapticFeedback.lightImpact();
       }
     });
   }

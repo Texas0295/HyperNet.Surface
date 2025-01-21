@@ -12,6 +12,7 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/unauthorized_hint.dart';
 import 'package:surface/widgets/universal_image.dart';
 
@@ -83,7 +84,7 @@ class _RealmScreenState extends State<RealmScreen> {
     final ua = context.read<UserProvider>();
 
     if (!ua.isAuthorized) {
-      return Scaffold(
+      return AppScaffold(
         appBar: AppBar(
           leading: AutoAppBarLeading(),
           title: Text('screenRealm').tr(),
@@ -94,7 +95,7 @@ class _RealmScreenState extends State<RealmScreen> {
       );
     }
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text('screenRealm').tr(),

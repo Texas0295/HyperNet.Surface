@@ -18,6 +18,7 @@ import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/universal_image.dart';
 
 class AccountPublisherEditScreen extends StatefulWidget {
@@ -176,7 +177,7 @@ class _AccountPublisherEditScreenState extends State<AccountPublisherEditScreen>
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
 
-    return Scaffold(
+    return AppScaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [

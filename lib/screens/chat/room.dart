@@ -20,6 +20,7 @@ import 'package:surface/widgets/chat/chat_message_input.dart';
 import 'package:surface/widgets/chat/chat_typing_indicator.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 import '../../providers/user_directory.dart';
@@ -211,7 +212,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     final call = context.watch<ChatCallProvider>();
     final ud = context.read<UserDirectoryProvider>();
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: Text(
           _channel?.type == 1

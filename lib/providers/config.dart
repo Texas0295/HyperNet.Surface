@@ -14,6 +14,7 @@ const kAppbarTransparentStoreKey = 'app_bar_transparent';
 const kAppBackgroundStoreKey = 'app_has_background';
 const kAppColorSchemeStoreKey = 'app_color_scheme';
 const kAppDrawerPreferCollapse = 'app_drawer_prefer_collapse';
+const kAppNotifyWithHaptic = 'app_notify_with_haptic';
 
 const Map<String, FilterQuality> kImageQualityLevel = {
   'settingsImageQualityLowest': FilterQuality.none,

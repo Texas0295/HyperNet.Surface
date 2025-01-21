@@ -8,6 +8,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
+import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_tags_field.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
@@ -119,7 +120,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
       ),
     ];
 
-    return Scaffold(
+    return AppScaffold(
       appBar: AppBar(
         title: Text('screenPostSearch').tr(),
         actions: [

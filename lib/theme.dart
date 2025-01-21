@@ -55,11 +55,10 @@ Future<ThemeData> createAppTheme(
       backgroundColor: hasAppBarBlurry ? colorScheme.primary.withOpacity(0.3) : colorScheme.primary,
       foregroundColor: hasAppBarBlurry ? colorScheme.onSurface : colorScheme.onPrimary,
     ),
-    scaffoldBackgroundColor: Colors.transparent,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
         TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
-        TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         TargetPlatform.macOS: ZoomPageTransitionsBuilder(),
         TargetPlatform.fuchsia: ZoomPageTransitionsBuilder(),
         TargetPlatform.linux: ZoomPageTransitionsBuilder(),
