@@ -20,7 +20,7 @@ Future<ThemeSet> createAppThemeSet({Color? seedColorOverride, bool? useMaterial3
 
 Future<ThemeData> createAppTheme(
   Brightness brightness, {
-    Color? seedColorOverride,
+  Color? seedColorOverride,
   bool? useMaterial3,
 }) async {
   final prefs = await SharedPreferences.getInstance();
@@ -34,9 +34,10 @@ Future<ThemeData> createAppTheme(
   );
 
   final hasAppBarBlurry = prefs.getBool(kAppbarTransparentStoreKey) ?? false;
+  final useM3 = useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? true);
 
   return ThemeData(
-    useMaterial3: useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? true),
+    useMaterial3: useM3,
     colorScheme: colorScheme,
     brightness: brightness,
     iconTheme: IconThemeData(
@@ -44,6 +45,9 @@ Future<ThemeData> createAppTheme(
       weight: 400,
       opticalSize: 20,
       color: colorScheme.onSurface,
+    ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: useM3 ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,
