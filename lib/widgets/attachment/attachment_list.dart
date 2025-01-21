@@ -15,6 +15,7 @@ class AttachmentList extends StatefulWidget {
   final List<SnAttachment?> data;
   final bool bordered;
   final bool gridded;
+  final bool columned;
   final BoxFit fit;
   final double? maxHeight;
   final double? minWidth;
@@ -26,6 +27,7 @@ class AttachmentList extends StatefulWidget {
     required this.data,
     this.bordered = false,
     this.gridded = false,
+    this.columned = false,
     this.fit = BoxFit.cover,
     this.maxHeight,
     this.minWidth,
@@ -105,45 +107,10 @@ class _AttachmentListState extends State<AttachmentList> {
           );
         }
 
-        if (widget.gridded) {
-          final fullOfImage =
-              widget.data.where((ele) => ele?.mediaType == SnMediaType.image).length == widget.data.length;
-          if (!fullOfImage) {
-            return Container(
-              margin: widget.padding ?? EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                border: Border(
-                  top: borderSide,
-                  bottom: borderSide,
-                ),
-                borderRadius: AttachmentList.kDefaultRadius,
-              ),
-              child: ClipRRect(
-                borderRadius: AttachmentList.kDefaultRadius,
-                child: Column(
-                  spacing: 4,
-                  children: widget.data
-                      .mapIndexed(
-                        (idx, ele) => GestureDetector(
-                          child: AspectRatio(
-                            aspectRatio: ele?.data['ratio']?.toDouble() ?? 1,
-                            child: Container(
-                              constraints: constraints,
-                              child: AttachmentItem(
-                                data: ele,
-                                heroTag: heroTags[idx],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            );
-          }
+        final fullOfImage =
+            widget.data.where((ele) => ele?.mediaType == SnMediaType.image).length == widget.data.length;
+
+        if (widget.gridded && fullOfImage) {
           return Container(
             margin: widget.padding ?? EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -186,6 +153,44 @@ class _AttachmentListState extends State<AttachmentList> {
                       ),
                     )
                     .toList(),
+              ),
+            ),
+          );
+        }
+
+        if ((!fullOfImage && widget.gridded) || widget.columned) {
+          return Container(
+            margin: widget.padding ?? EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              border: Border(
+                top: borderSide,
+                bottom: borderSide,
+              ),
+              borderRadius: AttachmentList.kDefaultRadius,
+            ),
+            child: ClipRRect(
+              borderRadius: AttachmentList.kDefaultRadius,
+              child: Column(
+                children: widget.data
+                    .mapIndexed(
+                      (idx, ele) => GestureDetector(
+                        child: AspectRatio(
+                          aspectRatio: ele?.data['ratio']?.toDouble() ?? 1,
+                          child: Container(
+                            constraints: constraints,
+                            child: AttachmentItem(
+                              data: ele,
+                              heroTag: heroTags[idx],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .expand((ele) => [ele, const Divider(height: 1)])
+                    .toList()
+                  ..removeLast(),
               ),
             ),
           );

@@ -343,7 +343,7 @@ class PostShareImageWidget extends StatelessWidget {
           if (data.type != 'article' && (data.preload?.attachments?.isNotEmpty ?? false))
             StyledWidget(AttachmentList(
               data: data.preload!.attachments!,
-              gridded: true,
+              columned: true,
             )).padding(horizontal: 16, bottom: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
