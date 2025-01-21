@@ -94,11 +94,14 @@ class _LinkPreviewEntry extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     if (meta.icon?.isNotEmpty ?? false)
-                      StyledWidget(
-                        meta.icon!.endsWith('.svg')
-                            ? SvgPicture.network(meta.icon!)
+                      SizedBox(
+                        width: 36,
+                        height: 36,
+                        child: meta.icon!.endsWith('.svg')
+                            ? SvgPicture.network(meta.icon!, width: 36, height: 36)
                             : UniversalImage(
                                 meta.icon!,
+                                noErrorWidget: true,
                                 width: 36,
                                 height: 36,
                                 cacheHeight: 36,

@@ -256,9 +256,8 @@ class PostItem extends StatelessWidget {
           AttachmentList(
             data: displayableAttachments!,
             bordered: true,
-            gridded: true,
             maxHeight: showFullPost ? null : 480,
-            minWidth: 640,
+            maxWidth: MediaQuery.of(context).size.width - 20,
             fit: showFullPost ? BoxFit.cover : BoxFit.contain,
             padding: const EdgeInsets.symmetric(horizontal: 12),
           ),
