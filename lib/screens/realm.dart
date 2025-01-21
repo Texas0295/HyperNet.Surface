@@ -119,113 +119,61 @@ class _RealmScreenState extends State<RealmScreen> {
         children: [
           LoadingIndicator(isActive: _isBusy),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: _fetchRealms,
-              child: ListView.builder(
-                itemCount: _realms?.length ?? 0,
-                itemBuilder: (context, idx) {
-                  final realm = _realms![idx];
-                  if (_isCompactView) {
-                    return ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                      leading: AccountImage(
-                        content: realm.avatar,
-                        fallbackWidget: const Icon(Symbols.group, size: 20),
-                      ),
-                      title: Text(realm.name),
-                      subtitle: Text(
-                        realm.description,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: PopupMenuButton(
-                        itemBuilder: (BuildContext context) => [
-                          PopupMenuItem(
-                            child: Row(
-                              children: [
-                                const Icon(Symbols.edit),
-                                const Gap(16),
-                                Text('edit').tr(),
-                              ],
-                            ),
-                            onTap: () {
-                              GoRouter.of(context).pushNamed(
-                                'realmManage',
-                                queryParameters: {'editing': realm.alias},
-                              ).then((value) {
-                                if (value != null) {
-                                  _fetchRealms();
-                                }
-                              });
-                            },
-                          ),
-                          PopupMenuItem(
-                            child: Row(
-                              children: [
-                                const Icon(Symbols.delete),
-                                const Gap(16),
-                                Text('delete').tr(),
-                              ],
-                            ),
-                            onTap: () {
-                              _deleteRealm(realm);
-                            },
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        GoRouter.of(context).pushNamed(
-                          'realmDetail',
-                          pathParameters: {'alias': realm.alias},
-                        );
-                      },
-                    );
-                  }
-
-                  return Container(
-                    constraints: BoxConstraints(maxWidth: 640),
-                    child: Card(
-                      margin: const EdgeInsets.all(12),
-                      child: InkWell(
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AspectRatio(
-                              aspectRatio: 16 / 7,
-                              child: Stack(
-                                clipBehavior: Clip.none,
-                                fit: StackFit.expand,
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                onRefresh: _fetchRealms,
+                child: ListView.builder(
+                  itemCount: _realms?.length ?? 0,
+                  itemBuilder: (context, idx) {
+                    final realm = _realms![idx];
+                    if (_isCompactView) {
+                      return ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                        leading: AccountImage(
+                          content: realm.avatar,
+                          fallbackWidget: const Icon(Symbols.group, size: 20),
+                        ),
+                        title: Text(realm.name),
+                        subtitle: Text(
+                          realm.description,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (BuildContext context) => [
+                            PopupMenuItem(
+                              child: Row(
                                 children: [
-                                  Container(
-                                    color: Theme.of(context).colorScheme.surfaceContainer,
-                                    child: (realm.banner?.isEmpty ?? true)
-                                        ? const SizedBox.shrink()
-                                        : AutoResizeUniversalImage(
-                                            sn.getAttachmentUrl(realm.banner!),
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ),
-                                  Positioned(
-                                    bottom: -30,
-                                    left: 18,
-                                    child: AccountImage(
-                                      content: realm.avatar,
-                                      radius: 24,
-                                      fallbackWidget: const Icon(Symbols.group, size: 24),
-                                    ),
-                                  ),
+                                  const Icon(Symbols.edit),
+                                  const Gap(16),
+                                  Text('edit').tr(),
                                 ],
                               ),
+                              onTap: () {
+                                GoRouter.of(context).pushNamed(
+                                  'realmManage',
+                                  queryParameters: {'editing': realm.alias},
+                                ).then((value) {
+                                  if (value != null) {
+                                    _fetchRealms();
+                                  }
+                                });
+                              },
                             ),
-                            const Gap(20 + 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(realm.name).textStyle(Theme.of(context).textTheme.titleMedium!),
-                                Text(realm.description).textStyle(Theme.of(context).textTheme.bodySmall!),
-                              ],
-                            ).padding(horizontal: 24, bottom: 14),
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  const Icon(Symbols.delete),
+                                  const Gap(16),
+                                  Text('delete').tr(),
+                                ],
+                              ),
+                              onTap: () {
+                                _deleteRealm(realm);
+                              },
+                            ),
                           ],
                         ),
                         onTap: () {
@@ -234,10 +182,69 @@ class _RealmScreenState extends State<RealmScreen> {
                             pathParameters: {'alias': realm.alias},
                           );
                         },
+                      );
+                    }
+
+                    return Container(
+                      constraints: BoxConstraints(maxWidth: 640),
+                      child: Card(
+                        margin: const EdgeInsets.all(12),
+                        child: InkWell(
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 16 / 7,
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  fit: StackFit.expand,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                      child: Container(
+                                        color: Theme.of(context).colorScheme.surfaceContainer,
+                                        child: (realm.banner?.isEmpty ?? true)
+                                            ? const SizedBox.shrink()
+                                            : AutoResizeUniversalImage(
+                                                sn.getAttachmentUrl(realm.banner!),
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: -30,
+                                      left: 18,
+                                      child: AccountImage(
+                                        content: realm.avatar,
+                                        radius: 24,
+                                        fallbackWidget: const Icon(Symbols.group, size: 24),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Gap(20 + 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(realm.name).textStyle(Theme.of(context).textTheme.titleMedium!),
+                                  Text(realm.description).textStyle(Theme.of(context).textTheme.bodySmall!),
+                                ],
+                              ).padding(horizontal: 24, bottom: 14),
+                            ],
+                          ),
+                          onTap: () {
+                            GoRouter.of(context).pushNamed(
+                              'realmDetail',
+                              pathParameters: {'alias': realm.alias},
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ).center();
-                },
+                    ).center();
+                  },
+                ),
               ),
             ),
           ),

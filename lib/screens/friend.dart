@@ -234,52 +234,56 @@ class _FriendScreenState extends State<FriendScreen> {
           if (_requests.isNotEmpty || _blocks.isNotEmpty)
             const Divider(height: 1),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => Future.wait([
-                _fetchRelations(),
-                _fetchRequests(),
-              ]),
-              child: ListView.builder(
-                itemCount: _relations.length,
-                itemBuilder: (context, index) {
-                  final relation = _relations[index];
-                  final other = relation.related;
-                  return ListTile(
-                    contentPadding: const EdgeInsets.only(right: 24, left: 16),
-                    leading: AccountImage(content: other?.avatar),
-                    title: Text(other?.nick ?? 'unknown'),
-                    subtitle: Text(other?.nick ?? 'unknown'),
-                    trailing: SizedBox(
-                      height: 48,
-                      width: 120,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                onTap: _isUpdating
-                                    ? null
-                                    : () => _changeRelation(relation, 2),
-                                child: Text('friendBlock').tr(),
-                              ),
-                              const Gap(8),
-                              InkWell(
-                                onTap: _isUpdating
-                                    ? null
-                                    : () => _deleteRelation(relation),
-                                child: Text('friendDeleteAction').tr(),
-                              ),
-                            ],
-                          ),
-                        ],
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                onRefresh: () => Future.wait([
+                  _fetchRelations(),
+                  _fetchRequests(),
+                ]),
+                child: ListView.builder(
+                  itemCount: _relations.length,
+                  itemBuilder: (context, index) {
+                    final relation = _relations[index];
+                    final other = relation.related;
+                    return ListTile(
+                      contentPadding: const EdgeInsets.only(right: 24, left: 16),
+                      leading: AccountImage(content: other?.avatar),
+                      title: Text(other?.nick ?? 'unknown'),
+                      subtitle: Text(other?.nick ?? 'unknown'),
+                      trailing: SizedBox(
+                        height: 48,
+                        width: 120,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: _isUpdating
+                                      ? null
+                                      : () => _changeRelation(relation, 2),
+                                  child: Text('friendBlock').tr(),
+                                ),
+                                const Gap(8),
+                                InkWell(
+                                  onTap: _isUpdating
+                                      ? null
+                                      : () => _deleteRelation(relation),
+                                  child: Text('friendDeleteAction').tr(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),

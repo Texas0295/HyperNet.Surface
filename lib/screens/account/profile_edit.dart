@@ -210,7 +210,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return AppScaffold(
       appBar: AppBar(
         leading: const PageBackButton(),
-        title: Text('screenProfileEdit').tr(),
+        title: Text('screenAccountProfileEdit').tr(),
       ),
       body: SingleChildScrollView(
         child: Column(

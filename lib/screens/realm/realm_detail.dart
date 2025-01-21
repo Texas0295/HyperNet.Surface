@@ -8,13 +8,12 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/types/post.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
-
-import '../../types/post.dart';
 
 class RealmDetailScreen extends StatefulWidget {
   final String alias;
@@ -421,7 +420,7 @@ class _RealmSettingsWidgetState extends State<_RealmSettingsWidget> {
 
     return Column(
       children: [
-        const Gap(16),
+        const Gap(8),
         ListTile(
           leading: const Icon(Symbols.edit),
           trailing: const Icon(Symbols.chevron_right),

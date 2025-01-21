@@ -68,8 +68,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final sn = context.read<SnNetworkProvider>();
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
+    return AppScaffold(
+      appBar: AppBar(
+        leading: const PageBackButton(),
+        title: Text('screenSettings').tr(),
+      ),
       body: SingleChildScrollView(
         child: Column(
           spacing: 16,

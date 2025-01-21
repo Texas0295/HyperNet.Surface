@@ -95,36 +95,6 @@ class PageBackButton extends StatelessWidget {
   }
 }
 
-class AppPageScaffold extends StatelessWidget {
-  final String? title;
-  final Widget? body;
-  final bool showAppBar;
-
-  const AppPageScaffold({
-    super.key,
-    this.title,
-    this.body,
-    this.showAppBar = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final state = GoRouter.maybeOf(context);
-    final routeName = state?.routerDelegate.currentConfiguration.last.route.name;
-
-    final autoTitle = state != null ? 'screen${routeName?.capitalize()}' : 'screen';
-
-    return AppScaffold(
-      appBar: showAppBar
-          ? AppBar(
-              title: Text(title ?? autoTitle.tr()),
-            )
-          : null,
-      body: body,
-    );
-  }
-}
-
 class AppRootScaffold extends StatelessWidget {
   final Widget body;
 

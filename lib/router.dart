@@ -282,7 +282,7 @@ final _appRoutes = [
     ),
   ),
   ShellRoute(
-    builder: (context, state, child) => AppPageScaffold(body: child),
+    builder: (context, state, child) => child,
     routes: [
       GoRoute(
         path: '/settings',
@@ -292,7 +292,7 @@ final _appRoutes = [
     ],
   ),
   ShellRoute(
-    builder: (context, state, child) => AppPageScaffold(body: child),
+    builder: (context, state, child) => child,
     routes: [
       GoRoute(
         path: '/about',
