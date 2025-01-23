@@ -14,6 +14,7 @@ import 'package:surface/widgets/navigation/app_scaffold.dart';
 class CallRoomScreen extends StatefulWidget {
   final String scope;
   final String alias;
+
   const CallRoomScreen({super.key, required this.scope, required this.alias});
 
   @override
@@ -36,8 +37,7 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
     return Stack(
       children: [
         Container(
-          color:
-              Theme.of(context).colorScheme.surfaceContainer.withOpacity(0.75),
+          color: Theme.of(context).colorScheme.surfaceContainer.withOpacity(0.75),
           child: call.focusTrack != null
               ? InteractiveParticipantWidget(
                   isFixedAvatar: false,
@@ -72,8 +72,7 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
                       color: Theme.of(context).cardColor,
                       participant: track,
                       onTap: () {
-                        if (track.participant.sid !=
-                            call.focusTrack?.participant.sid) {
+                        if (track.participant.sid != call.focusTrack?.participant.sid) {
                           call.setFocusTrack(track);
                         }
                       },
@@ -115,14 +114,10 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               child: InteractiveParticipantWidget(
-                color: Theme.of(context)
-                    .colorScheme
-                    .surfaceContainerHigh
-                    .withOpacity(0.75),
+                color: Theme.of(context).colorScheme.surfaceContainerHigh.withOpacity(0.75),
                 participant: track,
                 onTap: () {
-                  if (track.participant.sid !=
-                      call.focusTrack?.participant.sid) {
+                  if (track.participant.sid != call.focusTrack?.participant.sid) {
                     call.setFocusTrack(track);
                   }
                 },
@@ -160,150 +155,127 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'call'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
                   ),
                   const TextSpan(text: '\n'),
                   TextSpan(
                     text: call.lastDuration.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
                   ),
                 ]),
               ),
             ),
-            body: SafeArea(
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Column(
-                  children: [
+            body: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 64,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Builder(builder: (context) {
+                          final call = context.read<ChatCallProvider>();
+                          final connectionQuality =
+                              call.room.localParticipant?.connectionQuality ?? livekit.ConnectionQuality.unknown;
+                          return Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      call.channel?.name ?? 'unknown'.tr(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Gap(6),
+                                    Text(call.lastDuration.toString())
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      {
+                                        livekit.ConnectionState.disconnected: 'callStatusDisconnected'.tr(),
+                                        livekit.ConnectionState.connected: 'callStatusConnected'.tr(),
+                                        livekit.ConnectionState.connecting: 'callStatusConnecting'.tr(),
+                                        livekit.ConnectionState.reconnecting: 'callStatusReconnecting'.tr(),
+                                      }[call.room.connectionState]!,
+                                    ),
+                                    const Gap(6),
+                                    if (connectionQuality != livekit.ConnectionQuality.unknown)
+                                      Icon(
+                                        {
+                                          livekit.ConnectionQuality.excellent: Icons.signal_cellular_alt,
+                                          livekit.ConnectionQuality.good: Icons.signal_cellular_alt_2_bar,
+                                          livekit.ConnectionQuality.poor: Icons.signal_cellular_alt_1_bar,
+                                        }[connectionQuality],
+                                        color: {
+                                          livekit.ConnectionQuality.excellent: Colors.green,
+                                          livekit.ConnectionQuality.good: Colors.orange,
+                                          livekit.ConnectionQuality.poor: Colors.red,
+                                        }[connectionQuality],
+                                        size: 16,
+                                      )
+                                    else
+                                      const SizedBox(
+                                        width: 12,
+                                        height: 12,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      ).padding(all: 3),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: _layoutMode == 0 ? const Icon(Icons.view_list) : const Icon(Icons.grid_view),
+                              onPressed: () {
+                                _switchLayout();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ).padding(left: 20, right: 16),
+                  ),
+                  Expanded(
+                    child: Material(
+                      color: Theme.of(context).colorScheme.surfaceContainerLow,
+                      child: Builder(
+                        builder: (context) {
+                          switch (_layoutMode) {
+                            case 1:
+                              return _buildGridLayout();
+                            default:
+                              return _buildListLayout();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  if (call.room.localParticipant != null)
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 64,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Builder(builder: (context) {
-                            final call = context.read<ChatCallProvider>();
-                            final connectionQuality =
-                                call.room.localParticipant?.connectionQuality ??
-                                    livekit.ConnectionQuality.unknown;
-                            return Expanded(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        call.channel?.name ?? 'unknown'.tr(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const Gap(6),
-                                      Text(call.lastDuration.toString())
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        {
-                                          livekit.ConnectionState.disconnected:
-                                              'callStatusDisconnected'.tr(),
-                                          livekit.ConnectionState.connected:
-                                              'callStatusConnected'.tr(),
-                                          livekit.ConnectionState.connecting:
-                                              'callStatusConnecting'.tr(),
-                                          livekit.ConnectionState.reconnecting:
-                                              'callStatusReconnecting'.tr(),
-                                        }[call.room.connectionState]!,
-                                      ),
-                                      const Gap(6),
-                                      if (connectionQuality !=
-                                          livekit.ConnectionQuality.unknown)
-                                        Icon(
-                                          {
-                                            livekit.ConnectionQuality.excellent:
-                                                Icons.signal_cellular_alt,
-                                            livekit.ConnectionQuality.good:
-                                                Icons.signal_cellular_alt_2_bar,
-                                            livekit.ConnectionQuality.poor:
-                                                Icons.signal_cellular_alt_1_bar,
-                                          }[connectionQuality],
-                                          color: {
-                                            livekit.ConnectionQuality.excellent:
-                                                Colors.green,
-                                            livekit.ConnectionQuality.good:
-                                                Colors.orange,
-                                            livekit.ConnectionQuality.poor:
-                                                Colors.red,
-                                          }[connectionQuality],
-                                          size: 16,
-                                        )
-                                      else
-                                        const SizedBox(
-                                          width: 12,
-                                          height: 12,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
-                                        ).padding(all: 3),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: _layoutMode == 0
-                                    ? const Icon(Icons.view_list)
-                                    : const Icon(Icons.grid_view),
-                                onPressed: () {
-                                  _switchLayout();
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ).padding(left: 20, right: 16),
-                    ),
-                    Expanded(
-                      child: Material(
-                        color:
-                            Theme.of(context).colorScheme.surfaceContainerLow,
-                        child: Builder(
-                          builder: (context) {
-                            switch (_layoutMode) {
-                              case 1:
-                                return _buildGridLayout();
-                              default:
-                                return _buildListLayout();
-                            }
-                          },
-                        ),
+                      child: ControlsWidget(
+                        call.room,
+                        call.room.localParticipant!,
                       ),
                     ),
-                    if (call.room.localParticipant != null)
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: ControlsWidget(
-                          call.room,
-                          call.room.localParticipant!,
-                        ),
-                      ),
-                  ],
-                ),
-                onTap: () {},
+                ],
               ),
+              onTap: () {},
             ),
           );
         });
