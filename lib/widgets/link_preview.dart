@@ -81,8 +81,9 @@ class _LinkPreviewEntry extends StatelessWidget {
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                       child: AutoResizeUniversalImage(
-                        meta.image!,
+                        meta.image!.startsWith('//') ? 'https:${meta.image}' : meta.image!,
                         fit: BoxFit.contain,
                       ),
                     ),
