@@ -8,6 +8,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/chat.dart';
@@ -52,6 +53,8 @@ class ChatMessage extends StatelessWidget {
     final isOwner = ua.isAuthorized && data.sender.accountId == ua.user?.id;
 
     final dateFormatter = DateFormat('MM/dd HH:mm');
+
+    final cfg = context.read<ConfigProvider>();
 
     return SwipeTo(
       key: Key('chat-message-${data.id}'),
@@ -192,7 +195,10 @@ class ChatMessage extends StatelessWidget {
                 ],
               ).opacity(isPending ? 0.5 : 1),
             ),
-            if (data.body['text'] != null && data.type == 'messages.new' && (data.body['text']?.isNotEmpty ?? false))
+            if (data.body['text'] != null &&
+                data.type == 'messages.new' &&
+                (data.body['text']?.isNotEmpty ?? false) &&
+                (cfg.prefs.getBool(kAppExpandChatLink) ?? true))
               LinkPreviewWidget(text: data.body['text']!),
             if (data.preload?.attachments?.isNotEmpty ?? false)
               AttachmentList(

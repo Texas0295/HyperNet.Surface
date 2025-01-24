@@ -15,6 +15,8 @@ const kAppBackgroundStoreKey = 'app_has_background';
 const kAppColorSchemeStoreKey = 'app_color_scheme';
 const kAppDrawerPreferCollapse = 'app_drawer_prefer_collapse';
 const kAppNotifyWithHaptic = 'app_notify_with_haptic';
+const kAppExpandPostLink = 'app_expand_post_link';
+const kAppExpandChatLink = 'app_expand_chat_link';
 
 const Map<String, FilterQuality> kImageQualityLevel = {
   'settingsImageQualityLowest': FilterQuality.none,

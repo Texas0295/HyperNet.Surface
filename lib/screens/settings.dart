@@ -276,6 +276,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     });
                   },
                 ),
+                CheckboxListTile(
+                  secondary: const Icon(Symbols.link),
+                  title: Text('settingsExpandPostLink').tr(),
+                  subtitle: Text('settingsExpandPostLinkDescription').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  value: _prefs.getBool(kAppExpandPostLink) ?? true,
+                  onChanged: (value) {
+                    setState(() {
+                      _prefs.setBool(kAppExpandPostLink, value ?? false);
+                    });
+                  },
+                ),
+                CheckboxListTile(
+                  secondary: const Icon(Symbols.chat),
+                  title: Text('settingsExpandChatLink').tr(),
+                  subtitle: Text('settingsExpandChatLinkDescription').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  value: _prefs.getBool(kAppExpandChatLink) ?? true,
+                  onChanged: (value) {
+                    setState(() {
+                      _prefs.setBool(kAppExpandChatLink, value ?? false);
+                    });
+                  },
+                ),
               ],
             ),
             Column(

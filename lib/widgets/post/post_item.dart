@@ -203,6 +203,8 @@ class PostItem extends StatelessWidget {
         ?.where((ele) => ele?.mediaType != SnMediaType.image || data.type != 'article')
         .toList();
 
+    final cfg = context.read<ConfigProvider>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -261,7 +263,7 @@ class PostItem extends StatelessWidget {
             fit: showFullPost ? BoxFit.cover : BoxFit.contain,
             padding: const EdgeInsets.symmetric(horizontal: 12),
           ),
-        if (data.body['content'] != null)
+        if (data.body['content'] != null && (cfg.prefs.getBool(kAppExpandPostLink) ?? true))
           LinkPreviewWidget(
             text: data.body['content'],
           ).padding(horizontal: 4),
