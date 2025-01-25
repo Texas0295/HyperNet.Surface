@@ -596,7 +596,7 @@ class _UserScreenState extends State<UserScreen> with SingleTickerProviderStateM
                 subtitle: Text('@${ele.name}'),
                 trailing: const Icon(Symbols.chevron_right),
                 onTap: () {
-                  GoRouter.of(context).pushNamed(
+                  GoRouter.of(context).goNamed(
                     'postPublisher',
                     pathParameters: {'name': ele.name},
                   );

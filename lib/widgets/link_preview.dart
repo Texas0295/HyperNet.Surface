@@ -7,11 +7,10 @@ import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/link_preview.dart';
 import 'package:surface/types/link.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../providers/link_preview.dart';
 
 class LinkPreviewWidget extends StatefulWidget {
   final String text;

@@ -260,7 +260,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
     try {
       final cfg = context.read<ConfigProvider>();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        cfg.calcDrawerSize(context);
+        cfg.calcDrawerSize(context, withMediaQuery: true);
       });
       final home = context.read<HomeWidgetProvider>();
       await home.initialize();

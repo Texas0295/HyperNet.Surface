@@ -41,14 +41,22 @@ class ConfigProvider extends ChangeNotifier {
   bool drawerIsCollapsed = false;
   bool drawerIsExpanded = false;
 
-  void calcDrawerSize(BuildContext context) {
-    final rpb = ResponsiveBreakpoints.of(context);
-    final newDrawerIsCollapsed = rpb.smallerOrEqualTo(MOBILE);
-    final newDrawerIsExpanded = rpb.largerThan(TABLET)
-        ? (prefs.getBool(kAppDrawerPreferCollapse) ?? false)
-            ? false
-            : true
-        : false;
+  void calcDrawerSize(BuildContext context, {bool withMediaQuery = false}) {
+    bool newDrawerIsCollapsed = false;
+    bool newDrawerIsExpanded = false;
+    if (withMediaQuery) {
+      newDrawerIsCollapsed = MediaQuery.of(context).size.width < 450;
+      newDrawerIsExpanded = MediaQuery.of(context).size.width >= 451;
+    } else {
+      final rpb = ResponsiveBreakpoints.of(context);
+      newDrawerIsCollapsed = rpb.smallerOrEqualTo(MOBILE);
+      newDrawerIsCollapsed = rpb.largerThan(TABLET)
+          ? (prefs.getBool(kAppDrawerPreferCollapse) ?? false)
+              ? false
+              : true
+          : false;
+    }
+
     if (newDrawerIsExpanded != drawerIsExpanded || newDrawerIsCollapsed != drawerIsCollapsed) {
       drawerIsExpanded = newDrawerIsExpanded;
       drawerIsCollapsed = newDrawerIsCollapsed;
