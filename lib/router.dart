@@ -34,245 +34,221 @@ import 'package:surface/widgets/about.dart';
 import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
+Widget _fadeThroughTransition(
+    BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+  return FadeThroughTransition(
+    animation: animation,
+    secondaryAnimation: secondaryAnimation,
+    fillColor: Colors.transparent,
+    child: child,
+  );
+}
+
 final _appRoutes = [
-  ShellRoute(
-    builder: (context, state, child) => child,
+  GoRoute(
+    path: '/',
+    name: 'home',
+    pageBuilder: (context, state) => CustomTransitionPage(
+      transitionsBuilder: _fadeThroughTransition,
+      child: const HomeScreen(),
+    ),
+  ),
+  GoRoute(
+    path: '/posts',
+    name: 'explore',
+    pageBuilder: (context, state) => CustomTransitionPage(
+      transitionsBuilder: _fadeThroughTransition,
+      child: const ExploreScreen(),
+    ),
     routes: [
       GoRoute(
-        path: '/',
-        name: 'home',
-        pageBuilder: (context, state) => NoTransitionPage(
-          child: const HomeScreen(),
+        path: '/write/:mode',
+        name: 'postEditor',
+        builder: (context, state) => PostEditorScreen(
+          mode: state.pathParameters['mode']!,
+          postEditId: int.tryParse(
+            state.uri.queryParameters['editing'] ?? '',
+          ),
+          postReplyId: int.tryParse(
+            state.uri.queryParameters['replying'] ?? '',
+          ),
+          postRepostId: int.tryParse(
+            state.uri.queryParameters['reposting'] ?? '',
+          ),
+          extraProps: state.extra as PostEditorExtraProps?,
         ),
       ),
       GoRoute(
-        path: '/posts',
-        name: 'explore',
-        pageBuilder: (context, state) => NoTransitionPage(
-          child: const ExploreScreen(),
-        ),
-        routes: [
-          GoRoute(
-            path: '/write/:mode',
-            name: 'postEditor',
-            builder: (context, state) => PostEditorScreen(
-              mode: state.pathParameters['mode']!,
-              postEditId: int.tryParse(
-                state.uri.queryParameters['editing'] ?? '',
-              ),
-              postReplyId: int.tryParse(
-                state.uri.queryParameters['replying'] ?? '',
-              ),
-              postRepostId: int.tryParse(
-                state.uri.queryParameters['reposting'] ?? '',
-              ),
-              extraProps: state.extra as PostEditorExtraProps?,
-            ),
-          ),
-          GoRoute(
-            path: '/search',
-            name: 'postSearch',
-            builder: (context, state) => PostSearchScreen(
-              initialTags: state.uri.queryParameters['tags']?.split(','),
-              initialCategories: state.uri.queryParameters['categories']?.split(','),
-            ),
-          ),
-          GoRoute(
-            path: '/publishers/:name',
-            name: 'postPublisher',
-            builder: (context, state) => PostPublisherScreen(name: state.pathParameters['name']!),
-          ),
-          GoRoute(
-            path: '/:slug',
-            name: 'postDetail',
-            builder: (context, state) => PostDetailScreen(
-              slug: state.pathParameters['slug']!,
-              preload: state.extra as SnPost?,
-            ),
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/account',
-        name: 'account',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeThroughTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              fillColor: Colors.transparent,
-              child: child,
-            );
-          },
-          child: const AccountScreen(),
-        ),
-        routes: [],
-      ),
-      GoRoute(
-        path: '/chat',
-        name: 'chat',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeThroughTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              fillColor: Colors.transparent,
-              child: child,
-            );
-          },
-          child: const ChatScreen(),
-        ),
-        routes: [
-          GoRoute(
-            path: '/:scope/:alias',
-            name: 'chatRoom',
-            builder: (context, state) => AppBackground(
-              child: ChatRoomScreen(
-                scope: state.pathParameters['scope']!,
-                alias: state.pathParameters['alias']!,
-              ),
-            ),
-          ),
-          GoRoute(
-            path: '/:scope/:alias/call',
-            name: 'chatCallRoom',
-            builder: (context, state) => AppBackground(
-              child: CallRoomScreen(
-                scope: state.pathParameters['scope']!,
-                alias: state.pathParameters['alias']!,
-              ),
-            ),
-          ),
-          GoRoute(
-            path: '/:scope/:alias/detail',
-            name: 'channelDetail',
-            builder: (context, state) => AppBackground(
-              child: ChannelDetailScreen(
-                scope: state.pathParameters['scope']!,
-                alias: state.pathParameters['alias']!,
-              ),
-            ),
-          ),
-          GoRoute(
-            path: '/manage',
-            name: 'chatManage',
-            pageBuilder: (context, state) => CustomTransitionPage(
-              child: ChatManageScreen(
-                editingChannelAlias: state.uri.queryParameters['editing'],
-              ),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  fillColor: Colors.transparent,
-                  child: AppBackground(
-                    child: child,
-                  ),
-                );
-              },
-            ),
-          ),
-          GoRoute(
-            path: '/:alias',
-            name: 'realmDetail',
-            builder: (context, state) => AppBackground(
-              child: RealmDetailScreen(alias: state.pathParameters['alias']!),
-            ),
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/realm',
-        name: 'realm',
-        pageBuilder: (context, state) => NoTransitionPage(
-          child: const RealmScreen(),
-        ),
-        routes: [
-          GoRoute(
-            path: '/manage',
-            name: 'realmManage',
-            pageBuilder: (context, state) => CustomTransitionPage(
-              child: RealmManageScreen(
-                editingRealmAlias: state.uri.queryParameters['editing'],
-              ),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  fillColor: Colors.transparent,
-                  child: AppBackground(
-                    child: child,
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/album',
-        name: 'album',
-        pageBuilder: (context, state) => NoTransitionPage(
-          child: const AlbumScreen(),
+        path: '/search',
+        name: 'postSearch',
+        builder: (context, state) => PostSearchScreen(
+          initialTags: state.uri.queryParameters['tags']?.split(','),
+          initialCategories: state.uri.queryParameters['categories']?.split(','),
         ),
       ),
       GoRoute(
-        path: '/friend',
-        name: 'friend',
-        pageBuilder: (context, state) => NoTransitionPage(
-          child: const FriendScreen(),
-        ),
+        path: '/publishers/:name',
+        name: 'postPublisher',
+        builder: (context, state) => PostPublisherScreen(name: state.pathParameters['name']!),
       ),
       GoRoute(
-        path: '/notification',
-        name: 'notification',
-        pageBuilder: (context, state) => NoTransitionPage(
-          child: const NotificationScreen(),
+        path: '/:slug',
+        name: 'postDetail',
+        builder: (context, state) => PostDetailScreen(
+          slug: state.pathParameters['slug']!,
+          preload: state.extra as SnPost?,
         ),
       ),
     ],
   ),
-  ShellRoute(
-    builder: (context, state, child) => child,
+  GoRoute(
+    path: '/account',
+    name: 'account',
+    pageBuilder: (context, state) => CustomTransitionPage(
+      transitionsBuilder: _fadeThroughTransition,
+      child: const AccountScreen(),
+    ),
+  ),
+  GoRoute(
+    path: '/chat',
+    name: 'chat',
+    pageBuilder: (context, state) => CustomTransitionPage(
+      transitionsBuilder: _fadeThroughTransition,
+      child: const ChatScreen(),
+    ),
     routes: [
       GoRoute(
-        path: '/auth/login',
-        name: 'authLogin',
-        builder: (context, state) => LoginScreen(),
+        path: '/:scope/:alias',
+        name: 'chatRoom',
+        builder: (context, state) => AppBackground(
+          child: ChatRoomScreen(
+            scope: state.pathParameters['scope']!,
+            alias: state.pathParameters['alias']!,
+          ),
+        ),
       ),
       GoRoute(
-        path: '/auth/register',
-        name: 'authRegister',
-        builder: (context, state) => RegisterScreen(),
+        path: '/:scope/:alias/call',
+        name: 'chatCallRoom',
+        builder: (context, state) => AppBackground(
+          child: CallRoomScreen(
+            scope: state.pathParameters['scope']!,
+            alias: state.pathParameters['alias']!,
+          ),
+        ),
       ),
       GoRoute(
-        path: '/reports',
-        name: 'abuseReport',
-        builder: (context, state) => AbuseReportScreen(),
+        path: '/:scope/:alias/detail',
+        name: 'channelDetail',
+        builder: (context, state) => AppBackground(
+          child: ChannelDetailScreen(
+            scope: state.pathParameters['scope']!,
+            alias: state.pathParameters['alias']!,
+          ),
+        ),
       ),
       GoRoute(
-        path: '/account/profile/edit',
-        name: 'accountProfileEdit',
-        builder: (context, state) => ProfileEditScreen(),
-      ),
-      GoRoute(
-        path: '/account/publishers',
-        name: 'accountPublishers',
-        builder: (context, state) => PublisherScreen(),
-      ),
-      GoRoute(
-        path: '/account/publishers/new',
-        name: 'accountPublisherNew',
-        builder: (context, state) => AccountPublisherNewScreen(),
-      ),
-      GoRoute(
-        path: '/account/publishers/edit/:name',
-        name: 'accountPublisherEdit',
-        builder: (context, state) => AccountPublisherEditScreen(
-          name: state.pathParameters['name']!,
+        path: '/manage',
+        name: 'chatManage',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: ChatManageScreen(
+            editingChannelAlias: state.uri.queryParameters['editing'],
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              fillColor: Colors.transparent,
+              child: child,
+            );
+          },
         ),
       ),
     ],
+  ),
+  GoRoute(
+    path: '/realm',
+    name: 'realm',
+    pageBuilder: (context, state) => CustomTransitionPage(
+      transitionsBuilder: _fadeThroughTransition,
+      child: const RealmScreen(),
+    ),
+    routes: [
+      GoRoute(
+        path: '/:alias',
+        name: 'realmDetail',
+        builder: (context, state) => RealmDetailScreen(alias: state.pathParameters['alias']!),
+      ),
+      GoRoute(
+        path: '/manage',
+        name: 'realmManage',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          transitionsBuilder: _fadeThroughTransition,
+          child: RealmManageScreen(
+            editingRealmAlias: state.uri.queryParameters['editing'],
+          ),
+        ),
+      ),
+    ],
+  ),
+  GoRoute(
+    path: '/album',
+    name: 'album',
+    pageBuilder: (context, state) => CustomTransitionPage(
+      transitionsBuilder: _fadeThroughTransition,
+      child: const AlbumScreen(),
+    ),
+  ),
+  GoRoute(
+    path: '/friend',
+    name: 'friend',
+    pageBuilder: (context, state) => NoTransitionPage(
+      child: const FriendScreen(),
+    ),
+  ),
+  GoRoute(
+    path: '/notification',
+    name: 'notification',
+    pageBuilder: (context, state) => NoTransitionPage(
+      child: const NotificationScreen(),
+    ),
+  ),
+  GoRoute(
+    path: '/auth/login',
+    name: 'authLogin',
+    builder: (context, state) => LoginScreen(),
+  ),
+  GoRoute(
+    path: '/auth/register',
+    name: 'authRegister',
+    builder: (context, state) => RegisterScreen(),
+  ),
+  GoRoute(
+    path: '/reports',
+    name: 'abuseReport',
+    builder: (context, state) => AbuseReportScreen(),
+  ),
+  GoRoute(
+    path: '/account/profile/edit',
+    name: 'accountProfileEdit',
+    builder: (context, state) => ProfileEditScreen(),
+  ),
+  GoRoute(
+    path: '/account/publishers',
+    name: 'accountPublishers',
+    builder: (context, state) => PublisherScreen(),
+  ),
+  GoRoute(
+    path: '/account/publishers/new',
+    name: 'accountPublisherNew',
+    builder: (context, state) => AccountPublisherNewScreen(),
+  ),
+  GoRoute(
+    path: '/account/publishers/edit/:name',
+    name: 'accountPublisherEdit',
+    builder: (context, state) => AccountPublisherEditScreen(
+      name: state.pathParameters['name']!,
+    ),
   ),
   GoRoute(
     path: '/account/:name',
@@ -281,25 +257,15 @@ final _appRoutes = [
       child: UserScreen(name: state.pathParameters['name']!),
     ),
   ),
-  ShellRoute(
-    builder: (context, state, child) => child,
-    routes: [
-      GoRoute(
-        path: '/settings',
-        name: 'settings',
-        builder: (context, state) => SettingsScreen(),
-      ),
-    ],
+  GoRoute(
+    path: '/settings',
+    name: 'settings',
+    builder: (context, state) => SettingsScreen(),
   ),
-  ShellRoute(
-    builder: (context, state, child) => child,
-    routes: [
-      GoRoute(
-        path: '/about',
-        name: 'about',
-        builder: (context, state) => AboutScreen(),
-      ),
-    ],
+  GoRoute(
+    path: '/about',
+    name: 'about',
+    builder: (context, state) => AboutScreen(),
   ),
 ];
 

@@ -19,7 +19,6 @@ import 'package:surface/types/check_in.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/dialog.dart';
-import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/universal_image.dart';
 
 const Map<String, (String, IconData, Color)> kBadgesMeta = {
