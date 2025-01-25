@@ -19,6 +19,8 @@ import 'package:surface/screens/chat/room.dart';
 import 'package:surface/screens/explore.dart';
 import 'package:surface/screens/friend.dart';
 import 'package:surface/screens/home.dart';
+import 'package:surface/screens/news/news_detail.dart';
+import 'package:surface/screens/news/news_list.dart';
 import 'package:surface/screens/notification.dart';
 import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/screens/post/post_editor.dart';
@@ -31,7 +33,6 @@ import 'package:surface/screens/settings.dart';
 import 'package:surface/screens/sharing.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/about.dart';
-import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
 Widget _fadeThroughTransition(
@@ -48,18 +49,12 @@ final _appRoutes = [
   GoRoute(
     path: '/',
     name: 'home',
-    pageBuilder: (context, state) => CustomTransitionPage(
-      transitionsBuilder: _fadeThroughTransition,
-      child: const HomeScreen(),
-    ),
+    builder: (context, state) => const HomeScreen(),
   ),
   GoRoute(
     path: '/posts',
     name: 'explore',
-    pageBuilder: (context, state) => CustomTransitionPage(
-      transitionsBuilder: _fadeThroughTransition,
-      child: const ExploreScreen(),
-    ),
+    builder: (context, state) => const ExploreScreen(),
     routes: [
       GoRoute(
         path: '/write/:mode',
@@ -104,64 +99,42 @@ final _appRoutes = [
   GoRoute(
     path: '/account',
     name: 'account',
-    pageBuilder: (context, state) => CustomTransitionPage(
-      transitionsBuilder: _fadeThroughTransition,
-      child: const AccountScreen(),
-    ),
+    builder: (context, state) => const AccountScreen(),
   ),
   GoRoute(
     path: '/chat',
     name: 'chat',
-    pageBuilder: (context, state) => CustomTransitionPage(
-      transitionsBuilder: _fadeThroughTransition,
-      child: const ChatScreen(),
-    ),
+    builder: (context, state) => const ChatScreen(),
     routes: [
       GoRoute(
         path: '/:scope/:alias',
         name: 'chatRoom',
-        builder: (context, state) => AppBackground(
-          child: ChatRoomScreen(
-            scope: state.pathParameters['scope']!,
-            alias: state.pathParameters['alias']!,
-          ),
+        builder: (context, state) => ChatRoomScreen(
+          scope: state.pathParameters['scope']!,
+          alias: state.pathParameters['alias']!,
         ),
       ),
       GoRoute(
         path: '/:scope/:alias/call',
         name: 'chatCallRoom',
-        builder: (context, state) => AppBackground(
-          child: CallRoomScreen(
-            scope: state.pathParameters['scope']!,
-            alias: state.pathParameters['alias']!,
-          ),
+        builder: (context, state) => CallRoomScreen(
+          scope: state.pathParameters['scope']!,
+          alias: state.pathParameters['alias']!,
         ),
       ),
       GoRoute(
         path: '/:scope/:alias/detail',
         name: 'channelDetail',
-        builder: (context, state) => AppBackground(
-          child: ChannelDetailScreen(
-            scope: state.pathParameters['scope']!,
-            alias: state.pathParameters['alias']!,
-          ),
+        builder: (context, state) => ChannelDetailScreen(
+          scope: state.pathParameters['scope']!,
+          alias: state.pathParameters['alias']!,
         ),
       ),
       GoRoute(
         path: '/manage',
         name: 'chatManage',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          child: ChatManageScreen(
-            editingChannelAlias: state.uri.queryParameters['editing'],
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeThroughTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              fillColor: Colors.transparent,
-              child: child,
-            );
-          },
+        builder: (context, state) => ChatManageScreen(
+          editingChannelAlias: state.uri.queryParameters['editing'],
         ),
       ),
     ],
@@ -182,36 +155,40 @@ final _appRoutes = [
       GoRoute(
         path: '/manage',
         name: 'realmManage',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          transitionsBuilder: _fadeThroughTransition,
-          child: RealmManageScreen(
-            editingRealmAlias: state.uri.queryParameters['editing'],
-          ),
+        builder: (context, state) => RealmManageScreen(
+          editingRealmAlias: state.uri.queryParameters['editing'],
         ),
       ),
     ],
   ),
   GoRoute(
+    path: '/news',
+    name: 'news',
+    builder: (context, state) => const NewsScreen(),
+    routes: [
+      GoRoute(
+        path: '/:hash',
+        name: 'newsDetail',
+        builder: (context, state) => NewsDetailScreen(
+          hash: state.pathParameters['hash']!,
+        ),
+      ),
+    ]
+  ),
+  GoRoute(
     path: '/album',
     name: 'album',
-    pageBuilder: (context, state) => CustomTransitionPage(
-      transitionsBuilder: _fadeThroughTransition,
-      child: const AlbumScreen(),
-    ),
+    builder: (context, state) => const AlbumScreen(),
   ),
   GoRoute(
     path: '/friend',
     name: 'friend',
-    pageBuilder: (context, state) => NoTransitionPage(
-      child: const FriendScreen(),
-    ),
+    builder: (context, state) => const FriendScreen(),
   ),
   GoRoute(
     path: '/notification',
     name: 'notification',
-    pageBuilder: (context, state) => NoTransitionPage(
-      child: const NotificationScreen(),
-    ),
+    builder: (context, state) => const NotificationScreen(),
   ),
   GoRoute(
     path: '/auth/login',

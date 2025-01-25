@@ -15,6 +15,7 @@
   "screenAccountProfileEdit": "编辑资料",
   "screenAbuseReport": "滥用检举",
   "screenSettings": "设置",
+  "screenNews": "新闻",
   "screenAlbum": "相册",
   "screenChat": "聊天",
   "screenChatManage": "编辑聊天频道",
@@ -556,5 +557,9 @@
   "postCategoryKnowledge": "知识",
   "postCategoryLiterature": "文学",
   "postCategoryFunny": "搞笑",
-  "postCategoryUncategorized": "未分类"
+  "postCategoryUncategorized": "未分类",
+  "newsAllSources": "所有新闻",
+  "newsReadingProviderSwap": "切换",
+  "newsReadingFromReader": "你正在从 HyperNet.Reader 阅读文章",
+  "newsReadingFromOriginal": "你正在阅读原始文章"
 }

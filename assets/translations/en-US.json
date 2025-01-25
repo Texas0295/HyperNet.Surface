@@ -17,6 +17,7 @@
   "screenAccountProfileEdit": "Edit Profile",
   "screenAbuseReport": "Abuse Reports",
   "screenSettings": "Settings",
+  "screenNews": "News",
   "screenAlbum": "Album",
   "screenChat": "Chat",
   "screenChatManage": "Edit Channel",
@@ -558,5 +559,9 @@
   "postCategoryKnowledge": "Knowledge",
   "postCategoryLiterature": "Literature",
   "postCategoryFunny": "Funny",
-  "postCategoryUncategorized": "Uncategorized"
+  "postCategoryUncategorized": "Uncategorized",
+  "newsAllSources": "All News",
+  "newsReadingProviderSwap": "Swap",
+  "newsReadingFromReader": "You're reading from HyperNet.Reader",
+  "newsReadingFromOriginal": "You're reading the original article"
 }
