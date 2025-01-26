@@ -50,7 +50,7 @@ class ConfigProvider extends ChangeNotifier {
     } else {
       final rpb = ResponsiveBreakpoints.of(context);
       newDrawerIsCollapsed = rpb.smallerOrEqualTo(MOBILE);
-      newDrawerIsCollapsed = rpb.largerThan(TABLET)
+      newDrawerIsExpanded = rpb.largerThan(TABLET)
           ? (prefs.getBool(kAppDrawerPreferCollapse) ?? false)
               ? false
               : true
