@@ -55,11 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeScreenDashEntry(
       name: 'dashEntryRecommendation',
       child: _HomeDashRecommendationPostWidget(),
-      cols: 2,
-    ),
-    HomeScreenDashEntry(
-      name: 'dashEntryTodayNews',
-      child: _HomeDashTodayNews(),
+      rows: 2,
       cols: 2,
     ),
     HomeScreenDashEntry(
@@ -69,6 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeScreenDashEntry(
       name: 'dashEntryNotification',
       child: _HomeDashNotificationWidget(),
+    ),
+    HomeScreenDashEntry(
+      name: 'dashEntryTodayNews',
+      child: _HomeDashTodayNews(),
+      cols: 2,
     ),
   ];
 
