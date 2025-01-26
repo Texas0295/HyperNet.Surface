@@ -178,11 +178,17 @@ class _NewsArticleListWidgetState extends State<_NewsArticleListWidget> {
                   children: [
                     if (article.thumbnail.isNotEmpty && !article.thumbnail.endsWith('.svg'))
                       ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          topLeft: Radius.circular(8),
+                        ),
                         child: AspectRatio(
                           aspectRatio: 16 / 9,
-                          child: AutoResizeUniversalImage(
-                            article.thumbnail.startsWith('http') ? article.thumbnail : '$baseUrl/${article.thumbnail}',
+                          child: Container(
+                            color: Theme.of(context).colorScheme.surfaceContainer,
+                            child: AutoResizeUniversalImage(
+                              article.thumbnail.startsWith('http') ? article.thumbnail : '$baseUrl/${article.thumbnail}',
+                            ),
                           ),
                         ),
                       ),

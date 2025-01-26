@@ -101,7 +101,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           final width = double.tryParse(node.attributes['width'] ?? 'null');
           final height = double.tryParse(node.attributes['height'] ?? 'null');
           final ratio = width != null && height != null ? width / height : 1.0;
-          if (!src.startsWith('http')) {
+          if (src.startsWith('//')) {
+            src = 'https:$src';
+          } else if (!src.startsWith('http')) {
             final baseUri = Uri.parse(_article!.url);
             final baseUrl = '${baseUri.scheme}://${baseUri.host}';
             src = '$baseUrl/$src';
@@ -120,7 +122,13 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 height: height ?? double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
-                  child: AutoResizeUniversalImage(src, fit: BoxFit.cover),
+                  child: Container(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    child: AutoResizeUniversalImage(
+                      src,
+                      fit: width != null && height != null ? BoxFit.cover : BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
             ),
