@@ -562,5 +562,6 @@
   "newsReadingProviderSwap": "切换",
   "newsReadingFromReader": "你正在从 HyperNet.Reader 阅读文章",
   "newsReadingFromOriginal": "你正在阅读原始文章",
-  "newsDisclaimer": "本文由 HyperNet.Reader 从互联网上获取，我们不担保其内容的真实性，请自行判断。本文章的所有内容版权归原作者所有。"
+  "newsDisclaimer": "本文由 HyperNet.Reader 从互联网上获取，我们不担保其内容的真实性，请自行判断。本文章的所有内容版权归原作者所有。",
+  "newsToday": "快讯"
 }

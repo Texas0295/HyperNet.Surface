@@ -564,5 +564,6 @@
   "newsReadingProviderSwap": "Swap",
   "newsReadingFromReader": "You're reading from HyperNet.Reader",
   "newsReadingFromOriginal": "You're reading the original article",
-  "newsDisclaimer": "This article is fetched from the Internet, we do not guarantee its authenticity, please judge for yourself. All content in this article belongs to the original author."
+  "newsDisclaimer": "This article is fetched from the Internet, we do not guarantee its authenticity, please judge for yourself. All content in this article belongs to the original author.",
+  "newsToday": "Today's News"
 }

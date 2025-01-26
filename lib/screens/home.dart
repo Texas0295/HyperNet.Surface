@@ -9,6 +9,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html/parser.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
@@ -22,6 +23,7 @@ import 'package:surface/providers/special_day.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/widget.dart';
 import 'package:surface/types/check_in.dart';
+import 'package:surface/types/news.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -52,9 +54,13 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<HomeScreenDashEntry> kCards = [
     HomeScreenDashEntry(
       name: 'dashEntryRecommendation',
-      cols: 2,
-      rows: 2,
       child: _HomeDashRecommendationPostWidget(),
+      cols: 2,
+    ),
+    HomeScreenDashEntry(
+      name: 'dashEntryTodayNews',
+      child: _HomeDashTodayNews(),
+      cols: 2,
     ),
     HomeScreenDashEntry(
       name: 'dashEntryCheckIn',
@@ -227,6 +233,107 @@ class _HomeDashSpecialDayWidgetState extends State<_HomeDashSpecialDayWidget> {
     }
 
     return const SizedBox.shrink();
+  }
+}
+
+class _HomeDashTodayNews extends StatefulWidget {
+  const _HomeDashTodayNews();
+
+  @override
+  State<_HomeDashTodayNews> createState() => _HomeDashTodayNewsState();
+}
+
+class _HomeDashTodayNewsState extends State<_HomeDashTodayNews> {
+  SnNewsArticle? _article;
+
+  Future<void> _fetchArticle() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/re/news/today');
+      _article = SnNewsArticle.fromJson(resp.data['data']);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+      rethrow;
+    } finally {
+      setState(() {});
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _fetchArticle();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Symbols.newspaper),
+              const Gap(8),
+              Text(
+                'newsToday',
+                style: Theme.of(context).textTheme.titleLarge,
+              ).tr()
+            ],
+          ).padding(horizontal: 18, top: 12, bottom: 8),
+          if (_article != null)
+            Expanded(
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: Column(
+                  spacing: 4,
+                  children: [
+                    Text(
+                      _article!.title,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 18),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      parse(_article!.description).children.map((e) => e.text.trim()).join(),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Builder(
+                      builder: (context) {
+                        final date = _article!.publishedAt ?? _article!.createdAt;
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 2,
+                          children: [
+                            Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                            Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
+                            Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                          ],
+                        ).opacity(0.75);
+                      }
+                    ),
+                  ],
+                ).padding(horizontal: 16),
+                onTap: () {
+                  GoRouter.of(context).pushNamed(
+                    'newsDetail',
+                    pathParameters: {'hash': _article!.hash},
+                  );
+                },
+              ),
+            )
+          else
+            Expanded(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+        ],
+      ),
+    );
   }
 }
 
