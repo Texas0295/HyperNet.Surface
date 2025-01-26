@@ -15,6 +15,7 @@
   "screenAccountProfileEdit": "編輯資料",
   "screenAbuseReport": "濫用檢舉",
   "screenSettings": "設置",
+  "screenNews": "新聞",
   "screenAlbum": "相冊",
   "screenChat": "聊天",
   "screenChatManage": "編輯聊天頻道",
@@ -194,6 +195,10 @@
   "settingsFeatures": "功能",
   "settingsNotifyWithHaptic": "新通知時振動",
   "settingsNotifyWithHapticDescription": "在應用在前台時收到新通知出現時出發輕量的振動。",
+  "settingsExpandPostLink": "展開帖子鏈接",
+  "settingsExpandPostLinkDescription": "在帖子列表中展開顯示帖子中的鏈接。",
+  "settingsExpandChatLink": "展開聊天鏈接",
+  "settingsExpandChatLinkDescription": "在聊天信息中展開顯示內容中的鏈接。",
   "settingsNetwork": "網絡",
   "settingsNetworkServer": "HyperNet 服務器",
   "settingsNetworkServerDescription": "設置 HyperNet 服務器地址，選擇我們提供的，或者自己搭建。",
@@ -552,5 +557,10 @@
   "postCategoryKnowledge": "知識",
   "postCategoryLiterature": "文學",
   "postCategoryFunny": "搞笑",
-  "postCategoryUncategorized": "未分類"
+  "postCategoryUncategorized": "未分類",
+  "newsAllSources": "所有新聞",
+  "newsReadingProviderSwap": "切換",
+  "newsReadingFromReader": "你正在從 HyperNet.Reader 閲讀文章",
+  "newsReadingFromOriginal": "你正在閲讀原始文章",
+  "newsDisclaimer": "本文由 HyperNet.Reader 從互聯網上獲取，我們不擔保其內容的真實性，請自行判斷。本文章的所有內容版權歸原作者所有。"
 }

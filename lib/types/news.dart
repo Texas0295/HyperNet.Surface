@@ -31,7 +31,7 @@ class SnNewsArticle with _$SnNewsArticle {
     required String url,
     required String hash,
     required String source,
-    required dynamic publishedAt,
+    required DateTime? publishedAt,
   }) = _SnNewsArticle;
 
   factory SnNewsArticle.fromJson(Map<String, dynamic> json) => _$SnNewsArticleFromJson(json);

@@ -39,7 +39,9 @@ _$SnNewsArticleImpl _$$SnNewsArticleImplFromJson(Map<String, dynamic> json) =>
       url: json['url'] as String,
       hash: json['hash'] as String,
       source: json['source'] as String,
-      publishedAt: json['published_at'],
+      publishedAt: json['published_at'] == null
+          ? null
+          : DateTime.parse(json['published_at'] as String),
     );
 
 Map<String, dynamic> _$$SnNewsArticleImplToJson(_$SnNewsArticleImpl instance) =>
@@ -55,5 +57,5 @@ Map<String, dynamic> _$$SnNewsArticleImplToJson(_$SnNewsArticleImpl instance) =>
       'url': instance.url,
       'hash': instance.hash,
       'source': instance.source,
-      'published_at': instance.publishedAt,
+      'published_at': instance.publishedAt?.toIso8601String(),
     };

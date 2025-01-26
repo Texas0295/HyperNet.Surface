@@ -285,7 +285,7 @@ mixin _$SnNewsArticle {
   String get url => throw _privateConstructorUsedError;
   String get hash => throw _privateConstructorUsedError;
   String get source => throw _privateConstructorUsedError;
-  dynamic get publishedAt => throw _privateConstructorUsedError;
+  DateTime? get publishedAt => throw _privateConstructorUsedError;
 
   /// Serializes this SnNewsArticle to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -315,7 +315,7 @@ abstract class $SnNewsArticleCopyWith<$Res> {
       String url,
       String hash,
       String source,
-      dynamic publishedAt});
+      DateTime? publishedAt});
 }
 
 /// @nodoc
@@ -394,7 +394,7 @@ class _$SnNewsArticleCopyWithImpl<$Res, $Val extends SnNewsArticle>
       publishedAt: freezed == publishedAt
           ? _value.publishedAt
           : publishedAt // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -419,7 +419,7 @@ abstract class _$$SnNewsArticleImplCopyWith<$Res>
       String url,
       String hash,
       String source,
-      dynamic publishedAt});
+      DateTime? publishedAt});
 }
 
 /// @nodoc
@@ -496,7 +496,7 @@ class __$$SnNewsArticleImplCopyWithImpl<$Res>
       publishedAt: freezed == publishedAt
           ? _value.publishedAt
           : publishedAt // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as DateTime?,
     ));
   }
 }
@@ -544,7 +544,7 @@ class _$SnNewsArticleImpl implements _SnNewsArticle {
   @override
   final String source;
   @override
-  final dynamic publishedAt;
+  final DateTime? publishedAt;
 
   @override
   String toString() {
@@ -571,8 +571,8 @@ class _$SnNewsArticleImpl implements _SnNewsArticle {
             (identical(other.url, url) || other.url == url) &&
             (identical(other.hash, hash) || other.hash == hash) &&
             (identical(other.source, source) || other.source == source) &&
-            const DeepCollectionEquality()
-                .equals(other.publishedAt, publishedAt));
+            (identical(other.publishedAt, publishedAt) ||
+                other.publishedAt == publishedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -590,7 +590,7 @@ class _$SnNewsArticleImpl implements _SnNewsArticle {
       url,
       hash,
       source,
-      const DeepCollectionEquality().hash(publishedAt));
+      publishedAt);
 
   /// Create a copy of SnNewsArticle
   /// with the given fields replaced by the non-null parameter values.
@@ -621,7 +621,7 @@ abstract class _SnNewsArticle implements SnNewsArticle {
       required final String url,
       required final String hash,
       required final String source,
-      required final dynamic publishedAt}) = _$SnNewsArticleImpl;
+      required final DateTime? publishedAt}) = _$SnNewsArticleImpl;
 
   factory _SnNewsArticle.fromJson(Map<String, dynamic> json) =
       _$SnNewsArticleImpl.fromJson;
@@ -649,7 +649,7 @@ abstract class _SnNewsArticle implements SnNewsArticle {
   @override
   String get source;
   @override
-  dynamic get publishedAt;
+  DateTime? get publishedAt;
 
   /// Create a copy of SnNewsArticle
   /// with the given fields replaced by the non-null parameter values.

@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:html/parser.dart';
 import 'package:provider/provider.dart';
+import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/news.dart';
@@ -81,8 +83,12 @@ class _NewsScreenState extends State<NewsScreen> {
           },
           body: TabBarView(
             children: [
-              _NewsArticleListWidget(),
-              for (final source in _sources!) _NewsArticleListWidget(source: source.id),
+              _NewsArticleListWidget(allSources: _sources!),
+              for (final source in _sources!)
+                _NewsArticleListWidget(
+                  source: source.id,
+                  allSources: _sources!,
+                ),
             ],
           ),
         ),
@@ -93,8 +99,9 @@ class _NewsScreenState extends State<NewsScreen> {
 
 class _NewsArticleListWidget extends StatefulWidget {
   final String? source;
+  final List<SnNewsSource> allSources;
 
-  const _NewsArticleListWidget({this.source});
+  const _NewsArticleListWidget({this.source, required this.allSources});
 
   @override
   State<_NewsArticleListWidget> createState() => _NewsArticleListWidgetState();
@@ -154,6 +161,9 @@ class _NewsArticleListWidgetState extends State<_NewsArticleListWidget> {
             final baseUri = Uri.parse(article.url);
             final baseUrl = '${baseUri.scheme}://${baseUri.host}';
 
+            final htmlDescription = parse(article.description);
+            final date = article.publishedAt ?? article.createdAt;
+
             return Card(
               child: InkWell(
                 radius: 8,
@@ -164,21 +174,43 @@ class _NewsArticleListWidgetState extends State<_NewsArticleListWidget> {
                   );
                 },
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (article.thumbnail.isNotEmpty && !article.thumbnail.endsWith('.svg'))
                       ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                         child: AspectRatio(
                           aspectRatio: 16 / 9,
-                          child: AutoResizeUniversalImage('$baseUrl/${article.thumbnail}'),
+                          child: AutoResizeUniversalImage(
+                            article.thumbnail.startsWith('http') ? article.thumbnail : '$baseUrl/${article.thumbnail}',
+                          ),
                         ),
                       ),
-                    Text(article.title).textStyle(Theme.of(context).textTheme.titleLarge!),
-                    Text(article.description).textStyle(Theme.of(context).textTheme.bodyMedium!),
+                    const Gap(16),
+                    Text(article.title).textStyle(Theme.of(context).textTheme.titleLarge!).padding(horizontal: 16),
                     const Gap(8),
-                    Text(article.source).textStyle(Theme.of(context).textTheme.bodySmall!),
+                    Text(htmlDescription.children.map((ele) => ele.text.trim()).join())
+                        .textStyle(Theme.of(context).textTheme.bodyMedium!)
+                        .padding(horizontal: 16),
+                    const Gap(8),
+                    Row(
+                      spacing: 2,
+                      children: [
+                        Text(widget.allSources.where((x) => x.id == article.source).first.label)
+                            .textStyle(Theme.of(context).textTheme.bodySmall!),
+                      ],
+                    ).opacity(0.75).padding(horizontal: 16),
+                    Row(
+                      spacing: 2,
+                      children: [
+                        Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                        Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
+                        Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                      ],
+                    ).opacity(0.75).padding(horizontal: 16),
+                    const Gap(16),
                   ],
-                ).padding(all: 8),
+                ),
               ),
             );
           },
