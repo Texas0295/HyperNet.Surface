@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:surface/screens/abuse_report.dart';
 import 'package:surface/screens/account.dart';
+import 'package:surface/screens/account/account_settings.dart';
 import 'package:surface/screens/account/profile_page.dart';
 import 'package:surface/screens/account/profile_edit.dart';
 import 'package:surface/screens/account/publishers/publisher_edit.dart';
@@ -100,6 +101,42 @@ final _appRoutes = [
     path: '/account',
     name: 'account',
     builder: (context, state) => const AccountScreen(),
+    routes: [
+      GoRoute(
+        path: '/settings',
+        name: 'accountSettings',
+        builder: (context, state) => AccountSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/profile/edit',
+        name: 'accountProfileEdit',
+        builder: (context, state) => ProfileEditScreen(),
+      ),
+      GoRoute(
+        path: '/publishers',
+        name: 'accountPublishers',
+        builder: (context, state) => PublisherScreen(),
+      ),
+      GoRoute(
+        path: '/publishers/new',
+        name: 'accountPublisherNew',
+        builder: (context, state) => AccountPublisherNewScreen(),
+      ),
+      GoRoute(
+        path: '/publishers/edit/:name',
+        name: 'accountPublisherEdit',
+        builder: (context, state) => AccountPublisherEditScreen(
+          name: state.pathParameters['name']!,
+        ),
+      ),
+      GoRoute(
+        path: '/:name',
+        name: 'accountProfilePage',
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: UserScreen(name: state.pathParameters['name']!),
+        ),
+      ),
+    ]
   ),
   GoRoute(
     path: '/chat',
@@ -204,35 +241,6 @@ final _appRoutes = [
     path: '/reports',
     name: 'abuseReport',
     builder: (context, state) => AbuseReportScreen(),
-  ),
-  GoRoute(
-    path: '/account/profile/edit',
-    name: 'accountProfileEdit',
-    builder: (context, state) => ProfileEditScreen(),
-  ),
-  GoRoute(
-    path: '/account/publishers',
-    name: 'accountPublishers',
-    builder: (context, state) => PublisherScreen(),
-  ),
-  GoRoute(
-    path: '/account/publishers/new',
-    name: 'accountPublisherNew',
-    builder: (context, state) => AccountPublisherNewScreen(),
-  ),
-  GoRoute(
-    path: '/account/publishers/edit/:name',
-    name: 'accountPublisherEdit',
-    builder: (context, state) => AccountPublisherEditScreen(
-      name: state.pathParameters['name']!,
-    ),
-  ),
-  GoRoute(
-    path: '/account/:name',
-    name: 'accountProfilePage',
-    pageBuilder: (context, state) => NoTransitionPage(
-      child: UserScreen(name: state.pathParameters['name']!),
-    ),
   ),
   GoRoute(
     path: '/settings',

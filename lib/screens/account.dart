@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -13,6 +15,7 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
+import 'package:surface/widgets/universal_image.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -20,11 +23,39 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ua = context.watch<UserProvider>();
+    final sn = context.read<SnNetworkProvider>();
 
     return AppScaffold(
       appBar: AppBar(
         leading: AutoAppBarLeading(),
         title: Text("screenAccount").tr(),
+        flexibleSpace: ua.user != null && ua.user!.banner.isNotEmpty
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  AutoResizeUniversalImage(sn.getAttachmentUrl(ua.user!.banner), fit: BoxFit.cover),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 56 + MediaQuery.of(context).padding.top,
+                    child: ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 10,
+                          sigmaY: 10,
+                        ),
+                        child: Container(
+                          color: Colors.black.withOpacity(
+                            clampDouble(10 * 0.1, 0, 0.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : null,
         actions: [
           IconButton(
             icon: const Icon(Symbols.settings, fill: 1),
@@ -84,16 +115,6 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           }).padding(all: 20),
         ).padding(horizontal: 8, top: 16, bottom: 4),
         ListTile(
-          title: Text('accountProfileEdit').tr(),
-          subtitle: Text('accountProfileEditSubtitle').tr(),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-          leading: const Icon(Symbols.contact_page),
-          trailing: const Icon(Symbols.chevron_right),
-          onTap: () {
-            GoRouter.of(context).pushNamed('accountProfileEdit');
-          },
-        ),
-        ListTile(
           title: Text('accountPublishers').tr(),
           subtitle: Text('accountPublishersSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -111,6 +132,16 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           trailing: const Icon(Symbols.chevron_right),
           onTap: () {
             GoRouter.of(context).pushNamed('abuseReport');
+          },
+        ),
+        ListTile(
+          title: Text('accountSettings').tr(),
+          subtitle: Text('accountSettingsSubtitle').tr(),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+          leading: const Icon(Symbols.manage_accounts),
+          trailing: const Icon(Symbols.chevron_right),
+          onTap: () {
+            GoRouter.of(context).pushNamed('accountSettings');
           },
         ),
         ListTile(
@@ -132,33 +163,6 @@ class _AuthorizedAccountScreen extends StatelessWidget {
             ws.disconnect();
             await Hive.deleteFromDisk();
             await Hive.initFlutter();
-          },
-        ),
-        ListTile(
-          title: Text('accountDeletion'.tr()),
-          subtitle: Text('accountDeletionActionDescription'.tr()),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-          leading: const Icon(Symbols.person_cancel),
-          trailing: const Icon(Symbols.chevron_right),
-          onTap: () {
-            context
-                .showConfirmDialog(
-              'accountDeletion'.tr(),
-              'accountDeletionDescription'.tr(),
-            )
-                .then((value) {
-              if (!value || !context.mounted) return;
-              final sn = context.read<SnNetworkProvider>();
-              sn.client.post('/cgi/id/users/me/deletion').then((value) {
-                if (context.mounted) {
-                  context.showSnackbar('accountDeletionSubmitted'.tr());
-                }
-              }).catchError((err) {
-                if (context.mounted) {
-                  context.showErrorDialog(err);
-                }
-              });
-            });
           },
         ),
       ],

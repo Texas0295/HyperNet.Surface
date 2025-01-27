@@ -367,8 +367,8 @@ class _$SnAccountImpl extends _SnAccount {
       required this.deletedAt,
       required this.confirmedAt,
       required final List<SnAccountContact>? contacts,
-      required this.avatar,
-      required this.banner,
+      this.avatar = "",
+      this.banner = "",
       required this.description,
       required this.name,
       required this.nick,
@@ -410,8 +410,10 @@ class _$SnAccountImpl extends _SnAccount {
   }
 
   @override
+  @JsonKey()
   final String avatar;
   @override
+  @JsonKey()
   final String banner;
   @override
   final String description;
@@ -540,8 +542,8 @@ abstract class _SnAccount extends SnAccount {
       required final DateTime? deletedAt,
       required final DateTime? confirmedAt,
       required final List<SnAccountContact>? contacts,
-      required final String avatar,
-      required final String banner,
+      final String avatar,
+      final String banner,
       required final String description,
       required final String name,
       required final String nick,

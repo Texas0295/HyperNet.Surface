@@ -20,8 +20,8 @@ _$SnAccountImpl _$$SnAccountImplFromJson(Map<String, dynamic> json) =>
       contacts: (json['contacts'] as List<dynamic>?)
           ?.map((e) => SnAccountContact.fromJson(e as Map<String, dynamic>))
           .toList(),
-      avatar: json['avatar'] as String,
-      banner: json['banner'] as String,
+      avatar: json['avatar'] as String? ?? "",
+      banner: json['banner'] as String? ?? "",
       description: json['description'] as String,
       name: json['name'] as String,
       nick: json['nick'] as String,
