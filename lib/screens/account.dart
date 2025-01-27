@@ -135,6 +135,16 @@ class _AuthorizedAccountScreen extends StatelessWidget {
           },
         ),
         ListTile(
+          title: Text('factorSettings').tr(),
+          subtitle: Text('factorSettingsSubtitle').tr(),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+          leading: const Icon(Symbols.lock),
+          trailing: const Icon(Symbols.chevron_right),
+          onTap: () {
+            GoRouter.of(context).pushNamed('factorSettings');
+          },
+        ),
+        ListTile(
           title: Text('accountSettings').tr(),
           subtitle: Text('accountSettingsSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
