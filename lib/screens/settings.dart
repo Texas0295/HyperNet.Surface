@@ -82,6 +82,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('settingsAppearance').bold().fontSize(17).tr().padding(horizontal: 20, bottom: 4),
+                ListTile(
+                  title: Text('settingsDisplayLanguage').tr(),
+                  subtitle: Text('settingsDisplayLanguageDescription').tr(),
+                  contentPadding: const EdgeInsets.only(left: 24, right: 17),
+                  leading: const Icon(Symbols.translate),
+                  trailing: DropdownButtonHideUnderline(
+                    child: DropdownButton2<Locale?>(
+                      isExpanded: true,
+                      items: [
+                        ...EasyLocalization.of(context)!.supportedLocales.mapIndexed((idx, ele) {
+                          return DropdownMenuItem<Locale?>(
+                            value: ele,
+                            child: Text('${ele.languageCode}-${ele.countryCode}').fontSize(14),
+                          );
+                        }),
+                        DropdownMenuItem<Locale?>(
+                          value: null,
+                          child: Text('settingsDisplayLanguageSystem').tr().fontSize(14),
+                        ),
+                      ],
+                      value: EasyLocalization.of(context)!.currentLocale,
+                      onChanged: (Locale? value) {
+                        if (value != null) {
+                          EasyLocalization.of(context)!.setLocale(value);
+                        } else {
+                          EasyLocalization.of(context)!.resetLocale();
+                        }
+                      },
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 5,
+                        ),
+                        height: 40,
+                        width: 160,
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                      ),
+                    ),
+                  ),
+                ),
                 if (!kIsWeb)
                   ListTile(
                     title: Text('settingsBackgroundImage').tr(),
@@ -147,30 +189,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Color pickerColor = Color(_prefs.getInt(kAppColorSchemeStoreKey) ?? Colors.indigo.value);
                     final color = await showDialog<Color?>(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        content: SingleChildScrollView(
-                          child: ColorPicker(
-                            pickerColor: pickerColor,
-                            onColorChanged: (color) => pickerColor = color,
-                            enableAlpha: false,
-                            hexInputBar: true,
+                      builder: (context) =>
+                          AlertDialog(
+                            content: SingleChildScrollView(
+                              child: ColorPicker(
+                                pickerColor: pickerColor,
+                                onColorChanged: (color) => pickerColor = color,
+                                enableAlpha: false,
+                                hexInputBar: true,
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('dialogDismiss').tr(),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text('dialogConfirm').tr(),
+                                onPressed: () {
+                                  Navigator.of(context).pop(pickerColor);
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('dialogDismiss').tr(),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: const Text('dialogConfirm').tr(),
-                            onPressed: () {
-                              Navigator.of(context).pop(pickerColor);
-                            },
-                          ),
-                        ],
-                      ),
                     );
 
                     if (color == null || !context.mounted) return;
@@ -206,11 +249,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       value: _prefs.getInt(kAppColorSchemeStoreKey) == null
                           ? 1
                           : kColorSchemes.values
-                              .toList()
-                              .indexWhere((ele) => ele.value == _prefs.getInt(kAppColorSchemeStoreKey)),
+                          .toList()
+                          .indexWhere((ele) => ele.value == _prefs.getInt(kAppColorSchemeStoreKey)),
                       onChanged: (int? value) {
                         if (value != null && value != -1) {
-                          _prefs.setInt(kAppColorSchemeStoreKey, kColorSchemes.values.elementAt(value).value);
+                          _prefs.setInt(kAppColorSchemeStoreKey, kColorSchemes.values
+                              .elementAt(value)
+                              .value);
                           final th = context.read<ThemeProvider>();
                           th.reloadTheme(seedColorOverride: kColorSchemes.values.elementAt(value));
                           setState(() {});
@@ -342,7 +387,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ('Custom', _serverUrlController.text),
                       ]
                           .map(
-                            (item) => DropdownMenuItem<String>(
+                            (item) =>
+                            DropdownMenuItem<String>(
                               value: item.$2,
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -354,7 +400,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ],
                               ),
                             ),
-                          )
+                      )
                           .toList(),
                       value: _serverUrlController.text,
                       onChanged: (String? value) {
@@ -409,11 +455,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       isExpanded: true,
                       items: kImageQualityLevel.entries
                           .map(
-                            (item) => DropdownMenuItem<FilterQuality>(
+                            (item) =>
+                            DropdownMenuItem<FilterQuality>(
                               value: item.value,
                               child: Text(item.key).tr().fontSize(14),
                             ),
-                          )
+                      )
                           .toList(),
                       onChanged: (FilterQuality? value) {
                         if (value == null) return;

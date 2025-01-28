@@ -196,6 +196,9 @@
     "other": "{} 条评论"
   },
   "settingsAppearance": "外观",
+  "settingsDisplayLanguage": "显示语言",
+  "settingsDisplayLanguageDescription": "设置应用程序使用的语言",
+  "settingsDisplayLanguageSystem": "跟随系统",
   "settingsBackgroundImage": "背景图片",
   "settingsBackgroundImageDescription": "设置应用全局生效的的背景图片。",
   "settingsBackgroundImageClear": "清除现存背景图",

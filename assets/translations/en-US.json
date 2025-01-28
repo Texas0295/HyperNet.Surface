@@ -199,6 +199,9 @@
     "other": "{} comments"
   },
   "settingsAppearance": "Appearance",
+  "settingsDisplayLanguage": "Display Language",
+  "settingsDisplayLanguageDescription": "Set the application language.",
+  "settingsDisplayLanguageSystem": "Follow System",
   "settingsAppBarTransparent": "Transparent App Bar",
   "settingsAppBarTransparentDescription": "Enable transparent effect for the app bar.",
   "settingsDrawerPreferCollapse": "Prefer Drawer Collapse",
