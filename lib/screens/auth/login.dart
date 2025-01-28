@@ -7,17 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/screens/account/factor_settings.dart';
 import 'package:surface/types/auth.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../providers/websocket.dart';
-
-final Map<int, (String label, IconData icon, bool isOtp)> _factorLabelMap = {
-  0: ('authFactorPassword'.tr(), Symbols.password, false),
-  1: ('authFactorEmail'.tr(), Symbols.email, true),
-};
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -212,7 +208,7 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
           controller: _passwordController,
           obscureText: true,
           autofillHints: [
-            (_factorLabelMap[widget.factor!.type]?.$3 ?? true) ? AutofillHints.password : AutofillHints.oneTimeCode
+            widget.factor!.type == 0 ? AutofillHints.password : AutofillHints.oneTimeCode
           ],
           decoration: InputDecoration(
             isDense: true,
@@ -328,10 +324,10 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
                           ),
                         ),
                         secondary: Icon(
-                          _factorLabelMap[x.type]?.$2 ?? Symbols.question_mark,
+                          kFactorTypes[x.type]?.$3 ?? Symbols.question_mark,
                         ),
                         title: Text(
-                          _factorLabelMap[x.type]?.$1 ?? 'unknown'.tr(),
+                          kFactorTypes[x.type]?.$1 ?? 'unknown'.tr(),
                         ),
                         enabled: !widget.ticket!.factorTrail.contains(x.id),
                         value: _factorPicked == x.id,

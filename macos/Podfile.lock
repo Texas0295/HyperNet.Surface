@@ -22,14 +22,14 @@ PODS:
   - Firebase/Messaging (11.6.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.6.0)
-  - firebase_analytics (11.4.0):
+  - firebase_analytics (11.4.1):
     - Firebase/Analytics (= 11.6.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_core (3.10.0):
+  - firebase_core (3.10.1):
     - Firebase/CoreOnly (~> 11.6.0)
     - FlutterMacOS
-  - firebase_messaging (15.2.0):
+  - firebase_messaging (15.2.1):
     - Firebase/CoreOnly (~> 11.6.0)
     - Firebase/Messaging (~> 11.6.0)
     - firebase_core
@@ -296,9 +296,9 @@ SPEC CHECKSUMS:
   file_saver: 44e6fbf666677faf097302460e214e977fdd977b
   file_selector_macos: cc3858c981fe6889f364731200d6232dac1d812d
   Firebase: 374a441a91ead896215703a674d58cdb3e9d772b
-  firebase_analytics: 5249f87da6fed852901581aab2602e0280ec2fdb
-  firebase_core: 6d9bb8b0ea817e8fe0d928177d42275b45fdba6f
-  firebase_messaging: ae8e88b586e4d50abc7cac5bacf74d21967fd226
+  firebase_analytics: 91efc58e8e37964469fdd59ad11ba36bc97e75d6
+  firebase_core: 75e003524565fb5bd80c9960bc5892e8475821cd
+  firebase_messaging: 082a385eb98b5bb843a566cb30404859c4bd6e25
   FirebaseAnalytics: 7114c698cac995602e3b1b96663473e50d54d6e7
   FirebaseCore: 48b0dd707581cf9c1a1220da68223fb0a562afaa
   FirebaseCoreInternal: d98ab91e2d80a56d7b246856a8885443b302c0c2

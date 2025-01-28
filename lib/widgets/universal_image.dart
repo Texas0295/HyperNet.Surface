@@ -5,10 +5,9 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
+import 'package:surface/providers/config.dart';
 // Keep this import to make the web image render work
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
-import 'package:surface/providers/config.dart';
 
 class UniversalImage extends StatelessWidget {
   final String url;

@@ -89,6 +89,8 @@
   },
   "loginEnterPassword": "验证代码",
   "loginSuccess": "登录为 {}",
+  "authFactorDelete": "删除验证因子",
+  "authFactorDeleteDescription": "你确定要删除 {} 验证因子吗？",
   "authFactorPassword": "密码",
   "authFactorPasswordDescription": "注册时选择设置的密码。",
   "authFactorEmail": "电邮一次性验证码",
@@ -576,5 +578,8 @@
   "newsReadingFromReader": "你正在从 HyperNet.Reader 阅读文章",
   "newsReadingFromOriginal": "你正在阅读原始文章",
   "newsDisclaimer": "本文由 HyperNet.Reader 从互联网上获取，我们不担保其内容的真实性，请自行判断。本文章的所有内容版权归原作者所有。",
-  "newsToday": "快讯"
+  "newsToday": "快讯",
+  "totpPostSetup": "还有一件事",
+  "totpPostSetupDescription": "使用 Google Authenticator, Microsoft Authenticator, 1Password, Authy, Bitwarden 或其他支持 TOTP 的验证器扫描本 QR Code 来添加。",
+  "totpNeverShare": "永远不要分享这个 QR Code"
 }

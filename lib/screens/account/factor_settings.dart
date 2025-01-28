@@ -1,8 +1,10 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/auth.dart';
@@ -10,7 +12,7 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 
-final Map<int, (String, String, IconData)> _kFactorTypes = {
+final Map<int, (String, String, IconData)> kFactorTypes = {
   0: ('authFactorPassword', 'authFactorPasswordDescription', Symbols.password),
   1: ('authFactorEmail', 'authFactorEmailDescription', Symbols.email),
   2: ('authFactorTOTP', 'authFactorTOTPDescription', Symbols.timer),
@@ -25,10 +27,12 @@ class FactorSettingsScreen extends StatefulWidget {
 }
 
 class _FactorSettingsScreenState extends State<FactorSettingsScreen> {
+  bool _isBusy = false;
   List<SnAuthFactor>? _factors;
 
   Future<void> _fetchFactors() async {
     try {
+      setState(() => _isBusy = true);
       final sn = context.read<SnNetworkProvider>();
       final resp = await sn.client.get('/cgi/id/users/me/factors');
       _factors = List<SnAuthFactor>.from(
@@ -38,7 +42,7 @@ class _FactorSettingsScreenState extends State<FactorSettingsScreen> {
       if (!mounted) return;
       context.showErrorDialog(err);
     } finally {
-      setState(() {});
+      setState(() => _isBusy = false);
     }
   }
 
@@ -59,7 +63,7 @@ class _FactorSettingsScreenState extends State<FactorSettingsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LoadingIndicator(
-            isActive: _factors == null,
+            isActive: _isBusy,
           ),
           ListTile(
             title: Text('authFactorAdd').tr(),
@@ -90,10 +94,34 @@ class _FactorSettingsScreenState extends State<FactorSettingsScreen> {
                   itemBuilder: (context, idx) {
                     final ele = _factors![idx];
                     return ListTile(
-                      title: Text(_kFactorTypes[ele.type]!.$1).tr(),
-                      subtitle: Text(_kFactorTypes[ele.type]!.$2).tr(),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                      leading: Icon(_kFactorTypes[ele.type]!.$3),
+                      title: Text(kFactorTypes[ele.type]!.$1).tr(),
+                      subtitle: Text(kFactorTypes[ele.type]!.$2).tr(),
+                      contentPadding: const EdgeInsets.only(left: 24, right: 12),
+                      leading: Icon(kFactorTypes[ele.type]!.$3),
+                      trailing: IconButton(
+                        icon: const Icon(Symbols.close),
+                        onPressed: ele.type > 0
+                            ? () {
+                                context
+                                    .showConfirmDialog(
+                                  'authFactorDelete'.tr(),
+                                  'authFactorDeleteDescription'.tr(args: [kFactorTypes[ele.type]!.$1.tr()]),
+                                )
+                                    .then((val) async {
+                                  if (!val) return;
+                                  try {
+                                    if (!context.mounted) return;
+                                    final sn = context.read<SnNetworkProvider>();
+                                    await sn.client.delete('/cgi/id/users/me/factors/${ele.id}');
+                                    _fetchFactors();
+                                  } catch (err) {
+                                    if (!context.mounted) return;
+                                    context.showErrorDialog(err);
+                                  }
+                                });
+                              }
+                            : null,
+                      ),
                     );
                   },
                 ),
@@ -126,7 +154,14 @@ class _FactorNewDialogState extends State<_FactorNewDialog> {
       final resp = await sn.client.post('/cgi/id/users/me/factors', data: {
         'type': _factorType,
       });
-      // TODO show qrcode when creating totp factor
+      final factor = SnAuthFactor.fromJson(resp.data);
+      if (!mounted) return;
+      if (factor.type == 2) {
+        await showModalBottomSheet(
+          context: context,
+          builder: (context) => _FactorTotpFactorDialog(factor: factor),
+        );
+      }
       if (!mounted) return;
       Navigator.of(context).pop(true);
     } catch (err) {
@@ -154,7 +189,7 @@ class _FactorNewDialogState extends State<_FactorNewDialog> {
                 overflow: TextOverflow.ellipsis,
               ),
               value: _factorType,
-              items: _kFactorTypes.entries.map(
+              items: kFactorTypes.entries.map(
                 (ele) {
                   final contains = widget.currentlyHave.map((ele) => ele.type).contains(ele.key);
                   return DropdownMenuItem<int>(
@@ -196,6 +231,64 @@ class _FactorNewDialogState extends State<_FactorNewDialog> {
           child: Text('dialogConfirm').tr(),
         ),
       ],
+    );
+  }
+}
+
+class _FactorTotpFactorDialog extends StatelessWidget {
+  final SnAuthFactor factor;
+
+  const _FactorTotpFactorDialog({super.key, required this.factor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              'totpPostSetup',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ).tr().width(280),
+          ),
+          const Gap(4),
+          Center(
+            child: Text(
+              'totpPostSetupDescription',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
+            ).tr().width(280),
+          ),
+          const Gap(16),
+          QrImageView(
+            padding: EdgeInsets.zero,
+            data: factor.config!['url'],
+            errorCorrectionLevel: QrErrorCorrectLevel.H,
+            version: QrVersions.auto,
+            size: 160,
+            gapless: true,
+            eyeStyle: QrEyeStyle(
+              eyeShape: QrEyeShape.circle,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            dataModuleStyle: QrDataModuleStyle(
+              dataModuleShape: QrDataModuleShape.square,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          const Gap(16),
+          Center(
+            child: Text(
+              'totpNeverShare',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ).tr().bold().width(280),
+          ),
+        ],
+      ),
     );
   }
 }

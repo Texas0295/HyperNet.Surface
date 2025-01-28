@@ -106,6 +106,8 @@
   },
   "loginEnterPassword": "Enter the code",
   "loginSuccess": "Logged in as {}",
+  "authFactorDelete": "Delete Auth Factor",
+  "authFactorDeleteDescription": "Are you sure you want delete auth factor {}?",
   "authFactorPassword": "Password",
   "authFactorPasswordDescription": "The password you set when you registered.",
   "authFactorEmail": "Email verification code",
@@ -579,5 +581,8 @@
   "newsReadingFromReader": "You're reading from HyperNet.Reader",
   "newsReadingFromOriginal": "You're reading the original article",
   "newsDisclaimer": "This article is fetched from the Internet, we do not guarantee its authenticity, please judge for yourself. All content in this article belongs to the original author.",
-  "newsToday": "Today's News"
+  "newsToday": "Today's News",
+  "totpPostSetup": "One More Thing",
+  "totpPostSetupDescription": "Scan the QR Code below with Google Authenticator, Microsoft Authenticator, 1Password, Authy, Bitwarden or any of kind of authenticator app which supports TOTP.",
+  "totpNeverShare": "Never share this QR Code"
 }
