@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/screens/post/post_detail.dart';
@@ -96,6 +97,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cfg = context.read<ConfigProvider>();
+
     return AppScaffold(
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
@@ -243,8 +246,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                     openColor: Colors.transparent,
                     openElevation: 0,
-                    closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(0.75),
                     transitionType: ContainerTransitionType.fade,
+                    closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(
+                          cfg.prefs.getBool(kAppBackgroundStoreKey) == true ? 0.75 : 1,
+                        ),
                     closedShape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),

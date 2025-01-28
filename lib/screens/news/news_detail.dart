@@ -175,54 +175,57 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
           ),
           if (_articleFragment != null && _isReadingFromReader)
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 8,
-                  children: [
-                    Text(_article!.title, style: Theme.of(context).textTheme.titleLarge),
-                    Builder(builder: (context) {
-                      final htmlDescription = parse(_article!.description);
-                      return Text(
-                        htmlDescription.children.map((ele) => ele.text.trim()).join(),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      );
-                    }),
-                    Builder(builder: (context) {
-                      final date = _article!.publishedAt ?? _article!.createdAt;
-                      return Row(
-                        spacing: 2,
-                        children: [
-                          Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
-                          Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
-                          Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
-                        ],
-                      ).opacity(0.75);
-                    }),
-                    Text('newsDisclaimer').tr().textStyle(Theme.of(context).textTheme.bodySmall!).opacity(0.75),
-                    const Divider(),
-                    ..._parseHtmlToWidgets(_articleFragment!.children),
-                    const Divider(),
-                    InkWell(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Reference from original website',
-                            style: TextStyle(decoration: TextDecoration.underline),
-                          ),
-                          const Gap(4),
-                          Icon(Icons.launch, size: 16),
-                        ],
-                      ).opacity(0.85),
-                      onTap: () {
-                        launchUrlString(_article!.url);
-                      },
-                    ),
-                    Gap(MediaQuery.of(context).padding.bottom),
-                  ],
-                ).padding(horizontal: 12, vertical: 16),
-              ),
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 640),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 8,
+                    children: [
+                      Text(_article!.title, style: Theme.of(context).textTheme.titleLarge),
+                      Builder(builder: (context) {
+                        final htmlDescription = parse(_article!.description);
+                        return Text(
+                          htmlDescription.children.map((ele) => ele.text.trim()).join(),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        );
+                      }),
+                      Builder(builder: (context) {
+                        final date = _article!.publishedAt ?? _article!.createdAt;
+                        return Row(
+                          spacing: 2,
+                          children: [
+                            Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                            Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
+                            Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                          ],
+                        ).opacity(0.75);
+                      }),
+                      Text('newsDisclaimer').tr().textStyle(Theme.of(context).textTheme.bodySmall!).opacity(0.75),
+                      const Divider(),
+                      ..._parseHtmlToWidgets(_articleFragment!.children),
+                      const Divider(),
+                      InkWell(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Reference from original website',
+                              style: TextStyle(decoration: TextDecoration.underline),
+                            ),
+                            const Gap(4),
+                            Icon(Icons.launch, size: 16),
+                          ],
+                        ).opacity(0.85),
+                        onTap: () {
+                          launchUrlString(_article!.url);
+                        },
+                      ),
+                      Gap(MediaQuery.of(context).padding.bottom),
+                    ],
+                  ).padding(horizontal: 12, vertical: 16),
+                ),
+              ).center(),
             )
           else if (_article != null)
             Expanded(

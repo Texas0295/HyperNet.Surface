@@ -51,7 +51,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const List<HomeScreenDashEntry> kCards = [
+  late final List<HomeScreenDashEntry> kCards = [
     HomeScreenDashEntry(
       name: 'dashEntryRecommendation',
       child: _HomeDashRecommendationPostWidget(),
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeScreenDashEntry(
       name: 'dashEntryTodayNews',
       child: _HomeDashTodayNews(),
-      cols: 2,
+      cols: MediaQuery.of(context).size.width >= 640 ? 3 : 2,
     ),
   ];
 
@@ -293,7 +293,7 @@ class _HomeDashTodayNewsState extends State<_HomeDashTodayNews> {
                     Text(
                       _article!.title,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 18),
-                      maxLines: 2,
+                      maxLines: MediaQuery.of(context).size.width >= 640 ? 2 : 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(

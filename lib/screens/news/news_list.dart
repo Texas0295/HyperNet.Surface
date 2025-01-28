@@ -70,11 +70,16 @@ class _NewsScreenState extends State<NewsScreen> {
                 sliver: SliverAppBar(
                   leading: AutoAppBarLeading(),
                   title: Text('screenNews').tr(),
+                  floating: true,
+                  snap: true,
                   bottom: TabBar(
                     isScrollable: true,
                     tabs: [
-                      Tab(child: Text('newsAllSources'.tr())),
-                      for (final source in _sources!) Tab(child: Text(source.label)),
+                      Tab(child: Text('newsAllSources'.tr()).textColor(Theme.of(context).appBarTheme.foregroundColor)),
+                      for (final source in _sources!)
+                        Tab(
+                          child: Text(source.label).textColor(Theme.of(context).appBarTheme.foregroundColor),
+                        ),
                     ],
                   ),
                 ),
@@ -146,80 +151,87 @@ class _NewsArticleListWidgetState extends State<_NewsArticleListWidget> {
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
-      child: RefreshIndicator(
-        onRefresh: _fetchArticles,
-        child: InfiniteList(
-          isLoading: _isBusy,
-          itemCount: _articles.length,
-          hasReachedMax: _totalCount != null && _articles.length >= _totalCount!,
-          onFetchData: () {
-            _fetchArticles();
-          },
-          itemBuilder: (context, index) {
-            final article = _articles[index];
+      child: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 640),
+          child: RefreshIndicator(
+            onRefresh: _fetchArticles,
+            child: InfiniteList(
+              isLoading: _isBusy,
+              itemCount: _articles.length,
+              hasReachedMax: _totalCount != null && _articles.length >= _totalCount!,
+              onFetchData: () {
+                _fetchArticles();
+              },
+              itemBuilder: (context, index) {
+                final article = _articles[index];
 
-            final baseUri = Uri.parse(article.url);
-            final baseUrl = '${baseUri.scheme}://${baseUri.host}';
+                final baseUri = Uri.parse(article.url);
+                final baseUrl = '${baseUri.scheme}://${baseUri.host}';
 
-            final htmlDescription = parse(article.description);
-            final date = article.publishedAt ?? article.createdAt;
+                final htmlDescription = parse(article.description);
+                final date = article.publishedAt ?? article.createdAt;
 
-            return Card(
-              child: InkWell(
-                radius: 8,
-                onTap: () {
-                  GoRouter.of(context).pushNamed(
-                    'newsDetail',
-                    pathParameters: {'hash': article.hash},
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (article.thumbnail.isNotEmpty && !article.thumbnail.endsWith('.svg'))
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          topLeft: Radius.circular(8),
-                        ),
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Container(
-                            color: Theme.of(context).colorScheme.surfaceContainer,
-                            child: AutoResizeUniversalImage(
-                              article.thumbnail.startsWith('http') ? article.thumbnail : '$baseUrl/${article.thumbnail}',
+                return Card(
+                  child: InkWell(
+                    radius: 8,
+                    onTap: () {
+                      GoRouter.of(context).pushNamed(
+                        'newsDetail',
+                        pathParameters: {'hash': article.hash},
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (article.thumbnail.isNotEmpty && !article.thumbnail.endsWith('.svg'))
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(8),
+                              topLeft: Radius.circular(8),
+                            ),
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Container(
+                                color: Theme.of(context).colorScheme.surfaceContainer,
+                                child: AutoResizeUniversalImage(
+                                  article.thumbnail.startsWith('http')
+                                      ? article.thumbnail
+                                      : '$baseUrl/${article.thumbnail}',
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    const Gap(16),
-                    Text(article.title).textStyle(Theme.of(context).textTheme.titleLarge!).padding(horizontal: 16),
-                    const Gap(8),
-                    Text(htmlDescription.children.map((ele) => ele.text.trim()).join())
-                        .textStyle(Theme.of(context).textTheme.bodyMedium!)
-                        .padding(horizontal: 16),
-                    const Gap(8),
-                    Row(
-                      spacing: 2,
-                      children: [
-                        Text(widget.allSources.where((x) => x.id == article.source).first.label)
-                            .textStyle(Theme.of(context).textTheme.bodySmall!),
+                        const Gap(16),
+                        Text(article.title).textStyle(Theme.of(context).textTheme.titleLarge!).padding(horizontal: 16),
+                        const Gap(8),
+                        Text(htmlDescription.children.map((ele) => ele.text.trim()).join())
+                            .textStyle(Theme.of(context).textTheme.bodyMedium!)
+                            .padding(horizontal: 16),
+                        const Gap(8),
+                        Row(
+                          spacing: 2,
+                          children: [
+                            Text(widget.allSources.where((x) => x.id == article.source).first.label)
+                                .textStyle(Theme.of(context).textTheme.bodySmall!),
+                          ],
+                        ).opacity(0.75).padding(horizontal: 16),
+                        Row(
+                          spacing: 2,
+                          children: [
+                            Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                            Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
+                            Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                          ],
+                        ).opacity(0.75).padding(horizontal: 16),
+                        const Gap(16),
                       ],
-                    ).opacity(0.75).padding(horizontal: 16),
-                    Row(
-                      spacing: 2,
-                      children: [
-                        Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
-                        Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
-                        Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
-                      ],
-                    ).opacity(0.75).padding(horizontal: 16),
-                    const Gap(16),
-                  ],
-                ),
-              ),
-            );
-          },
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
