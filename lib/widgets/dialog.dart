@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 extension AppPromptExtension on BuildContext {
   void showSnackbar(String content, {SnackBarAction? action}) {
@@ -111,7 +113,34 @@ extension AppPromptExtension on BuildContext {
       context: this,
       builder: (ctx) => AlertDialog(
         title: Text('dialogError').tr(),
-        content: content,
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 20,
+          children: [
+            content,
+            Text.rich(
+              TextSpan(
+                text: 'needHelp'.tr(),
+                children: [
+                  TextSpan(text: ' '),
+                  TextSpan(
+                    text: 'needHelpLaunch'.tr(),
+                    style: TextStyle(
+                      color: Theme.of(ctx).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Theme.of(ctx).colorScheme.primary,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrlString('https://kb.solsynth.dev/solar-network');
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -128,17 +157,7 @@ extension ByteFormatter on int {
     if (this == 0) return '0 Bytes';
     const k = 1024;
     final dm = decimals < 0 ? 0 : decimals;
-    final sizes = [
-      'Bytes',
-      'KiB',
-      'MiB',
-      'GiB',
-      'TiB',
-      'PiB',
-      'EiB',
-      'ZiB',
-      'YiB'
-    ];
+    final sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
     final i = (math.log(this) / math.log(k)).floor().toInt();
     return '${(this / math.pow(k, i)).toStringAsFixed(dm)} ${sizes[i]}';
   }
