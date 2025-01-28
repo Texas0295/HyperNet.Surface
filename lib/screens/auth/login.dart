@@ -208,7 +208,9 @@ class _LoginCheckScreenState extends State<_LoginCheckScreen> {
           controller: _passwordController,
           obscureText: true,
           autofillHints: [
-            widget.factor!.type == 0 ? AutofillHints.password : AutofillHints.oneTimeCode
+            widget.factor!.type == 0
+                ? AutofillHints.password
+                : AutofillHints.oneTimeCode
           ],
           decoration: InputDecoration(
             isDense: true,
@@ -263,7 +265,8 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
   bool _isBusy = false;
   int? _factorPicked;
 
-  Color get _unFocusColor => Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.75).round());
+  Color get _unFocusColor =>
+      Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.75).round());
 
   void _performGetFactorCode() async {
     if (_factorPicked == null) return;
@@ -327,8 +330,8 @@ class _LoginPickerScreenState extends State<_LoginPickerScreen> {
                           kFactorTypes[x.type]?.$3 ?? Symbols.question_mark,
                         ),
                         title: Text(
-                          kFactorTypes[x.type]?.$1 ?? 'unknown'.tr(),
-                        ),
+                          kFactorTypes[x.type]?.$1 ?? 'unknown',
+                        ).tr(),
                         enabled: !widget.ticket!.factorTrail.contains(x.id),
                         value: _factorPicked == x.id,
                         onChanged: (value) {
@@ -404,11 +407,13 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
-      final lookupResp = await sn.client.get('/cgi/id/users/lookup?probe=$username');
+      final lookupResp =
+          await sn.client.get('/cgi/id/users/lookup?probe=$username');
       await sn.client.post('/cgi/id/users/me/password-reset', data: {
         'user_id': lookupResp.data['id'],
       });
-      if (mounted) context.showModalDialog('done'.tr(), 'signinResetPasswordSent'.tr());
+      if (mounted)
+        context.showModalDialog('done'.tr(), 'signinResetPasswordSent'.tr());
     } catch (err) {
       if (mounted) context.showErrorDialog(err);
     } finally {
@@ -433,7 +438,8 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
       widget.onTicket(result.ticket);
 
       // Pull factors
-      final factorResp = await sn.client.get('/cgi/id/auth/factors', queryParameters: {
+      final factorResp =
+          await sn.client.get('/cgi/id/auth/factors', queryParameters: {
         'ticketId': result.ticket!.id.toString(),
       });
       widget.onFactor(
@@ -527,7 +533,10 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
                     'termAcceptNextWithAgree'.tr(),
                     textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.75).round()),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withAlpha((255 * 0.75).round()),
                         ),
                   ),
                   Material(
