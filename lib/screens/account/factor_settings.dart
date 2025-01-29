@@ -238,7 +238,7 @@ class _FactorNewDialogState extends State<_FactorNewDialog> {
 class _FactorTotpFactorDialog extends StatelessWidget {
   final SnAuthFactor factor;
 
-  const _FactorTotpFactorDialog({super.key, required this.factor});
+  const _FactorTotpFactorDialog({required this.factor});
 
   @override
   Widget build(BuildContext context) {

@@ -18,6 +18,7 @@
   "screenAbuseReport": "Abuse Reports",
   "screenSettings": "Settings",
   "screenAccountSettings": "Account Settings",
+  "screenFactorSettings": "Auth Factors",
   "screenAccountWallet": "Wallet",
   "screenNews": "News",
   "screenAlbum": "Album",
@@ -30,7 +31,6 @@
   "screenNotification": "Notification",
   "screenPostSearch": "Search Posts",
   "screenFriend": "Friends",
-  "screenFactorSettings": "Auth Factors",
   "dialogOkay": "Okay",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -592,5 +592,14 @@
   "totpPostSetupDescription": "Scan the QR Code below with Google Authenticator, Microsoft Authenticator, 1Password, Authy, Bitwarden or any of kind of authenticator app which supports TOTP.",
   "totpNeverShare": "Never share this QR Code",
   "needHelp": "Need Help?",
-  "needHelpLaunch": "Check out our Goatpedia!"
+  "needHelpLaunch": "Check out our Goatpedia!",
+  "walletCreate": "Create a Wallet",
+  "walletCreateSubtitle": "Create a wallet to start using Solar Coins",
+  "walletCreateTerms": "By creating a wallet, you agree to Solar Wallet's Extra Terms of Service.",
+  "walletCreatePassword": "Set a payment password for your new wallet below",
+  "walletCurrencyShort": "Credit",
+  "walletCurrency": {
+    "one": "{} Social Credit Point",
+    "other": "{} Social Credit Points"
+  }
 }

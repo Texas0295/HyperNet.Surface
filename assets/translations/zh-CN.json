@@ -16,6 +16,7 @@
   "screenAbuseReport": "滥用检举",
   "screenSettings": "设置",
   "screenAccountSettings": "账号设置",
+  "screenFactorSettings": "验证因子",
   "screenAccountWallet": "钱包",
   "screenNews": "新闻",
   "screenAlbum": "相册",
@@ -589,5 +590,10 @@
   "totpPostSetupDescription": "使用 Google Authenticator, Microsoft Authenticator, 1Password, Authy, Bitwarden 或其他支持 TOTP 的验证器扫描本 QR Code 来添加。",
   "totpNeverShare": "永远不要分享这个 QR Code",
   "needHelp": "需要帮助？",
-  "needHelpLaunch": "查看我们的山羊维基！"
+  "needHelpLaunch": "查看我们的山羊维基！",
+  "walletCurrencyShort": "信用点",
+  "walletCurrency": {
+    "one": "{} 社会信用点",
+    "other": "{} 社会信用点"
+  }
 }

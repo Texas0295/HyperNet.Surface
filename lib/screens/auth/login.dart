@@ -412,8 +412,9 @@ class _LoginLookupScreenState extends State<_LoginLookupScreen> {
       await sn.client.post('/cgi/id/users/me/password-reset', data: {
         'user_id': lookupResp.data['id'],
       });
-      if (mounted)
+      if (mounted) {
         context.showModalDialog('done'.tr(), 'signinResetPasswordSent'.tr());
+      }
     } catch (err) {
       if (mounted) context.showErrorDialog(err);
     } finally {

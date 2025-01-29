@@ -33,6 +33,7 @@ import 'package:surface/screens/realm/manage.dart';
 import 'package:surface/screens/realm/realm_detail.dart';
 import 'package:surface/screens/settings.dart';
 import 'package:surface/screens/sharing.dart';
+import 'package:surface/screens/wallet.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/about.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
@@ -99,6 +100,11 @@ final _appRoutes = [
     ],
   ),
   GoRoute(path: '/account', name: 'account', builder: (context, state) => const AccountScreen(), routes: [
+    GoRoute(
+      path: '/wallet',
+      name: 'accountWallet',
+      builder: (context, state) => const WalletScreen(),
+    ),
     GoRoute(
       path: '/settings',
       name: 'accountSettings',
