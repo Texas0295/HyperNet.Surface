@@ -38,9 +38,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   static const Map<String, IconData> kNotificationTopicIcons = {
     'passport.security.alert': Symbols.gpp_maybe,
+    'passport.security.otp': Symbols.password,
     'interactive.subscription': Symbols.subscriptions,
     'interactive.feedback': Symbols.add_reaction,
     'messaging.callStart': Symbols.call_received,
+    'wallet.transaction.new': Symbols.receipt,
   };
 
   Future<void> _fetchNotifications() async {

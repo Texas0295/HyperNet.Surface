@@ -591,9 +591,12 @@
   "totpNeverShare": "永远不要分享这个 QR Code",
   "needHelp": "需要帮助？",
   "needHelpLaunch": "查看我们的山羊维基！",
-  "walletCurrencyShort": "信用点",
+  "walletCreate": "创建钱包",
+  "walletCreateSubtitle": "创建于一个钱包来开始使用源点。",
+  "walletCreatePassword": "在下方设置你的付款密码",
+  "walletCurrencyShort": "点",
   "walletCurrency": {
-    "one": "{} 社会信用点",
-    "other": "{} 社会信用点"
+    "one": "{} 源点",
+    "other": "{} 源点"
   }
 }

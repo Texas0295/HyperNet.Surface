@@ -265,8 +265,6 @@ class _CreateWalletWidgetState extends State<_CreateWalletWidget> {
               const Gap(12),
               Text('walletCreate', style: Theme.of(context).textTheme.titleLarge).tr(),
               Text('walletCreateSubtitle', style: Theme.of(context).textTheme.bodyMedium).tr(),
-              const Gap(4),
-              Text('walletCreateTerms', style: Theme.of(context).textTheme.bodySmall).tr(),
               const Gap(8),
               Align(
                 alignment: Alignment.centerRight,

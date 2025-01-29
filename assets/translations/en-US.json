@@ -594,12 +594,11 @@
   "needHelp": "Need Help?",
   "needHelpLaunch": "Check out our Goatpedia!",
   "walletCreate": "Create a Wallet",
-  "walletCreateSubtitle": "Create a wallet to start using Solar Coins",
-  "walletCreateTerms": "By creating a wallet, you agree to Solar Wallet's Extra Terms of Service.",
+  "walletCreateSubtitle": "Create a wallet to start using Source Points",
   "walletCreatePassword": "Set a payment password for your new wallet below",
-  "walletCurrencyShort": "Credit",
+  "walletCurrencyShort": "SRC",
   "walletCurrency": {
-    "one": "{} Social Credit Point",
-    "other": "{} Social Credit Points"
+    "one": "{} Source Point",
+    "other": "{} Source Points"
   }
 }
