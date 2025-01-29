@@ -86,7 +86,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   Text('walletCurrency'.plural(double.parse(_wallet!.balance))),
                 ],
               ).padding(horizontal: 20, vertical: 24),
-            ),
+            ).padding(horizontal: 8, top: 16, bottom: 4),
           if (_wallet != null) Expanded(child: _WalletTransactionList(myself: _wallet!)),
         ],
       ),

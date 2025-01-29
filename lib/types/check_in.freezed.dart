@@ -26,6 +26,7 @@ mixin _$SnCheckInRecord {
   DateTime? get deletedAt => throw _privateConstructorUsedError;
   int get resultTier => throw _privateConstructorUsedError;
   int get resultExperience => throw _privateConstructorUsedError;
+  double get resultCoin => throw _privateConstructorUsedError;
   List<int> get resultModifiers => throw _privateConstructorUsedError;
   int get accountId => throw _privateConstructorUsedError;
 
@@ -52,6 +53,7 @@ abstract class $SnCheckInRecordCopyWith<$Res> {
       DateTime? deletedAt,
       int resultTier,
       int resultExperience,
+      double resultCoin,
       List<int> resultModifiers,
       int accountId});
 }
@@ -77,6 +79,7 @@ class _$SnCheckInRecordCopyWithImpl<$Res, $Val extends SnCheckInRecord>
     Object? deletedAt = freezed,
     Object? resultTier = null,
     Object? resultExperience = null,
+    Object? resultCoin = null,
     Object? resultModifiers = null,
     Object? accountId = null,
   }) {
@@ -105,6 +108,10 @@ class _$SnCheckInRecordCopyWithImpl<$Res, $Val extends SnCheckInRecord>
           ? _value.resultExperience
           : resultExperience // ignore: cast_nullable_to_non_nullable
               as int,
+      resultCoin: null == resultCoin
+          ? _value.resultCoin
+          : resultCoin // ignore: cast_nullable_to_non_nullable
+              as double,
       resultModifiers: null == resultModifiers
           ? _value.resultModifiers
           : resultModifiers // ignore: cast_nullable_to_non_nullable
@@ -132,6 +139,7 @@ abstract class _$$SnCheckInRecordImplCopyWith<$Res>
       DateTime? deletedAt,
       int resultTier,
       int resultExperience,
+      double resultCoin,
       List<int> resultModifiers,
       int accountId});
 }
@@ -155,6 +163,7 @@ class __$$SnCheckInRecordImplCopyWithImpl<$Res>
     Object? deletedAt = freezed,
     Object? resultTier = null,
     Object? resultExperience = null,
+    Object? resultCoin = null,
     Object? resultModifiers = null,
     Object? accountId = null,
   }) {
@@ -183,6 +192,10 @@ class __$$SnCheckInRecordImplCopyWithImpl<$Res>
           ? _value.resultExperience
           : resultExperience // ignore: cast_nullable_to_non_nullable
               as int,
+      resultCoin: null == resultCoin
+          ? _value.resultCoin
+          : resultCoin // ignore: cast_nullable_to_non_nullable
+              as double,
       resultModifiers: null == resultModifiers
           ? _value._resultModifiers
           : resultModifiers // ignore: cast_nullable_to_non_nullable
@@ -205,6 +218,7 @@ class _$SnCheckInRecordImpl extends _SnCheckInRecord {
       required this.deletedAt,
       required this.resultTier,
       required this.resultExperience,
+      required this.resultCoin,
       required final List<int> resultModifiers,
       required this.accountId})
       : _resultModifiers = resultModifiers,
@@ -225,6 +239,8 @@ class _$SnCheckInRecordImpl extends _SnCheckInRecord {
   final int resultTier;
   @override
   final int resultExperience;
+  @override
+  final double resultCoin;
   final List<int> _resultModifiers;
   @override
   List<int> get resultModifiers {
@@ -238,7 +254,7 @@ class _$SnCheckInRecordImpl extends _SnCheckInRecord {
 
   @override
   String toString() {
-    return 'SnCheckInRecord(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, resultTier: $resultTier, resultExperience: $resultExperience, resultModifiers: $resultModifiers, accountId: $accountId)';
+    return 'SnCheckInRecord(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, resultTier: $resultTier, resultExperience: $resultExperience, resultCoin: $resultCoin, resultModifiers: $resultModifiers, accountId: $accountId)';
   }
 
   @override
@@ -257,6 +273,8 @@ class _$SnCheckInRecordImpl extends _SnCheckInRecord {
                 other.resultTier == resultTier) &&
             (identical(other.resultExperience, resultExperience) ||
                 other.resultExperience == resultExperience) &&
+            (identical(other.resultCoin, resultCoin) ||
+                other.resultCoin == resultCoin) &&
             const DeepCollectionEquality()
                 .equals(other._resultModifiers, _resultModifiers) &&
             (identical(other.accountId, accountId) ||
@@ -273,6 +291,7 @@ class _$SnCheckInRecordImpl extends _SnCheckInRecord {
       deletedAt,
       resultTier,
       resultExperience,
+      resultCoin,
       const DeepCollectionEquality().hash(_resultModifiers),
       accountId);
 
@@ -301,6 +320,7 @@ abstract class _SnCheckInRecord extends SnCheckInRecord {
       required final DateTime? deletedAt,
       required final int resultTier,
       required final int resultExperience,
+      required final double resultCoin,
       required final List<int> resultModifiers,
       required final int accountId}) = _$SnCheckInRecordImpl;
   const _SnCheckInRecord._() : super._();
@@ -320,6 +340,8 @@ abstract class _SnCheckInRecord extends SnCheckInRecord {
   int get resultTier;
   @override
   int get resultExperience;
+  @override
+  double get resultCoin;
   @override
   List<int> get resultModifiers;
   @override

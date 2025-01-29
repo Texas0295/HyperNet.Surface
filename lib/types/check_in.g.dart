@@ -17,6 +17,7 @@ _$SnCheckInRecordImpl _$$SnCheckInRecordImplFromJson(
           : DateTime.parse(json['deleted_at'] as String),
       resultTier: (json['result_tier'] as num).toInt(),
       resultExperience: (json['result_experience'] as num).toInt(),
+      resultCoin: (json['result_coin'] as num).toDouble(),
       resultModifiers: (json['result_modifiers'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$SnCheckInRecordImplToJson(
       'deleted_at': instance.deletedAt?.toIso8601String(),
       'result_tier': instance.resultTier,
       'result_experience': instance.resultExperience,
+      'result_coin': instance.resultCoin,
       'result_modifiers': instance.resultModifiers,
       'account_id': instance.accountId,
     };

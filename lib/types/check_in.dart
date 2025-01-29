@@ -16,6 +16,7 @@ class SnCheckInRecord with _$SnCheckInRecord {
     required DateTime? deletedAt,
     required int resultTier,
     required int resultExperience,
+    required double resultCoin,
     required List<int> resultModifiers,
     required int accountId,
   }) = _SnCheckInRecord;

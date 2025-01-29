@@ -16,6 +16,8 @@
   "screenAbuseReport": "濫用檢舉",
   "screenSettings": "設置",
   "screenAccountSettings": "賬號設置",
+  "screenFactorSettings": "驗證因子",
+  "screenAccountWallet": "錢包",
   "screenNews": "新聞",
   "screenAlbum": "相冊",
   "screenChat": "聊天",
@@ -113,6 +115,8 @@
   "accountSettingsSubtitle": "管理你的帳號並讓它更好的服務你。",
   "accountProfileEdit": "編輯資料",
   "accountProfileEditSubtitle": "使你的 Solarpass 賬户更像你。",
+  "accountWallet": "錢包",
+  "accountWalletSubtitle": "查看你的餘額和交易記錄。",
   "factorSettings": "驗證因子",
   "factorSettingsSubtitle": "管理你的登陸驗證方式。",
   "accountProfileEditApplied": "個人資料修改已被應用。",
@@ -193,6 +197,9 @@
     "other": "{} 條評論"
   },
   "settingsAppearance": "外觀",
+  "settingsDisplayLanguage": "顯示語言",
+  "settingsDisplayLanguageDescription": "設置應用程序使用的語言",
+  "settingsDisplayLanguageSystem": "跟隨系統",
   "settingsBackgroundImage": "背景圖片",
   "settingsBackgroundImageDescription": "設置應用全局生效的的背景圖片。",
   "settingsBackgroundImageClear": "清除現存背景圖",
@@ -581,5 +588,15 @@
   "newsToday": "快訊",
   "totpPostSetup": "還有一件事",
   "totpPostSetupDescription": "使用 Google Authenticator, Microsoft Authenticator, 1Password, Authy, Bitwarden 或其他支持 TOTP 的驗證器掃描本 QR Code 來添加。",
-  "totpNeverShare": "永遠不要分享這個 QR Code"
+  "totpNeverShare": "永遠不要分享這個 QR Code",
+  "needHelp": "需要幫助？",
+  "needHelpLaunch": "查看我們的山羊維基！",
+  "walletCreate": "創建錢包",
+  "walletCreateSubtitle": "創建於一個錢包來開始使用源點。",
+  "walletCreatePassword": "在下方設置你的付款密碼",
+  "walletCurrencyShort": "源點",
+  "walletCurrency": {
+    "one": "{} 源點",
+    "other": "{} 源點"
+  }
 }

@@ -302,20 +302,18 @@ class _HomeDashTodayNewsState extends State<_HomeDashTodayNews> {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    Builder(
-                      builder: (context) {
-                        final date = _article!.publishedAt ?? _article!.createdAt;
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          spacing: 2,
-                          children: [
-                            Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
-                            Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
-                            Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
-                          ],
-                        ).opacity(0.75);
-                      }
-                    ),
+                    Builder(builder: (context) {
+                      final date = _article!.publishedAt ?? _article!.createdAt;
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 2,
+                        children: [
+                          Text(DateFormat().format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                          Text(' · ').textStyle(Theme.of(context).textTheme.bodySmall!).bold(),
+                          Text(RelativeTime(context).format(date)).textStyle(Theme.of(context).textTheme.bodySmall!),
+                        ],
+                      ).opacity(0.75);
+                    }),
                   ],
                 ).padding(horizontal: 16),
                 onTap: () {
@@ -515,6 +513,11 @@ class _HomeDashCheckInWidgetState extends State<_HomeDashCheckInWidget> {
                           '+${_todayRecord!.resultExperience} EXP',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
+                        if (_todayRecord!.resultCoin >= 0)
+                          Text(
+                            '+${_todayRecord!.resultCoin} ${'walletCurrencyShort'.tr()}',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          )
                       ],
                     ),
             ),
