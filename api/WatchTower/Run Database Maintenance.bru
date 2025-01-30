@@ -1,0 +1,11 @@
+meta {
+  name: Run Database Maintenance
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{endpoint}}/wt/maintenance/database
+  body: none
+  auth: inherit
+}
