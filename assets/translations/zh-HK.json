@@ -552,6 +552,9 @@
   "postImageShareAds": "來 Solar Network 探索更多有趣帖子",
   "postShare": "分享",
   "postShareImage": "分享帖圖",
+  "postGetInsight": "獲取見解",
+  "postGetInsightTitle": "AI 見解",
+  "postGetInsightDescription": "AI 可能會出錯，檢查信息真實性。",
   "appInitializing": "正在初始化",
   "poweredBy": "由 {} 提供支持",
   "shareIntent": "分享",
@@ -598,5 +601,6 @@
   "walletCurrency": {
     "one": "{} 源點",
     "other": "{} 源點"
-  }
+  },
+  "aiThinkingProcess": "AI 思考過程"
 }

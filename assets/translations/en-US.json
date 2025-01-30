@@ -554,6 +554,9 @@
   "postImageShareAds": "Explore posts on the Solar Network",
   "postShare": "Share",
   "postShareImage": "Share via Image",
+  "postGetInsight": "Get Insight",
+  "postGetInsightTitle": "AI Insight",
+  "postGetInsightDescription": "AI may make mistakes, check important information.",
   "appInitializing": "Initializing",
   "poweredBy": "Powered by {}",
   "shareIntent": "Share",
@@ -600,5 +603,6 @@
   "walletCurrency": {
     "one": "{} Source Point",
     "other": "{} Source Points"
-  }
+  },
+  "aiThinkingProcess": "AI Thinking Process"
 }

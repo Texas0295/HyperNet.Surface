@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +36,7 @@ import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/post/post_reaction.dart';
 import 'package:surface/widgets/post/publisher_popover.dart';
 import 'package:surface/widgets/universal_image.dart';
+import 'package:xml/xml.dart';
 
 class PostItem extends StatelessWidget {
   final SnPost data;
@@ -818,6 +821,22 @@ class _PostContentHeader extends StatelessWidget {
               ),
               const PopupMenuDivider(),
               PopupMenuItem(
+                child: Row(
+                  children: [
+                    const Icon(Symbols.book_4_spark),
+                    const Gap(16),
+                    Text('postGetInsight').tr(),
+                  ],
+                ),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => _PostGetInsightSheet(postId: data.id),
+                  );
+                },
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
                 onTap: onShare,
                 child: Row(
                   children: [
@@ -1177,6 +1196,99 @@ class _PostAbuseReportDialogState extends State<_PostAbuseReportDialog> {
           onPressed: _isBusy ? null : _performAction,
           child: Text('submit').tr(),
         ),
+      ],
+    );
+  }
+}
+
+class _PostGetInsightSheet extends StatefulWidget {
+  final int postId;
+
+  const _PostGetInsightSheet({required this.postId});
+
+  @override
+  State<_PostGetInsightSheet> createState() => _PostGetInsightSheetState();
+}
+
+class _PostGetInsightSheetState extends State<_PostGetInsightSheet> {
+  String? _response;
+  String? _thinkingProcess;
+
+  Future<void> _fetchResponse() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/co/posts/${widget.postId}/insight',
+          options: Options(
+            sendTimeout: const Duration(minutes: 10),
+            receiveTimeout: const Duration(minutes: 10),
+          ));
+      final out = resp.data['response'] as String;
+      final document = XmlDocument.parse(out);
+      _thinkingProcess = document.getElement('think')?.innerText.trim();
+      RegExp cleanThinkingRegExp = RegExp(r'<think>[\s\S]*?</think>');
+      setState(() => _response = out.replaceAll(cleanThinkingRegExp, '').trim());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchResponse();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(Symbols.book_4_spark, size: 24),
+            const Gap(16),
+            Text('postGetInsightTitle', style: Theme.of(context).textTheme.titleLarge).tr(),
+          ],
+        ).padding(horizontal: 20, top: 16, bottom: 12),
+        const Gap(4),
+        Text('postGetInsightDescription', style: Theme.of(context).textTheme.bodySmall).tr().padding(horizontal: 20),
+        const Gap(4),
+        if (_response == null)
+          Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        else
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (_thinkingProcess != null && _thinkingProcess!.isNotEmpty)
+                    ExpansionTile(
+                      leading: const Icon(Symbols.info),
+                      title: Text('aiThinkingProcess'.tr()),
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 20),
+                      collapsedBackgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      minTileHeight: 32,
+                      children: [
+                        SelectableText(
+                          _thinkingProcess!,
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.italic),
+                        ).padding(horizontal: 20, vertical: 8),
+                      ],
+                    ).padding(vertical: 8),
+                  SelectionArea(
+                    child: MarkdownTextContent(
+                      content: _response!,
+                    ),
+                  ).padding(horizontal: 20, top: 8),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
