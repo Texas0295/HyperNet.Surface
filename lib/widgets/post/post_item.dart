@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -188,6 +189,7 @@ class PostItem extends StatelessWidget {
               ),
             ),
             Text('postArticle').tr().fontSize(13).opacity(0.75).padding(horizontal: 24, bottom: 8),
+            _PostFeaturedComment(data: data, maxWidth: maxWidth).padding(horizontal: 12),
             _PostBottomAction(
               data: data,
               showComments: showComments,
@@ -269,6 +271,7 @@ class PostItem extends StatelessWidget {
           LinkPreviewWidget(
             text: data.body['content'],
           ).padding(horizontal: 4),
+        _PostFeaturedComment(data: data, maxWidth: maxWidth).padding(horizontal: 12),
         Container(
           constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
           child: Column(
@@ -1121,6 +1124,95 @@ class _PostTruncatedHint extends StatelessWidget {
         ],
       ).opacity(0.75),
     );
+  }
+}
+
+class _PostFeaturedComment extends StatefulWidget {
+  final SnPost data;
+  final double? maxWidth;
+
+  const _PostFeaturedComment({required this.data, this.maxWidth});
+
+  @override
+  State<_PostFeaturedComment> createState() => _PostFeaturedCommentState();
+}
+
+class _PostFeaturedCommentState extends State<_PostFeaturedComment> {
+  SnPost? _featuredComment;
+
+  Future<void> _fetchComments() async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/co/posts/${widget.data.id}/replies/featured', queryParameters: {
+        'take': 1,
+      });
+      setState(() => _featuredComment = SnPost.fromJson(resp.data[0]));
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.data.metric.replyCount > 0) {
+      _fetchComments();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.data.metric.replyCount == 0) return const SizedBox.shrink();
+    if (_featuredComment == null) return const SizedBox.shrink();
+
+    return AnimateWidgetExtensions(Container(
+      constraints: BoxConstraints(maxWidth: widget.maxWidth ?? double.infinity),
+      margin: const EdgeInsets.only(top: 8),
+      width: double.infinity,
+      child: Material(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        child: InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              useRootNavigator: true,
+              builder: (context) => PostCommentListPopup(
+                postId: widget.data.id,
+                commentCount: widget.data.metric.replyCount,
+              ),
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('postFeaturedComment', style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 16)).tr(),
+              const Gap(4),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundImage: UniversalImage.provider(
+                      _featuredComment!.publisher.avatar,
+                    ),
+                  ),
+                  const Gap(8),
+                  Expanded(
+                    child: MarkdownTextContent(
+                      content: _featuredComment!.body['content'],
+                      isAutoWarp: true,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ).padding(horizontal: 16, vertical: 8),
+        ),
+      ),
+    )).animate().fadeIn(duration: 300.ms, curve: Curves.easeInOut);
   }
 }
 
