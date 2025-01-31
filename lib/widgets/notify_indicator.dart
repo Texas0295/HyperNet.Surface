@@ -6,7 +6,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/config.dart';
 import 'package:surface/providers/notification.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -63,6 +65,8 @@ class _NotifyIndicatorState extends State<NotifyIndicator> with SingleTickerProv
     final ua = context.read<UserProvider>();
     final nty = context.watch<NotificationProvider>();
 
+    final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
+
     final show = nty.showingCount > 0 && ua.isAuthorized;
 
     if (show) {
@@ -83,7 +87,7 @@ class _NotifyIndicatorState extends State<NotifyIndicator> with SingleTickerProv
                 controller: _animationController,
                 effects: [
                   SlideEffect(
-                    begin: Offset(0, -1),
+                    begin: isMobile ? Offset(0, -1) : Offset(1, 0),
                     end: Offset(0, 0),
                     duration: Duration(milliseconds: 300),
                     curve: Curves.fastEaseInToSlowEaseOut,
@@ -99,7 +103,7 @@ class _NotifyIndicatorState extends State<NotifyIndicator> with SingleTickerProv
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   width: double.infinity,
                   constraints: BoxConstraints(
-                    maxWidth: min(480, MediaQuery.of(context).size.width - 16),
+                    maxWidth: isMobile ? MediaQuery.of(context).size.width - 16 : 360,
                   ),
                   child: Material(
                     elevation: 2,

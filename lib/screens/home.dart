@@ -288,6 +288,7 @@ class _HomeDashTodayNewsState extends State<_HomeDashTodayNews> {
               child: InkWell(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 4,
                   children: [
                     Text(

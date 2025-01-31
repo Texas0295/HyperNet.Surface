@@ -78,6 +78,7 @@ class NotificationProvider extends ChangeNotifier {
     _ws.stream.stream.listen((event) {
       if (event.method == 'notifications.new') {
         final notification = SnNotification.fromJson(event.payload!);
+        if (showingCount < 0) showingCount = 0;
         showingCount++;
         notifications.add(notification);
         Future.delayed(const Duration(seconds: 3), () {
