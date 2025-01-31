@@ -31,34 +31,37 @@ class _AppRailNavigationState extends State<AppRailNavigation> {
       builder: (context, _) {
         final destinations = nav.destinations.where((ele) => ele.isPinned).toList();
 
-        return NavigationRail(
-          selectedIndex:
-              nav.currentIndex != null && nav.currentIndex! < nav.pinnedDestinationCount ? nav.currentIndex : null,
-          destinations: [
-            ...destinations.where((ele) => ele.isPinned).map((ele) {
-              return NavigationRailDestination(
-                icon: ele.icon,
-                label: Text(ele.label).tr(),
-              );
-            }),
-          ],
-          trailing: Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: StyledWidget(
-                IconButton(
-                  icon: const Icon(Symbols.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                ),
-              ).padding(bottom: 16),
+        return SizedBox(
+          width: 80,
+          child: NavigationRail(
+            selectedIndex:
+                nav.currentIndex != null && nav.currentIndex! < nav.pinnedDestinationCount ? nav.currentIndex : null,
+            destinations: [
+              ...destinations.where((ele) => ele.isPinned).map((ele) {
+                return NavigationRailDestination(
+                  icon: ele.icon,
+                  label: Text(ele.label).tr(),
+                );
+              }),
+            ],
+            trailing: Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: StyledWidget(
+                  IconButton(
+                    icon: const Icon(Symbols.menu),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  ),
+                ).padding(bottom: 16),
+              ),
             ),
+            onDestinationSelected: (idx) {
+              nav.setIndex(idx);
+              GoRouter.of(context).goNamed(destinations[idx].screen);
+            },
           ),
-          onDestinationSelected: (idx) {
-            nav.setIndex(idx);
-            GoRouter.of(context).goNamed(destinations[idx].screen);
-          },
         );
       },
     );

@@ -140,6 +140,7 @@ class AppRootScaffold extends StatelessWidget {
     );
 
     final safeTop = MediaQuery.of(context).padding.top;
+    final safeBottom = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
       key: globalRootScaffoldKey,
@@ -191,7 +192,10 @@ class AppRootScaffold extends StatelessWidget {
             ],
           ),
           Positioned(top: safeTop > 0 ? safeTop : 16, right: 8, child: NotifyIndicator()),
-          Positioned(top: safeTop > 0 ? safeTop : 16, left: 8, child: ConnectionIndicator()),
+          if (ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE))
+            Positioned(bottom: safeBottom > 0 ? safeBottom : 16, left: 0, right: 0, child: ConnectionIndicator())
+          else
+            Positioned(top: safeTop > 0 ? safeTop : 16, left: 0, right: 0, child: ConnectionIndicator()),
         ],
       ),
       drawer: !isExpandedDrawer ? AppNavigationDrawer() : null,

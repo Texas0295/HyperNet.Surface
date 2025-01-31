@@ -28,7 +28,7 @@ class ContextMenuArea extends StatelessWidget {
           // Leave padding for side navigation
           mousePosition = cfg.drawerIsExpanded
               ? mousePosition.copyWith(dx: mousePosition.dx - 304 * 2)
-              : mousePosition.copyWith(dx: mousePosition.dx - 72 * 2);
+              : mousePosition.copyWith(dx: mousePosition.dx - 80 * 2);
         }
       },
       child: GestureDetector(

@@ -84,6 +84,7 @@ class _NotifyIndicatorState extends State<NotifyIndicator> with SingleTickerProv
             ignoring: !show,
             child: GestureDetector(
               child: Animate(
+                autoPlay: false,
                 controller: _animationController,
                 effects: [
                   SlideEffect(
