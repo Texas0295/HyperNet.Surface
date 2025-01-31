@@ -560,6 +560,7 @@
   "shareIntent": "分享",
   "shareIntentDescription": "您想對您分享的內容做些什麼？",
   "shareIntentPostStory": "發佈動態",
+  "shareIntentSendChannel": "分享到聊天頻道",
   "updateAvailable": "檢測到更新可用",
   "updateOngoing": "正在更新，請稍後……",
   "custom": "自定義",

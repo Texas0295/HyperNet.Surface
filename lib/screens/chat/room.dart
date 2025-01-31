@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,9 +10,12 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
+import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/channel.dart';
 import 'package:surface/providers/chat_call.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/user_directory.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/chat/call/call_prejoin.dart';
@@ -23,14 +27,19 @@ import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
-import '../../providers/user_directory.dart';
-import '../../providers/userinfo.dart';
+class ChatRoomScreenExtra {
+  final String? initialText;
+  final List<PostWriteMedia>? initialAttachments;
+
+  ChatRoomScreenExtra({this.initialText, this.initialAttachments});
+}
 
 class ChatRoomScreen extends StatefulWidget {
   final String scope;
   final String alias;
+  final ChatRoomScreenExtra? extra;
 
-  const ChatRoomScreen({super.key, required this.scope, required this.alias});
+  const ChatRoomScreen({super.key, required this.scope, required this.alias, this.extra});
 
   @override
   State<ChatRoomScreen> createState() => _ChatRoomScreenState();
@@ -177,8 +186,23 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     _messageController = ChatMessageController(context);
     _fetchChannel().then((_) async {
       await _messageController.initialize(_channel!);
-      await _messageController.checkUpdate();
-      await _fetchOngoingCall();
+
+      if (widget.extra != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          log('[ChatInput] Setting initial text and attachments...');
+          if (widget.extra!.initialText != null) {
+            _inputGlobalKey.currentState?.setInitialText(widget.extra!.initialText!);
+          }
+          if (widget.extra!.initialAttachments != null) {
+            _inputGlobalKey.currentState?.setInitialAttachments(widget.extra!.initialAttachments!);
+          }
+        });
+      }
+
+      await Future.wait([
+        _messageController.checkUpdate(),
+        _fetchOngoingCall(),
+      ]);
     });
 
     final ws = context.read<WebSocketProvider>();

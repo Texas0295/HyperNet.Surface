@@ -20,13 +20,13 @@ import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 
-class PostEditorExtraProps {
+class PostEditorExtra {
   final String? text;
   final String? title;
   final String? description;
   final List<PostWriteMedia>? attachments;
 
-  const PostEditorExtraProps({
+  const PostEditorExtra({
     this.text,
     this.title,
     this.description,
@@ -39,7 +39,7 @@ class PostEditorScreen extends StatefulWidget {
   final int? postEditId;
   final int? postReplyId;
   final int? postRepostId;
-  final PostEditorExtraProps? extraProps;
+  final PostEditorExtra? extraProps;
 
   const PostEditorScreen({
     super.key,

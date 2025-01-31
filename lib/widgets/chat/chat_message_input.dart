@@ -46,6 +46,16 @@ class ChatMessageInputState extends State<ChatMessageInput> {
     setState(() => _replyingMessage = value);
   }
 
+  void setInitialText(String? value) {
+    _contentController.text = value ?? '';
+    setState(() {});
+  }
+
+  void setInitialAttachments(List<PostWriteMedia>? value) {
+    _attachments.addAll(value ?? []);
+    setState(() {});
+  }
+
   void setEdit(SnChatMessage? value) {
     _contentController.text = value?.body['text'] ?? '';
     _attachments.clear();

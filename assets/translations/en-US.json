@@ -562,6 +562,7 @@
   "shareIntent": "Share",
   "shareIntentDescription": "What do you want to do with the content you are sharing?",
   "shareIntentPostStory": "Post a Story",
+  "shareIntentSendChannel": "Share to Channel",
   "updateAvailable": "Update Available",
   "updateOngoing": "Updating, please wait...",
   "custom": "Custom",

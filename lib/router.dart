@@ -73,7 +73,7 @@ final _appRoutes = [
           postRepostId: int.tryParse(
             state.uri.queryParameters['reposting'] ?? '',
           ),
-          extraProps: state.extra as PostEditorExtraProps?,
+          extraProps: state.extra as PostEditorExtra?,
         ),
       ),
       GoRoute(
@@ -156,6 +156,7 @@ final _appRoutes = [
         builder: (context, state) => ChatRoomScreen(
           scope: state.pathParameters['scope']!,
           alias: state.pathParameters['alias']!,
+          extra: state.extra as ChatRoomScreenExtra?,
         ),
       ),
       GoRoute(
