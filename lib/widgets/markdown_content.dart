@@ -20,6 +20,7 @@ class MarkdownTextContent extends StatelessWidget {
   final bool isAutoWarp;
   final bool isEnlargeSticker;
   final TextScaler? textScaler;
+  final Color? textColor;
   final List<SnAttachment?>? attachments;
 
   const MarkdownTextContent({
@@ -28,6 +29,7 @@ class MarkdownTextContent extends StatelessWidget {
     this.isAutoWarp = false,
     this.isEnlargeSticker = false,
     this.textScaler,
+    this.textColor,
     this.attachments,
   });
 
@@ -42,6 +44,7 @@ class MarkdownTextContent extends StatelessWidget {
         Theme.of(context),
       ).copyWith(
         textScaler: textScaler,
+        p: textColor != null ? Theme.of(context).textTheme.bodyMedium!.copyWith(color: textColor) : null,
         blockquote: TextStyle(
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),

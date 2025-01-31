@@ -1,0 +1,26 @@
+meta {
+  name: Developer Notify One User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{endpoint}}/cgi/id/dev/notify/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "client_id": "{{third_client_id}}",
+    "client_secret":"{{third_client_tk}}",
+    "type": "general",
+    "subject": "测试",
+    "subtitle": "Alphabot です",
+    "content": "全新通知动画",
+    "metadata": {
+      "image": "D2EDbcrsTugs3xk5"
+    },
+    "priority": 10
+  }
+}

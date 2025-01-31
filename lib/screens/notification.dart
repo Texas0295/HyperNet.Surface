@@ -21,6 +21,16 @@ import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 import '../providers/userinfo.dart';
 import '../widgets/unauthorized_hint.dart';
 
+const Map<String, IconData> kNotificationTopicIcons = {
+  'general': Symbols.notifications,
+  'passport.security.alert': Symbols.gpp_maybe,
+  'passport.security.otp': Symbols.password,
+  'interactive.subscription': Symbols.subscriptions,
+  'interactive.feedback': Symbols.add_reaction,
+  'messaging.callStart': Symbols.call_received,
+  'wallet.transaction.new': Symbols.receipt,
+};
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -35,15 +45,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   final List<SnNotification> _notifications = List.empty(growable: true);
   int? _totalCount;
-
-  static const Map<String, IconData> kNotificationTopicIcons = {
-    'passport.security.alert': Symbols.gpp_maybe,
-    'passport.security.otp': Symbols.password,
-    'interactive.subscription': Symbols.subscriptions,
-    'interactive.feedback': Symbols.add_reaction,
-    'messaging.callStart': Symbols.call_received,
-    'wallet.transaction.new': Symbols.receipt,
-  };
 
   Future<void> _fetchNotifications() async {
     final ua = context.read<UserProvider>();

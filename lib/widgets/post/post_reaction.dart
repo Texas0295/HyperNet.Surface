@@ -61,7 +61,7 @@ class _PostReactionPopupState extends State<PostReactionPopup> {
           );
         }
       }
-      HapticFeedback.mediumImpact();
+      HapticFeedback.heavyImpact();
     } catch (err) {
       // ignore: use_build_context_synchronously
       if (context.mounted) context.showErrorDialog(err);

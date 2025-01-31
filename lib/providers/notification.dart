@@ -71,22 +71,28 @@ class NotificationProvider extends ChangeNotifier {
     );
   }
 
+  int showingCount = 0;
   List<SnNotification> notifications = List.empty(growable: true);
 
   void listen() {
     _ws.stream.stream.listen((event) {
       if (event.method == 'notifications.new') {
         final notification = SnNotification.fromJson(event.payload!);
+        showingCount++;
         notifications.add(notification);
+        Future.delayed(const Duration(seconds: 3), () {
+          if (showingCount >= 0) showingCount--;
+          notifyListeners();
+        });
         notifyListeners();
         final doHaptic = _cfg.prefs.getBool(kAppNotifyWithHaptic) ?? true;
-        if (doHaptic) HapticFeedback.lightImpact();
+        if (doHaptic) HapticFeedback.mediumImpact();
       }
     });
   }
 
   void clear() {
-    notifications.clear();
+    showingCount = 0;
     notifyListeners();
   }
 }
