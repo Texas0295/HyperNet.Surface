@@ -33,6 +33,7 @@ mixin _$SnAccount {
   String get name => throw _privateConstructorUsedError;
   String get nick => throw _privateConstructorUsedError;
   Map<String, dynamic> get permNodes => throw _privateConstructorUsedError;
+  String get language => throw _privateConstructorUsedError;
   SnAccountProfile? get profile => throw _privateConstructorUsedError;
   List<SnAccountBadge> get badges => throw _privateConstructorUsedError;
   DateTime? get suspendedAt => throw _privateConstructorUsedError;
@@ -69,6 +70,7 @@ abstract class $SnAccountCopyWith<$Res> {
       String name,
       String nick,
       Map<String, dynamic> permNodes,
+      String language,
       SnAccountProfile? profile,
       List<SnAccountBadge> badges,
       DateTime? suspendedAt,
@@ -107,6 +109,7 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
     Object? name = null,
     Object? nick = null,
     Object? permNodes = null,
+    Object? language = null,
     Object? profile = freezed,
     Object? badges = null,
     Object? suspendedAt = freezed,
@@ -164,6 +167,10 @@ class _$SnAccountCopyWithImpl<$Res, $Val extends SnAccount>
           ? _value.permNodes
           : permNodes // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      language: null == language
+          ? _value.language
+          : language // ignore: cast_nullable_to_non_nullable
+              as String,
       profile: freezed == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -231,6 +238,7 @@ abstract class _$$SnAccountImplCopyWith<$Res>
       String name,
       String nick,
       Map<String, dynamic> permNodes,
+      String language,
       SnAccountProfile? profile,
       List<SnAccountBadge> badges,
       DateTime? suspendedAt,
@@ -268,6 +276,7 @@ class __$$SnAccountImplCopyWithImpl<$Res>
     Object? name = null,
     Object? nick = null,
     Object? permNodes = null,
+    Object? language = null,
     Object? profile = freezed,
     Object? badges = null,
     Object? suspendedAt = freezed,
@@ -325,6 +334,10 @@ class __$$SnAccountImplCopyWithImpl<$Res>
           ? _value._permNodes
           : permNodes // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      language: null == language
+          ? _value.language
+          : language // ignore: cast_nullable_to_non_nullable
+              as String,
       profile: freezed == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -373,6 +386,7 @@ class _$SnAccountImpl extends _SnAccount {
       required this.name,
       required this.nick,
       required final Map<String, dynamic> permNodes,
+      required this.language,
       required this.profile,
       final List<SnAccountBadge> badges = const [],
       required this.suspendedAt,
@@ -430,6 +444,8 @@ class _$SnAccountImpl extends _SnAccount {
   }
 
   @override
+  final String language;
+  @override
   final SnAccountProfile? profile;
   final List<SnAccountBadge> _badges;
   @override
@@ -453,7 +469,7 @@ class _$SnAccountImpl extends _SnAccount {
 
   @override
   String toString() {
-    return 'SnAccount(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, confirmedAt: $confirmedAt, contacts: $contacts, avatar: $avatar, banner: $banner, description: $description, name: $name, nick: $nick, permNodes: $permNodes, profile: $profile, badges: $badges, suspendedAt: $suspendedAt, affiliatedId: $affiliatedId, affiliatedTo: $affiliatedTo, automatedBy: $automatedBy, automatedId: $automatedId)';
+    return 'SnAccount(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, confirmedAt: $confirmedAt, contacts: $contacts, avatar: $avatar, banner: $banner, description: $description, name: $name, nick: $nick, permNodes: $permNodes, language: $language, profile: $profile, badges: $badges, suspendedAt: $suspendedAt, affiliatedId: $affiliatedId, affiliatedTo: $affiliatedTo, automatedBy: $automatedBy, automatedId: $automatedId)';
   }
 
   @override
@@ -479,6 +495,8 @@ class _$SnAccountImpl extends _SnAccount {
             (identical(other.nick, nick) || other.nick == nick) &&
             const DeepCollectionEquality()
                 .equals(other._permNodes, _permNodes) &&
+            (identical(other.language, language) ||
+                other.language == language) &&
             (identical(other.profile, profile) || other.profile == profile) &&
             const DeepCollectionEquality().equals(other._badges, _badges) &&
             (identical(other.suspendedAt, suspendedAt) ||
@@ -509,6 +527,7 @@ class _$SnAccountImpl extends _SnAccount {
         name,
         nick,
         const DeepCollectionEquality().hash(_permNodes),
+        language,
         profile,
         const DeepCollectionEquality().hash(_badges),
         suspendedAt,
@@ -548,6 +567,7 @@ abstract class _SnAccount extends SnAccount {
       required final String name,
       required final String nick,
       required final Map<String, dynamic> permNodes,
+      required final String language,
       required final SnAccountProfile? profile,
       final List<SnAccountBadge> badges,
       required final DateTime? suspendedAt,
@@ -585,6 +605,8 @@ abstract class _SnAccount extends SnAccount {
   String get nick;
   @override
   Map<String, dynamic> get permNodes;
+  @override
+  String get language;
   @override
   SnAccountProfile? get profile;
   @override

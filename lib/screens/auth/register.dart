@@ -44,6 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'nick': nickname,
         'email': email,
         'password': password,
+        'language': EasyLocalization.of(context)!.currentLocale.toString(),
       });
 
       if (!context.mounted) return;

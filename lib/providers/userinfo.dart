@@ -53,4 +53,11 @@ class UserProvider extends ChangeNotifier {
     user = null;
     notifyListeners();
   }
+
+  void setLanguage(String? value) {
+    if (value == null) return;
+    if (user == null) return;
+    user = user!.copyWith(language: value);
+    notifyListeners();
+  }
 }

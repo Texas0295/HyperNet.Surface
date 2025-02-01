@@ -26,6 +26,7 @@ _$SnAccountImpl _$$SnAccountImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       nick: json['nick'] as String,
       permNodes: json['perm_nodes'] as Map<String, dynamic>,
+      language: json['language'] as String,
       profile: json['profile'] == null
           ? null
           : SnAccountProfile.fromJson(json['profile'] as Map<String, dynamic>),
@@ -56,6 +57,7 @@ Map<String, dynamic> _$$SnAccountImplToJson(_$SnAccountImpl instance) =>
       'name': instance.name,
       'nick': instance.nick,
       'perm_nodes': instance.permNodes,
+      'language': instance.language,
       'profile': instance.profile?.toJson(),
       'badges': instance.badges.map((e) => e.toJson()).toList(),
       'suspended_at': instance.suspendedAt?.toIso8601String(),

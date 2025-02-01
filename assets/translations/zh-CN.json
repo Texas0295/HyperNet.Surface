@@ -239,6 +239,8 @@
   "settingsMisc": "杂项",
   "settingsMiscAbout": "关于",
   "settingsMiscAboutDescription": "查看 Solian 的版本信息。",
+  "settingsAccountLanguage": "帐号偏好语言",
+  "settingsAccountLanguageDescription": "设置邮件、通知和其他帐号相关内容的语言。",
   "sensitiveContent": "敏感内容",
   "sensitiveContentCollapsed": "敏感内容已折叠。",
   "sensitiveContentDescription": "此内容已被标记，可能不适合所有人查看。",
@@ -604,5 +606,6 @@
     "one": "{} 源点",
     "other": "{} 源点"
   },
-  "aiThinkingProcess": "AI 思考过程"
+  "aiThinkingProcess": "AI 思考过程",
+  "accountSettingsApplied": "帐号设置已应用。"
 }

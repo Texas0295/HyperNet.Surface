@@ -241,6 +241,8 @@
   "settingsMisc": "Misc",
   "settingsMiscAbout": "About",
   "settingsMiscAboutDescription": "View the version information of Solian.",
+  "settingsAccountLanguage": "Account Language",
+  "settingsAccountLanguageDescription": "Set the language for email, notification, and other account-related content.",
   "sensitiveContent": "Sensitive Content",
   "sensitiveContentCollapsed": "Sensitive content has been collapsed.",
   "sensitiveContentDescription": "This content has been marked as sensitive, and may not be suitable for all viewers.",
@@ -606,5 +608,6 @@
     "one": "{} Source Point",
     "other": "{} Source Points"
   },
-  "aiThinkingProcess": "AI Thinking Process"
+  "aiThinkingProcess": "AI Thinking Process",
+  "accountSettingsApplied": "Account settings have been applied."
 }

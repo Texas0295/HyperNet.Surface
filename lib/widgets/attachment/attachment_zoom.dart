@@ -152,6 +152,7 @@ class _AttachmentZoomViewState extends State<AttachmentZoomView> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           body: Stack(
             children: [
               Builder(builder: (context) {
