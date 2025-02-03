@@ -33,7 +33,16 @@ class WebSocketProvider extends ChangeNotifier {
     await connect();
   }
 
+  Completer<void>? _connectCompleter;
+
   Future<void> connect({noRetry = false}) async {
+    if(_connectCompleter != null) {
+      await _connectCompleter!.future;
+      _connectCompleter = null;
+    }
+
+    _connectCompleter = Completer<void>();
+
     if (!_ua.isAuthorized) return;
     if (isConnected || conn != null) {
       disconnect();
@@ -64,12 +73,13 @@ class WebSocketProvider extends ChangeNotifier {
         log('Retry connecting to websocket in 3 seconds...');
         return Future.delayed(
           const Duration(seconds: 3),
-          () => connect(noRetry: true),
+              () => connect(noRetry: true),
         );
       }
     } finally {
       isBusy = false;
       notifyListeners();
+      _connectCompleter!.complete();
     }
   }
 
