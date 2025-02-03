@@ -1,0 +1,20 @@
+meta {
+  name: Get Transaction
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{endpoint}}/cgi/wa/transactions/67
+  body: none
+  auth: inherit
+}
+
+body:json {
+  {
+    "client_id": "highland-mc",
+    "client_secret": "(3^DLAvo3v",
+    "remark": "我是秦始皇，现在被困香港，现在 SN 转我 500 源点，帮助我回到咸阳，到时候封你为太监一职。",
+    "amount": 500
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Create Transaction
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{endpoint}}/cgi/wa/transactions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "client_id": "highland-mc",
+    "client_secret": "(3^DLAvo3v",
+    "remark": "秦始皇的赞赏",
+    "amount": 500,
+    "payee_id": 1
+  }
+}
