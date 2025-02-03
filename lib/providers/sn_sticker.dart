@@ -9,12 +9,22 @@ class SnStickerProvider {
   late final SnNetworkProvider _sn;
   final Map<String, SnSticker?> _cache = {};
 
+  final Map<int, List<SnSticker>> stickersByPack = {};
+
+  List<SnSticker> get stickers => _cache.values.where((ele) => ele != null).cast<SnSticker>().toList();
+
   SnStickerProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
   }
 
   bool hasNotSticker(String alias) {
     return _cache.containsKey(alias) && _cache[alias] == null;
+  }
+
+  void _cacheSticker(SnSticker sticker) {
+    _cache['${sticker.pack.prefix}:${sticker.alias}'] = sticker;
+    if (stickersByPack[sticker.pack.id] == null) stickersByPack[sticker.pack.id] = List.empty(growable: true);
+    if (!stickersByPack[sticker.pack.id]!.contains(sticker)) stickersByPack[sticker.pack.id]!.add(sticker);
   }
 
   Future<SnSticker?> lookupSticker(String alias) async {
@@ -25,7 +35,7 @@ class SnStickerProvider {
     try {
       final resp = await _sn.client.get('/cgi/uc/stickers/lookup/$alias');
       final sticker = SnSticker.fromJson(resp.data);
-      _cache[alias] = sticker;
+      _cacheSticker(sticker);
 
       return sticker;
     } catch (err) {
@@ -34,5 +44,31 @@ class SnStickerProvider {
     }
 
     return null;
+  }
+
+  Future<void> listStickerEagerly() async {
+    var count = await listSticker();
+    for (var page = 1; count > 0; count -= 10) {
+      await listSticker(page: page);
+      page++;
+    }
+  }
+
+  Future<int> listSticker({int page = 0}) async {
+    try {
+      final resp = await _sn.client.get('/cgi/uc/stickers', queryParameters: {
+        'take': 10,
+        'offset': page * 10,
+      });
+      final data = resp.data;
+      final stickers = List.from(data['data']).map((ele) => SnSticker.fromJson(ele));
+      for (final sticker in stickers) {
+        _cacheSticker(sticker);
+      }
+      return data['count'] as int;
+    } catch (err) {
+      log('[Sticker] Failed to list stickers: $err');
+      rethrow;
+    }
   }
 }

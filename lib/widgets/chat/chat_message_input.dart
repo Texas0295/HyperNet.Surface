@@ -1,17 +1,23 @@
+import 'dart:math' show min;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/sn_attachment.dart';
+import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/sn_sticker.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/types/chat.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
+import 'package:surface/widgets/universal_image.dart';
 
 class ChatMessageInput extends StatefulWidget {
   final ChatMessageController controller;
@@ -143,6 +149,30 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   final List<PostWriteMedia> _attachments = List.empty(growable: true);
+
+  OverlayEntry? _overlayEntry;
+
+  void _showEmojiPicker(BuildContext context) {
+    final overlay = Overlay.of(context);
+    final sticker = context.read<SnStickerProvider>();
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        bottom: 16 + MediaQuery.of(context).padding.bottom,
+        right: 16,
+        child: _StickerPicker(
+          originalText: _contentController.text,
+          onDismiss: () => _dismissEmojiPicker(),
+          onInsert: (str) => _contentController.text = str,
+        ),
+      ),
+    );
+
+    overlay.insert(_overlayEntry!);
+  }
+
+  void _dismissEmojiPicker() {
+    _overlayEntry?.remove();
+  }
 
   @override
   void dispose() {
@@ -289,6 +319,19 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                 ),
               ),
               const Gap(8),
+              IconButton(
+                icon: Icon(
+                  Symbols.mood,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                visualDensity: const VisualDensity(
+                  horizontal: -4,
+                  vertical: -4,
+                ),
+                onPressed: () {
+                  _showEmojiPicker(context);
+                },
+              ),
               AddPostMediaButton(
                 onAdd: (items) {
                   setState(() {
@@ -311,6 +354,108 @@ class ChatMessageInputState extends State<ChatMessageInput> {
           ),
         ).padding(horizontal: 16),
       ],
+    );
+  }
+}
+
+class _StickerPicker extends StatelessWidget {
+  final String originalText;
+  final Function? onDismiss;
+  final Function(String)? onInsert;
+
+  const _StickerPicker({super.key, this.onDismiss, required this.originalText, this.onInsert});
+
+  @override
+  Widget build(BuildContext context) {
+    final sticker = context.read<SnStickerProvider>();
+    return GestureDetector(
+      onTap: () {
+        onDismiss?.call();
+      },
+      child: Container(
+        constraints: BoxConstraints(maxWidth: min(360, MediaQuery.of(context).size.width), maxHeight: 240),
+        child: Material(
+          elevation: 8,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: sticker.stickersByPack.entries
+                  .map((e) {
+                    return <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 8),
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(e.value.first.pack.name).bold(),
+                            Text(e.value.first.pack.description),
+                          ],
+                        ),
+                      ),
+                      GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 48,
+                          childAspectRatio: 1.0,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemCount: e.value.length,
+                        itemBuilder: (context, index) {
+                          final sn = context.read<SnNetworkProvider>();
+                          final element = e.value[index];
+                          return GestureDetector(
+                            onTap: () {
+                              final withSpace = originalText.isNotEmpty;
+                              onInsert?.call(
+                                  '$originalText${withSpace ? ' ' : ''}:${element.pack.prefix}${element.alias}:');
+                              onDismiss?.call();
+                            },
+                            child: Tooltip(
+                              richMessage: TextSpan(
+                                children: [
+                                  TextSpan(text: ':${element.pack.prefix}${element.alias}:\n', style: GoogleFonts.robotoMono()),
+                                  TextSpan(text: element.name).bold(),
+                                ],
+                              ),
+                              child: Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  child: UniversalImage(
+                                    sn.getAttachmentUrl(element.attachment.rid),
+                                    width: 48,
+                                    height: 48,
+                                    cacheHeight: 48,
+                                    cacheWidth: 48,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ];
+                  })
+                  .expand((ele) => ele)
+                  .toList(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

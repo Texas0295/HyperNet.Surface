@@ -281,6 +281,9 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
       final notify = context.read<NotificationProvider>();
       notify.listen();
       await notify.registerPushNotifications();
+      if (!mounted) return;
+      final sticker = context.read<SnStickerProvider>();
+      await sticker.listStickerEagerly();
     } catch (err) {
       if (!mounted) return;
       await context.showErrorDialog(err);

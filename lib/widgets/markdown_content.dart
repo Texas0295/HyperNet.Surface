@@ -132,7 +132,7 @@ class MarkdownTextContent extends StatelessWidget {
                         return GestureDetector(
                             child: UniversalImage(
                               sn.getAttachmentUrl(snapshot.data!.attachment.rid),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               width: size,
                               height: size,
                               cacheHeight: size,
