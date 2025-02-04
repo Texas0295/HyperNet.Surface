@@ -118,7 +118,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   html: ^0.15.5
   xml: ^6.5.0
-  system_tray: ^0.1.1
+  tray_manager: ^0.3.2
 
 dev_dependencies:
   flutter_test:

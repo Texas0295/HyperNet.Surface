@@ -11,7 +11,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   media_kit_libs_linux
   media_kit_video
   pasteboard
-  system_tray
+  tray_manager
   url_launcher_linux
 )
 

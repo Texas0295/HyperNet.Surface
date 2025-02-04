@@ -42,10 +42,10 @@ import 'package:surface/types/chat.dart';
 import 'package:surface/types/realm.dart';
 import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 import 'package:surface/widgets/dialog.dart';
+import 'package:tray_manager/tray_manager.dart';
 import 'package:version/version.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:system_tray/system_tray.dart';
 
 @pragma('vm:entry-point')
 void appBackgroundDispatcher() {
@@ -209,7 +209,7 @@ class _AppSplashScreen extends StatefulWidget {
   State<_AppSplashScreen> createState() => _AppSplashScreenState();
 }
 
-class _AppSplashScreenState extends State<_AppSplashScreen> {
+class _AppSplashScreenState extends State<_AppSplashScreen> with TrayListener {
   void _tryRequestRating() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('first_boot_time')) {
@@ -301,32 +301,26 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
 
     final icon = Platform.isWindows ? 'assets/icon/tray-icon.ico' : 'assets/icon/tray-icon.png';
-    final SystemTray systemTray = SystemTray();
+    final appVersion = await PackageInfo.fromPlatform();
 
-    await systemTray.initSystemTray(
-      title: "",
-      iconPath: icon,
+    trayManager.addListener(this);
+    await trayManager.setIcon(icon);
+
+    Menu menu = Menu(
+      items: [
+        MenuItem(
+          key: 'version_label',
+          label: 'Solian ${appVersion.version}+${appVersion.buildNumber}',
+          disabled: true,
+        ),
+        MenuItem.separator(),
+        MenuItem(
+          key: 'exit',
+          label: 'trayMenuExit'.tr(),
+        ),
+      ],
     );
-
-    await systemTray.setContextMenu([
-      MenuItem(label: 'trayMenuShow'.tr(), onClicked: () => appWindow.show()),
-      MenuItem(label: 'trayMenuHide'.tr(), onClicked: () => appWindow.hide()),
-      MenuItem(
-        label: 'trayMenuExit'.tr(),
-        onClicked: () {
-          _appLifecycleListener?.dispose();
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-        },
-      ),
-    ]);
-
-    systemTray.registerSystemTrayEventHandler((eventName) {
-      if (eventName == "leftMouseDown") {
-        Platform.isWindows ? appWindow.show() : systemTray.popUpContextMenu();
-      } else if (eventName == "rightMouseDown") {
-        Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
-      }
-    });
+    await trayManager.setContextMenu(menu);
   }
 
   AppLifecycleListener? _appLifecycleListener;
@@ -352,6 +346,40 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
   Future<AppExitResponse> _onExitRequested() async {
     appWindow.hide();
     return AppExitResponse.cancel;
+  }
+
+  @override
+  void onTrayIconMouseDown() {
+    if (Platform.isWindows) {
+      appWindow.show();
+    } else {
+      trayManager.popUpContextMenu();
+    }
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
+    if (Platform.isWindows) {
+      trayManager.popUpContextMenu();
+    } else {
+      appWindow.show();
+    }
+  }
+
+  @override
+  void onTrayMenuItemClick(MenuItem menuItem) {
+    switch (menuItem.key) {
+      case 'exit':
+        _appLifecycleListener?.dispose();
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) trayManager.removeListener(this);
+    super.dispose();
   }
 
   @override

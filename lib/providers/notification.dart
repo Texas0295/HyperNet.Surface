@@ -12,6 +12,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/providers/websocket.dart';
 import 'package:surface/types/notification.dart';
+import 'package:tray_manager/tray_manager.dart';
 
 class NotificationProvider extends ChangeNotifier {
   late final SnNetworkProvider _sn;
@@ -86,14 +87,26 @@ class NotificationProvider extends ChangeNotifier {
           notifyListeners();
         });
         notifyListeners();
+        updateTray();
         final doHaptic = _cfg.prefs.getBool(kAppNotifyWithHaptic) ?? true;
         if (doHaptic) HapticFeedback.mediumImpact();
       }
     });
   }
 
+  void updateTray() {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
+    if (notifications.isEmpty) {
+      trayManager.setTitle('');
+    } else {
+      trayManager.setTitle(' ${notifications.length.toString()}');
+    }
+  }
+
   void clear() {
     showingCount = 0;
+    notifications.clear();
+    updateTray();
     notifyListeners();
   }
 }

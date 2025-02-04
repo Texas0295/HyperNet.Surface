@@ -7,6 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:surface/providers/notification.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/notification.dart';
 import 'package:surface/types/post.dart';
@@ -54,6 +55,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
+      final nty = context.read<NotificationProvider>();
       final resp = await sn.client.get('/cgi/id/notifications?take=10');
       _totalCount = resp.data['count'];
       _notifications.addAll(
@@ -62,6 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 .cast<SnNotification>() ??
             [],
       );
+      nty.updateTray();
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -88,9 +91,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     try {
       final sn = context.read<SnNetworkProvider>();
+      final nty = context.read<NotificationProvider>();
       final resp = await sn.client.put('/cgi/id/notifications/read/all');
       _notifications.clear();
       _fetchNotifications();
+      nty.clear();
 
       if (!mounted) return;
       context.showSnackbar(
