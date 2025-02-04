@@ -607,5 +607,8 @@
     "other": "{} 源点"
   },
   "aiThinkingProcess": "AI 思考过程",
-  "accountSettingsApplied": "帐号设置已应用。"
+  "accountSettingsApplied": "帐号设置已应用。",
+  "trayMenuShow": "显示窗口",
+  "trayMenuHide": "隐藏窗口",
+  "trayMenuExit": "退出"
 }

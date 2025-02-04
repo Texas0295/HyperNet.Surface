@@ -154,7 +154,6 @@ class ChatMessageInputState extends State<ChatMessageInput> {
 
   void _showEmojiPicker(BuildContext context) {
     final overlay = Overlay.of(context);
-    final sticker = context.read<SnStickerProvider>();
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         bottom: 16 + MediaQuery.of(context).padding.bottom,
@@ -363,7 +362,7 @@ class _StickerPicker extends StatelessWidget {
   final Function? onDismiss;
   final Function(String)? onInsert;
 
-  const _StickerPicker({super.key, this.onDismiss, required this.originalText, this.onInsert});
+  const _StickerPicker({this.onDismiss, required this.originalText, this.onInsert});
 
   @override
   Widget build(BuildContext context) {

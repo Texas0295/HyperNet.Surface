@@ -47,6 +47,7 @@ class HomeWidgetProvider {
 }
 
 Future<void> widgetUpdateRandomPost() async {
+  if (kIsWeb || (!Platform.isAndroid && !Platform.isIOS)) return;
   final snc = await SnNetworkProvider.createOffContextClient();
   final resp = await snc.get('/cgi/co/recommendations/shuffle?take=1');
   final post = SnPost.fromJson(resp.data['data'][0]);

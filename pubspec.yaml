@@ -118,6 +118,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   html: ^0.15.5
   xml: ^6.5.0
+  system_tray: ^0.1.1
 
 dev_dependencies:
   flutter_test:
@@ -152,6 +153,8 @@ flutter:
     - assets/icon/icon.png
     - assets/icon/icon-dark.png
     - assets/icon/icon-light-radius.png
+    - assets/icon/tray-icon.ico
+    - assets/icon/tray-icon.png
     - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see

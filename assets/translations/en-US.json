@@ -609,5 +609,8 @@
     "other": "{} Source Points"
   },
   "aiThinkingProcess": "AI Thinking Process",
-  "accountSettingsApplied": "Account settings have been applied."
+  "accountSettingsApplied": "Account settings have been applied.",
+  "trayMenuShow": "Show Window",
+  "trayMenuHide": "Hide Window",
+  "trayMenuExit": "Exit"
 }

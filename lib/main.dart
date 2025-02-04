@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:croppy/croppy.dart';
@@ -10,6 +11,7 @@ import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -43,6 +45,7 @@ import 'package:surface/widgets/dialog.dart';
 import 'package:version/version.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:system_tray/system_tray.dart';
 
 @pragma('vm:entry-point')
 void appBackgroundDispatcher() {
@@ -294,14 +297,61 @@ class _AppSplashScreenState extends State<_AppSplashScreen> {
     await widgetUpdateRandomPost();
   }
 
+  Future<void> _trayInitialization() async {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
+
+    final icon = Platform.isWindows ? 'assets/icon/tray-icon.ico' : 'assets/icon/tray-icon.png';
+    final SystemTray systemTray = SystemTray();
+
+    await systemTray.initSystemTray(
+      title: "",
+      iconPath: icon,
+    );
+
+    await systemTray.setContextMenu([
+      MenuItem(label: 'trayMenuShow'.tr(), onClicked: () => appWindow.show()),
+      MenuItem(label: 'trayMenuHide'.tr(), onClicked: () => appWindow.hide()),
+      MenuItem(
+        label: 'trayMenuExit'.tr(),
+        onClicked: () {
+          _appLifecycleListener?.dispose();
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        },
+      ),
+    ]);
+
+    systemTray.registerSystemTrayEventHandler((eventName) {
+      if (eventName == "leftMouseDown") {
+        Platform.isWindows ? appWindow.show() : systemTray.popUpContextMenu();
+      } else if (eventName == "rightMouseDown") {
+        Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
+      }
+    });
+  }
+
+  AppLifecycleListener? _appLifecycleListener;
+
   @override
   void initState() {
     super.initState();
+
+    if (!kIsWeb && !(Platform.isIOS || Platform.isAndroid)) {
+      _appLifecycleListener = AppLifecycleListener(
+        onExitRequested: _onExitRequested,
+      );
+    }
+
+    _trayInitialization();
     _initialize().then((_) {
       _postInitialization();
       _tryRequestRating();
       _checkForUpdate();
     });
+  }
+
+  Future<AppExitResponse> _onExitRequested() async {
+    appWindow.hide();
+    return AppExitResponse.cancel;
   }
 
   @override
