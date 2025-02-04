@@ -153,6 +153,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       ),
                 ),
               ]),
+              maxLines: 2,
             ),
             actions: [
               IconButton(
@@ -250,121 +251,130 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               ),
               const Divider(height: 1),
               Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(bottom: 8),
-                  child: Column(
-                    children: [
-                      // Replying Notice
-                      if (_writeController.replyingPost != null)
-                        Column(
-                          children: [
-                            ExpansionTile(
-                              minTileHeight: 48,
-                              leading: const Icon(Symbols.reply).padding(left: 4),
-                              title: Text('postReplyingNotice')
-                                  .fontSize(15)
-                                  .tr(args: ['@${_writeController.replyingPost!.publisher.name}']),
-                              children: <Widget>[PostItem(data: _writeController.replyingPost!)],
-                            ),
-                            const Divider(height: 1),
-                          ],
-                        ),
-                      // Reposting Notice
-                      if (_writeController.repostingPost != null)
-                        Column(
-                          children: [
-                            ExpansionTile(
-                              minTileHeight: 48,
-                              leading: const Icon(Symbols.forward).padding(left: 4),
-                              title: Text('postRepostingNotice')
-                                  .fontSize(15)
-                                  .tr(args: ['@${_writeController.repostingPost!.publisher.name}']),
-                              children: <Widget>[
-                                PostItem(
-                                  data: _writeController.repostingPost!,
-                                )
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      padding: EdgeInsets.only(bottom: 160),
+                      child: Column(
+                        children: [
+                          // Replying Notice
+                          if (_writeController.replyingPost != null)
+                            Column(
+                              children: [
+                                ExpansionTile(
+                                  minTileHeight: 48,
+                                  leading: const Icon(Symbols.reply).padding(left: 4),
+                                  title: Text('postReplyingNotice')
+                                      .fontSize(15)
+                                      .tr(args: ['@${_writeController.replyingPost!.publisher.name}']),
+                                  children: <Widget>[PostItem(data: _writeController.replyingPost!)],
+                                ),
+                                const Divider(height: 1),
                               ],
                             ),
-                            const Divider(height: 1),
-                          ],
-                        ),
-                      // Editing Notice
-                      if (_writeController.editingPost != null)
-                        Column(
-                          children: [
-                            ExpansionTile(
-                              minTileHeight: 48,
-                              leading: const Icon(Symbols.edit_note).padding(left: 4),
-                              title: Text('postEditingNotice')
-                                  .fontSize(15)
-                                  .tr(args: ['@${_writeController.editingPost!.publisher.name}']),
-                              children: <Widget>[PostItem(data: _writeController.editingPost!)],
+                          // Reposting Notice
+                          if (_writeController.repostingPost != null)
+                            Column(
+                              children: [
+                                ExpansionTile(
+                                  minTileHeight: 48,
+                                  leading: const Icon(Symbols.forward).padding(left: 4),
+                                  title: Text('postRepostingNotice')
+                                      .fontSize(15)
+                                      .tr(args: ['@${_writeController.repostingPost!.publisher.name}']),
+                                  children: <Widget>[
+                                    PostItem(
+                                      data: _writeController.repostingPost!,
+                                    )
+                                  ],
+                                ),
+                                const Divider(height: 1),
+                              ],
                             ),
-                            const Divider(height: 1),
-                          ],
-                        ),
-                      // Content Input Area
-                      Container(
-                        constraints: const BoxConstraints(maxWidth: 640),
-                        child: TextField(
-                          controller: _writeController.contentController,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            hintText: 'fieldPostContent'.tr(),
-                            hintStyle: TextStyle(fontSize: 14),
-                            isCollapsed: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
+                          // Editing Notice
+                          if (_writeController.editingPost != null)
+                            Column(
+                              children: [
+                                ExpansionTile(
+                                  minTileHeight: 48,
+                                  leading: const Icon(Symbols.edit_note).padding(left: 4),
+                                  title: Text('postEditingNotice')
+                                      .fontSize(15)
+                                      .tr(args: ['@${_writeController.editingPost!.publisher.name}']),
+                                  children: <Widget>[PostItem(data: _writeController.editingPost!)],
+                                ),
+                                const Divider(height: 1),
+                              ],
                             ),
-                            border: InputBorder.none,
+                          // Content Input Area
+                          Container(
+                            constraints: const BoxConstraints(maxWidth: 640),
+                            child: TextField(
+                              controller: _writeController.contentController,
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: 'fieldPostContent'.tr(),
+                                hintStyle: TextStyle(fontSize: 14),
+                                isCollapsed: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                            ),
                           ),
-                          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-                        ),
+                        ]
+                            .expandIndexed(
+                              (idx, ele) => [
+                                if (idx != 0 || _writeController.isRelatedNull) const Gap(8),
+                                ele,
+                              ],
+                            )
+                            .toList(),
                       ),
-                    ]
-                        .expandIndexed(
-                          (idx, ele) => [
-                            if (idx != 0 || _writeController.isRelatedNull) const Gap(8),
-                            ele,
-                          ],
-                        )
-                        .toList(),
-                  ),
+                    ),
+                    if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: PostMediaPendingList(
+                          thumbnail: _writeController.thumbnail,
+                          attachments: _writeController.attachments,
+                          isBusy: _writeController.isBusy,
+                          onUpload: (int idx) async {
+                            await _writeController.uploadSingleAttachment(context, idx);
+                          },
+                          onPostSetThumbnail: (int? idx) {
+                            _writeController.setThumbnail(idx);
+                          },
+                          onInsertLink: (int idx) async {
+                            _writeController.contentController.text +=
+                                '\n![](solink://attachments/${_writeController.attachments[idx].attachment!.rid})';
+                          },
+                          onUpdate: (int idx, PostWriteMedia updatedMedia) async {
+                            _writeController.setIsBusy(true);
+                            try {
+                              _writeController.setAttachmentAt(idx, updatedMedia);
+                            } finally {
+                              _writeController.setIsBusy(false);
+                            }
+                          },
+                          onRemove: (int idx) async {
+                            _writeController.setIsBusy(true);
+                            try {
+                              _writeController.removeAttachmentAt(idx);
+                            } finally {
+                              _writeController.setIsBusy(false);
+                            }
+                          },
+                          onUpdateBusy: (state) => _writeController.setIsBusy(state),
+                        ).padding(bottom: 8),
+                      ),
+                  ],
                 ),
               ),
-              if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
-                PostMediaPendingList(
-                  thumbnail: _writeController.thumbnail,
-                  attachments: _writeController.attachments,
-                  isBusy: _writeController.isBusy,
-                  onUpload: (int idx) async {
-                    await _writeController.uploadSingleAttachment(context, idx);
-                  },
-                  onPostSetThumbnail: (int? idx) {
-                    _writeController.setThumbnail(idx);
-                  },
-                  onInsertLink: (int idx) async {
-                    _writeController.contentController.text +=
-                        '\n![](solink://attachments/${_writeController.attachments[idx].attachment!.rid})';
-                  },
-                  onUpdate: (int idx, PostWriteMedia updatedMedia) async {
-                    _writeController.setIsBusy(true);
-                    try {
-                      _writeController.setAttachmentAt(idx, updatedMedia);
-                    } finally {
-                      _writeController.setIsBusy(false);
-                    }
-                  },
-                  onRemove: (int idx) async {
-                    _writeController.setIsBusy(true);
-                    try {
-                      _writeController.removeAttachmentAt(idx);
-                    } finally {
-                      _writeController.setIsBusy(false);
-                    }
-                  },
-                  onUpdateBusy: (state) => _writeController.setIsBusy(state),
-                ).padding(bottom: 8),
               Material(
                 elevation: 2,
                 child: Column(
