@@ -8,9 +8,11 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/types/account.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/types/realm.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/account/account_select.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
@@ -229,13 +231,35 @@ class _RealmMemberListWidgetState extends State<_RealmMemberListWidget> {
     }
   }
 
-  void _showMemberAdd() {
-    showModalBottomSheet(
+  Future<void> _addMember(SnAccount related) async {
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.post(
+        '/cgi/id/realms/${widget.realm!.alias}/members',
+        data: {'related': related.name},
+      );
+      if (!mounted) return;
+      context.showSnackbar('realmMemberAdded'.tr());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
+  void _showMemberAdd() async {
+    final user = await showModalBottomSheet<SnAccount?>(
       context: context,
-      builder: (context) => _NewRealmMemberWidget(
-        realm: widget.realm!,
+      builder: (context) => AccountSelect(
+        title: 'realmMemberAdd'.tr(),
       ),
     );
+    if (!mounted) return;
+    if (user == null) return;
+    _addMember(user);
   }
 
   @override
@@ -290,85 +314,6 @@ class _RealmMemberListWidgetState extends State<_RealmMemberListWidget> {
         ),
       ],
     );
-  }
-}
-
-class _NewRealmMemberWidget extends StatefulWidget {
-  final SnRealm realm;
-
-  const _NewRealmMemberWidget({required this.realm});
-
-  @override
-  State<_NewRealmMemberWidget> createState() => _NewRealmMemberWidgetState();
-}
-
-class _NewRealmMemberWidgetState extends State<_NewRealmMemberWidget> {
-  bool _isBusy = false;
-
-  final TextEditingController _relatedController = TextEditingController();
-
-  Future<void> _performAction() async {
-    if (_relatedController.text.isEmpty) return;
-
-    setState(() => _isBusy = true);
-
-    try {
-      final sn = context.read<SnNetworkProvider>();
-      await sn.client.post(
-        '/cgi/id/realms/${widget.realm.alias}/members',
-        data: {
-          'related': _relatedController.text,
-        },
-      );
-      if (!mounted) return;
-      Navigator.pop(context, true);
-      context.showSnackbar('channelMemberAdded'.tr());
-    } catch (err) {
-      if (!mounted) return;
-      context.showErrorDialog(err);
-    } finally {
-      setState(() => _isBusy = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _relatedController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StyledWidget(Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'realmMemberAdd',
-          style: Theme.of(context).textTheme.titleLarge,
-        ).tr(),
-        const Gap(12),
-        TextField(
-          controller: _relatedController,
-          readOnly: _isBusy,
-          autocorrect: false,
-          autofocus: true,
-          textCapitalization: TextCapitalization.none,
-          decoration: InputDecoration(
-            labelText: 'fieldMemberRelatedName'.tr(),
-            suffix: SizedBox(
-              height: 24,
-              child: IconButton(
-                onPressed: _isBusy ? null : () => _performAction(),
-                icon: Icon(Symbols.send),
-                visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                padding: EdgeInsets.zero,
-              ),
-            ),
-          ),
-          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-        )
-      ],
-    )).padding(all: 24);
   }
 }
 

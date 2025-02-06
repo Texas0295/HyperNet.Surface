@@ -6,15 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/relationship.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/account.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/account/account_select.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
-
-import '../providers/userinfo.dart';
-import '../widgets/unauthorized_hint.dart';
+import 'package:surface/widgets/unauthorized_hint.dart';
 
 const kFriendStatus = {
   0: 'friendStatusPending',
@@ -168,6 +168,24 @@ class _FriendScreenState extends State<FriendScreen> {
     });
   }
 
+  Future<void> _sendRequest(SnAccount user) async {
+    setState(() => _isBusy = true);
+
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.post('/cgi/id/users/me/relations', data: {
+        'related': user.name,
+      });
+      if (!mounted) return;
+      context.showSnackbar('friendRequestSent'.tr());
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -199,11 +217,16 @@ class _FriendScreenState extends State<FriendScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Symbols.add),
-        onPressed: () {
-          showModalBottomSheet(
+        onPressed: () async {
+          final user = await showModalBottomSheet<SnAccount?>(
             context: context,
-            builder: (context) => _NewFriendWidget(),
+            builder: (context) => AccountSelect(
+              title: 'friendNew'.tr(),
+            ),
           );
+          if (!mounted) return;
+          if (user == null) return;
+          _sendRequest(user);
         },
       ),
       body: Column(
@@ -231,8 +254,7 @@ class _FriendScreenState extends State<FriendScreen> {
               trailing: const Icon(Symbols.chevron_right),
               onTap: _showBlocks,
             ),
-          if (_requests.isNotEmpty || _blocks.isNotEmpty)
-            const Divider(height: 1),
+          if (_requests.isNotEmpty || _blocks.isNotEmpty) const Divider(height: 1),
           Expanded(
             child: MediaQuery.removePadding(
               context: context,
@@ -264,16 +286,12 @@ class _FriendScreenState extends State<FriendScreen> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 InkWell(
-                                  onTap: _isUpdating
-                                      ? null
-                                      : () => _changeRelation(relation, 2),
+                                  onTap: _isUpdating ? null : () => _changeRelation(relation, 2),
                                   child: Text('friendBlock').tr(),
                                 ),
                                 const Gap(8),
                                 InkWell(
-                                  onTap: _isUpdating
-                                      ? null
-                                      : () => _deleteRelation(relation),
+                                  onTap: _isUpdating ? null : () => _deleteRelation(relation),
                                   child: Text('friendDeleteAction').tr(),
                                 ),
                               ],
@@ -293,83 +311,9 @@ class _FriendScreenState extends State<FriendScreen> {
   }
 }
 
-class _NewFriendWidget extends StatefulWidget {
-  const _NewFriendWidget();
-
-  @override
-  State<_NewFriendWidget> createState() => _NewFriendWidgetState();
-}
-
-class _NewFriendWidgetState extends State<_NewFriendWidget> {
-  bool _isBusy = false;
-
-  final TextEditingController _relatedController = TextEditingController();
-
-  Future<void> _sendRequest() async {
-    if (_relatedController.text.isEmpty) return;
-
-    setState(() => _isBusy = true);
-
-    try {
-      final sn = context.read<SnNetworkProvider>();
-      await sn.client.post('/cgi/id/users/me/relations', data: {
-        'related': _relatedController.text,
-      });
-      if (!mounted) return;
-      Navigator.pop(context, true);
-      context.showSnackbar('friendRequestSent'.tr());
-    } catch (err) {
-      if (!mounted) return;
-      context.showErrorDialog(err);
-    } finally {
-      setState(() => _isBusy = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _relatedController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StyledWidget(Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'friendNew',
-          style: Theme.of(context).textTheme.titleLarge,
-        ).tr(),
-        const Gap(12),
-        TextField(
-          controller: _relatedController,
-          readOnly: _isBusy,
-          autocorrect: false,
-          autofocus: true,
-          textCapitalization: TextCapitalization.none,
-          decoration: InputDecoration(
-            labelText: 'fieldFriendRelatedName'.tr(),
-            suffix: SizedBox(
-              height: 24,
-              child: IconButton(
-                onPressed: _isBusy ? null : () => _sendRequest(),
-                icon: Icon(Symbols.send),
-                visualDensity:
-                    const VisualDensity(horizontal: -4, vertical: -4),
-                padding: EdgeInsets.zero,
-              ),
-            ),
-          ),
-          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-        )
-      ],
-    )).padding(all: 24);
-  }
-}
-
 class _FriendshipListWidget extends StatefulWidget {
   final List<SnRelationship> relations;
+
   const _FriendshipListWidget({required this.relations});
 
   @override
@@ -476,9 +420,7 @@ class _FriendshipListWidgetState extends State<_FriendshipListWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(kFriendStatus[relation.status] ?? 'unknown')
-                    .tr()
-                    .opacity(0.75),
+                Text(kFriendStatus[relation.status] ?? 'unknown').tr().opacity(0.75),
                 if (relation.status == 0)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -499,8 +441,7 @@ class _FriendshipListWidgetState extends State<_FriendshipListWidget> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap:
-                            _isBusy ? null : () => _changeRelation(relation, 1),
+                        onTap: _isBusy ? null : () => _changeRelation(relation, 1),
                         child: Text('friendUnblock').tr(),
                       ),
                       const Gap(8),
