@@ -18,6 +18,7 @@ import flutter_inappwebview_macos
 import flutter_udid
 import flutter_webrtc
 import gal
+import hotkey_manager_macos
 import in_app_review
 import livekit_client
 import media_kit_libs_macos_video
@@ -48,6 +49,7 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FlutterUdidPlugin.register(with: registry.registrar(forPlugin: "FlutterUdidPlugin"))
   FlutterWebRTCPlugin.register(with: registry.registrar(forPlugin: "FlutterWebRTCPlugin"))
   GalPlugin.register(with: registry.registrar(forPlugin: "GalPlugin"))
+  HotkeyManagerMacosPlugin.register(with: registry.registrar(forPlugin: "HotkeyManagerMacosPlugin"))
   InAppReviewPlugin.register(with: registry.registrar(forPlugin: "InAppReviewPlugin"))
   LiveKitPlugin.register(with: registry.registrar(forPlugin: "LiveKitPlugin"))
   MediaKitLibsMacosVideoPlugin.register(with: registry.registrar(forPlugin: "MediaKitLibsMacosVideoPlugin"))

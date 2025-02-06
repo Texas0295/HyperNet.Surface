@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_time/relative_time.dart';
@@ -297,6 +298,22 @@ class _AppSplashScreenState extends State<_AppSplashScreen> with TrayListener {
     await widgetUpdateRandomPost();
   }
 
+  Future<void> _hotkeyInitialization() async {
+    if (kIsWeb) return;
+
+    if (Platform.isMacOS) {
+      HotKey quitHotKey = HotKey(
+        key: PhysicalKeyboardKey.keyQ,
+        modifiers: [HotKeyModifier.meta],
+        scope: HotKeyScope.inapp,
+      );
+      await hotKeyManager.register(quitHotKey, keyUpHandler: (_) {
+        _appLifecycleListener?.dispose();
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      });
+    }
+  }
+
   Future<void> _trayInitialization() async {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
 
@@ -336,6 +353,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> with TrayListener {
     }
 
     _trayInitialization();
+    _hotkeyInitialization();
     _initialize().then((_) {
       _postInitialization();
       _tryRequestRating();
@@ -378,7 +396,10 @@ class _AppSplashScreenState extends State<_AppSplashScreen> with TrayListener {
 
   @override
   void dispose() {
-    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) trayManager.removeListener(this);
+    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) {
+      trayManager.removeListener(this);
+      hotKeyManager.unregisterAll();
+    }
     super.dispose();
   }
 
