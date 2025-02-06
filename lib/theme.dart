@@ -33,7 +33,7 @@ Future<ThemeData> createAppTheme(
     brightness: brightness,
   );
 
-  final hasAppBarBlurry = prefs.getBool(kAppbarTransparentStoreKey) ?? false;
+  final hasAppBarTransparent = prefs.getBool(kAppbarTransparentStoreKey) ?? false;
   final useM3 = useMaterial3 ?? (prefs.getBool(kMaterialYouToggleStoreKey) ?? true);
 
   return ThemeData(
@@ -51,9 +51,9 @@ Future<ThemeData> createAppTheme(
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,
-      elevation: hasAppBarBlurry ? 0 : null,
-      backgroundColor: hasAppBarBlurry ? colorScheme.primary.withOpacity(0.3) : colorScheme.primary,
-      foregroundColor: hasAppBarBlurry ? colorScheme.onSurface : colorScheme.onPrimary,
+      elevation: hasAppBarTransparent ? 0 : null,
+      backgroundColor: hasAppBarTransparent ? Colors.transparent : colorScheme.primary,
+      foregroundColor: hasAppBarTransparent ? colorScheme.onSurface : colorScheme.onPrimary,
     ),
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
