@@ -369,6 +369,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> with TrayListener {
   @override
   void onTrayIconMouseDown() {
     if (Platform.isWindows) {
+      context.read<NotificationProvider>().clearTray();
       appWindow.show();
     } else {
       trayManager.popUpContextMenu();
@@ -380,6 +381,7 @@ class _AppSplashScreenState extends State<_AppSplashScreen> with TrayListener {
     if (Platform.isWindows) {
       trayManager.popUpContextMenu();
     } else {
+      context.read<NotificationProvider>().clearTray();
       appWindow.show();
     }
   }

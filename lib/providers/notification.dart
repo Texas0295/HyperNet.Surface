@@ -73,6 +73,7 @@ class NotificationProvider extends ChangeNotifier {
   }
 
   int showingCount = 0;
+  int showingTrayCount = 0;
   List<SnNotification> notifications = List.empty(growable: true);
 
   void listen() {
@@ -81,6 +82,7 @@ class NotificationProvider extends ChangeNotifier {
         final notification = SnNotification.fromJson(event.payload!);
         if (showingCount < 0) showingCount = 0;
         showingCount++;
+        showingTrayCount++;
         notifications.add(notification);
         Future.delayed(const Duration(seconds: 3), () {
           if (showingCount >= 0) showingCount--;
@@ -92,6 +94,11 @@ class NotificationProvider extends ChangeNotifier {
         if (doHaptic) HapticFeedback.mediumImpact();
       }
     });
+  }
+
+  void clearTray() {
+    showingTrayCount = 0;
+    updateTray();
   }
 
   void updateTray() {
