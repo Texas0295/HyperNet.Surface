@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'dart:math' show min;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/chat_message_controller.dart';
@@ -38,9 +43,30 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   final TextEditingController _contentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
+  final HotKey _pasteHotKey = HotKey(
+    key: PhysicalKeyboardKey.keyV,
+    modifiers: [Platform.isMacOS ? HotKeyModifier.meta : HotKeyModifier.control],
+    scope: HotKeyScope.inapp,
+  );
+
+  void _registerHotKey() {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
+    hotKeyManager.register(_pasteHotKey, keyDownHandler: (_) async {
+      final imageBytes = await Pasteboard.image;
+      if (imageBytes == null) return;
+      _attachments.add(PostWriteMedia.fromBytes(
+        imageBytes,
+        'attachmentPastedImage'.tr(),
+        SnMediaType.image,
+      ));
+      setState(() {});
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _registerHotKey();
     _contentController.addListener(() {
       if (_contentController.text.isNotEmpty) {
         widget.controller.pingTypingStatus();
@@ -177,6 +203,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   void dispose() {
     _contentController.dispose();
     _focusNode.dispose();
+    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) hotKeyManager.unregister(_pasteHotKey);
     super.dispose();
   }
 
@@ -420,7 +447,9 @@ class _StickerPicker extends StatelessWidget {
                             child: Tooltip(
                               richMessage: TextSpan(
                                 children: [
-                                  TextSpan(text: ':${element.pack.prefix}${element.alias}:\n', style: GoogleFonts.robotoMono()),
+                                  TextSpan(
+                                      text: ':${element.pack.prefix}${element.alias}:\n',
+                                      style: GoogleFonts.robotoMono()),
                                   TextSpan(text: element.name).bold(),
                                 ],
                               ),

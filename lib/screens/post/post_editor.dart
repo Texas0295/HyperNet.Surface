@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/config.dart';
@@ -19,6 +25,8 @@ import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
+
+import '../../types/attachment.dart';
 
 class PostEditorExtra {
   final String? text;
@@ -94,15 +102,39 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     );
   }
 
+  final HotKey _pasteHotKey = HotKey(
+    key: PhysicalKeyboardKey.keyV,
+    modifiers: [Platform.isMacOS ? HotKeyModifier.meta : HotKeyModifier.control],
+    scope: HotKeyScope.inapp,
+  );
+
+  void _registerHotKey() {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
+    hotKeyManager.register(_pasteHotKey, keyDownHandler: (_) async {
+      final imageBytes = await Pasteboard.image;
+      if (imageBytes == null) return;
+      _writeController.addAttachments([
+        PostWriteMedia.fromBytes(
+          imageBytes,
+          'attachmentPastedImage'.tr(),
+          SnMediaType.image,
+        ),
+      ]);
+      setState(() {});
+    });
+  }
+
   @override
   void dispose() {
     _writeController.dispose();
+    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) hotKeyManager.unregister(_pasteHotKey);
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    _registerHotKey();
     if (!PostWriteController.kTitleMap.keys.contains(widget.mode)) {
       context.showErrorDialog('Unknown post type');
       Navigator.pop(context);
