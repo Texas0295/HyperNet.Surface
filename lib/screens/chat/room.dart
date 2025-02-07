@@ -206,7 +206,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     });
 
     final ws = context.read<WebSocketProvider>();
-    _wsSubscription = ws.stream.stream.listen((event) {
+    _wsSubscription = ws.pk.stream.listen((event) {
       switch (event.method) {
         case 'calls.new':
           final payload = SnChatCall.fromJson(event.payload!);

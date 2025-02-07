@@ -77,7 +77,7 @@ class NotificationProvider extends ChangeNotifier {
   List<SnNotification> notifications = List.empty(growable: true);
 
   void listen() {
-    _ws.stream.stream.listen((event) {
+    _ws.pk.stream.listen((event) {
       if (event.method == 'notifications.new') {
         final notification = SnNotification.fromJson(event.payload!);
         if (showingCount < 0) showingCount = 0;

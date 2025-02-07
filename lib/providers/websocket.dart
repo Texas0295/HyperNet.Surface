@@ -18,7 +18,8 @@ class WebSocketProvider extends ChangeNotifier {
   late final SnNetworkProvider _sn;
   late final UserProvider _ua;
 
-  StreamController<WebSocketPackage> stream = StreamController.broadcast();
+  StreamController<WebSocketPackage> pk = StreamController.broadcast();
+  Stream<dynamic>? _wsStream;
 
   WebSocketProvider(BuildContext context) {
     _sn = context.read<SnNetworkProvider>();
@@ -36,7 +37,7 @@ class WebSocketProvider extends ChangeNotifier {
   Completer<void>? _connectCompleter;
 
   Future<void> connect({noRetry = false}) async {
-    if(_connectCompleter != null) {
+    if (_connectCompleter != null) {
       await _connectCompleter!.future;
       _connectCompleter = null;
     }
@@ -59,6 +60,7 @@ class WebSocketProvider extends ChangeNotifier {
     try {
       conn = WebSocketChannel.connect(uri);
       await conn!.ready;
+      _wsStream = conn!.stream.asBroadcastStream();
       listen();
       log('[WebSocket] Connected to server!');
       isConnected = true;
@@ -73,7 +75,7 @@ class WebSocketProvider extends ChangeNotifier {
         log('Retry connecting to websocket in 3 seconds...');
         return Future.delayed(
           const Duration(seconds: 3),
-              () => connect(noRetry: true),
+          () => connect(noRetry: true),
         );
       }
     } finally {
@@ -93,11 +95,12 @@ class WebSocketProvider extends ChangeNotifier {
   }
 
   void listen() {
-    conn?.stream.listen(
+    if (_wsStream == null) return;
+    _wsStream!.listen(
       (event) {
         final packet = WebSocketPackage.fromJson(jsonDecode(event));
         log('Websocket incoming message: ${packet.method} ${packet.message}');
-        stream.sink.add(packet);
+        pk.sink.add(packet);
       },
       onDone: () {
         isConnected = false;

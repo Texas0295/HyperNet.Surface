@@ -71,7 +71,7 @@ class ChatMessageController extends ChangeNotifier {
       resp.data as Map<String, dynamic>,
     );
 
-    _wsSubscription = _ws.stream.stream.listen((event) {
+    _wsSubscription = _ws.pk.stream.listen((event) {
       switch (event.method) {
         case 'events.new':
           if (event.payload?['channel_id'] != channel?.id) break;
