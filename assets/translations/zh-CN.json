@@ -138,9 +138,11 @@
   "fieldPublisherBelongToRealmUnset": "未设置发布者所属领域",
   "writePostTypeStory": "发动态",
   "writePostTypeArticle": "写文章",
+  "writePostTypeQuestion": "提问题",
   "fieldPostPublisher": "帖子发布者",
   "fieldPostContent": "发生什么事了？！",
   "fieldPostTitle": "标题",
+  "fieldPostQuestionReward": "回答奖励源点",
   "fieldPostDescription": "描述",
   "fieldPostTags": "标签",
   "fieldPostCategories": "分类",
@@ -608,5 +610,8 @@
   },
   "aiThinkingProcess": "AI 思考过程",
   "accountSettingsApplied": "帐号设置已应用。",
-  "trayMenuExit": "退出"
+  "trayMenuExit": "退出",
+  "postQuestionUnanswered": "未解答的问题",
+  "postQuestionUnansweredWithReward": "未解答的问题，悬赏源点 {}",
+  "postQuestionAnswered": "已解答的问题"
 }

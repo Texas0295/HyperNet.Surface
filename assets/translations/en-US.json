@@ -154,9 +154,11 @@
   "fieldPublisherBelongToRealmUnset": "Unset Publisher Belongs to Realm",
   "writePostTypeStory": "Post a story",
   "writePostTypeArticle": "Write an article",
+  "writePostTypeQuestion": "Ask a question",
   "fieldPostPublisher": "Post publisher",
   "fieldPostContent": "What happened?!",
   "fieldPostTitle": "Title",
+  "fieldPostQuestionReward": "Answer Rewards (Source Points)",
   "fieldPostDescription": "Description",
   "fieldPostTags": "Tags",
   "fieldPostCategories": "Categories",
@@ -610,5 +612,8 @@
   },
   "aiThinkingProcess": "AI Thinking Process",
   "accountSettingsApplied": "Account settings have been applied.",
-  "trayMenuExit": "Exit"
+  "trayMenuExit": "Exit",
+  "postQuestionUnanswered": "Unanswered Question",
+  "postQuestionUnansweredWithReward": "Unanswered Question, reward source points {}",
+  "postQuestionAnswered": "Answered Question"
 }

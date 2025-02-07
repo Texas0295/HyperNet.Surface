@@ -144,6 +144,7 @@ class PostWriteController extends ChangeNotifier {
   static const Map<String, String> kTitleMap = {
     'stories': 'writePostTypeStory',
     'articles': 'writePostTypeArticle',
+    'questions': 'writePostTypeQuestion',
   };
 
   static const kAttachmentProgressWeight = 0.9;
@@ -153,6 +154,7 @@ class PostWriteController extends ChangeNotifier {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController aliasController = TextEditingController();
+  final TextEditingController rewardController = TextEditingController();
 
   bool _temporarySaveActive = false;
 
@@ -215,6 +217,7 @@ class PostWriteController extends ChangeNotifier {
         descriptionController.text = post.body['description'] ?? '';
         contentController.text = post.body['content'] ?? '';
         aliasController.text = post.alias ?? '';
+        rewardController.text = post.body['reward']?.toString() ?? '';
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
         visibleUsers = List.from(post.visibleUsersList ?? [], growable: true);
@@ -348,6 +351,7 @@ class PostWriteController extends ChangeNotifier {
           if (aliasController.text.isNotEmpty) 'alias': aliasController.text,
           if (titleController.text.isNotEmpty) 'title': titleController.text,
           if (descriptionController.text.isNotEmpty) 'description': descriptionController.text,
+          if (rewardController.text.isNotEmpty) 'reward': rewardController.text,
           if (thumbnail != null && thumbnail!.attachment != null) 'thumbnail': thumbnail!.attachment!.toJson(),
           'attachments':
               attachments.where((e) => e.attachment != null).map((e) => e.attachment!.toJson()).toList(growable: true),
@@ -376,6 +380,7 @@ class PostWriteController extends ChangeNotifier {
       aliasController.text = data['alias'] ?? '';
       titleController.text = data['title'] ?? '';
       descriptionController.text = data['description'] ?? '';
+      rewardController.text = data['reward']?.toString() ?? '';
       if (data['thumbnail'] != null) thumbnail = PostWriteMedia(SnAttachment.fromJson(data['thumbnail']));
       attachments
           .addAll(data['attachments'].map((ele) => PostWriteMedia(SnAttachment.fromJson(ele))).cast<PostWriteMedia>());
@@ -474,6 +479,8 @@ class PostWriteController extends ChangeNotifier {
     progress = kAttachmentProgressWeight;
     notifyListeners();
 
+    final reward = double.tryParse(rewardController.text);
+
     // Posting the content
     try {
       final baseProgressVal = progress!;
@@ -499,6 +506,7 @@ class PostWriteController extends ChangeNotifier {
           if (publishedUntil != null) 'published_until': publishedAt!.toUtc().toIso8601String(),
           if (replyingPost != null) 'reply_to': replyingPost!.id,
           if (repostingPost != null) 'repost_to': repostingPost!.id,
+          if (reward != null) 'reward': reward,
         },
         onSendProgress: (count, total) {
           progress = baseProgressVal + (count / total) * (kPostingProgressWeight / 2);

@@ -166,6 +166,27 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
             ],
           ),
+          Row(
+            children: [
+              Text('writePostTypeQuestion').tr(),
+              const Gap(20),
+              FloatingActionButton(
+                heroTag: null,
+                tooltip: 'writePostTypeQuestion'.tr(),
+                onPressed: () {
+                  GoRouter.of(context).pushNamed('postEditor', pathParameters: {
+                    'mode': 'questions',
+                  }).then((value) {
+                    if (value == true) {
+                      _refreshPosts();
+                    }
+                  });
+                  _fabKey.currentState!.toggle();
+                },
+                child: const Icon(Symbols.question_answer),
+              ),
+            ],
+          ),
         ],
       ),
       body: RefreshIndicator(

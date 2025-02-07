@@ -242,6 +242,10 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                             controller: _writeController,
                             onTapPublisher: _showPublisherPopup,
                           ),
+                        'questions' => _PostQuestionEditor(
+                            controller: _writeController,
+                            onTapPublisher: _showPublisherPopup,
+                          ),
                         _ => const Placeholder(),
                       },
                     ),
@@ -438,12 +442,13 @@ class _PostStoryEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       constraints: const BoxConstraints(maxWidth: 640),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Material(
-            elevation: 1,
+            elevation: 2,
             borderRadius: const BorderRadius.all(Radius.circular(24)),
             child: GestureDetector(
               onTap: () {
@@ -455,23 +460,38 @@ class _PostStoryEditor extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: TextField(
-              controller: controller.contentController,
-              maxLines: null,
-              decoration: InputDecoration(
-                hintText: 'fieldPostContent'.tr(),
-                hintStyle: TextStyle(fontSize: 14),
-                isCollapsed: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+            child: Column(
+              children: [
+                const Gap(6),
+                TextField(
+                  controller: controller.titleController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'fieldPostTitle'.tr(),
+                    border: InputBorder.none,
+                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                ).padding(horizontal: 16),
+                const Gap(8),
+                TextField(
+                  controller: controller.contentController,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    hintText: 'fieldPostContent'.tr(),
+                    hintStyle: TextStyle(fontSize: 14),
+                    isCollapsed: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    border: InputBorder.none,
+                  ),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ),
-                border: InputBorder.none,
-              ),
-              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-            ).padding(top: 4),
+              ],
+            ),
           ),
         ],
-      ),
+      ).padding(bottom: 8),
     );
   }
 }
@@ -508,21 +528,21 @@ class _PostArticleEditor extends StatelessWidget {
           },
         ),
       ),
-      const Gap(4),
+      const Gap(16),
       TextField(
         controller: controller.titleController,
-        decoration: InputDecoration(
-          labelText: 'fieldPostTitle'.tr(),
+        decoration: InputDecoration.collapsed(
+          hintText: 'fieldPostTitle'.tr(),
           border: InputBorder.none,
         ),
         style: Theme.of(context).textTheme.titleLarge,
         onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ).padding(horizontal: 16),
-      const Gap(4),
+      const Gap(8),
       TextField(
         controller: controller.descriptionController,
-        decoration: InputDecoration(
-          labelText: 'fieldPostDescription'.tr(),
+        decoration: InputDecoration.collapsed(
+          hintText: 'fieldPostDescription'.tr(),
           border: InputBorder.none,
         ),
         maxLines: null,
@@ -530,7 +550,7 @@ class _PostArticleEditor extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyLarge,
         onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ).padding(horizontal: 16),
-      const Gap(8),
+      const Gap(4),
     ];
 
     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
@@ -593,6 +613,80 @@ class _PostArticleEditor extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PostQuestionEditor extends StatelessWidget {
+  final PostWriteController controller;
+  final Function? onTapPublisher;
+
+  const _PostQuestionEditor({required this.controller, this.onTapPublisher});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      constraints: const BoxConstraints(maxWidth: 640),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Material(
+            elevation: 1,
+            borderRadius: const BorderRadius.all(Radius.circular(24)),
+            child: GestureDetector(
+              onTap: () {
+                onTapPublisher?.call();
+              },
+              child: AccountImage(
+                content: controller.publisher?.avatar,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                const Gap(6),
+                TextField(
+                  controller: controller.titleController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'fieldPostTitle'.tr(),
+                    border: InputBorder.none,
+                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                ).padding(horizontal: 16),
+                const Gap(8),
+                TextField(
+                  controller: controller.rewardController,
+                  decoration: InputDecoration(
+                    hintText: 'fieldPostQuestionReward'.tr(),
+                    suffixText: 'walletCurrencyShort'.tr(),
+                    border: InputBorder.none,
+                    isCollapsed: true,
+                  ),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                ).padding(horizontal: 16),
+                const Gap(8),
+                TextField(
+                  controller: controller.contentController,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    hintText: 'fieldPostContent'.tr(),
+                    hintStyle: TextStyle(fontSize: 14),
+                    isCollapsed: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    border: InputBorder.none,
+                  ),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ).padding(top: 8),
     );
   }
 }

@@ -88,16 +88,6 @@ class PostMetaEditor extends StatelessWidget {
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 8),
           child: Column(
             children: [
-              if (controller.mode == 'stories')
-                TextField(
-                  controller: controller.titleController,
-                  decoration: InputDecoration(
-                    labelText: 'fieldPostTitle'.tr(),
-                    border: UnderlineInputBorder(),
-                  ),
-                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-                ).padding(horizontal: 24),
-              const Gap(4),
               PostTagsField(
                 initialTags: controller.tags,
                 labelText: 'fieldPostTags'.tr(),

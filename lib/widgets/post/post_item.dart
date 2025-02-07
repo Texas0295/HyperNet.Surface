@@ -228,6 +228,7 @@ class PostItem extends StatelessWidget {
                   if (onDeleted != null) onDeleted!();
                 },
               ).padding(horizontal: 12, vertical: 8),
+              if (data.type == 'question') _PostQuestionHint(data: data).padding(horizontal: 16, bottom: 8),
               if (data.body['title'] != null || data.body['description'] != null)
                 _PostHeadline(
                   data: data,
@@ -333,6 +334,7 @@ class PostShareImageWidget extends StatelessWidget {
             showMenu: false,
             isRelativeDate: false,
           ).padding(horizontal: 16, bottom: 8),
+          if (data.type == 'question') _PostQuestionHint(data: data).padding(horizontal: 16, bottom: 8),
           _PostHeadline(
             data: data,
             isEnlarge: data.type == 'article',
@@ -435,6 +437,30 @@ class PostShareImageWidget extends StatelessWidget {
         ],
       ).padding(vertical: 16),
     );
+  }
+}
+
+class _PostQuestionHint extends StatelessWidget {
+  final SnPost data;
+
+  const _PostQuestionHint({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(data.body['answer'] == null ? Symbols.help : Symbols.check_circle, size: 20),
+        const Gap(4),
+        if (data.body['answer'] == null && data.body['reward']?.toDouble() != null)
+          Text('postQuestionUnansweredWithReward'.tr(args: [
+            '${data.body['reward']}',
+          ])).opacity(0.75)
+        else if (data.body['answer'] == null)
+          Text('postQuestionUnanswered').opacity(0.75)
+        else
+          Text('postQuestionAnswered').opacity(0.75),
+      ],
+    ).opacity(0.75);
   }
 }
 
