@@ -12,21 +12,22 @@ import 'package:go_router/go_router.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:pasteboard/pasteboard.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/controllers/post_write_controller.dart';
 import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
+import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/loading_indicator.dart';
+import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
-
-import '../../types/attachment.dart';
 
 class PostEditorExtra {
   final String? text;
@@ -288,6 +289,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     SingleChildScrollView(
                       padding: EdgeInsets.only(bottom: 160),
                       child: Column(
+                        spacing: 8,
                         children: [
                           // Replying Notice
                           if (_writeController.replyingPost != null)
@@ -339,31 +341,12 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               ],
                             ),
                           // Content Input Area
-                          Container(
-                            constraints: const BoxConstraints(maxWidth: 640),
-                            child: TextField(
-                              controller: _writeController.contentController,
-                              maxLines: null,
-                              decoration: InputDecoration(
-                                hintText: 'fieldPostContent'.tr(),
-                                hintStyle: TextStyle(fontSize: 14),
-                                isCollapsed: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-                            ),
-                          ),
-                        ]
-                            .expandIndexed(
-                              (idx, ele) => [
-                                if (idx != 0 || _writeController.isRelatedNull) const Gap(8),
-                                ele,
-                              ],
-                            )
-                            .toList(),
+                          switch (_writeController.mode) {
+                            'stories' => _PostStoryEditor(controller: _writeController),
+                            'articles' => _PostArticleEditor(controller: _writeController),
+                            _ => const Placeholder(),
+                          },
+                        ],
                       ),
                     ),
                     if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
@@ -507,4 +490,91 @@ class _PostEditorActionScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
       };
+}
+
+class _PostStoryEditor extends StatelessWidget {
+  final PostWriteController controller;
+
+  const _PostStoryEditor({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 640),
+      child: TextField(
+        controller: controller.contentController,
+        maxLines: null,
+        decoration: InputDecoration(
+          hintText: 'fieldPostContent'.tr(),
+          hintStyle: TextStyle(fontSize: 14),
+          isCollapsed: true,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
+          border: InputBorder.none,
+        ),
+        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      ),
+    );
+  }
+}
+
+class _PostArticleEditor extends StatelessWidget {
+  final PostWriteController controller;
+
+  const _PostArticleEditor({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
+      return Container(
+        constraints: const BoxConstraints(maxWidth: 640 * 2 + 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller.contentController,
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: 'fieldPostContent'.tr(),
+                  hintStyle: TextStyle(fontSize: 14),
+                  isCollapsed: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  border: InputBorder.none,
+                ),
+                onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+              ),
+            ),
+            const Gap(8),
+            Expanded(
+              child: MarkdownTextContent(
+                content: controller.contentController.text,
+              ).padding(horizontal: 24),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 640),
+      child: TextField(
+        controller: controller.contentController,
+        maxLines: null,
+        decoration: InputDecoration(
+          hintText: 'fieldPostContent'.tr(),
+          hintStyle: TextStyle(fontSize: 14),
+          isCollapsed: true,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
+          border: InputBorder.none,
+        ),
+        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      ),
+    );
+  }
 }

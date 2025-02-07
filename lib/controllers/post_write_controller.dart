@@ -168,6 +168,7 @@ class PostWriteController extends ChangeNotifier {
     });
     contentController.addListener(() {
       _temporaryPlanSave();
+      notifyListeners();
     });
     if (doLoadFromTemporary) _temporaryLoad();
   }
