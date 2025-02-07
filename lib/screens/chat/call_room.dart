@@ -155,12 +155,16 @@ class _CallRoomScreenState extends State<CallRoomScreen> {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'call'.tr(),
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).appBarTheme.foregroundColor,
+                        ),
                   ),
                   const TextSpan(text: '\n'),
                   TextSpan(
                     text: call.lastDuration.toString(),
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).appBarTheme.foregroundColor,
+                        ),
                   ),
                 ]),
               ),

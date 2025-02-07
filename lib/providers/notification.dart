@@ -103,10 +103,10 @@ class NotificationProvider extends ChangeNotifier {
 
   void updateTray() {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
-    if (notifications.isEmpty) {
+    if (showingTrayCount == 0) {
       trayManager.setTitle('');
     } else {
-      trayManager.setTitle(' ${notifications.length.toString()}');
+      trayManager.setTitle(' $showingTrayCount');
     }
   }
 
