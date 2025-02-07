@@ -292,7 +292,7 @@ class PostMediaPendingList extends StatelessWidget {
       constraints: const BoxConstraints(maxHeight: 120),
       child: Row(
         children: [
-          const Gap(8),
+          const Gap(16),
           if (thumbnail != null)
             ContextMenuArea(
               contextMenu: _createContextMenu(context, -1, thumbnail!),
@@ -337,15 +337,10 @@ class _PostMediaPendingItem extends StatelessWidget {
 
     final sn = context.read<SnNetworkProvider>();
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).dividerColor,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).colorScheme.surfaceContainer,
-      ),
+    return Material(
+      elevation: 4,
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      borderRadius: BorderRadius.circular(8),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         child: Row(

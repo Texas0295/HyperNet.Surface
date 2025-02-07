@@ -336,6 +336,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                         : 'fieldChatMessage'.tr(args: [widget.controller.channel?.name ?? 'loading'.tr()]),
                     border: InputBorder.none,
                   ),
+                  textInputAction: TextInputAction.send,
                   onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   onSubmitted: (_) {
                     if (_isBusy) return;

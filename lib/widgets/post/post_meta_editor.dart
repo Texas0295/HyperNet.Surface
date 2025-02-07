@@ -19,6 +19,7 @@ const Map<int, String> kPostVisibilityLevel = {
 
 class PostMetaEditor extends StatelessWidget {
   final PostWriteController controller;
+
   const PostMetaEditor({super.key, required this.controller});
 
   Future<DateTime?> _selectDate(
@@ -87,26 +88,14 @@ class PostMetaEditor extends StatelessWidget {
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 8),
           child: Column(
             children: [
-              TextField(
-                controller: controller.titleController,
-                decoration: InputDecoration(
-                  labelText: 'fieldPostTitle'.tr(),
-                  border: UnderlineInputBorder(),
-                ),
-                onTapOutside: (_) =>
-                    FocusManager.instance.primaryFocus?.unfocus(),
-              ).padding(horizontal: 24),
-              if (controller.mode == 'articles') const Gap(4),
-              if (controller.mode == 'articles')
+              if (controller.mode == 'stories')
                 TextField(
-                  controller: controller.descriptionController,
-                  maxLines: null,
+                  controller: controller.titleController,
                   decoration: InputDecoration(
-                    labelText: 'fieldPostDescription'.tr(),
+                    labelText: 'fieldPostTitle'.tr(),
                     border: UnderlineInputBorder(),
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ).padding(horizontal: 24),
               const Gap(4),
               PostTagsField(
@@ -133,8 +122,7 @@ class PostMetaEditor extends StatelessWidget {
                   helperMaxLines: 2,
                   border: UnderlineInputBorder(),
                 ),
-                onTapOutside: (_) =>
-                    FocusManager.instance.primaryFocus?.unfocus(),
+                onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
               ).padding(horizontal: 24),
               const Gap(12),
               ListTile(
@@ -182,8 +170,7 @@ class PostMetaEditor extends StatelessWidget {
                   leading: Icon(Symbols.person),
                   trailing: Icon(Symbols.chevron_right),
                   title: Text('postVisibleUsers').tr(),
-                  subtitle: Text('postSelectedUsers')
-                      .plural(controller.visibleUsers.length),
+                  subtitle: Text('postSelectedUsers').plural(controller.visibleUsers.length),
                   onTap: () {
                     _selectVisibleUser(context);
                   },
@@ -194,8 +181,7 @@ class PostMetaEditor extends StatelessWidget {
                   leading: Icon(Symbols.person),
                   trailing: Icon(Symbols.chevron_right),
                   title: Text('postInvisibleUsers').tr(),
-                  subtitle: Text('postSelectedUsers')
-                      .plural(controller.invisibleUsers.length),
+                  subtitle: Text('postSelectedUsers').plural(controller.invisibleUsers.length),
                   onTap: () {
                     _selectInvisibleUser(context);
                   },
@@ -204,9 +190,7 @@ class PostMetaEditor extends StatelessWidget {
                 leading: const Icon(Symbols.event_available),
                 title: Text('postPublishedAt').tr(),
                 subtitle: Text(
-                  controller.publishedAt != null
-                      ? dateFormatter.format(controller.publishedAt!)
-                      : 'unset'.tr(),
+                  controller.publishedAt != null ? dateFormatter.format(controller.publishedAt!) : 'unset'.tr(),
                 ),
                 trailing: controller.publishedAt != null
                     ? IconButton(
@@ -230,9 +214,7 @@ class PostMetaEditor extends StatelessWidget {
                 leading: const Icon(Symbols.event_busy),
                 title: Text('postPublishedUntil').tr(),
                 subtitle: Text(
-                  controller.publishedUntil != null
-                      ? dateFormatter.format(controller.publishedUntil!)
-                      : 'unset'.tr(),
+                  controller.publishedUntil != null ? dateFormatter.format(controller.publishedUntil!) : 'unset'.tr(),
                 ),
                 trailing: controller.publishedUntil != null
                     ? IconButton(

@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
@@ -96,10 +98,14 @@ class _AccountSelectState extends State<AccountSelect> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.title,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ).padding(left: 24, right: 24, top: 16, bottom: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Symbols.group, size: 24),
+              const Gap(16),
+              Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
+            ],
+          ).padding(horizontal: 20, top: 16, bottom: 12),
           Container(
             color: Theme.of(context).colorScheme.secondaryContainer,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

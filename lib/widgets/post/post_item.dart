@@ -833,7 +833,7 @@ class _PostContentHeader extends StatelessWidget {
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
-                    builder: (context) => _PostGetInsightSheet(postId: data.id),
+                    builder: (context) => _PostGetInsightPopup(postId: data.id),
                   );
                 },
               ),
@@ -1292,16 +1292,16 @@ class _PostAbuseReportDialogState extends State<_PostAbuseReportDialog> {
   }
 }
 
-class _PostGetInsightSheet extends StatefulWidget {
+class _PostGetInsightPopup extends StatefulWidget {
   final int postId;
 
-  const _PostGetInsightSheet({required this.postId});
+  const _PostGetInsightPopup({required this.postId});
 
   @override
-  State<_PostGetInsightSheet> createState() => _PostGetInsightSheetState();
+  State<_PostGetInsightPopup> createState() => _PostGetInsightPopupState();
 }
 
-class _PostGetInsightSheetState extends State<_PostGetInsightSheet> {
+class _PostGetInsightPopupState extends State<_PostGetInsightPopup> {
   String? _response;
   String? _thinkingProcess;
 

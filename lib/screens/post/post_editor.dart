@@ -125,6 +125,16 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     });
   }
 
+  void _showPublisherPopup() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => _PostPublisherPopup(
+        controller: _writeController,
+        publishers: _publishers,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _writeController.dispose();
@@ -198,156 +208,42 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
           ),
           body: Column(
             children: [
-              DropdownButtonHideUnderline(
-                child: DropdownButton2<SnPublisher>(
-                  isExpanded: true,
-                  hint: Text(
-                    'fieldPostPublisher',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).hintColor,
-                    ),
-                  ).tr(),
-                  items: <DropdownMenuItem<SnPublisher>>[
-                    ...(_publishers?.map(
-                          (item) => DropdownMenuItem<SnPublisher>(
-                            enabled: _writeController.editingPost == null,
-                            value: item,
-                            child: Row(
-                              children: [
-                                AccountImage(content: item.avatar, radius: 16),
-                                const Gap(8),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(item.nick).textStyle(Theme.of(context).textTheme.bodyMedium!),
-                                      Text('@${item.name}')
-                                          .textStyle(Theme.of(context).textTheme.bodySmall!)
-                                          .fontSize(12),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ) ??
-                        []),
-                    DropdownMenuItem<SnPublisher>(
-                      value: null,
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Theme.of(context).colorScheme.onSurface,
-                            child: const Icon(Symbols.add),
-                          ),
-                          const Gap(8),
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('publishersNew').tr().textStyle(Theme.of(context).textTheme.bodyMedium!),
-                              ],
-                            ),
-                          ),
-                        ],
+              if (_writeController.editingPost != null)
+                Container(
+                  padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 1 / MediaQuery.of(context).devicePixelRatio,
                       ),
                     ),
-                  ],
-                  value: _writeController.publisher,
-                  onChanged: (SnPublisher? value) {
-                    if (value == null) {
-                      GoRouter.of(context).pushNamed('accountPublisherNew').then((value) {
-                        if (value == true) {
-                          _publishers = null;
-                          _fetchPublishers();
-                        }
-                      });
-                    } else {
-                      _writeController.setPublisher(value);
-                      final config = context.read<ConfigProvider>();
-                      config.prefs.setInt('int_last_publisher_id', value.id);
-                    }
-                  },
-                  buttonStyleData: const ButtonStyleData(
-                    padding: EdgeInsets.only(right: 16),
-                    height: 48,
                   ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    height: 48,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.edit, size: 16),
+                      const Gap(10),
+                      Text('postEditingNotice').tr(args: ['@${_writeController.editingPost!.publisher.name}']),
+                    ],
                   ),
                 ),
-              ),
-              const Divider(height: 1),
               Expanded(
                 child: Stack(
                   children: [
                     SingleChildScrollView(
                       padding: EdgeInsets.only(bottom: 160),
-                      child: Column(
-                        spacing: 8,
-                        children: [
-                          // Replying Notice
-                          if (_writeController.replyingPost != null)
-                            Column(
-                              children: [
-                                ExpansionTile(
-                                  minTileHeight: 48,
-                                  leading: const Icon(Symbols.reply).padding(left: 4),
-                                  title: Text('postReplyingNotice')
-                                      .fontSize(15)
-                                      .tr(args: ['@${_writeController.replyingPost!.publisher.name}']),
-                                  children: <Widget>[PostItem(data: _writeController.replyingPost!)],
-                                ),
-                                const Divider(height: 1),
-                              ],
-                            ),
-                          // Reposting Notice
-                          if (_writeController.repostingPost != null)
-                            Column(
-                              children: [
-                                ExpansionTile(
-                                  minTileHeight: 48,
-                                  leading: const Icon(Symbols.forward).padding(left: 4),
-                                  title: Text('postRepostingNotice')
-                                      .fontSize(15)
-                                      .tr(args: ['@${_writeController.repostingPost!.publisher.name}']),
-                                  children: <Widget>[
-                                    PostItem(
-                                      data: _writeController.repostingPost!,
-                                    )
-                                  ],
-                                ),
-                                const Divider(height: 1),
-                              ],
-                            ),
-                          // Editing Notice
-                          if (_writeController.editingPost != null)
-                            Column(
-                              children: [
-                                ExpansionTile(
-                                  minTileHeight: 48,
-                                  leading: const Icon(Symbols.edit_note).padding(left: 4),
-                                  title: Text('postEditingNotice')
-                                      .fontSize(15)
-                                      .tr(args: ['@${_writeController.editingPost!.publisher.name}']),
-                                  children: <Widget>[PostItem(data: _writeController.editingPost!)],
-                                ),
-                                const Divider(height: 1),
-                              ],
-                            ),
-                          // Content Input Area
-                          switch (_writeController.mode) {
-                            'stories' => _PostStoryEditor(controller: _writeController),
-                            'articles' => _PostArticleEditor(controller: _writeController),
-                            _ => const Placeholder(),
-                          },
-                        ],
-                      ),
+                      child: switch (_writeController.mode) {
+                        'stories' => _PostStoryEditor(
+                            controller: _writeController,
+                            onTapPublisher: _showPublisherPopup,
+                          ),
+                        'articles' => _PostArticleEditor(
+                            controller: _writeController,
+                            onTapPublisher: _showPublisherPopup,
+                          ),
+                        _ => const Placeholder(),
+                      },
                     ),
                     if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
                       Positioned(
@@ -492,28 +388,89 @@ class _PostEditorActionScrollBehavior extends MaterialScrollBehavior {
       };
 }
 
+class _PostPublisherPopup extends StatelessWidget {
+  final PostWriteController controller;
+  final List<SnPublisher>? publishers;
+
+  const _PostPublisherPopup({required this.controller, this.publishers});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(Symbols.face, size: 24),
+            const Gap(16),
+            Text('accountPublishers', style: Theme.of(context).textTheme.titleLarge).tr(),
+          ],
+        ).padding(horizontal: 20, top: 16, bottom: 12),
+        Expanded(
+          child: ListView.builder(
+            itemCount: publishers?.length ?? 0,
+            itemBuilder: (context, idx) {
+              final publisher = publishers![idx];
+              return ListTile(
+                title: Text(publisher.nick),
+                subtitle: Text('@${publisher.name}'),
+                leading: AccountImage(content: publisher.avatar, radius: 18),
+                onTap: () {
+                  controller.setPublisher(publisher);
+                  Navigator.pop(context, true);
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PostStoryEditor extends StatelessWidget {
   final PostWriteController controller;
+  final Function? onTapPublisher;
 
-  const _PostStoryEditor({required this.controller});
+  const _PostStoryEditor({required this.controller, this.onTapPublisher});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(maxWidth: 640),
-      child: TextField(
-        controller: controller.contentController,
-        maxLines: null,
-        decoration: InputDecoration(
-          hintText: 'fieldPostContent'.tr(),
-          hintStyle: TextStyle(fontSize: 14),
-          isCollapsed: true,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Material(
+            elevation: 1,
+            borderRadius: const BorderRadius.all(Radius.circular(24)),
+            child: GestureDetector(
+              onTap: () {
+                onTapPublisher?.call();
+              },
+              child: AccountImage(
+                content: controller.publisher?.avatar,
+              ),
+            ),
           ),
-          border: InputBorder.none,
-        ),
-        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          Expanded(
+            child: TextField(
+              controller: controller.contentController,
+              maxLines: null,
+              decoration: InputDecoration(
+                hintText: 'fieldPostContent'.tr(),
+                hintStyle: TextStyle(fontSize: 14),
+                isCollapsed: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                border: InputBorder.none,
+              ),
+              onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+            ).padding(top: 4),
+          ),
+        ],
       ),
     );
   }
@@ -521,60 +478,121 @@ class _PostStoryEditor extends StatelessWidget {
 
 class _PostArticleEditor extends StatelessWidget {
   final PostWriteController controller;
+  final Function? onTapPublisher;
 
-  const _PostArticleEditor({required this.controller});
+  const _PostArticleEditor({required this.controller, this.onTapPublisher});
 
   @override
   Widget build(BuildContext context) {
+    final editorWidgets = <Widget>[
+      Material(
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        child: InkWell(
+          child: Row(
+            children: [
+              AccountImage(content: controller.publisher?.avatar, radius: 20),
+              const Gap(8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(controller.publisher?.nick ?? 'loading'.tr()).bold(),
+                    Text('@${controller.publisher?.name}'),
+                  ],
+                ),
+              ),
+            ],
+          ).padding(horizontal: 12, vertical: 8),
+          onTap: () {
+            onTapPublisher?.call();
+          },
+        ),
+      ),
+      const Gap(4),
+      TextField(
+        controller: controller.titleController,
+        decoration: InputDecoration(
+          labelText: 'fieldPostTitle'.tr(),
+          border: InputBorder.none,
+        ),
+        style: Theme.of(context).textTheme.titleLarge,
+        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      ).padding(horizontal: 16),
+      const Gap(4),
+      TextField(
+        controller: controller.descriptionController,
+        decoration: InputDecoration(
+          labelText: 'fieldPostDescription'.tr(),
+          border: InputBorder.none,
+        ),
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+        style: Theme.of(context).textTheme.bodyLarge,
+        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      ).padding(horizontal: 16),
+      const Gap(8),
+    ];
+
     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE)) {
       return Container(
         constraints: const BoxConstraints(maxWidth: 640 * 2 + 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: [
-            Expanded(
-              child: TextField(
-                controller: controller.contentController,
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: 'fieldPostContent'.tr(),
-                  hintStyle: TextStyle(fontSize: 14),
-                  isCollapsed: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+            ...editorWidgets,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller.contentController,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      hintText: 'fieldPostContent'.tr(),
+                      hintStyle: TextStyle(fontSize: 14),
+                      isCollapsed: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   ),
-                  border: InputBorder.none,
                 ),
-                onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-              ),
-            ),
-            const Gap(8),
-            Expanded(
-              child: MarkdownTextContent(
-                content: controller.contentController.text,
-              ).padding(horizontal: 24),
+                const Gap(8),
+                Expanded(
+                  child: MarkdownTextContent(
+                    content: controller.contentController.text,
+                  ).padding(horizontal: 24),
+                ),
+              ],
             ),
           ],
         ),
       );
     }
 
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 640),
-      child: TextField(
-        controller: controller.contentController,
-        maxLines: null,
-        decoration: InputDecoration(
-          hintText: 'fieldPostContent'.tr(),
-          hintStyle: TextStyle(fontSize: 14),
-          isCollapsed: true,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
+    return Column(
+      children: [
+        ...editorWidgets,
+        Container(
+          padding: const EdgeInsets.only(top: 8),
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: TextField(
+            controller: controller.contentController,
+            maxLines: null,
+            decoration: InputDecoration(
+              hintText: 'fieldPostContent'.tr(),
+              hintStyle: TextStyle(fontSize: 14),
+              isCollapsed: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              border: InputBorder.none,
+            ),
+            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           ),
-          border: InputBorder.none,
         ),
-        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-      ),
+      ],
     );
   }
 }
