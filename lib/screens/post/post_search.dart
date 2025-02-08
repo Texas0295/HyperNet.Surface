@@ -134,7 +134,7 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
       body: Stack(
         children: [
           InfiniteList(
-            padding: const EdgeInsets.only(top: 100),
+            padding: const EdgeInsets.only(top: 100 + 8),
             itemCount: _posts.length,
             isLoading: _isBusy,
             hasReachedMax: _postCount != null && _posts.length >= _postCount!,
@@ -142,27 +142,18 @@ class _PostSearchScreenState extends State<PostSearchScreen> {
               _fetchPosts();
             },
             itemBuilder: (context, idx) {
-              return GestureDetector(
-                child: PostItem(
-                  data: _posts[idx],
-                  maxWidth: 640,
-                  onChanged: (data) {
-                    setState(() => _posts[idx] = data);
-                  },
-                  onDeleted: () {
-                    _refreshPosts();
-                  },
-                ),
-                onTap: () {
-                  GoRouter.of(context).pushNamed(
-                    'postDetail',
-                    pathParameters: {'slug': _posts[idx].id.toString()},
-                    extra: _posts[idx],
-                  );
+              return OpenablePostItem(
+                data: _posts[idx],
+                maxWidth: 640,
+                onChanged: (data) {
+                  setState(() => _posts[idx] = data);
+                },
+                onDeleted: () {
+                  _refreshPosts();
                 },
               );
             },
-            separatorBuilder: (context, index) => const Divider(height: 1),
+            separatorBuilder: (_, __) => const Gap(8),
           ),
           Positioned(
             top: 16,

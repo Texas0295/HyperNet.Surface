@@ -246,34 +246,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
                 return Center(
-                  child: OpenContainer(
-                    closedBuilder: (_, __) => Container(
-                      constraints: const BoxConstraints(maxWidth: 640),
-                      child: PostItem(
-                        data: _posts[idx],
-                        maxWidth: 640,
-                        onChanged: (data) {
-                          setState(() => _posts[idx] = data);
-                        },
-                        onDeleted: () {
-                          _refreshPosts();
-                        },
-                      ),
-                    ),
-                    openBuilder: (_, close) => PostDetailScreen(
-                      slug: _posts[idx].id.toString(),
-                      preload: _posts[idx],
-                      onBack: close,
-                    ),
-                    openColor: Colors.transparent,
-                    openElevation: 0,
-                    transitionType: ContainerTransitionType.fade,
-                    closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(
-                          cfg.prefs.getBool(kAppBackgroundStoreKey) == true ? 0.75 : 1,
-                        ),
-                    closedShape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                    ),
+                  child: OpenablePostItem(
+                    data: _posts[idx],
+                    maxWidth: 640,
+                    onChanged: (data) {
+                      setState(() => _posts[idx] = data);
+                    },
+                    onDeleted: () {
+                      _refreshPosts();
+                    },
                   ),
                 );
               },

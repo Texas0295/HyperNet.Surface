@@ -287,8 +287,8 @@ class _PostPublisherScreenState extends State<PostPublisherScreen> with SingleTi
                   Theme(
                     data: Theme.of(context).copyWith(
                       appBarTheme: Theme.of(context).appBarTheme.copyWith(
-                        foregroundColor: Colors.white,
-                      ),
+                            foregroundColor: Colors.white,
+                          ),
                     ),
                     child: SliverAppBar(
                       expandedHeight: _appBarHeight,
@@ -597,25 +597,16 @@ class _PublisherPostList extends StatelessWidget {
       hasReachedMax: postCount != null && posts.length >= postCount!,
       onFetchData: fetchPosts,
       itemBuilder: (context, idx) {
-        return GestureDetector(
-          child: PostItem(
-            data: posts[idx],
-            maxWidth: 640,
-            onChanged: (data) {
-              onChanged(idx, data);
-            },
-            onDeleted: onDeleted,
-          ),
-          onTap: () {
-            GoRouter.of(context).pushNamed(
-              'postDetail',
-              pathParameters: {'slug': posts[idx].id.toString()},
-              extra: posts[idx],
-            );
+        return OpenablePostItem(
+          data: posts[idx],
+          maxWidth: 640,
+          onChanged: (data) {
+            onChanged(idx, data);
           },
+          onDeleted: onDeleted,
         );
       },
-      separatorBuilder: (context, index) => const Divider(height: 1),
+      separatorBuilder: (_, __) => const Gap(8),
     );
   }
 }

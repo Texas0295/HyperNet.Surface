@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:animations/animations.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_saver/file_saver.dart';
@@ -22,6 +23,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/userinfo.dart';
+import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/types/reaction.dart';
@@ -37,6 +39,65 @@ import 'package:surface/widgets/post/post_reaction.dart';
 import 'package:surface/widgets/post/publisher_popover.dart';
 import 'package:surface/widgets/universal_image.dart';
 import 'package:xml/xml.dart';
+
+class OpenablePostItem extends StatelessWidget {
+  final SnPost data;
+  final bool showReactions;
+  final bool showComments;
+  final bool showMenu;
+  final bool showFullPost;
+  final double? maxWidth;
+  final Function(SnPost data)? onChanged;
+  final Function()? onDeleted;
+  final Function()? onSelectAnswer;
+
+  const OpenablePostItem({
+    super.key,
+    required this.data,
+    this.showReactions = true,
+    this.showComments = true,
+    this.showMenu = true,
+    this.showFullPost = false,
+    this.maxWidth,
+    this.onChanged,
+    this.onDeleted,
+    this.onSelectAnswer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cfg = context.read<ConfigProvider>();
+
+    return OpenContainer(
+      closedBuilder: (_, __) => Container(
+        constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+        child: PostItem(
+          data: data,
+          maxWidth: maxWidth,
+          showComments: showComments,
+          showFullPost: showFullPost,
+          onChanged: onChanged,
+          onDeleted: onDeleted,
+          onSelectAnswer: onSelectAnswer,
+        ),
+      ),
+      openBuilder: (_, close) => PostDetailScreen(
+        slug: data.id.toString(),
+        preload: data,
+        onBack: close,
+      ),
+      openColor: Colors.transparent,
+      openElevation: 0,
+      transitionType: ContainerTransitionType.fade,
+      closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(
+            cfg.prefs.getBool(kAppBackgroundStoreKey) == true ? 0.75 : 1,
+          ),
+      closedShape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+    );
+  }
+}
 
 class PostItem extends StatelessWidget {
   final SnPost data;
