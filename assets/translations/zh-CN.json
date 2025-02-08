@@ -613,5 +613,8 @@
   "trayMenuExit": "退出",
   "postQuestionUnanswered": "未解答的问题",
   "postQuestionUnansweredWithReward": "未解答的问题，悬赏源点 {}",
-  "postQuestionAnswered": "已解答的问题"
+  "postQuestionAnswered": "已解答的问题",
+  "postQuestionAnswerTitle": "精选解答",
+  "postQuestionAnswerSelect": "选择解答",
+  "postQuestionAnswerSelected": "解答已选择，奖励已发放。"
 }

@@ -8,17 +8,23 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/post.dart';
+import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_mini_editor.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
+import '../../providers/sn_network.dart';
+
 class PostCommentSliverList extends StatefulWidget {
-  final int parentPostId;
+  final SnPost parentPost;
   final double? maxWidth;
+  final Function(SnPost)? onSelectAnswer;
+
   const PostCommentSliverList({
     super.key,
-    required this.parentPostId,
+    required this.parentPost,
     this.maxWidth,
+    this.onSelectAnswer,
   });
 
   @override
@@ -37,7 +43,7 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
     setState(() => _isBusy = true);
 
     final pt = context.read<SnPostContentProvider>();
-    final result = await pt.listPostReplies(widget.parentPostId);
+    final result = await pt.listPostReplies(widget.parentPost.id);
     final List<SnPost> out = result.$1;
 
     if (!mounted) return;
@@ -46,6 +52,21 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
     _posts.addAll(out);
 
     if (mounted) setState(() => _isBusy = false);
+  }
+
+  Future<void> _selectAnswer(SnPost answer) async {
+    try {
+      final sn = context.read<SnNetworkProvider>();
+      await sn.client.put('/cgi/co/questions/${widget.parentPost.id}/answer', data: {
+        'publisher': answer.publisherId,
+        'answer_id': answer.id,
+      });
+      if (!mounted) return;
+      await refresh();
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    }
   }
 
   Future<void> refresh() async {
@@ -71,6 +92,7 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
           child: PostItem(
             data: _posts[idx],
             maxWidth: widget.maxWidth,
+            onSelectAnswer: widget.parentPost.type == 'question' ? () => _selectAnswer(_posts[idx]) : null,
             onChanged: (data) {
               setState(() => _posts[idx] = data);
             },
@@ -94,11 +116,12 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
 }
 
 class PostCommentListPopup extends StatefulWidget {
-  final int postId;
+  final SnPost post;
   final int commentCount;
+
   const PostCommentListPopup({
     super.key,
-    required this.postId,
+    required this.post,
     this.commentCount = 0,
   });
 
@@ -122,9 +145,7 @@ class _PostCommentListPopupState extends State<PostCommentListPopup> {
           children: [
             const Icon(Symbols.comment, size: 24),
             const Gap(16),
-            Text('postCommentsDetailed')
-                .plural(widget.commentCount)
-                .textStyle(Theme.of(context).textTheme.titleLarge!),
+            Text('postCommentsDetailed').plural(widget.commentCount).textStyle(Theme.of(context).textTheme.titleLarge!),
           ],
         ).padding(horizontal: 20, top: 16, bottom: 12),
         Expanded(
@@ -143,7 +164,7 @@ class _PostCommentListPopupState extends State<PostCommentListPopup> {
                       ),
                     ),
                     child: PostMiniEditor(
-                      postReplyId: widget.postId,
+                      postReplyId: widget.post.id,
                       onPost: () {
                         _childListKey.currentState!.refresh();
                       },
@@ -151,8 +172,8 @@ class _PostCommentListPopupState extends State<PostCommentListPopup> {
                   ),
                 ),
               PostCommentSliverList(
+                parentPost: widget.post,
                 key: _childListKey,
-                parentPostId: widget.postId,
               ),
             ],
           ),

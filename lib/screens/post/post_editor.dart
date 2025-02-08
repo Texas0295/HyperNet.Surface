@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:pasteboard/pasteboard.dart';
@@ -23,7 +21,6 @@ import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
-import 'package:surface/widgets/post/post_item.dart';
 import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';

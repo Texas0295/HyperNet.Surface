@@ -183,7 +183,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             if (_data != null)
               PostCommentSliverList(
                 key: _childListKey,
-                parentPostId: _data!.id,
+                parentPost: _data!,
                 maxWidth: 640,
               ),
             SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),

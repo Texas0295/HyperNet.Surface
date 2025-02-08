@@ -615,5 +615,7 @@
   "trayMenuExit": "Exit",
   "postQuestionUnanswered": "Unanswered Question",
   "postQuestionUnansweredWithReward": "Unanswered Question, reward source points {}",
-  "postQuestionAnswered": "Answered Question"
+  "postQuestionAnswered": "Answered Question",
+  "postQuestionAnswerSelect": "Select as Answer",
+  "postQuestionAnswerSelected": "Answer has been selected, reward has been applied."
 }

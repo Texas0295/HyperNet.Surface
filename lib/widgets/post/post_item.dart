@@ -47,6 +47,7 @@ class PostItem extends StatelessWidget {
   final double? maxWidth;
   final Function(SnPost data)? onChanged;
   final Function()? onDeleted;
+  final Function()? onSelectAnswer;
 
   const PostItem({
     super.key,
@@ -58,6 +59,7 @@ class PostItem extends StatelessWidget {
     this.maxWidth,
     this.onChanged,
     this.onDeleted,
+    this.onSelectAnswer,
   });
 
   void _onChanged(SnPost data) {
@@ -142,6 +144,7 @@ class PostItem extends StatelessWidget {
               isRelativeDate: !showFullPost,
               onShare: () => _doShare(context),
               onShareImage: () => _doShareViaPicture(context),
+              onSelectAnswer: onSelectAnswer,
               onDeleted: () {
                 if (onDeleted != null) {}
               },
@@ -224,6 +227,7 @@ class PostItem extends StatelessWidget {
                 showMenu: showMenu,
                 onShare: () => _doShare(context),
                 onShareImage: () => _doShareViaPicture(context),
+                onSelectAnswer: onSelectAnswer,
                 onDeleted: () {
                   if (onDeleted != null) onDeleted!();
                 },
@@ -456,9 +460,9 @@ class _PostQuestionHint extends StatelessWidget {
             '${data.body['reward']}',
           ])).opacity(0.75)
         else if (data.body['answer'] == null)
-          Text('postQuestionUnanswered').opacity(0.75)
+          Text('postQuestionUnanswered'.tr()).opacity(0.75)
         else
-          Text('postQuestionAnswered').opacity(0.75),
+          Text('postQuestionAnswered'.tr()).opacity(0.75),
       ],
     ).opacity(0.75);
   }
@@ -555,7 +559,7 @@ class _PostBottomAction extends StatelessWidget {
                       context: context,
                       useRootNavigator: true,
                       builder: (context) => PostCommentListPopup(
-                        postId: data.id,
+                        post: data,
                         commentCount: data.metric.replyCount,
                       ),
                     );
@@ -678,6 +682,7 @@ class _PostContentHeader extends StatelessWidget {
   final bool showMenu;
   final Function onDeleted;
   final Function() onShare, onShareImage;
+  final Function()? onSelectAnswer;
 
   const _PostContentHeader({
     required this.data,
@@ -688,6 +693,7 @@ class _PostContentHeader extends StatelessWidget {
     required this.onDeleted,
     required this.onShare,
     required this.onShareImage,
+    this.onSelectAnswer,
   });
 
   Future<void> _deletePost(BuildContext context) async {
@@ -786,6 +792,20 @@ class _PostContentHeader extends StatelessWidget {
               visualDensity: VisualDensity(horizontal: -4, vertical: -4),
             ),
             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              if (isAuthor && onSelectAnswer != null)
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      const Icon(Symbols.check_circle),
+                      const Gap(16),
+                      Text('postQuestionAnswerSelect').tr(),
+                    ],
+                  ),
+                  onTap: () {
+                    onSelectAnswer?.call();
+                  },
+                ),
+              if (isAuthor && onSelectAnswer != null) PopupMenuDivider(),
               if (isAuthor)
                 PopupMenuItem(
                   child: Row(
@@ -1165,8 +1185,18 @@ class _PostFeaturedComment extends StatefulWidget {
 
 class _PostFeaturedCommentState extends State<_PostFeaturedComment> {
   SnPost? _featuredComment;
+  bool _isAnswer = false;
 
   Future<void> _fetchComments() async {
+    // If this is a answered question, fetch the answer instead
+    if (widget.data.type == 'question' && widget.data.body['answer'] != null) {
+      final sn = context.read<SnNetworkProvider>();
+      final resp = await sn.client.get('/cgi/co/posts/${widget.data.body['answer']}');
+      _isAnswer = true;
+      setState(() => _featuredComment = SnPost.fromJson(resp.data));
+      return;
+    }
+
     try {
       final sn = context.read<SnNetworkProvider>();
       final resp = await sn.client.get('/cgi/co/posts/${widget.data.id}/replies/featured', queryParameters: {
@@ -1192,13 +1222,15 @@ class _PostFeaturedCommentState extends State<_PostFeaturedComment> {
     if (widget.data.metric.replyCount == 0) return const SizedBox.shrink();
     if (_featuredComment == null) return const SizedBox.shrink();
 
+    final sn = context.read<SnNetworkProvider>();
+
     return AnimateWidgetExtensions(Container(
       constraints: BoxConstraints(maxWidth: widget.maxWidth ?? double.infinity),
       margin: const EdgeInsets.only(top: 8),
       width: double.infinity,
       child: Material(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        color: _isAnswer ? Colors.green.withOpacity(0.5) : Theme.of(context).colorScheme.surfaceContainerHigh,
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           onTap: () {
@@ -1206,7 +1238,7 @@ class _PostFeaturedCommentState extends State<_PostFeaturedComment> {
               context: context,
               useRootNavigator: true,
               builder: (context) => PostCommentListPopup(
-                postId: widget.data.id,
+                post: widget.data,
                 commentCount: widget.data.metric.replyCount,
               ),
             );
@@ -1214,7 +1246,18 @@ class _PostFeaturedCommentState extends State<_PostFeaturedComment> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('postFeaturedComment', style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 16)).tr(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Gap(2),
+                  Icon(_isAnswer ? Symbols.task_alt : Symbols.prompt_suggestion, size: 20),
+                  const Gap(10),
+                  Text(
+                    _isAnswer ? 'postQuestionAnswerTitle' : 'postFeaturedComment',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 15),
+                  ).tr(),
+                ],
+              ),
               const Gap(4),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -1222,7 +1265,7 @@ class _PostFeaturedCommentState extends State<_PostFeaturedComment> {
                   CircleAvatar(
                     radius: 12,
                     backgroundImage: UniversalImage.provider(
-                      _featuredComment!.publisher.avatar,
+                      sn.getAttachmentUrl(_featuredComment!.publisher.avatar),
                     ),
                   ),
                   const Gap(8),

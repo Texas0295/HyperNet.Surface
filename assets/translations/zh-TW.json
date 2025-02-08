@@ -138,9 +138,11 @@
   "fieldPublisherBelongToRealmUnset": "未設置發佈者所屬領域",
   "writePostTypeStory": "發動態",
   "writePostTypeArticle": "寫文章",
+  "writePostTypeQuestion": "提問題",
   "fieldPostPublisher": "帖子發佈者",
   "fieldPostContent": "發生什麼事了？！",
   "fieldPostTitle": "標題",
+  "fieldPostQuestionReward": "回答獎勵源點",
   "fieldPostDescription": "描述",
   "fieldPostTags": "標籤",
   "fieldPostCategories": "分類",
@@ -607,5 +609,12 @@
     "other": "{} 源點"
   },
   "aiThinkingProcess": "AI 思考過程",
-  "accountSettingsApplied": "帳號設置已應用。"
+  "accountSettingsApplied": "帳號設置已應用。",
+  "trayMenuExit": "退出",
+  "postQuestionUnanswered": "未解答的問題",
+  "postQuestionUnansweredWithReward": "未解答的問題，懸賞源點 {}",
+  "postQuestionAnswered": "已解答的問題",
+  "postQuestionAnswerTitle": "精選解答",
+  "postQuestionAnswerSelect": "選擇解答",
+  "postQuestionAnswerSelected": "解答已選擇，獎勵已發放。"
 }
