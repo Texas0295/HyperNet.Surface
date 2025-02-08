@@ -1383,8 +1383,14 @@ class _PostGetInsightPopupState extends State<_PostGetInsightPopup> {
             receiveTimeout: const Duration(minutes: 10),
           ));
       final out = resp.data['response'] as String;
-      final document = XmlDocument.parse(out);
-      _thinkingProcess = document.getElement('think')?.innerText.trim();
+
+      try {
+        final document = XmlDocument.parse(out);
+        _thinkingProcess = document.getElement('think')?.innerText.trim();
+      } catch (_) {
+        // ignore
+      }
+
       RegExp cleanThinkingRegExp = RegExp(r'<think>[\s\S]*?</think>');
       setState(() => _response = out.replaceAll(cleanThinkingRegExp, '').trim());
     } catch (err) {
