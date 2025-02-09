@@ -23,6 +23,9 @@ class SnPostContentProvider {
       if (out[i].body['thumbnail'] != null) {
         rids.add(out[i].body['thumbnail']);
       }
+      if (out[i].body['video'] != null) {
+        rids.add(out[i].body['video']);
+      }
       if (out[i].repostTo != null) {
         out[i] = out[i].copyWith(
           repostTo: await _preloadRelatedDataSingle(out[i].repostTo!),
@@ -36,6 +39,7 @@ class SnPostContentProvider {
         preload: SnPostPreload(
           thumbnail: attachments.where((ele) => ele?.rid == out[i].body['thumbnail']).firstOrNull,
           attachments: attachments.where((ele) => out[i].body['attachments']?.contains(ele?.rid) ?? false).toList(),
+          video: attachments.where((ele) => ele?.rid == out[i].body['video']).firstOrNull,
         ),
       );
     }
@@ -53,6 +57,9 @@ class SnPostContentProvider {
     if (out.body['thumbnail'] != null) {
       rids.add(out.body['thumbnail']);
     }
+    if (out.body['video'] != null) {
+      rids.add(out.body['video']);
+    }
     if (out.repostTo != null) {
       out = out.copyWith(
         repostTo: await _preloadRelatedDataSingle(out.repostTo!),
@@ -64,6 +71,7 @@ class SnPostContentProvider {
       preload: SnPostPreload(
         thumbnail: attachments.where((ele) => ele?.rid == out.body['thumbnail']).firstOrNull,
         attachments: attachments.where((ele) => out.body['attachments']?.contains(ele?.rid) ?? false).toList(),
+        video: attachments.where((ele) => ele?.rid == out.body['video']).firstOrNull,
       ),
     );
 

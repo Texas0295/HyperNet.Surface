@@ -28,6 +28,7 @@ import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/types/reaction.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/attachment/attachment_list.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/link_preview.dart';
@@ -210,6 +211,7 @@ class PostItem extends StatelessWidget {
                 if (onDeleted != null) {}
               },
             ).padding(horizontal: 12, top: 8, bottom: 8),
+            if (data.preload?.video != null) _PostVideoPlayer(data: data).padding(horizontal: 12, bottom: 8),
             Container(
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 4, left: 12, right: 12),
@@ -293,6 +295,7 @@ class PostItem extends StatelessWidget {
                   if (onDeleted != null) onDeleted!();
                 },
               ).padding(horizontal: 12, vertical: 8),
+              if (data.preload?.video != null) _PostVideoPlayer(data: data).padding(horizontal: 12, bottom: 8),
               if (data.type == 'question') _PostQuestionHint(data: data).padding(horizontal: 16, bottom: 8),
               if (data.body['title'] != null || data.body['description'] != null)
                 _PostHeadline(
@@ -1517,6 +1520,32 @@ class _PostGetInsightPopupState extends State<_PostGetInsightPopup> {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _PostVideoPlayer extends StatelessWidget {
+  final SnPost data;
+
+  const _PostVideoPlayer({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 1,
+        ),
+      ),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          child: AttachmentItem(data: data.preload!.video!, heroTag: 'post-video-${data.id}'),
+        ),
+      ),
     );
   }
 }

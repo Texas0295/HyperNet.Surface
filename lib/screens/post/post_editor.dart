@@ -18,6 +18,7 @@ import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/loading_indicator.dart';
 import 'package:surface/widgets/markdown_content.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
@@ -25,6 +26,9 @@ import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../widgets/attachment/attachment_input.dart';
 
 class PostEditorExtra {
   final String? text;
@@ -240,6 +244,10 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                             onTapPublisher: _showPublisherPopup,
                           ),
                         'questions' => _PostQuestionEditor(
+                            controller: _writeController,
+                            onTapPublisher: _showPublisherPopup,
+                          ),
+                        'videos' => _PostVideoEditor(
                             controller: _writeController,
                             onTapPublisher: _showPublisherPopup,
                           ),
@@ -684,6 +692,118 @@ class _PostQuestionEditor extends StatelessWidget {
           ),
         ],
       ).padding(top: 8),
+    );
+  }
+}
+
+class _PostVideoEditor extends StatelessWidget {
+  final PostWriteController controller;
+  final Function? onTapPublisher;
+
+  const _PostVideoEditor({required this.controller, this.onTapPublisher});
+
+  void _selectVideo(BuildContext context) async {
+    final video = await showDialog<SnAttachment?>(
+      context: context,
+      builder: (context) => AttachmentInputDialog(
+        title: 'postVideoUpload'.tr(),
+        pool: 'interactive',
+        mediaType: SnMediaType.video,
+      ),
+    );
+    if (!context.mounted) return;
+    if (video == null) return;
+    controller.setVideoAttachment(video);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Material(
+          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+          child: InkWell(
+            child: Row(
+              children: [
+                AccountImage(content: controller.publisher?.avatar, radius: 20),
+                const Gap(8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(controller.publisher?.nick ?? 'loading'.tr()).bold(),
+                      Text('@${controller.publisher?.name}'),
+                    ],
+                  ),
+                ),
+              ],
+            ).padding(horizontal: 12, vertical: 8),
+            onTap: () {
+              onTapPublisher?.call();
+            },
+          ),
+        ),
+        const Gap(16),
+        TextField(
+          controller: controller.titleController,
+          decoration: InputDecoration.collapsed(
+            hintText: 'fieldPostTitle'.tr(),
+            border: InputBorder.none,
+          ),
+          style: Theme.of(context).textTheme.titleLarge,
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        ).padding(horizontal: 16),
+        const Gap(8),
+        TextField(
+          controller: controller.descriptionController,
+          decoration: InputDecoration.collapsed(
+            hintText: 'fieldPostDescription'.tr(),
+            border: InputBorder.none,
+          ),
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          style: Theme.of(context).textTheme.bodyLarge,
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        ).padding(horizontal: 16),
+        const Gap(12),
+        Container(
+          margin: const EdgeInsets.only(left: 16, right: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Theme.of(context).dividerColor),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: controller.videoAttachment == null
+                  ? Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.add),
+                          const Gap(4),
+                          Text('postVideoUpload'.tr()),
+                        ],
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: AttachmentItem(
+                        data: controller.videoAttachment!,
+                        heroTag: const Uuid().v4(),
+                      ),
+                    ),
+            ),
+            onTap: () {
+              if (controller.videoAttachment != null) return;
+              _selectVideo(context);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

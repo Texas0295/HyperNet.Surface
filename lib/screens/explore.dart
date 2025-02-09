@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -7,10 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:surface/providers/config.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_network.dart';
-import 'package:surface/screens/post/post_detail.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/app_bar_leading.dart';
 import 'package:surface/widgets/dialog.dart';
@@ -97,8 +94,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cfg = context.read<ConfigProvider>();
-
     return AppScaffold(
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
@@ -184,6 +179,27 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   _fabKey.currentState!.toggle();
                 },
                 child: const Icon(Symbols.question_answer),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('writePostTypeVideo').tr(),
+              const Gap(20),
+              FloatingActionButton(
+                heroTag: null,
+                tooltip: 'writePostTypeVideo'.tr(),
+                onPressed: () {
+                  GoRouter.of(context).pushNamed('postEditor', pathParameters: {
+                    'mode': 'videos',
+                  }).then((value) {
+                    if (value == true) {
+                      _refreshPosts();
+                    }
+                  });
+                  _fabKey.currentState!.toggle();
+                },
+                child: const Icon(Symbols.video_call),
               ),
             ],
           ),

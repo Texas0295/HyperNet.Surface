@@ -95,6 +95,7 @@ class PostMediaPendingList extends StatelessWidget {
       context: context,
       builder: (context) => AttachmentInputDialog(
         title: 'attachmentSetThumbnail'.tr(),
+        pool: 'interactive',
         analyzeNow: true,
       ),
     );

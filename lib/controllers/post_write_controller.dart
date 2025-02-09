@@ -145,6 +145,7 @@ class PostWriteController extends ChangeNotifier {
     'stories': 'writePostTypeStory',
     'articles': 'writePostTypeArticle',
     'questions': 'writePostTypeQuestion',
+    'videos': 'writePostTypeVideo',
   };
 
   static const kAttachmentProgressWeight = 0.9;
@@ -197,6 +198,7 @@ class PostWriteController extends ChangeNotifier {
   PostWriteMedia? thumbnail;
   List<PostWriteMedia> attachments = List.empty(growable: true);
   DateTime? publishedAt, publishedUntil;
+  SnAttachment? videoAttachment;
 
   Future<void> fetchRelatedPost(
     BuildContext context, {
@@ -507,6 +509,7 @@ class PostWriteController extends ChangeNotifier {
           if (replyingPost != null) 'reply_to': replyingPost!.id,
           if (repostingPost != null) 'repost_to': repostingPost!.id,
           if (reward != null) 'reward': reward,
+          if (videoAttachment != null) 'video': videoAttachment!.rid,
         },
         onSendProgress: (count, total) {
           progress = baseProgressVal + (count / total) * (kPostingProgressWeight / 2);
@@ -630,6 +633,11 @@ class PostWriteController extends ChangeNotifier {
   void setMode(String value) {
     mode = value;
     _temporaryPlanSave();
+    notifyListeners();
+  }
+
+  void setVideoAttachment(SnAttachment? value) {
+    videoAttachment = value;
     notifyListeners();
   }
 

@@ -139,6 +139,7 @@
   "writePostTypeStory": "发动态",
   "writePostTypeArticle": "写文章",
   "writePostTypeQuestion": "提问题",
+  "writePostTypeVideo": "发视频",
   "fieldPostPublisher": "帖子发布者",
   "fieldPostContent": "发生什么事了？！",
   "fieldPostTitle": "标题",
@@ -616,5 +617,6 @@
   "postQuestionAnswered": "已解答的问题",
   "postQuestionAnswerTitle": "精选解答",
   "postQuestionAnswerSelect": "选择解答",
-  "postQuestionAnswerSelected": "解答已选择，奖励已发放。"
+  "postQuestionAnswerSelected": "解答已选择，奖励已发放。",
+  "postVideoUpload": "上传视频"
 }

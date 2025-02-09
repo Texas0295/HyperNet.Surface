@@ -2,7 +2,6 @@ PODS:
   - Alamofire (5.10.2)
   - connectivity_plus (0.0.1):
     - Flutter
-    - FlutterMacOS
   - croppy (0.0.1):
     - Flutter
   - device_info_plus (0.0.1):
@@ -180,7 +179,7 @@ PODS:
   - in_app_review (2.0.0):
     - Flutter
   - Kingfisher (8.2.0)
-  - livekit_client (2.3.5):
+  - livekit_client (2.3.6):
     - Flutter
     - flutter_webrtc
     - WebRTC-SDK (= 125.6422.06)
@@ -237,7 +236,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - croppy (from `.symlinks/plugins/croppy/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -300,7 +299,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/darwin"
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   croppy:
     :path: ".symlinks/plugins/croppy/ios"
   device_info_plus:
@@ -374,7 +373,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
-  connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
+  connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   croppy: b6199bc8d56bd2e03cc11609d1c47ad9875c1321
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
@@ -404,7 +403,7 @@ SPEC CHECKSUMS:
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   Kingfisher: 323e5c4ec7983aaace12af655a7b51a7f88a599d
-  livekit_client: dcc5fd47ba69c98fc6baeb12e862c9d43807d976
+  livekit_client: 148b2cf67a09aaf475ba8e5bf1667fe10dc35f81
   media_kit_libs_ios_video: a5fe24bc7875ccd6378a0978c13185e1344651c1
   media_kit_native_event_loop: e6b2ab20cf0746eb1c33be961fcf79667304fa2a
   media_kit_video: 5da63f157170e5bf303bf85453b7ef6971218a2e

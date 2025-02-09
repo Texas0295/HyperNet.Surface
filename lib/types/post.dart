@@ -89,6 +89,7 @@ class SnPostPreload with _$SnPostPreload {
   const factory SnPostPreload({
     required SnAttachment? thumbnail,
     required List<SnAttachment?>? attachments,
+    required SnAttachment? video,
   }) = _SnPostPreload;
 
   factory SnPostPreload.fromJson(Map<String, Object?> json) =>

@@ -155,6 +155,7 @@
   "writePostTypeStory": "Post a story",
   "writePostTypeArticle": "Write an article",
   "writePostTypeQuestion": "Ask a question",
+  "writePostTypeVideo": "Post a video",
   "fieldPostPublisher": "Post publisher",
   "fieldPostContent": "What happened?!",
   "fieldPostTitle": "Title",
@@ -617,5 +618,6 @@
   "postQuestionUnansweredWithReward": "Unanswered Question, reward source points {}",
   "postQuestionAnswered": "Answered Question",
   "postQuestionAnswerSelect": "Select as Answer",
-  "postQuestionAnswerSelected": "Answer has been selected, reward has been applied."
+  "postQuestionAnswerSelected": "Answer has been selected, reward has been applied.",
+  "postVideoUpload": "Upload Video"
 }

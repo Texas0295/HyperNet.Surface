@@ -165,12 +165,16 @@ _$SnPostPreloadImpl _$$SnPostPreloadImplFromJson(Map<String, dynamic> json) =>
               ? null
               : SnAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
+      video: json['video'] == null
+          ? null
+          : SnAttachment.fromJson(json['video'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$SnPostPreloadImplToJson(_$SnPostPreloadImpl instance) =>
     <String, dynamic>{
       'thumbnail': instance.thumbnail?.toJson(),
       'attachments': instance.attachments?.map((e) => e?.toJson()).toList(),
+      'video': instance.video?.toJson(),
     };
 
 _$SnBodyImpl _$$SnBodyImplFromJson(Map<String, dynamic> json) => _$SnBodyImpl(

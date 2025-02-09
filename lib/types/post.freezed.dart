@@ -1567,6 +1567,7 @@ SnPostPreload _$SnPostPreloadFromJson(Map<String, dynamic> json) {
 mixin _$SnPostPreload {
   SnAttachment? get thumbnail => throw _privateConstructorUsedError;
   List<SnAttachment?>? get attachments => throw _privateConstructorUsedError;
+  SnAttachment? get video => throw _privateConstructorUsedError;
 
   /// Serializes this SnPostPreload to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1584,9 +1585,13 @@ abstract class $SnPostPreloadCopyWith<$Res> {
           SnPostPreload value, $Res Function(SnPostPreload) then) =
       _$SnPostPreloadCopyWithImpl<$Res, SnPostPreload>;
   @useResult
-  $Res call({SnAttachment? thumbnail, List<SnAttachment?>? attachments});
+  $Res call(
+      {SnAttachment? thumbnail,
+      List<SnAttachment?>? attachments,
+      SnAttachment? video});
 
   $SnAttachmentCopyWith<$Res>? get thumbnail;
+  $SnAttachmentCopyWith<$Res>? get video;
 }
 
 /// @nodoc
@@ -1606,6 +1611,7 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
   $Res call({
     Object? thumbnail = freezed,
     Object? attachments = freezed,
+    Object? video = freezed,
   }) {
     return _then(_value.copyWith(
       thumbnail: freezed == thumbnail
@@ -1616,6 +1622,10 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
           ? _value.attachments
           : attachments // ignore: cast_nullable_to_non_nullable
               as List<SnAttachment?>?,
+      video: freezed == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as SnAttachment?,
     ) as $Val);
   }
 
@@ -1632,6 +1642,20 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
       return _then(_value.copyWith(thumbnail: value) as $Val);
     });
   }
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnAttachmentCopyWith<$Res>? get video {
+    if (_value.video == null) {
+      return null;
+    }
+
+    return $SnAttachmentCopyWith<$Res>(_value.video!, (value) {
+      return _then(_value.copyWith(video: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1642,10 +1666,15 @@ abstract class _$$SnPostPreloadImplCopyWith<$Res>
       __$$SnPostPreloadImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({SnAttachment? thumbnail, List<SnAttachment?>? attachments});
+  $Res call(
+      {SnAttachment? thumbnail,
+      List<SnAttachment?>? attachments,
+      SnAttachment? video});
 
   @override
   $SnAttachmentCopyWith<$Res>? get thumbnail;
+  @override
+  $SnAttachmentCopyWith<$Res>? get video;
 }
 
 /// @nodoc
@@ -1663,6 +1692,7 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
   $Res call({
     Object? thumbnail = freezed,
     Object? attachments = freezed,
+    Object? video = freezed,
   }) {
     return _then(_$SnPostPreloadImpl(
       thumbnail: freezed == thumbnail
@@ -1673,6 +1703,10 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
           ? _value._attachments
           : attachments // ignore: cast_nullable_to_non_nullable
               as List<SnAttachment?>?,
+      video: freezed == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as SnAttachment?,
     ));
   }
 }
@@ -1682,7 +1716,8 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
 class _$SnPostPreloadImpl implements _SnPostPreload {
   const _$SnPostPreloadImpl(
       {required this.thumbnail,
-      required final List<SnAttachment?>? attachments})
+      required final List<SnAttachment?>? attachments,
+      required this.video})
       : _attachments = attachments;
 
   factory _$SnPostPreloadImpl.fromJson(Map<String, dynamic> json) =>
@@ -1701,8 +1736,11 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
   }
 
   @override
+  final SnAttachment? video;
+
+  @override
   String toString() {
-    return 'SnPostPreload(thumbnail: $thumbnail, attachments: $attachments)';
+    return 'SnPostPreload(thumbnail: $thumbnail, attachments: $attachments, video: $video)';
   }
 
   @override
@@ -1713,13 +1751,14 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
             (identical(other.thumbnail, thumbnail) ||
                 other.thumbnail == thumbnail) &&
             const DeepCollectionEquality()
-                .equals(other._attachments, _attachments));
+                .equals(other._attachments, _attachments) &&
+            (identical(other.video, video) || other.video == video));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, thumbnail,
-      const DeepCollectionEquality().hash(_attachments));
+      const DeepCollectionEquality().hash(_attachments), video);
 
   /// Create a copy of SnPostPreload
   /// with the given fields replaced by the non-null parameter values.
@@ -1740,7 +1779,8 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
 abstract class _SnPostPreload implements SnPostPreload {
   const factory _SnPostPreload(
       {required final SnAttachment? thumbnail,
-      required final List<SnAttachment?>? attachments}) = _$SnPostPreloadImpl;
+      required final List<SnAttachment?>? attachments,
+      required final SnAttachment? video}) = _$SnPostPreloadImpl;
 
   factory _SnPostPreload.fromJson(Map<String, dynamic> json) =
       _$SnPostPreloadImpl.fromJson;
@@ -1749,6 +1789,8 @@ abstract class _SnPostPreload implements SnPostPreload {
   SnAttachment? get thumbnail;
   @override
   List<SnAttachment?>? get attachments;
+  @override
+  SnAttachment? get video;
 
   /// Create a copy of SnPostPreload
   /// with the given fields replaced by the non-null parameter values.

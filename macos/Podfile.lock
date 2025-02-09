@@ -2,7 +2,6 @@ PODS:
   - bitsdojo_window_macos (0.0.1):
     - FlutterMacOS
   - connectivity_plus (0.0.1):
-    - Flutter
     - FlutterMacOS
   - croppy (0.0.1):
     - FlutterMacOS
@@ -143,7 +142,7 @@ PODS:
     - HotKey
   - in_app_review (2.0.0):
     - FlutterMacOS
-  - livekit_client (2.3.5):
+  - livekit_client (2.3.6):
     - flutter_webrtc
     - FlutterMacOS
     - WebRTC-SDK (= 125.6422.06)
@@ -190,7 +189,7 @@ PODS:
 
 DEPENDENCIES:
   - bitsdojo_window_macos (from `Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos`)
-  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin`)
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
   - croppy (from `Flutter/ephemeral/.symlinks/plugins/croppy/macos`)
   - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - file_picker (from `Flutter/ephemeral/.symlinks/plugins/file_picker/macos`)
@@ -244,7 +243,7 @@ EXTERNAL SOURCES:
   bitsdojo_window_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos
   connectivity_plus:
-    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
   croppy:
     :path: Flutter/ephemeral/.symlinks/plugins/croppy/macos
   device_info_plus:
@@ -308,7 +307,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   bitsdojo_window_macos: 44e3b8fe3dd463820e0321f6256c5b1c16bb6a00
-  connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
+  connectivity_plus: 0a976dfd033b59192912fa3c6c7b54aab5093802
   croppy: 25a638bd7d05411d8c697f481568f261037694fc
   device_info_plus: 1b14eed9bf95428983aed283a8d51cce3d8c4215
   file_picker: e716a70a9fe5fd9e09ebc922d7541464289443af
@@ -334,7 +333,7 @@ SPEC CHECKSUMS:
   HotKey: 400beb7caa29054ea8d864c96f5ba7e5b4852277
   hotkey_manager_macos: 1e2edb0c7ae4fe67108af44a9d3445de41404160
   in_app_review: a6a031b9acd03c7d103e341aa334adf2c493fb93
-  livekit_client: 91c68237edede55f8891a166a28c1daec8a1e4b1
+  livekit_client: 0ad107154753a5a76802d2222c040223ad049499
   media_kit_libs_macos_video: b3e2bbec2eef97c285f2b1baa7963c67c753fb82
   media_kit_native_event_loop: 81fd5b45192b72f8b5b69eaf5b540f45777eb8d5
   media_kit_video: c75b07f14d59706c775778e4dd47dd027de8d1e5

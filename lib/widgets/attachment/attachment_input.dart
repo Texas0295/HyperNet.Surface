@@ -6,12 +6,22 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_attachment.dart';
+import 'package:surface/types/attachment.dart';
 import 'package:surface/widgets/dialog.dart';
 
 class AttachmentInputDialog extends StatefulWidget {
   final String? title;
-final bool? analyzeNow;
-  const AttachmentInputDialog({super.key, required this.title, this.analyzeNow = false});
+  final bool? analyzeNow;
+  final SnMediaType? mediaType;
+  final String pool;
+
+  const AttachmentInputDialog({
+    super.key,
+    required this.title,
+    required this.pool,
+    this.analyzeNow = false,
+    this.mediaType = SnMediaType.image,
+  });
 
   @override
   State<AttachmentInputDialog> createState() => _AttachmentInputDialogState();
@@ -20,13 +30,18 @@ final bool? analyzeNow;
 class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
   final _randomIdController = TextEditingController();
 
-  XFile? _thumbnailFile;
+  XFile? _file;
+  double? _progress;
 
-  void _pickImage() async {
+  void _pickMedia() async {
     final picker = ImagePicker();
-    final result = await picker.pickImage(source: ImageSource.gallery);
+    final result = switch (widget.mediaType) {
+      SnMediaType.image => await picker.pickImage(source: ImageSource.gallery),
+      SnMediaType.video => await picker.pickVideo(source: ImageSource.gallery),
+      _ => await picker.pickMedia(),
+    };
     if (result == null) return;
-    setState(() => _thumbnailFile = result);
+    setState(() => _file = result);
   }
 
   bool _isBusy = false;
@@ -46,15 +61,20 @@ class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
         if (!mounted) return;
         context.showErrorDialog(err);
       }
-    } else if (_thumbnailFile != null) {
+    } else if (_file != null) {
       try {
-        final attachment = await attach.directUploadOne(
-          (await _thumbnailFile!.readAsBytes()).buffer.asUint8List(),
-          _thumbnailFile!.path,
-          'interactive',
-          null,
+        final place = await attach.chunkedUploadInitialize(await _file!.length(), _file!.name, widget.pool, null);
+
+        final attachment = await attach.chunkedUploadParts(
+          _file!,
+          place.$1,
+          place.$2,
           analyzeNow: widget.analyzeNow ?? false,
+          onProgress: (value) {
+            setState(() => _progress = value);
+          },
         );
+
         if (!mounted) return;
         Navigator.pop(context, attachment);
       } catch (err) {
@@ -67,7 +87,7 @@ class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.title ?? 'attachmentInputDialog').tr(),
+      title: Text(widget.title ?? 'attachmentInputDialog'.tr()),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -86,24 +106,35 @@ class _AttachmentInputDialogState extends State<AttachmentInputDialog> {
           const Gap(24),
           Text('attachmentInputNew').tr().fontSize(14),
           Card(
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              leading: const Icon(Symbols.add_photo_alternate),
-              trailing: const Icon(Symbols.chevron_right),
-              title: Text('addAttachmentFromAlbum').tr(),
-              subtitle: _thumbnailFile == null ? Text('unset').tr() : Text('waitingForUpload').tr(),
-              onTap: () {
-                _pickImage();
-              },
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  leading: const Icon(Symbols.add_photo_alternate),
+                  trailing: const Icon(Symbols.chevron_right),
+                  title: Text('addAttachmentFromAlbum').tr(),
+                  subtitle: _file == null ? Text('unset').tr() : Text('waitingForUpload').tr(),
+                  onTap: () {
+                    _pickMedia();
+                  },
+                ),
+              ],
             ),
           ),
+          if (_isBusy)
+            LinearProgressIndicator(
+              value: _progress,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ).padding(top: 16),
         ],
       ),
       actions: [
         TextButton(
-          onPressed: _isBusy ? null : () {
-            Navigator.pop(context);
-          },
+          onPressed: _isBusy
+              ? null
+              : () {
+                  Navigator.pop(context);
+                },
           child: Text('dialogDismiss').tr(),
         ),
         TextButton(
