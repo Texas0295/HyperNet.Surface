@@ -220,6 +220,7 @@ class PostWriteController extends ChangeNotifier {
         contentController.text = post.body['content'] ?? '';
         aliasController.text = post.alias ?? '';
         rewardController.text = post.body['reward']?.toString() ?? '';
+        videoAttachment = post.preload?.video;
         publishedAt = post.publishedAt;
         publishedUntil = post.publishedUntil;
         visibleUsers = List.from(post.visibleUsersList ?? [], growable: true);
