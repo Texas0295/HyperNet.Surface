@@ -203,6 +203,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   void dispose() {
     _contentController.dispose();
     _focusNode.dispose();
+    _dismissEmojiPicker();
     if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) hotKeyManager.unregister(_pasteHotKey);
     super.dispose();
   }
