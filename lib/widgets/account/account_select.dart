@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
+import 'package:surface/providers/userinfo.dart';
 import 'package:surface/types/account.dart';
 import 'package:surface/widgets/account/account_image.dart';
 
@@ -49,10 +50,19 @@ class _AccountSelectState extends State<AccountSelect> {
   Future<void> _getFriends() async {
     final sn = context.read<SnNetworkProvider>();
     final resp = await sn.client.get('/cgi/id/users/me/relations?status=1');
+    if (!mounted) return;
+    final ua = context.read<UserProvider>();
 
     setState(() {
       _relativeUsers.addAll(
-        resp.data?.map((e) => SnRelationship.fromJson(e)) ?? [],
+        resp.data?.map((e) {
+          final rel = SnRelationship.fromJson(e);
+          if (rel.relatedId == ua.user?.id) {
+            return rel.account!;
+          } else {
+            return rel.related!;
+          }
+        }).cast<SnAccount>(),
       );
     });
   }
@@ -123,13 +133,9 @@ class _AccountSelectState extends State<AccountSelect> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _pendingUsers.isEmpty
-                  ? _relativeUsers.length
-                  : _pendingUsers.length,
+              itemCount: _pendingUsers.isEmpty ? _relativeUsers.length : _pendingUsers.length,
               itemBuilder: (context, index) {
-                var user = _pendingUsers.isEmpty
-                    ? _relativeUsers[index]
-                    : _pendingUsers[index];
+                var user = _pendingUsers.isEmpty ? _relativeUsers[index] : _pendingUsers[index];
                 return ListTile(
                   title: Text(user.nick),
                   subtitle: Text(user.name),
@@ -148,8 +154,7 @@ class _AccountSelectState extends State<AccountSelect> {
                           }
 
                           setState(() {
-                            final idx = _selectedUsers
-                                .indexWhere((x) => x.id == user.id);
+                            final idx = _selectedUsers.indexWhere((x) => x.id == user.id);
                             if (idx != -1) {
                               _selectedUsers.removeAt(idx);
                             } else {

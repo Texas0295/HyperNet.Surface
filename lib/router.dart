@@ -193,16 +193,16 @@ final _appRoutes = [
     ),
     routes: [
       GoRoute(
-        path: '/:alias',
-        name: 'realmDetail',
-        builder: (context, state) => RealmDetailScreen(alias: state.pathParameters['alias']!),
-      ),
-      GoRoute(
         path: '/manage',
         name: 'realmManage',
         builder: (context, state) => RealmManageScreen(
           editingRealmAlias: state.uri.queryParameters['editing'],
         ),
+      ),
+      GoRoute(
+        path: '/:alias',
+        name: 'realmDetail',
+        builder: (context, state) => RealmDetailScreen(alias: state.pathParameters['alias']!),
       ),
     ],
   ),
