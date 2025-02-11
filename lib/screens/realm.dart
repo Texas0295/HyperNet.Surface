@@ -101,6 +101,12 @@ class _RealmScreenState extends State<RealmScreen> {
         title: Text('screenRealm').tr(),
         actions: [
           IconButton(
+            icon: const Icon(Symbols.globe),
+            onPressed: () {
+              GoRouter.of(context).pushNamed('realmDiscovery');
+            },
+          ),
+          IconButton(
             icon: !_isCompactView ? const Icon(Symbols.view_list) : const Icon(Symbols.view_module),
             onPressed: () {
               setState(() => _isCompactView = !_isCompactView);

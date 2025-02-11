@@ -58,6 +58,7 @@ class AppScaffold extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SizedBox.expand(
         child: AppBackground(
+          isRoot: true,
           child: Column(
             children: [
               IgnorePointer(child: SizedBox(height: appBar != null ? appBarHeight + safeTop : 0)),

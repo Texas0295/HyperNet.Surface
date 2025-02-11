@@ -31,6 +31,7 @@ import 'package:surface/screens/post/post_search.dart';
 import 'package:surface/screens/realm.dart';
 import 'package:surface/screens/realm/manage.dart';
 import 'package:surface/screens/realm/realm_detail.dart';
+import 'package:surface/screens/realm/realm_discovery.dart';
 import 'package:surface/screens/settings.dart';
 import 'package:surface/screens/sharing.dart';
 import 'package:surface/screens/wallet.dart';
@@ -198,6 +199,11 @@ final _appRoutes = [
         builder: (context, state) => RealmManageScreen(
           editingRealmAlias: state.uri.queryParameters['editing'],
         ),
+      ),
+      GoRoute(
+        path: '/discovery',
+        name: 'realmDiscovery',
+        builder: (context, state) => const RealmDiscoveryScreen(),
       ),
       GoRoute(
         path: '/:alias',

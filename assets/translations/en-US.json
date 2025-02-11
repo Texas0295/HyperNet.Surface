@@ -27,6 +27,7 @@
   "screenChatNew": "New Channel",
   "screenRealm": "Realm",
   "screenRealmManage": "Edit Realm",
+  "screenRealmDiscovery": "Realm Discovery",
   "screenRealmNew": "New Realm",
   "screenNotification": "Notification",
   "screenPostSearch": "Search Posts",
@@ -619,5 +620,10 @@
   "postQuestionAnswered": "Answered Question",
   "postQuestionAnswerSelect": "Select as Answer",
   "postQuestionAnswerSelected": "Answer has been selected, reward has been applied.",
-  "postVideoUpload": "Upload Video"
+  "postVideoUpload": "Upload Video",
+  "realmJoin": "Join Realm",
+  "realmCommunityHint": "This realm is a community realm, you can freely join.",
+  "realmCommunityPublicChannelsHint": "The public channels in this realm",
+  "realmJoined": "Joined realm {}.",
+  "join": "Join"
 }

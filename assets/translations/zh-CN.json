@@ -25,6 +25,7 @@
   "screenChatNew": "新建聊天频道",
   "screenRealm": "领域",
   "screenRealmManage": "编辑领域",
+  "screenRealmDiscovery": "发现领域",
   "screenRealmNew": "新建领域",
   "screenNotification": "通知",
   "screenPostSearch": "搜索帖子",
@@ -618,5 +619,10 @@
   "postQuestionAnswerTitle": "精选解答",
   "postQuestionAnswerSelect": "选择解答",
   "postQuestionAnswerSelected": "解答已选择，奖励已发放。",
-  "postVideoUpload": "上传视频"
+  "postVideoUpload": "上传视频",
+  "realmJoin": "加入领域",
+  "realmCommunityHint": "该领域是一个社区领域，你可以自由加入。",
+  "realmCommunityPublicChannelsHint": "该领域包含的公共频道",
+  "realmJoined": "已加入领域 {}。",
+  "join": "加入"
 }

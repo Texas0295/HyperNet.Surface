@@ -25,6 +25,7 @@
   "screenChatNew": "新建聊天頻道",
   "screenRealm": "領域",
   "screenRealmManage": "編輯領域",
+  "screenRealmDiscovery": "發現領域",
   "screenRealmNew": "新建領域",
   "screenNotification": "通知",
   "screenPostSearch": "搜索帖子",
@@ -139,6 +140,7 @@
   "writePostTypeStory": "發動態",
   "writePostTypeArticle": "寫文章",
   "writePostTypeQuestion": "提問題",
+  "writePostTypeVideo": "發視頻",
   "fieldPostPublisher": "帖子發佈者",
   "fieldPostContent": "發生什麼事了？！",
   "fieldPostTitle": "標題",
@@ -616,5 +618,11 @@
   "postQuestionAnswered": "已解答的問題",
   "postQuestionAnswerTitle": "精選解答",
   "postQuestionAnswerSelect": "選擇解答",
-  "postQuestionAnswerSelected": "解答已選擇，獎勵已發放。"
+  "postQuestionAnswerSelected": "解答已選擇，獎勵已發放。",
+  "postVideoUpload": "上傳視頻",
+  "realmJoin": "加入領域",
+  "realmCommunityHint": "該領域是一個社區領域，你可以自由加入。",
+  "realmCommunityPublicChannelsHint": "該領域包含的公共頻道",
+  "realmJoined": "已加入領域 {}。",
+  "join": "加入"
 }
