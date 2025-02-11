@@ -261,17 +261,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
               hasReachedMax: _postCount != null && _posts.length >= _postCount!,
               onFetchData: _fetchPosts,
               itemBuilder: (context, idx) {
-                return Center(
-                  child: OpenablePostItem(
-                    data: _posts[idx],
-                    maxWidth: 640,
-                    onChanged: (data) {
-                      setState(() => _posts[idx] = data);
-                    },
-                    onDeleted: () {
-                      _refreshPosts();
-                    },
-                  ),
+                return OpenablePostItem(
+                  data: _posts[idx],
+                  maxWidth: 640,
+                  onChanged: (data) {
+                    setState(() => _posts[idx] = data);
+                  },
+                  onDeleted: () {
+                    _refreshPosts();
+                  },
                 );
               },
               separatorBuilder: (_, __) => const Gap(8),

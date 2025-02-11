@@ -69,32 +69,34 @@ class OpenablePostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final cfg = context.read<ConfigProvider>();
 
-    return OpenContainer(
-      closedBuilder: (_, __) => Container(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
-        child: PostItem(
-          data: data,
-          maxWidth: maxWidth,
-          showComments: showComments,
-          showFullPost: showFullPost,
-          onChanged: onChanged,
-          onDeleted: onDeleted,
-          onSelectAnswer: onSelectAnswer,
-        ),
-      ),
-      openBuilder: (_, close) => PostDetailScreen(
-        slug: data.id.toString(),
-        preload: data,
-        onBack: close,
-      ),
-      openColor: Colors.transparent,
-      openElevation: 0,
-      transitionType: ContainerTransitionType.fade,
-      closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(
-            cfg.prefs.getBool(kAppBackgroundStoreKey) == true ? 0.75 : 1,
+    return Center(
+      child: OpenContainer(
+        closedBuilder: (_, __) => Container(
+          constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+          child: PostItem(
+            data: data,
+            maxWidth: maxWidth,
+            showComments: showComments,
+            showFullPost: showFullPost,
+            onChanged: onChanged,
+            onDeleted: onDeleted,
+            onSelectAnswer: onSelectAnswer,
           ),
-      closedShape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        openBuilder: (_, close) => PostDetailScreen(
+          slug: data.id.toString(),
+          preload: data,
+          onBack: close,
+        ),
+        openColor: Colors.transparent,
+        openElevation: 0,
+        transitionType: ContainerTransitionType.fade,
+        closedColor: Theme.of(context).colorScheme.surfaceContainerLow.withOpacity(
+              cfg.prefs.getBool(kAppBackgroundStoreKey) == true ? 0.75 : 1,
+            ),
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
       ),
     );
   }
