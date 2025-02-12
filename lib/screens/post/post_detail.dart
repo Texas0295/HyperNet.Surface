@@ -64,7 +64,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final ua = context.watch<UserProvider>();
-    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    final double maxWidth = _data?.type == 'video' ? double.infinity : 640;
 
     return AppBackground(
       isRoot: widget.onBack != null,
@@ -114,7 +115,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               SliverToBoxAdapter(
                 child: PostItem(
                   data: _data!,
-                  maxWidth: 640,
+                  maxWidth: maxWidth,
                   showComments: false,
                   showFullPost: true,
                   onChanged: (data) {
@@ -125,11 +126,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   },
                 ),
               ),
-            const SliverToBoxAdapter(child: Divider(height: 1)),
-            if (_data != null)
+            if (_data != null && _data!.type != 'video') const SliverToBoxAdapter(child: Divider(height: 1)),
+            if (_data != null && _data!.type != 'video')
               SliverToBoxAdapter(
                 child: Container(
-                  constraints: const BoxConstraints(maxWidth: 640),
+                  constraints: BoxConstraints(maxWidth: maxWidth),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -142,51 +143,30 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   ).padding(horizontal: 20, vertical: 12).center(),
                 ),
               ),
-            if (_data != null && ua.isAuthorized)
+            if (_data != null && ua.isAuthorized && _data!.type != 'video')
               SliverToBoxAdapter(
-                child: Container(
-                  height: 240,
-                  constraints: const BoxConstraints(maxWidth: 640),
-                  margin:
-                      ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? const EdgeInsets.all(8) : EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    borderRadius: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                        ? const BorderRadius.all(Radius.circular(8))
-                        : BorderRadius.zero,
-                    border: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                        ? Border.all(
-                            color: Theme.of(context).dividerColor,
-                            width: 1 / devicePixelRatio,
-                          )
-                        : Border.symmetric(
-                            horizontal: BorderSide(
-                              color: Theme.of(context).dividerColor,
-                              width: 1 / devicePixelRatio,
-                            ),
-                          ),
-                  ),
-                  child: PostMiniEditor(
-                    postReplyId: _data!.id,
-                    onPost: () {
-                      setState(() {
-                        _data = _data!.copyWith(
-                          metric: _data!.metric.copyWith(
-                            replyCount: _data!.metric.replyCount + 1,
-                          ),
-                        );
-                      });
-                      _childListKey.currentState!.refresh();
-                    },
-                  ),
-                ).center(),
+                child: PostCommentQuickAction(
+                  parentPost: _data!,
+                  maxWidth: maxWidth,
+                  onPosted: () {
+                    setState(() {
+                      _data = _data!.copyWith(
+                        metric: _data!.metric.copyWith(
+                          replyCount: _data!.metric.replyCount + 1,
+                        ),
+                      );
+                    });
+                    _childListKey.currentState!.refresh();
+                  },
+                ),
               ),
-            if (_data != null)
+            if (_data != null && _data!.type != 'video')
               PostCommentSliverList(
                 key: _childListKey,
                 parentPost: _data!,
-                maxWidth: 640,
+                maxWidth: maxWidth,
               ),
-            SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
+            if (_data != null && _data!.type == 'video') SliverGap(math.max(MediaQuery.of(context).padding.bottom, 16)),
           ],
         ),
       ),

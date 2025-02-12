@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -14,6 +15,47 @@ import 'package:surface/widgets/post/post_mini_editor.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 import '../../providers/sn_network.dart';
+
+class PostCommentQuickAction extends StatelessWidget {
+  final double? maxWidth;
+  final SnPost parentPost;
+  final Function? onPosted;
+
+  const PostCommentQuickAction({super.key, this.maxWidth, required this.parentPost, this.onPosted});
+
+  @override
+  Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    return Container(
+      height: 240,
+      constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+      margin: ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? const EdgeInsets.symmetric(vertical: 8) : EdgeInsets.zero,
+      decoration: BoxDecoration(
+        borderRadius: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+            ? const BorderRadius.all(Radius.circular(8))
+            : BorderRadius.zero,
+        border: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+            ? Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 1 / devicePixelRatio,
+              )
+            : Border.symmetric(
+                horizontal: BorderSide(
+                  color: Theme.of(context).dividerColor,
+                  width: 1 / devicePixelRatio,
+                ),
+              ),
+      ),
+      child: PostMiniEditor(
+        postReplyId: parentPost.id,
+        onPost: () {
+          onPosted?.call();
+        },
+      ),
+    );
+  }
+}
 
 class PostCommentSliverList extends StatefulWidget {
   final SnPost parentPost;
@@ -71,6 +113,7 @@ class PostCommentSliverListState extends State<PostCommentSliverList> {
 
   Future<void> refresh() async {
     _posts.clear();
+    _postCount = null;
     _fetchPosts();
   }
 

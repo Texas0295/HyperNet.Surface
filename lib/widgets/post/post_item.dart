@@ -195,6 +195,57 @@ class PostItem extends StatelessWidget {
     final ua = context.read<UserProvider>();
     final isAuthor = ua.isAuthorized && data.publisher.accountId == ua.user?.id;
 
+    // Video full view
+    if (showFullPost && data.type == 'video' && ResponsiveBreakpoints.of(context).largerThan(TABLET)) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Gap(16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _PostContentHeader(
+                  data: data,
+                  isAuthor: isAuthor,
+                  isRelativeDate: !showFullPost,
+                  onShare: () => _doShare(context),
+                  onShareImage: () => _doShareViaPicture(context),
+                  onSelectAnswer: onSelectAnswer,
+                  onDeleted: () {
+                    if (onDeleted != null) {}
+                  },
+                ).padding(bottom: 8),
+                if (data.preload?.video != null) _PostVideoPlayer(data: data).padding(bottom: 8),
+                _PostHeadline(data: data).padding(horizontal: 4, bottom: 8),
+                _PostFeaturedComment(data: data).padding(),
+                _PostBottomAction(
+                  data: data,
+                  showComments: true,
+                  showReactions: showReactions,
+                  onShare: () => _doShare(context),
+                  onShareImage: () => _doShareViaPicture(context),
+                  onChanged: _onChanged,
+                ),
+              ],
+            ),
+          ),
+          const Gap(4),
+          SizedBox(
+            width: 340,
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                PostCommentSliverList(
+                  parentPost: data,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
     // Article headline preview
     if (!showFullPost && data.type == 'article') {
       return Container(
