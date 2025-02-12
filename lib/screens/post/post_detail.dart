@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:surface/providers/post.dart';
 import 'package:surface/providers/userinfo.dart';
@@ -17,7 +16,6 @@ import 'package:surface/widgets/navigation/app_background.dart';
 import 'package:surface/widgets/navigation/app_scaffold.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_item.dart';
-import 'package:surface/widgets/post/post_mini_editor.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String slug;

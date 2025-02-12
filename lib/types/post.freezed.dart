@@ -48,6 +48,7 @@ mixin _$SnPost {
   int get totalUpvote => throw _privateConstructorUsedError;
   int get totalDownvote => throw _privateConstructorUsedError;
   int get publisherId => throw _privateConstructorUsedError;
+  int? get pollId => throw _privateConstructorUsedError;
   SnPublisher get publisher => throw _privateConstructorUsedError;
   SnMetric get metric => throw _privateConstructorUsedError;
   SnPostPreload? get preload => throw _privateConstructorUsedError;
@@ -95,6 +96,7 @@ abstract class $SnPostCopyWith<$Res> {
       int totalUpvote,
       int totalDownvote,
       int publisherId,
+      int? pollId,
       SnPublisher publisher,
       SnMetric metric,
       SnPostPreload? preload});
@@ -149,6 +151,7 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
     Object? totalUpvote = null,
     Object? totalDownvote = null,
     Object? publisherId = null,
+    Object? pollId = freezed,
     Object? publisher = null,
     Object? metric = null,
     Object? preload = freezed,
@@ -266,6 +269,10 @@ class _$SnPostCopyWithImpl<$Res, $Val extends SnPost>
           ? _value.publisherId
           : publisherId // ignore: cast_nullable_to_non_nullable
               as int,
+      pollId: freezed == pollId
+          ? _value.pollId
+          : pollId // ignore: cast_nullable_to_non_nullable
+              as int?,
       publisher: null == publisher
           ? _value.publisher
           : publisher // ignore: cast_nullable_to_non_nullable
@@ -380,6 +387,7 @@ abstract class _$$SnPostImplCopyWith<$Res> implements $SnPostCopyWith<$Res> {
       int totalUpvote,
       int totalDownvote,
       int publisherId,
+      int? pollId,
       SnPublisher publisher,
       SnMetric metric,
       SnPostPreload? preload});
@@ -437,6 +445,7 @@ class __$$SnPostImplCopyWithImpl<$Res>
     Object? totalUpvote = null,
     Object? totalDownvote = null,
     Object? publisherId = null,
+    Object? pollId = freezed,
     Object? publisher = null,
     Object? metric = null,
     Object? preload = freezed,
@@ -554,6 +563,10 @@ class __$$SnPostImplCopyWithImpl<$Res>
           ? _value.publisherId
           : publisherId // ignore: cast_nullable_to_non_nullable
               as int,
+      pollId: freezed == pollId
+          ? _value.pollId
+          : pollId // ignore: cast_nullable_to_non_nullable
+              as int?,
       publisher: null == publisher
           ? _value.publisher
           : publisher // ignore: cast_nullable_to_non_nullable
@@ -602,6 +615,7 @@ class _$SnPostImpl extends _SnPost {
       required this.totalUpvote,
       required this.totalDownvote,
       required this.publisherId,
+      required this.pollId,
       required this.publisher,
       required this.metric,
       this.preload})
@@ -719,6 +733,8 @@ class _$SnPostImpl extends _SnPost {
   @override
   final int publisherId;
   @override
+  final int? pollId;
+  @override
   final SnPublisher publisher;
   @override
   final SnMetric metric;
@@ -727,7 +743,7 @@ class _$SnPostImpl extends _SnPost {
 
   @override
   String toString() {
-    return 'SnPost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, body: $body, language: $language, alias: $alias, aliasPrefix: $aliasPrefix, tags: $tags, categories: $categories, replies: $replies, replyId: $replyId, repostId: $repostId, replyTo: $replyTo, repostTo: $repostTo, visibleUsersList: $visibleUsersList, invisibleUsersList: $invisibleUsersList, visibility: $visibility, editedAt: $editedAt, pinnedAt: $pinnedAt, lockedAt: $lockedAt, isDraft: $isDraft, publishedAt: $publishedAt, publishedUntil: $publishedUntil, totalUpvote: $totalUpvote, totalDownvote: $totalDownvote, publisherId: $publisherId, publisher: $publisher, metric: $metric, preload: $preload)';
+    return 'SnPost(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, type: $type, body: $body, language: $language, alias: $alias, aliasPrefix: $aliasPrefix, tags: $tags, categories: $categories, replies: $replies, replyId: $replyId, repostId: $repostId, replyTo: $replyTo, repostTo: $repostTo, visibleUsersList: $visibleUsersList, invisibleUsersList: $invisibleUsersList, visibility: $visibility, editedAt: $editedAt, pinnedAt: $pinnedAt, lockedAt: $lockedAt, isDraft: $isDraft, publishedAt: $publishedAt, publishedUntil: $publishedUntil, totalUpvote: $totalUpvote, totalDownvote: $totalDownvote, publisherId: $publisherId, pollId: $pollId, publisher: $publisher, metric: $metric, preload: $preload)';
   }
 
   @override
@@ -782,6 +798,7 @@ class _$SnPostImpl extends _SnPost {
                 other.totalDownvote == totalDownvote) &&
             (identical(other.publisherId, publisherId) ||
                 other.publisherId == publisherId) &&
+            (identical(other.pollId, pollId) || other.pollId == pollId) &&
             (identical(other.publisher, publisher) ||
                 other.publisher == publisher) &&
             (identical(other.metric, metric) || other.metric == metric) &&
@@ -820,6 +837,7 @@ class _$SnPostImpl extends _SnPost {
         totalUpvote,
         totalDownvote,
         publisherId,
+        pollId,
         publisher,
         metric,
         preload
@@ -871,6 +889,7 @@ abstract class _SnPost extends SnPost {
       required final int totalUpvote,
       required final int totalDownvote,
       required final int publisherId,
+      required final int? pollId,
       required final SnPublisher publisher,
       required final SnMetric metric,
       final SnPostPreload? preload}) = _$SnPostImpl;
@@ -934,6 +953,8 @@ abstract class _SnPost extends SnPost {
   int get totalDownvote;
   @override
   int get publisherId;
+  @override
+  int? get pollId;
   @override
   SnPublisher get publisher;
   @override
@@ -1568,6 +1589,7 @@ mixin _$SnPostPreload {
   SnAttachment? get thumbnail => throw _privateConstructorUsedError;
   List<SnAttachment?>? get attachments => throw _privateConstructorUsedError;
   SnAttachment? get video => throw _privateConstructorUsedError;
+  SnPoll? get poll => throw _privateConstructorUsedError;
 
   /// Serializes this SnPostPreload to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1588,10 +1610,12 @@ abstract class $SnPostPreloadCopyWith<$Res> {
   $Res call(
       {SnAttachment? thumbnail,
       List<SnAttachment?>? attachments,
-      SnAttachment? video});
+      SnAttachment? video,
+      SnPoll? poll});
 
   $SnAttachmentCopyWith<$Res>? get thumbnail;
   $SnAttachmentCopyWith<$Res>? get video;
+  $SnPollCopyWith<$Res>? get poll;
 }
 
 /// @nodoc
@@ -1612,6 +1636,7 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
     Object? thumbnail = freezed,
     Object? attachments = freezed,
     Object? video = freezed,
+    Object? poll = freezed,
   }) {
     return _then(_value.copyWith(
       thumbnail: freezed == thumbnail
@@ -1626,6 +1651,10 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as SnAttachment?,
+      poll: freezed == poll
+          ? _value.poll
+          : poll // ignore: cast_nullable_to_non_nullable
+              as SnPoll?,
     ) as $Val);
   }
 
@@ -1656,6 +1685,20 @@ class _$SnPostPreloadCopyWithImpl<$Res, $Val extends SnPostPreload>
       return _then(_value.copyWith(video: value) as $Val);
     });
   }
+
+  /// Create a copy of SnPostPreload
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnPollCopyWith<$Res>? get poll {
+    if (_value.poll == null) {
+      return null;
+    }
+
+    return $SnPollCopyWith<$Res>(_value.poll!, (value) {
+      return _then(_value.copyWith(poll: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1669,12 +1712,15 @@ abstract class _$$SnPostPreloadImplCopyWith<$Res>
   $Res call(
       {SnAttachment? thumbnail,
       List<SnAttachment?>? attachments,
-      SnAttachment? video});
+      SnAttachment? video,
+      SnPoll? poll});
 
   @override
   $SnAttachmentCopyWith<$Res>? get thumbnail;
   @override
   $SnAttachmentCopyWith<$Res>? get video;
+  @override
+  $SnPollCopyWith<$Res>? get poll;
 }
 
 /// @nodoc
@@ -1693,6 +1739,7 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
     Object? thumbnail = freezed,
     Object? attachments = freezed,
     Object? video = freezed,
+    Object? poll = freezed,
   }) {
     return _then(_$SnPostPreloadImpl(
       thumbnail: freezed == thumbnail
@@ -1707,6 +1754,10 @@ class __$$SnPostPreloadImplCopyWithImpl<$Res>
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
               as SnAttachment?,
+      poll: freezed == poll
+          ? _value.poll
+          : poll // ignore: cast_nullable_to_non_nullable
+              as SnPoll?,
     ));
   }
 }
@@ -1717,7 +1768,8 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
   const _$SnPostPreloadImpl(
       {required this.thumbnail,
       required final List<SnAttachment?>? attachments,
-      required this.video})
+      required this.video,
+      required this.poll})
       : _attachments = attachments;
 
   factory _$SnPostPreloadImpl.fromJson(Map<String, dynamic> json) =>
@@ -1737,10 +1789,12 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
 
   @override
   final SnAttachment? video;
+  @override
+  final SnPoll? poll;
 
   @override
   String toString() {
-    return 'SnPostPreload(thumbnail: $thumbnail, attachments: $attachments, video: $video)';
+    return 'SnPostPreload(thumbnail: $thumbnail, attachments: $attachments, video: $video, poll: $poll)';
   }
 
   @override
@@ -1752,13 +1806,14 @@ class _$SnPostPreloadImpl implements _SnPostPreload {
                 other.thumbnail == thumbnail) &&
             const DeepCollectionEquality()
                 .equals(other._attachments, _attachments) &&
-            (identical(other.video, video) || other.video == video));
+            (identical(other.video, video) || other.video == video) &&
+            (identical(other.poll, poll) || other.poll == poll));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, thumbnail,
-      const DeepCollectionEquality().hash(_attachments), video);
+      const DeepCollectionEquality().hash(_attachments), video, poll);
 
   /// Create a copy of SnPostPreload
   /// with the given fields replaced by the non-null parameter values.
@@ -1780,7 +1835,8 @@ abstract class _SnPostPreload implements SnPostPreload {
   const factory _SnPostPreload(
       {required final SnAttachment? thumbnail,
       required final List<SnAttachment?>? attachments,
-      required final SnAttachment? video}) = _$SnPostPreloadImpl;
+      required final SnAttachment? video,
+      required final SnPoll? poll}) = _$SnPostPreloadImpl;
 
   factory _SnPostPreload.fromJson(Map<String, dynamic> json) =
       _$SnPostPreloadImpl.fromJson;
@@ -1791,6 +1847,8 @@ abstract class _SnPostPreload implements SnPostPreload {
   List<SnAttachment?>? get attachments;
   @override
   SnAttachment? get video;
+  @override
+  SnPoll? get poll;
 
   /// Create a copy of SnPostPreload
   /// with the given fields replaced by the non-null parameter values.

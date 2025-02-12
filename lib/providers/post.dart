@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/providers/user_directory.dart';
+import 'package:surface/types/poll.dart';
 import 'package:surface/types/post.dart';
 
 class SnPostContentProvider {
@@ -14,6 +15,11 @@ class SnPostContentProvider {
     _sn = context.read<SnNetworkProvider>();
     _ud = context.read<UserDirectoryProvider>();
     _attach = context.read<SnAttachmentProvider>();
+  }
+
+  Future<SnPoll> _fetchPoll(int id) async {
+    final resp = await _sn.client.get('/cgi/co/polls/$id');
+    return SnPoll.fromJson(resp.data);
   }
 
   Future<List<SnPost>> _preloadRelatedDataInBatch(List<SnPost> out) async {
@@ -35,11 +41,17 @@ class SnPostContentProvider {
 
     final attachments = await _attach.getMultiple(rids.toList());
     for (var i = 0; i < out.length; i++) {
+      SnPoll? poll;
+      if (out[i].pollId != null) {
+        poll = await _fetchPoll(out[i].pollId!);
+      }
+
       out[i] = out[i].copyWith(
         preload: SnPostPreload(
           thumbnail: attachments.where((ele) => ele?.rid == out[i].body['thumbnail']).firstOrNull,
           attachments: attachments.where((ele) => out[i].body['attachments']?.contains(ele?.rid) ?? false).toList(),
           video: attachments.where((ele) => ele?.rid == out[i].body['video']).firstOrNull,
+          poll: poll,
         ),
       );
     }
@@ -67,11 +79,18 @@ class SnPostContentProvider {
     }
 
     final attachments = await _attach.getMultiple(rids.toList());
+
+    SnPoll? poll;
+    if (out.pollId != null) {
+      poll = await _fetchPoll(out.pollId!);
+    }
+
     out = out.copyWith(
       preload: SnPostPreload(
         thumbnail: attachments.where((ele) => ele?.rid == out.body['thumbnail']).firstOrNull,
         attachments: attachments.where((ele) => out.body['attachments']?.contains(ele?.rid) ?? false).toList(),
         video: attachments.where((ele) => ele?.rid == out.body['video']).firstOrNull,
+        poll: poll,
       ),
     );
 

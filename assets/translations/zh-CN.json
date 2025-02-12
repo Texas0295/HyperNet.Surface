@@ -624,5 +624,13 @@
   "realmCommunityHint": "该领域是一个社区领域，你可以自由加入。",
   "realmCommunityPublicChannelsHint": "该领域包含的公共频道",
   "realmJoined": "已加入领域 {}。",
-  "join": "加入"
+  "join": "加入",
+  "pollEditorNew": "新投票",
+  "pollEditorEdit": "编辑投票",
+  "pollEditorDelete": "删除投票",
+  "pollEditorDeleteDescription": "你确定要删除这个投票吗？该操作不可撤销。",
+  "pollEditorUnlink": "解除链接",
+  "pollOptionAdd": "添加选项",
+  "pollOptionName": "选项名称",
+  "pollLinkExisting": "链接现有投票"
 }

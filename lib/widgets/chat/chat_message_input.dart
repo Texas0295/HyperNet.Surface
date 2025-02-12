@@ -352,10 +352,9 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   Symbols.mood,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                visualDensity: const VisualDensity(
-                  horizontal: -4,
-                  vertical: -4,
-                ),
+                visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
                 onPressed: () {
                   _showEmojiPicker(context);
                 },
@@ -373,10 +372,9 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                   Symbols.send,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                visualDensity: const VisualDensity(
-                  horizontal: -4,
-                  vertical: -4,
-                ),
+                visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
             ],
           ),

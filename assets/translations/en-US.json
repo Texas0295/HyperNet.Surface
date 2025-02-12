@@ -625,5 +625,13 @@
   "realmCommunityHint": "This realm is a community realm, you can freely join.",
   "realmCommunityPublicChannelsHint": "The public channels in this realm",
   "realmJoined": "Joined realm {}.",
-  "join": "Join"
+  "join": "Join",
+  "pollEditorNew": "New Poll",
+  "pollEditorEdit": "Edit Poll",
+  "pollEditorDelete": "Delete Poll",
+  "pollEditorDeleteDescription": "Are you sure you want to delete this poll? This operation is irreversible.",
+  "pollEditorUnlink": "Unlink Poll",
+  "pollOptionAdd": "Add Option",
+  "pollOptionName": "Option Name",
+  "pollLinkExisting": "Link existing poll"
 }

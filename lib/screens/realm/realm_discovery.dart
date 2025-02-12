@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -261,7 +260,7 @@ class _RealmJoinPopupState extends State<_RealmJoinPopup> {
             itemBuilder: (context, index) {
               final channel = _channels![index];
               return CheckboxListTile(
-                value: _planJoinChannels.contains(channel.alias) ?? false,
+                value: _planJoinChannels.contains(channel.alias),
                 title: Text(channel.name),
                 subtitle: Text(
                   channel.description,

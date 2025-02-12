@@ -16,6 +16,7 @@ import 'package:surface/providers/post.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
+import 'package:surface/types/poll.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -199,6 +200,7 @@ class PostWriteController extends ChangeNotifier {
   List<PostWriteMedia> attachments = List.empty(growable: true);
   DateTime? publishedAt, publishedUntil;
   SnAttachment? videoAttachment;
+  SnPoll? poll;
 
   Future<void> fetchRelatedPost(
     BuildContext context, {
@@ -229,6 +231,7 @@ class PostWriteController extends ChangeNotifier {
         tags = List.from(post.tags.map((ele) => ele.alias), growable: true);
         categories = List.from(post.categories.map((ele) => ele.alias), growable: true);
         attachments.addAll(post.preload?.attachments?.map((ele) => PostWriteMedia(ele)) ?? []);
+        poll = post.preload?.poll;
 
         if (post.preload?.thumbnail != null && (post.preload?.thumbnail?.rid.isNotEmpty ?? false)) {
           thumbnail = PostWriteMedia(post.preload!.thumbnail);
@@ -367,6 +370,7 @@ class PostWriteController extends ChangeNotifier {
           if (publishedUntil != null) 'published_until': publishedAt!.toUtc().toIso8601String(),
           if (replyingPost != null) 'reply_to': replyingPost!.toJson(),
           if (repostingPost != null) 'repost_to': repostingPost!.toJson(),
+          if (poll != null) 'poll': poll!.toJson(),
         }),
       );
     });
@@ -396,6 +400,7 @@ class PostWriteController extends ChangeNotifier {
       if (data['published_until'] != null) publishedUntil = DateTime.tryParse(data['published_until'])?.toLocal();
       replyingPost = data['reply_to'] != null ? SnPost.fromJson(data['reply_to']) : null;
       repostingPost = data['repost_to'] != null ? SnPost.fromJson(data['repost_to']) : null;
+      poll = data['poll'] != null ? SnPoll.fromJson(data['poll']) : null;
       temporaryRestored = true;
       notifyListeners();
     });
@@ -511,6 +516,7 @@ class PostWriteController extends ChangeNotifier {
           if (repostingPost != null) 'repost_to': repostingPost!.id,
           if (reward != null) 'reward': reward,
           if (videoAttachment != null) 'video': videoAttachment!.rid,
+          if (poll != null) 'poll': poll!.id,
         },
         onSendProgress: (count, total) {
           progress = baseProgressVal + (count / total) * (kPostingProgressWeight / 2);
@@ -639,6 +645,11 @@ class PostWriteController extends ChangeNotifier {
 
   void setVideoAttachment(SnAttachment? value) {
     videoAttachment = value;
+    notifyListeners();
+  }
+
+  void setPoll(SnPoll? value) {
+    poll = value;
     notifyListeners();
   }
 

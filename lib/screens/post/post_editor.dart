@@ -18,8 +18,10 @@ import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
+import 'package:surface/types/poll.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
+import 'package:surface/widgets/attachment/attachment_input.dart';
 import 'package:surface/widgets/attachment/attachment_item.dart';
 import 'package:surface/widgets/attachment/pending_attachment_alt.dart';
 import 'package:surface/widgets/attachment/pending_attachment_boost.dart';
@@ -30,9 +32,8 @@ import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:surface/widgets/post/post_poll.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../widgets/attachment/attachment_input.dart';
 
 class PostEditorExtra {
   final String? text;
@@ -140,6 +141,23 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     );
   }
 
+  void _showPollEditorDialog() async {
+    final poll = await showDialog<dynamic>(
+      context: context,
+      builder: (context) => PollEditorDialog(
+        poll: _writeController.poll,
+      ),
+    );
+    if (poll == null) return;
+    if (!mounted) return;
+
+    if (poll == false) {
+      _writeController.setPoll(null);
+    } else {
+      _writeController.setPoll(poll);
+    }
+  }
+
   @override
   void dispose() {
     _writeController.dispose();
@@ -238,7 +256,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                   children: [
                     SingleChildScrollView(
                       padding: EdgeInsets.only(bottom: 160),
-                      child: switch (_writeController.mode) {
+                      child: StyledWidget(switch (_writeController.mode) {
                         'stories' => _PostStoryEditor(
                             controller: _writeController,
                             onTapPublisher: _showPublisherPopup,
@@ -256,7 +274,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                             onTapPublisher: _showPublisherPopup,
                           ),
                         _ => const Placeholder(),
-                      },
+                      })
+                          .padding(top: 8),
                     ),
                     if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
                       Positioned(
@@ -304,7 +323,6 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LoadingIndicator(isActive: _isLoading),
                     if (_writeController.isBusy && _writeController.progress != null)
                       TweenAnimationBuilder<double>(
                         tween: Tween(begin: 0, end: _writeController.progress),
@@ -313,6 +331,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       )
                     else if (_writeController.isBusy)
                       const LinearProgressIndicator(value: null, minHeight: 2),
+                    LoadingIndicator(isActive: _isLoading),
+                    const Gap(4),
                     Container(
                       child: _writeController.temporaryRestored
                           ? Container(
@@ -360,6 +380,18 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                       });
                                     },
                                   ),
+                                  if (_writeController.mode == 'stories')
+                                    IconButton(
+                                      icon: Icon(Symbols.poll, color: Theme.of(context).colorScheme.primary),
+                                      style: ButtonStyle(
+                                        backgroundColor: _writeController.poll == null
+                                            ? null
+                                            : WidgetStatePropertyAll(Theme.of(context).colorScheme.surfaceContainer),
+                                      ),
+                                      onPressed: () {
+                                        _showPollEditorDialog();
+                                      },
+                                    ),
                                 ],
                               ),
                             ),
@@ -382,7 +414,6 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                   ],
                 ).padding(
                   bottom: MediaQuery.of(context).padding.bottom + 8,
-                  top: 4,
                 ),
               ),
             ],
