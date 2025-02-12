@@ -891,7 +891,7 @@ class _PostVideoEditor extends StatelessWidget {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
-              onTap: controller.videoAttachment != null ? () => _selectVideo(context) : null,
+              onTap: controller.videoAttachment == null ? () => _selectVideo(context) : null,
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: controller.videoAttachment == null
