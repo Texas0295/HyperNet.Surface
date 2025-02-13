@@ -36,6 +36,7 @@ import 'package:surface/widgets/markdown_content.dart';
 import 'package:gap/gap.dart';
 import 'package:surface/widgets/post/post_comment_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
+import 'package:surface/widgets/post/post_poll.dart';
 import 'package:surface/widgets/post/post_reaction.dart';
 import 'package:surface/widgets/post/publisher_popover.dart';
 import 'package:surface/widgets/universal_image.dart';
@@ -218,7 +219,7 @@ class PostItem extends StatelessWidget {
                 ).padding(bottom: 8),
                 if (data.preload?.video != null) _PostVideoPlayer(data: data).padding(bottom: 8),
                 _PostHeadline(data: data).padding(horizontal: 4, bottom: 8),
-                _PostFeaturedComment(data: data).padding(),
+                _PostFeaturedComment(data: data),
                 _PostBottomAction(
                   data: data,
                   showComments: true,
@@ -389,6 +390,7 @@ class PostItem extends StatelessWidget {
             fit: showFullPost ? BoxFit.cover : BoxFit.contain,
             padding: const EdgeInsets.symmetric(horizontal: 12),
           ),
+        if (data.preload?.poll != null) PostPoll(poll: data.preload!.poll!).padding(horizontal: 12, vertical: 4),
         if (data.body['content'] != null && (cfg.prefs.getBool(kAppExpandPostLink) ?? true))
           LinkPreviewWidget(
             text: data.body['content'],

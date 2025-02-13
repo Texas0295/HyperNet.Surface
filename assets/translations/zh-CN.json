@@ -632,5 +632,10 @@
   "pollEditorUnlink": "解除链接",
   "pollOptionAdd": "添加选项",
   "pollOptionName": "选项名称",
-  "pollLinkExisting": "链接现有投票"
+  "pollLinkExisting": "链接现有投票",
+  "pollAnswered": "答案已经反馈。",
+  "pollVotes": {
+    "one": "{} 票",
+    "other": "{} 票"
+  }
 }

@@ -18,7 +18,6 @@ import 'package:surface/providers/config.dart';
 import 'package:surface/providers/sn_attachment.dart';
 import 'package:surface/providers/sn_network.dart';
 import 'package:surface/types/attachment.dart';
-import 'package:surface/types/poll.dart';
 import 'package:surface/types/post.dart';
 import 'package:surface/widgets/account/account_image.dart';
 import 'package:surface/widgets/attachment/attachment_input.dart';
@@ -32,7 +31,7 @@ import 'package:surface/widgets/post/post_media_pending_list.dart';
 import 'package:surface/widgets/post/post_meta_editor.dart';
 import 'package:surface/widgets/dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:surface/widgets/post/post_poll.dart';
+import 'package:surface/widgets/post/post_poll_editor.dart';
 import 'package:uuid/uuid.dart';
 
 class PostEditorExtra {

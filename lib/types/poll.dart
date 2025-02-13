@@ -24,7 +24,8 @@ class SnPoll with _$SnPoll {
 class SnPollMetric with _$SnPollMetric {
   const factory SnPollMetric({
     required int totalAnswer,
-    required dynamic byOptions,
+    @Default({}) Map<String, int> byOptions,
+    @Default({}) Map<String, int> byOptionsPercentage,
   }) = _SnPollMetric;
 
   factory SnPollMetric.fromJson(Map<String, Object?> json)

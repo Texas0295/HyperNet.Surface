@@ -34,13 +34,22 @@ Map<String, dynamic> _$$SnPollImplToJson(_$SnPollImpl instance) =>
 _$SnPollMetricImpl _$$SnPollMetricImplFromJson(Map<String, dynamic> json) =>
     _$SnPollMetricImpl(
       totalAnswer: (json['total_answer'] as num).toInt(),
-      byOptions: json['by_options'],
+      byOptions: (json['by_options'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, (e as num).toInt()),
+          ) ??
+          const {},
+      byOptionsPercentage:
+          (json['by_options_percentage'] as Map<String, dynamic>?)?.map(
+                (k, e) => MapEntry(k, (e as num).toInt()),
+              ) ??
+              const {},
     );
 
 Map<String, dynamic> _$$SnPollMetricImplToJson(_$SnPollMetricImpl instance) =>
     <String, dynamic>{
       'total_answer': instance.totalAnswer,
       'by_options': instance.byOptions,
+      'by_options_percentage': instance.byOptionsPercentage,
     };
 
 _$SnPollOptionImpl _$$SnPollOptionImplFromJson(Map<String, dynamic> json) =>

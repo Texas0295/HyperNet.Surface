@@ -344,7 +344,9 @@ SnPollMetric _$SnPollMetricFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SnPollMetric {
   int get totalAnswer => throw _privateConstructorUsedError;
-  dynamic get byOptions => throw _privateConstructorUsedError;
+  Map<String, int> get byOptions => throw _privateConstructorUsedError;
+  Map<String, int> get byOptionsPercentage =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this SnPollMetric to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -362,7 +364,10 @@ abstract class $SnPollMetricCopyWith<$Res> {
           SnPollMetric value, $Res Function(SnPollMetric) then) =
       _$SnPollMetricCopyWithImpl<$Res, SnPollMetric>;
   @useResult
-  $Res call({int totalAnswer, dynamic byOptions});
+  $Res call(
+      {int totalAnswer,
+      Map<String, int> byOptions,
+      Map<String, int> byOptionsPercentage});
 }
 
 /// @nodoc
@@ -381,17 +386,22 @@ class _$SnPollMetricCopyWithImpl<$Res, $Val extends SnPollMetric>
   @override
   $Res call({
     Object? totalAnswer = null,
-    Object? byOptions = freezed,
+    Object? byOptions = null,
+    Object? byOptionsPercentage = null,
   }) {
     return _then(_value.copyWith(
       totalAnswer: null == totalAnswer
           ? _value.totalAnswer
           : totalAnswer // ignore: cast_nullable_to_non_nullable
               as int,
-      byOptions: freezed == byOptions
+      byOptions: null == byOptions
           ? _value.byOptions
           : byOptions // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as Map<String, int>,
+      byOptionsPercentage: null == byOptionsPercentage
+          ? _value.byOptionsPercentage
+          : byOptionsPercentage // ignore: cast_nullable_to_non_nullable
+              as Map<String, int>,
     ) as $Val);
   }
 }
@@ -404,7 +414,10 @@ abstract class _$$SnPollMetricImplCopyWith<$Res>
       __$$SnPollMetricImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int totalAnswer, dynamic byOptions});
+  $Res call(
+      {int totalAnswer,
+      Map<String, int> byOptions,
+      Map<String, int> byOptionsPercentage});
 }
 
 /// @nodoc
@@ -421,17 +434,22 @@ class __$$SnPollMetricImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? totalAnswer = null,
-    Object? byOptions = freezed,
+    Object? byOptions = null,
+    Object? byOptionsPercentage = null,
   }) {
     return _then(_$SnPollMetricImpl(
       totalAnswer: null == totalAnswer
           ? _value.totalAnswer
           : totalAnswer // ignore: cast_nullable_to_non_nullable
               as int,
-      byOptions: freezed == byOptions
-          ? _value.byOptions
+      byOptions: null == byOptions
+          ? _value._byOptions
           : byOptions // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as Map<String, int>,
+      byOptionsPercentage: null == byOptionsPercentage
+          ? _value._byOptionsPercentage
+          : byOptionsPercentage // ignore: cast_nullable_to_non_nullable
+              as Map<String, int>,
     ));
   }
 }
@@ -440,19 +458,39 @@ class __$$SnPollMetricImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SnPollMetricImpl implements _SnPollMetric {
   const _$SnPollMetricImpl(
-      {required this.totalAnswer, required this.byOptions});
+      {required this.totalAnswer,
+      final Map<String, int> byOptions = const {},
+      final Map<String, int> byOptionsPercentage = const {}})
+      : _byOptions = byOptions,
+        _byOptionsPercentage = byOptionsPercentage;
 
   factory _$SnPollMetricImpl.fromJson(Map<String, dynamic> json) =>
       _$$SnPollMetricImplFromJson(json);
 
   @override
   final int totalAnswer;
+  final Map<String, int> _byOptions;
   @override
-  final dynamic byOptions;
+  @JsonKey()
+  Map<String, int> get byOptions {
+    if (_byOptions is EqualUnmodifiableMapView) return _byOptions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_byOptions);
+  }
+
+  final Map<String, int> _byOptionsPercentage;
+  @override
+  @JsonKey()
+  Map<String, int> get byOptionsPercentage {
+    if (_byOptionsPercentage is EqualUnmodifiableMapView)
+      return _byOptionsPercentage;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_byOptionsPercentage);
+  }
 
   @override
   String toString() {
-    return 'SnPollMetric(totalAnswer: $totalAnswer, byOptions: $byOptions)';
+    return 'SnPollMetric(totalAnswer: $totalAnswer, byOptions: $byOptions, byOptionsPercentage: $byOptionsPercentage)';
   }
 
   @override
@@ -462,13 +500,19 @@ class _$SnPollMetricImpl implements _SnPollMetric {
             other is _$SnPollMetricImpl &&
             (identical(other.totalAnswer, totalAnswer) ||
                 other.totalAnswer == totalAnswer) &&
-            const DeepCollectionEquality().equals(other.byOptions, byOptions));
+            const DeepCollectionEquality()
+                .equals(other._byOptions, _byOptions) &&
+            const DeepCollectionEquality()
+                .equals(other._byOptionsPercentage, _byOptionsPercentage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, totalAnswer, const DeepCollectionEquality().hash(byOptions));
+      runtimeType,
+      totalAnswer,
+      const DeepCollectionEquality().hash(_byOptions),
+      const DeepCollectionEquality().hash(_byOptionsPercentage));
 
   /// Create a copy of SnPollMetric
   /// with the given fields replaced by the non-null parameter values.
@@ -489,7 +533,8 @@ class _$SnPollMetricImpl implements _SnPollMetric {
 abstract class _SnPollMetric implements SnPollMetric {
   const factory _SnPollMetric(
       {required final int totalAnswer,
-      required final dynamic byOptions}) = _$SnPollMetricImpl;
+      final Map<String, int> byOptions,
+      final Map<String, int> byOptionsPercentage}) = _$SnPollMetricImpl;
 
   factory _SnPollMetric.fromJson(Map<String, dynamic> json) =
       _$SnPollMetricImpl.fromJson;
@@ -497,7 +542,9 @@ abstract class _SnPollMetric implements SnPollMetric {
   @override
   int get totalAnswer;
   @override
-  dynamic get byOptions;
+  Map<String, int> get byOptions;
+  @override
+  Map<String, int> get byOptionsPercentage;
 
   /// Create a copy of SnPollMetric
   /// with the given fields replaced by the non-null parameter values.

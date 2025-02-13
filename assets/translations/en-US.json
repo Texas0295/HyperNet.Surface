@@ -633,5 +633,10 @@
   "pollEditorUnlink": "Unlink Poll",
   "pollOptionAdd": "Add Option",
   "pollOptionName": "Option Name",
-  "pollLinkExisting": "Link existing poll"
+  "pollLinkExisting": "Link existing poll",
+  "pollAnswered": "Answered the poll.",
+  "pollVotes": {
+    "one": "{} vote",
+    "other": "{} votes"
+  }
 }
