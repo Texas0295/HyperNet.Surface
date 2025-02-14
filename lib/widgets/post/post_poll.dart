@@ -31,19 +31,27 @@ class _PostPollState extends State<PostPoll> {
 
   String? _answeredChoice;
 
+  Future<void> _refreshPoll() async {
+    final sn = context.read<SnNetworkProvider>();
+    final resp = await sn.client.get('/cgi/co/polls/${widget.poll.id}');
+    if (!mounted) return;
+    setState(() => _poll = SnPoll.fromJson(resp.data!));
+  }
+
   Future<void> _fetchAnswer() async {
     final ua = context.read<UserProvider>();
     if (!ua.isAuthorized) return;
     try {
       setState(() => _isBusy = true);
       final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.get('/cgi/co/polls/${widget.poll.id}/answer');
+      final resp =
+          await sn.client.get('/cgi/co/polls/${widget.poll.id}/answer');
       _answeredChoice = resp.data?['answer'];
       if (!mounted) return;
       setState(() {});
     } catch (err) {
       if (!mounted) return;
-      context.showErrorDialog(err);
+      // ignore because it may not found
     } finally {
       setState(() => _isBusy = false);
     }
@@ -59,8 +67,9 @@ class _PostPollState extends State<PostPoll> {
         'answer': option.id,
       });
       if (!mounted) return;
-      context.showSnackbar('pollAnswered'.tr());
       HapticFeedback.heavyImpact();
+      _answeredChoice = option.id;
+      _refreshPoll();
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -78,15 +87,24 @@ class _PostPollState extends State<PostPoll> {
           for (final option in _poll.options)
             Stack(
               children: [
-                Container(
-                  height: 60,
-                  width: MediaQuery.of(context).size.width * (_poll.metric.byOptionsPercentage[option.id] ?? 0).toDouble(),
-                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width *
+                        (_poll.metric.byOptionsPercentage[option.id] ?? 0)
+                            .toDouble(),
+                    color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                  ),
                 ),
                 ListTile(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   minTileHeight: 60,
-                  leading: _answeredChoice == option.id ? const Icon(Symbols.circle, fill: 1) : const Icon(Symbols.circle),
+                  leading: _answeredChoice == option.id
+                      ? const Icon(Symbols.circle, fill: 1)
+                      : const Icon(Symbols.circle),
                   title: Text(option.name),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,14 +113,18 @@ class _PostPollState extends State<PostPoll> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('pollVotes'.plural(_poll.metric.byOptions[option.id] ?? 0)),
+                          Text(
+                            'pollVotes'
+                                .plural(_poll.metric.byOptions[option.id] ?? 0),
+                          ),
                           Text(' · ').padding(horizontal: 4),
                           Text(
                             '${((_poll.metric.byOptionsPercentage[option.id] ?? 0).toDouble() * 100).toStringAsFixed(2)}%',
                           ),
                         ],
                       ),
-                      if (option.description.isNotEmpty) Text(option.description),
+                      if (option.description.isNotEmpty)
+                        Text(option.description),
                     ],
                   ),
                   onTap: _isBusy ? null : () => _voteForOption(option),

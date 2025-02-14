@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{endpoint}}/cgi/id/dev/notify/1
+  url: {{endpoint}}/cgi/id/dev/notify/122
   body: json
   auth: inherit
 }
@@ -15,12 +15,9 @@ body:json {
     "client_id": "{{third_client_id}}",
     "client_secret":"{{third_client_tk}}",
     "type": "general",
-    "subject": "测试",
-    "subtitle": "Alphabot です",
-    "content": "全新通知动画",
-    "metadata": {
-      "image": "D2EDbcrsTugs3xk5"
-    },
+    "subject": "处理该帐号 @solian 的决定",
+    "subtitle": "违反用户协议",
+    "content": "您的帐号违反了我们用户协议中关于冒充我们官方的行为，至此做出停权的决定。还请见谅。该决定是最终决定，不接受上诉。",
     "priority": 10
   }
 }

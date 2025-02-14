@@ -40,7 +40,7 @@ _$SnPollMetricImpl _$$SnPollMetricImplFromJson(Map<String, dynamic> json) =>
           const {},
       byOptionsPercentage:
           (json['by_options_percentage'] as Map<String, dynamic>?)?.map(
-                (k, e) => MapEntry(k, (e as num).toInt()),
+                (k, e) => MapEntry(k, (e as num).toDouble()),
               ) ??
               const {},
     );

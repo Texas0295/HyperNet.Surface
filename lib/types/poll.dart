@@ -16,8 +16,7 @@ class SnPoll with _$SnPoll {
     required SnPollMetric metric,
   }) = _SnPoll;
 
-  factory SnPoll.fromJson(Map<String, Object?> json) =>
-      _$SnPollFromJson(json);
+  factory SnPoll.fromJson(Map<String, Object?> json) => _$SnPollFromJson(json);
 }
 
 @freezed
@@ -25,11 +24,11 @@ class SnPollMetric with _$SnPollMetric {
   const factory SnPollMetric({
     required int totalAnswer,
     @Default({}) Map<String, int> byOptions,
-    @Default({}) Map<String, int> byOptionsPercentage,
+    @Default({}) Map<String, double> byOptionsPercentage,
   }) = _SnPollMetric;
 
-  factory SnPollMetric.fromJson(Map<String, Object?> json)
-    => _$SnPollMetricFromJson(json);
+  factory SnPollMetric.fromJson(Map<String, Object?> json) =>
+      _$SnPollMetricFromJson(json);
 }
 
 @freezed
@@ -41,6 +40,6 @@ class SnPollOption with _$SnPollOption {
     required String description,
   }) = _SnPollOption;
 
-  factory SnPollOption.fromJson(Map<String, Object?> json)
-    => _$SnPollOptionFromJson(json);
+  factory SnPollOption.fromJson(Map<String, Object?> json) =>
+      _$SnPollOptionFromJson(json);
 }
