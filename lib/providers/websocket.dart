@@ -42,22 +42,22 @@ class WebSocketProvider extends ChangeNotifier {
       _connectCompleter = null;
     }
 
-    _connectCompleter = Completer<void>();
-
     if (!_ua.isAuthorized) return;
     if (isConnected || conn != null) {
       disconnect();
     }
 
-    final atk = await _sn.getFreshAtk();
-    final uri = Uri.parse(
-      '${_sn.client.options.baseUrl.replaceFirst('http', 'ws')}/ws?tk=$atk',
-    );
-
-    isBusy = true;
-    notifyListeners();
-
     try {
+      _connectCompleter = Completer<void>();
+
+      final atk = await _sn.getFreshAtk();
+      final uri = Uri.parse(
+        '${_sn.client.options.baseUrl.replaceFirst('http', 'ws')}/ws?tk=$atk',
+      );
+
+      isBusy = true;
+      notifyListeners();
+
       conn = WebSocketChannel.connect(uri);
       await conn!.ready;
       _wsStream = conn!.stream.asBroadcastStream();
@@ -82,6 +82,7 @@ class WebSocketProvider extends ChangeNotifier {
       isBusy = false;
       notifyListeners();
       _connectCompleter!.complete();
+      _connectCompleter = null;
     }
   }
 
