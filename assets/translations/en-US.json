@@ -648,5 +648,7 @@
   "realmIsPublic": "Public Realm",
   "realmIsPublicDescription": "The realm is public, anyone can join.",
   "realmIsCommunity": "Community Realm",
-  "realmIsCommunityDescription": "Community realm will be displayed on the discover page."
+  "realmIsCommunityDescription": "Community realm will be displayed on the discover page.",
+  "realmLeave": "Leave Realm",
+  "realmLeaveDescription": "Leave the current realm and delete the realm's identity."
 }

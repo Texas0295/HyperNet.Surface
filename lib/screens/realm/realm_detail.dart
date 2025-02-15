@@ -357,6 +357,28 @@ class _RealmSettingsWidgetState extends State<_RealmSettingsWidget> {
     }
   }
 
+  Future<void> _leaveRealm() async {
+    final confirm = await context.showConfirmDialog(
+      'realmLeave'.tr(),
+      'realmLeaveDescription'.tr(),
+    );
+    if (!confirm) return;
+    if (!mounted) return;
+
+    final sn = context.read<SnNetworkProvider>();
+
+    try {
+      await sn.client.delete('/cgi/id/realms/${widget.realm!.alias}/members/me');
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ua = context.read<UserProvider>();
@@ -367,22 +389,31 @@ class _RealmSettingsWidgetState extends State<_RealmSettingsWidget> {
       children: [
         const Gap(8),
         ListTile(
-          leading: const Icon(Symbols.edit),
+          leading: const Icon(Symbols.logout),
           trailing: const Icon(Symbols.chevron_right),
-          title: Text('realmEdit').tr(),
-          subtitle: Text('realmEditDescription').tr(),
+          title: Text('realmLeave').tr(),
+          subtitle: Text('realmLeaveDescription').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-          onTap: () {
-            GoRouter.of(context).pushNamed(
-              'realmManage',
-              queryParameters: {'editing': widget.realm!.alias},
-            ).then((value) {
-              if (value != null) {
-                widget.onUpdate();
-              }
-            });
-          },
+          onTap: _isBusy ? null : () => _leaveRealm(),
         ),
+        if (isOwned)
+          ListTile(
+            leading: const Icon(Symbols.edit),
+            trailing: const Icon(Symbols.chevron_right),
+            title: Text('realmEdit').tr(),
+            subtitle: Text('realmEditDescription').tr(),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+            onTap: () {
+              GoRouter.of(context).pushNamed(
+                'realmManage',
+                queryParameters: {'editing': widget.realm!.alias},
+              ).then((value) {
+                if (value != null) {
+                  widget.onUpdate();
+                }
+              });
+            },
+          ),
         if (isOwned)
           ListTile(
             leading: const Icon(Symbols.delete),
