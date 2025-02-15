@@ -48,6 +48,11 @@ class ChatMessageInputState extends State<ChatMessageInput> {
     modifiers: [(!kIsWeb && Platform.isMacOS) ? HotKeyModifier.meta : HotKeyModifier.control],
     scope: HotKeyScope.inapp,
   );
+  final HotKey _newLineHotKey = HotKey(
+    key: PhysicalKeyboardKey.enter,
+    modifiers: [(!kIsWeb && Platform.isMacOS) ? HotKeyModifier.meta : HotKeyModifier.control],
+    scope: HotKeyScope.inapp,
+  );
 
   void _registerHotKey() {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) return;
@@ -60,6 +65,10 @@ class ChatMessageInputState extends State<ChatMessageInput> {
         SnMediaType.image,
       ));
       setState(() {});
+    });
+    hotKeyManager.register(_newLineHotKey, keyDownHandler: (_) async {
+      if (_contentController.text.isEmpty) return;
+      _contentController.text += '\n';
     });
   }
 
@@ -205,7 +214,10 @@ class ChatMessageInputState extends State<ChatMessageInput> {
     _contentController.dispose();
     _focusNode.dispose();
     _dismissEmojiPicker();
-    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) hotKeyManager.unregister(_pasteHotKey);
+    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) {
+      hotKeyManager.unregister(_pasteHotKey);
+      hotKeyManager.unregister(_newLineHotKey);
+    }
     super.dispose();
   }
 
@@ -345,6 +357,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
                     _sendMessage();
                     _focusNode.requestFocus();
                   },
+                  maxLines: null,
                 ),
               ),
               const Gap(8),
