@@ -91,9 +91,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
         resp.data?.map((e) => SnPublisher.fromJson(e)) ?? [],
       );
       final beforeId = config.prefs.getInt('int_last_publisher_id');
-      _writeController.setPublisher(
-          _publishers?.where((ele) => ele.id == beforeId).firstOrNull ??
-              _publishers?.firstOrNull);
+      _writeController
+          .setPublisher(_publishers?.where((ele) => ele.id == beforeId).firstOrNull ?? _publishers?.firstOrNull);
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -165,8 +164,9 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   @override
   void dispose() {
     _writeController.dispose();
-    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS))
+    if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) {
       hotKeyManager.unregister(_pasteHotKey);
+    }
     super.dispose();
   }
 
@@ -190,8 +190,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     if (widget.extraProps != null) {
       _writeController.contentController.text = widget.extraProps!.text ?? '';
       _writeController.titleController.text = widget.extraProps!.title ?? '';
-      _writeController.descriptionController.text =
-          widget.extraProps!.description ?? '';
+      _writeController.descriptionController.text = widget.extraProps!.description ?? '';
       _writeController.addAttachments(widget.extraProps!.attachments ?? []);
     }
   }
@@ -212,9 +211,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
               textAlign: TextAlign.center,
               text: TextSpan(children: [
                 TextSpan(
-                  text: _writeController.title.isNotEmpty
-                      ? _writeController.title
-                      : 'untitled'.tr(),
+                  text: _writeController.title.isNotEmpty ? _writeController.title : 'untitled'.tr(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).appBarTheme.foregroundColor!,
                       ),
@@ -241,8 +238,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
             children: [
               if (_writeController.editingPost != null)
                 Container(
-                  padding: const EdgeInsets.only(
-                      top: 4, bottom: 4, left: 20, right: 20),
+                  padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 20),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -256,9 +252,63 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     children: [
                       const Icon(Icons.edit, size: 16),
                       const Gap(10),
-                      Text('postEditingNotice').tr(args: [
-                        '@${_writeController.editingPost!.publisher.name}'
-                      ]),
+                      Text('postEditingNotice').tr(args: ['@${_writeController.editingPost!.publisher.name}']),
+                    ],
+                  ),
+                ),
+              if (_writeController.replyingPost != null)
+                Container(
+                  padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 1 / MediaQuery.of(context).devicePixelRatio,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Symbols.reply, size: 16),
+                      const Gap(10),
+                      Text('@${_writeController.replyingPost!.publisher.name}').bold(),
+                      const Gap(4),
+                      Expanded(
+                        child: Text(
+                          _writeController.replyingPost!.body['content'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (_writeController.repostingPost != null)
+                Container(
+                  padding: const EdgeInsets.only(top: 4, bottom: 4, left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 1 / MediaQuery.of(context).devicePixelRatio,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Symbols.forward, size: 16),
+                      const Gap(10),
+                      Text('@${_writeController.repostingPost!.publisher.name}').bold(),
+                      const Gap(4),
+                      Expanded(
+                        child: Text(
+                          _writeController.repostingPost!.body['content'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -288,8 +338,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                       })
                           .padding(top: 8),
                     ),
-                    if (_writeController.attachments.isNotEmpty ||
-                        _writeController.thumbnail != null)
+                    if (_writeController.attachments.isNotEmpty || _writeController.thumbnail != null)
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -299,8 +348,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           attachments: _writeController.attachments,
                           isBusy: _writeController.isBusy,
                           onUpload: (int idx) async {
-                            await _writeController.uploadSingleAttachment(
-                                context, idx);
+                            await _writeController.uploadSingleAttachment(context, idx);
                           },
                           onPostSetThumbnail: (int? idx) {
                             _writeController.setThumbnail(idx);
@@ -309,12 +357,10 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                             _writeController.contentController.text +=
                                 '\n![](solink://attachments/${_writeController.attachments[idx].attachment!.rid})';
                           },
-                          onUpdate:
-                              (int idx, PostWriteMedia updatedMedia) async {
+                          onUpdate: (int idx, PostWriteMedia updatedMedia) async {
                             _writeController.setIsBusy(true);
                             try {
-                              _writeController.setAttachmentAt(
-                                  idx, updatedMedia);
+                              _writeController.setAttachmentAt(idx, updatedMedia);
                             } finally {
                               _writeController.setIsBusy(false);
                             }
@@ -327,8 +373,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               _writeController.setIsBusy(false);
                             }
                           },
-                          onUpdateBusy: (state) =>
-                              _writeController.setIsBusy(state),
+                          onUpdateBusy: (state) => _writeController.setIsBusy(state),
                         ).padding(bottom: 8),
                       ),
                   ],
@@ -339,13 +384,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (_writeController.isBusy &&
-                        _writeController.progress != null)
+                    if (_writeController.isBusy && _writeController.progress != null)
                       TweenAnimationBuilder<double>(
                         tween: Tween(begin: 0, end: _writeController.progress),
                         duration: Duration(milliseconds: 300),
-                        builder: (context, value, _) =>
-                            LinearProgressIndicator(value: value, minHeight: 2),
+                        builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 2),
                       )
                     else if (_writeController.isBusy)
                       const LinearProgressIndicator(value: null, minHeight: 2),
@@ -354,14 +397,12 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                     Container(
                       child: _writeController.temporaryRestored
                           ? Container(
-                              padding: const EdgeInsets.only(
-                                  top: 4, bottom: 4, left: 28, right: 22),
+                              padding: const EdgeInsets.only(top: 4, bottom: 4, left: 28, right: 22),
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
                                     color: Theme.of(context).dividerColor,
-                                    width: 1 /
-                                        MediaQuery.of(context).devicePixelRatio,
+                                    width: 1 / MediaQuery.of(context).devicePixelRatio,
                                   ),
                                 ),
                               ),
@@ -370,9 +411,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                 children: [
                                   const Icon(Icons.restore, size: 20),
                                   const Gap(8),
-                                  Expanded(
-                                      child:
-                                          Text('postLocalDraftRestored').tr()),
+                                  Expanded(child: Text('postLocalDraftRestored').tr()),
                                   InkWell(
                                     child: Text('dialogDismiss').tr(),
                                     onTap: () {
@@ -383,10 +422,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                               ))
                           : const SizedBox.shrink(),
                     )
-                        .height(_writeController.temporaryRestored ? 32 : 0,
-                            animate: true)
-                        .animate(const Duration(milliseconds: 300),
-                            Curves.fastLinearToSlowEaseIn),
+                        .height(_writeController.temporaryRestored ? 32 : 0, animate: true)
+                        .animate(const Duration(milliseconds: 300), Curves.fastLinearToSlowEaseIn),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -406,18 +443,11 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                   ),
                                   if (_writeController.mode == 'stories')
                                     IconButton(
-                                      icon: Icon(Symbols.poll,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
+                                      icon: Icon(Symbols.poll, color: Theme.of(context).colorScheme.primary),
                                       style: ButtonStyle(
-                                        backgroundColor:
-                                            _writeController.poll == null
-                                                ? null
-                                                : WidgetStatePropertyAll(
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .surfaceContainer),
+                                        backgroundColor: _writeController.poll == null
+                                            ? null
+                                            : WidgetStatePropertyAll(Theme.of(context).colorScheme.surfaceContainer),
                                       ),
                                       onPressed: () {
                                         _showPollEditorDialog();
@@ -429,8 +459,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           ),
                         ),
                         TextButton.icon(
-                          onPressed: (_writeController.isBusy ||
-                                  _writeController.publisher == null)
+                          onPressed: (_writeController.isBusy || _writeController.publisher == null)
                               ? null
                               : () {
                                   _writeController.sendPost(context).then((_) {
@@ -481,9 +510,7 @@ class _PostPublisherPopup extends StatelessWidget {
           children: [
             const Icon(Symbols.face, size: 24),
             const Gap(16),
-            Text('accountPublishers',
-                    style: Theme.of(context).textTheme.titleLarge)
-                .tr(),
+            Text('accountPublishers', style: Theme.of(context).textTheme.titleLarge).tr(),
           ],
         ).padding(horizontal: 20, top: 16, bottom: 12),
         ListTile(
@@ -559,8 +586,7 @@ class _PostStoryEditor extends StatelessWidget {
                     border: InputBorder.none,
                   ),
                   style: Theme.of(context).textTheme.titleLarge,
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ).padding(horizontal: 16),
                 const Gap(8),
                 TextField(
@@ -575,8 +601,7 @@ class _PostStoryEditor extends StatelessWidget {
                     ),
                     border: InputBorder.none,
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ),
               ],
             ),
@@ -666,8 +691,7 @@ class _PostArticleEditor extends StatelessWidget {
                       ),
                       border: InputBorder.none,
                     ),
-                    onTapOutside: (_) =>
-                        FocusManager.instance.primaryFocus?.unfocus(),
+                    onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                   ),
                 ),
                 const Gap(8),
@@ -746,8 +770,7 @@ class _PostQuestionEditor extends StatelessWidget {
                     border: InputBorder.none,
                   ),
                   style: Theme.of(context).textTheme.titleLarge,
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ).padding(horizontal: 16),
                 const Gap(8),
                 TextField(
@@ -758,8 +781,7 @@ class _PostQuestionEditor extends StatelessWidget {
                     border: InputBorder.none,
                     isCollapsed: true,
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ).padding(horizontal: 16),
                 const Gap(8),
                 TextField(
@@ -774,8 +796,7 @@ class _PostQuestionEditor extends StatelessWidget {
                     ),
                     border: InputBorder.none,
                   ),
-                  onTapOutside: (_) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
+                  onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
                 ),
               ],
             ),
@@ -811,8 +832,7 @@ class _PostVideoEditor extends StatelessWidget {
 
     final result = await showDialog<SnAttachment?>(
       context: context,
-      builder: (context) => PendingAttachmentAltDialog(
-          media: PostWriteMedia(controller.videoAttachment)),
+      builder: (context) => PendingAttachmentAltDialog(media: PostWriteMedia(controller.videoAttachment)),
     );
     if (result == null) return;
 
@@ -824,8 +844,7 @@ class _PostVideoEditor extends StatelessWidget {
 
     final result = await showDialog<SnAttachmentBoost?>(
       context: context,
-      builder: (context) => PendingAttachmentBoostDialog(
-          media: PostWriteMedia(controller.videoAttachment)),
+      builder: (context) => PendingAttachmentBoostDialog(media: PostWriteMedia(controller.videoAttachment)),
     );
     if (result == null) return;
 
@@ -868,8 +887,7 @@ class _PostVideoEditor extends StatelessWidget {
 
     try {
       final sn = context.read<SnNetworkProvider>();
-      await sn.client
-          .delete('/cgi/uc/attachments/${controller.videoAttachment!.id}');
+      await sn.client.delete('/cgi/uc/attachments/${controller.videoAttachment!.id}');
       controller.setVideoAttachment(null);
     } catch (err) {
       if (!context.mounted) return;
@@ -961,8 +979,7 @@ class _PostVideoEditor extends StatelessWidget {
                   label: 'attachmentCopyRandomId'.tr(),
                   icon: Symbols.content_copy,
                   onSelected: () {
-                    Clipboard.setData(
-                        ClipboardData(text: controller.videoAttachment!.rid));
+                    Clipboard.setData(ClipboardData(text: controller.videoAttachment!.rid));
                   },
                 ),
                 MenuItem(
@@ -981,9 +998,7 @@ class _PostVideoEditor extends StatelessWidget {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
-              onTap: controller.videoAttachment == null
-                  ? () => _selectVideo(context)
-                  : null,
+              onTap: controller.videoAttachment == null ? () => _selectVideo(context) : null,
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: controller.videoAttachment == null
