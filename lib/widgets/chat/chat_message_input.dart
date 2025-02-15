@@ -112,6 +112,7 @@ class ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   Future<void> _sendMessage() async {
+    if (_contentController.text.isEmpty && _attachments.isEmpty) return;
     if (_isBusy) return;
 
     final attach = context.read<SnAttachmentProvider>();

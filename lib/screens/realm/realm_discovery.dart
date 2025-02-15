@@ -154,7 +154,7 @@ class _RealmJoinPopupState extends State<_RealmJoinPopup> {
     try {
       setState(() => _isBusy = true);
       final sn = context.read<SnNetworkProvider>();
-      final resp = await sn.client.get('/cgi/im/channels/${widget.realm.alias}');
+      final resp = await sn.client.get('/cgi/im/channels/${widget.realm.alias}/public');
       final out = List<SnChannel>.from(
         resp.data.map((e) => SnChannel.fromJson(e)).cast<SnChannel>(),
       );
