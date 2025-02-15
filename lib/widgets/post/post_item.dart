@@ -965,7 +965,7 @@ class _PostContentHeader extends StatelessWidget {
                 onTap: () {
                   GoRouter.of(context).pushNamed(
                     'postEditor',
-                    pathParameters: {'mode': data.typePlural},
+                    pathParameters: {'mode': 'stories'},
                     queryParameters: {'replying': data.id.toString()},
                   );
                 },
@@ -981,7 +981,7 @@ class _PostContentHeader extends StatelessWidget {
                 onTap: () {
                   GoRouter.of(context).pushNamed(
                     'postEditor',
-                    pathParameters: {'mode': data.typePlural},
+                    pathParameters: {'mode': 'stories'},
                     queryParameters: {'reposting': data.id.toString()},
                   );
                 },
