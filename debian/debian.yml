@@ -1,0 +1,14 @@
+flutter_app: 
+  command: surface
+  arch: x64
+  parent: /usr/local/lib
+  nonInteractive: false
+
+control:
+  Package: solian
+  Version: 2.3.2
+  Architecture: amd64
+  Priority: optional
+  Depends: mpv keybinder-3.0
+  Maintainer: Solsynth LLC
+  Description: The Solar Network Desktop Application
