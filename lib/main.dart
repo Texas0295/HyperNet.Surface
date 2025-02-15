@@ -69,20 +69,6 @@ void appBackgroundDispatcher() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
-
-  await Hive.initFlutter();
-  Hive.registerAdapter(SnChannelImplAdapter());
-  Hive.registerAdapter(SnRealmImplAdapter());
-  Hive.registerAdapter(SnChannelMemberImplAdapter());
-  Hive.registerAdapter(SnChatMessageImplAdapter());
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  GoRouter.optionURLReflectsImperativeAPIs = true;
-  usePathUrlStrategy();
 
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     doWhenWindowReady(() {
@@ -92,6 +78,23 @@ void main() async {
       appWindow.show();
     });
   }
+
+  await EasyLocalization.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(SnChannelImplAdapter());
+  Hive.registerAdapter(SnRealmImplAdapter());
+  Hive.registerAdapter(SnChannelMemberImplAdapter());
+  Hive.registerAdapter(SnChatMessageImplAdapter());
+
+  if (kIsWeb && !Platform.isLinux) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+  usePathUrlStrategy();
 
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     Workmanager().initialize(
