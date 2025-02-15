@@ -639,5 +639,13 @@
     "other": "{} 票"
   },
   "publisherDelete": "删除发布者 {}",
-  "publisherDeleteDescription": "你确定要删除这个发布者吗？该操作不可撤销。"
+  "publisherDeleteDescription": "你确定要删除这个发布者吗？该操作不可撤销。",
+  "channelIsPublic": "公开频道",
+  "channelIsPublicDescription": "该频道是公开的，任何人都可以加入。",
+  "channelIsCommunity": "社区频道",
+  "channelIsCommunityDescription": "目前来说，社区频道还没有什么特别之处。",
+  "realmIsPublic": "公开领域",
+  "realmIsPublicDescription": "该领域是公开的，任何人都可以加入。",
+  "realmIsCommunity": "社区领域",
+  "realmIsCommunityDescription": "社区领域会显示在发现页面上。"
 }

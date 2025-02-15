@@ -37,6 +37,9 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
 
   SnChannel? _editingChannel;
 
+  bool _isPublic = false;
+  bool _isCommunity = false;
+
   Future<void> _fetchRealms() async {
     setState(() => _isBusy = true);
     try {
@@ -67,6 +70,8 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
       _aliasController.text = _editingChannel!.alias;
       _nameController.text = _editingChannel!.name;
       _descriptionController.text = _editingChannel!.description;
+      _isPublic = _editingChannel!.isPublic;
+      _isCommunity = _editingChannel!.isCommunity;
     } catch (err) {
       if (!mounted) return;
       context.showErrorDialog(err);
@@ -88,6 +93,8 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
           : uuid.v4().replaceAll('-', '').substring(0, 12),
       'name': _nameController.text,
       'description': _descriptionController.text,
+      'is_public': _isPublic,
+      'is_community': _isCommunity,
     };
 
     try {
@@ -269,6 +276,23 @@ class _ChatManageScreenState extends State<ChatManageScreen> {
                     labelText: 'fieldChatDescription'.tr(),
                   ),
                   onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+                ),
+                const Gap(12),
+                CheckboxListTile(
+                  value: _isPublic,
+                  title: Text('channelIsPublic'.tr()),
+                  subtitle: Text('channelIsPublicDescription'.tr()),
+                  onChanged: (value) {
+                    setState(() => _isPublic = value ?? false);
+                  },
+                ),
+                CheckboxListTile(
+                  value: _isCommunity,
+                  title: Text('channelIsCommunity'.tr()),
+                  subtitle: Text('channelIsCommunityDescription'.tr()),
+                  onChanged: (value) {
+                    setState(() => _isCommunity = value ?? false);
+                  },
                 ),
                 const Gap(12),
                 Row(

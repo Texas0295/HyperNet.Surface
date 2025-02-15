@@ -50,6 +50,8 @@ class _RealmManageScreenState extends State<RealmManageScreen> {
       _aliasController.text = out.alias;
       _nameController.text = out.name;
       _descriptionController.text = out.description;
+      _isPublic = out.isPublic;
+      _isCommunity = out.isCommunity;
     } catch (err) {
       // ignore: use_build_context_synchronously
       if (context.mounted) context.showErrorDialog(err);
@@ -66,6 +68,9 @@ class _RealmManageScreenState extends State<RealmManageScreen> {
   final _descriptionController = TextEditingController();
 
   final _imagePicker = ImagePicker();
+
+  bool _isPublic = false;
+  bool _isCommunity = false;
 
   Future<void> _updateImage(String place) async {
     final image = await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -138,6 +143,8 @@ class _RealmManageScreenState extends State<RealmManageScreen> {
       'description': _descriptionController.text,
       'avatar': _avatar,
       'banner': _banner,
+      'is_public': _isPublic,
+      'is_community': _isCommunity,
     };
 
     try {
@@ -291,6 +298,23 @@ class _RealmManageScreenState extends State<RealmManageScreen> {
                   ),
                   onTapOutside: (_) =>
                       FocusManager.instance.primaryFocus?.unfocus(),
+                ),
+                const Gap(12),
+                CheckboxListTile(
+                  value: _isPublic,
+                  title: Text('realmIsPublic'.tr()),
+                  subtitle: Text('realmIsPublicDescription'.tr()),
+                  onChanged: (value) {
+                    setState(() => _isPublic = value ?? false);
+                  },
+                ),
+                CheckboxListTile(
+                  value: _isCommunity,
+                  title: Text('realmIsCommunity'.tr()),
+                  subtitle: Text('realmIsCommunityDescription'.tr()),
+                  onChanged: (value) {
+                    setState(() => _isCommunity = value ?? false);
+                  },
                 ),
                 const Gap(12),
                 Row(
