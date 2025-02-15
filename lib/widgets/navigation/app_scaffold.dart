@@ -166,10 +166,12 @@ class AppRootScaffold extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: Platform.isMacOS ? MainAxisAlignment.center : MainAxisAlignment.start,
                         children: [
-                          Text(
-                            'Solar Network',
-                            style: GoogleFonts.spaceGrotesk(),
-                          ).padding(horizontal: 12, vertical: 5),
+                          Expanded(
+                            child: Text(
+                              'Solar Network',
+                              style: GoogleFonts.spaceGrotesk(),
+                            ).padding(horizontal: 12, vertical: 5),
+                          ),
                           if (!Platform.isMacOS)
                             Row(
                               mainAxisSize: MainAxisSize.min,
