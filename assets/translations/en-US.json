@@ -638,5 +638,7 @@
   "pollVotes": {
     "one": "{} vote",
     "other": "{} votes"
-  }
+  },
+  "publisherDelete": "Delete Publisher {}",
+  "publisherDeleteDescription": "Are you sure you want to delete this publisher? This operation is irreversible."
 }

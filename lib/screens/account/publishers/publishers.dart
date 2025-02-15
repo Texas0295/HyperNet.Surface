@@ -45,6 +45,33 @@ class _PublisherScreenState extends State<PublisherScreen> {
     }
   }
 
+  Future<void> _deletePublisher(SnPublisher publisher) async {
+    final confirm = await context.showConfirmDialog(
+      'publisherDelete'.tr(args: ['#${publisher.name}']),
+      'publisherDeleteDescription'.tr(),
+    );
+    if (!confirm) return;
+
+    if (!mounted) return;
+    setState(() => _isBusy = true);
+
+    try {
+      await context
+          .read<SnNetworkProvider>()
+          .client
+          .delete('/cgi/co/publishers/${publisher.name}');
+      if (!mounted) return;
+      context.showSnackbar('publisherDeleted'.tr(args: ['#${publisher.name}']));
+      _publishers.remove(publisher);
+      _fetchPublishers();
+    } catch (err) {
+      if (!mounted) return;
+      context.showErrorDialog(err);
+    } finally {
+      setState(() => _isBusy = false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -116,6 +143,18 @@ class _PublisherScreenState extends State<PublisherScreen> {
                                   _fetchPublishers();
                                 }
                               });
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                const Icon(Symbols.delete),
+                                const Gap(16),
+                                Text('delete').tr(),
+                              ],
+                            ),
+                            onTap: () {
+                              _deletePublisher(publisher);
                             },
                           ),
                         ],

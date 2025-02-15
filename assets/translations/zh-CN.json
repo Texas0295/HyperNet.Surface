@@ -637,5 +637,7 @@
   "pollVotes": {
     "one": "{} 票",
     "other": "{} 票"
-  }
+  },
+  "publisherDelete": "删除发布者 {}",
+  "publisherDeleteDescription": "你确定要删除这个发布者吗？该操作不可撤销。"
 }
