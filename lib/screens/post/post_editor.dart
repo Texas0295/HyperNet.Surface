@@ -138,6 +138,9 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
       builder: (context) => _PostPublisherPopup(
         controller: _writeController,
         publishers: _publishers,
+        onUpdate: () {
+          _fetchPublishers();
+        },
       ),
     );
   }
@@ -464,8 +467,9 @@ class _PostEditorActionScrollBehavior extends MaterialScrollBehavior {
 class _PostPublisherPopup extends StatelessWidget {
   final PostWriteController controller;
   final List<SnPublisher>? publishers;
+  final Function onUpdate;
 
-  const _PostPublisherPopup({required this.controller, this.publishers});
+  const _PostPublisherPopup({required this.controller, this.publishers, required this.onUpdate});
 
   @override
   Widget build(BuildContext context) {
@@ -488,7 +492,11 @@ class _PostPublisherPopup extends StatelessWidget {
           subtitle: Text('publisherNewSubtitle').tr(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 24),
           onTap: () {
-            GoRouter.of(context).pushNamed('accountPublisherNew');
+            GoRouter.of(context).pushNamed('accountPublisherNew').then((value) {
+              if (value == true) {
+                onUpdate();
+              }
+            });
           },
         ),
         const Divider(height: 1),
