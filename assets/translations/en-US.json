@@ -964,6 +964,6 @@
   "postVideoLiveDescription": "This is a live video, you can embed the source site by yourself.",
   "postVideoRendererWeb": "WebView Rendering", 
   "postVideoRendererWebDescription": "Use WebView to render the content",
-  "fieldPostVideoStreamUrl": "Live Stream URL",
-  "fieldPostVideoStreamUrlDescription": "Live stream URL, can be HLS or webpage; use webpage renderer if you want to embed the webpage."
+  "fieldPostVideoUrl": "Video URL",
+  "fieldPostVideoUrlDescription": "The URL of the video content, it can be a webpage, and will be rendered by iFrame / WebView."
 }

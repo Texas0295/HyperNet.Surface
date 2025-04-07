@@ -961,6 +961,6 @@
   "postVideoLiveDescription": "这是一条直播影片，允许用户自行嵌入源站。",
   "postVideoRendererWeb": "网页渲染器", 
   "postVideoRendererWebDescription": "使用 WebView 渲染内容。",
-  "fieldPostVideoStreamUrl": "直播流地址",
-  "fieldPostVideoStreamUrlDescription": "直播流地址，可以为 HLS，或者网页；使用网页嵌入请启用网页渲染器。"
+  "fieldPostVideoUrl": "视频流地址",
+  "fieldPostVideoUrlDescription": "视频内容的地址，可以为网页，将会使用 iFrame / WebView 渲染。"
 }

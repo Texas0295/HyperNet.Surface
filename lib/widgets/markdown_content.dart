@@ -232,7 +232,7 @@ class _UserNameCardInlineSyntax extends markdown.InlineSyntax {
     final alias = match[0]!;
     final anchor = markdown.Element.text('a', alias)
       ..attributes['href'] = Uri.encodeFull(
-        'solink://account/${alias.substring(1)}',
+        'solink://accounts/${alias.substring(1)}',
       );
     parser.addNode(anchor);
 

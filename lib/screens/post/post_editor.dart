@@ -1219,19 +1219,21 @@ class _PostVideoEditorState extends State<_PostVideoEditor> {
                       FocusManager.instance.primaryFocus?.unfocus(),
                 ).padding(horizontal: 16),
                 const Gap(12),
-                if (widget.controller.videoLive)
+                if (widget.controller.videoLive ||
+                    widget.controller.videoAttachment == null)
                   TextField(
                     controller: _streamUrlController,
                     decoration: InputDecoration(
-                      labelText: 'fieldPostVideoStreamUrl'.tr(),
-                      helperText: 'fieldPostVideoStreamUrlDescription'.tr(),
+                      labelText: 'fieldPostVideoUrl'.tr(),
+                      helperText: 'fieldPostVideoUrlDescription'.tr(),
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),
                     onTapOutside: (_) =>
                         FocusManager.instance.primaryFocus?.unfocus(),
-                  ).padding(horizontal: 12)
-                else
+                  ).padding(horizontal: 16, bottom: 12, top: 2),
+                if (!widget.controller.videoLive &&
+                    _streamUrlController.text.isEmpty)
                   Container(
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     decoration: BoxDecoration(

@@ -752,6 +752,7 @@ class PostWriteController extends ChangeNotifier {
 
   void setVideoUrl(String value) {
     videoUrl = value;
+    notifyListeners();
   }
 
   void setVideoLive(bool value) {
