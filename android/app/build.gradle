@@ -10,12 +10,15 @@ plugins {
 }
 
 dependencies {
-    implementation 'com.facebook.fresco:webpsupport:2.6.0'
-    implementation 'com.facebook.react:react-android:0.75.5'
+//    implementation('org.jitsi.react:jitsi-meet-sdk:11.1.1') { transitive = true }
+//    implementation 'com.facebook.fresco:webpsupport:2.6.0'
+//    implementation 'com.facebook.fresco:animated-webp:2.6.0'
+//    implementation 'com.facebook.react:react-android:0.75.5'
+//    implementation 'com.facebook.react:hermes-android:0.75.5'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.glance:glance:1.1.1'
     implementation 'androidx.glance:glance-appwidget:1.1.1'
-    implementation 'androidx.compose.foundation:foundation-layout-android:1.7.6'
+    implementation 'androidx.compose.foundation:foundation-layout-android:1.7.8'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'io.coil-kt.coil3:coil-compose:3.0.4'
@@ -75,8 +78,10 @@ android {
         }
         release {
             signingConfig = signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

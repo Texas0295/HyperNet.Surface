@@ -13,17 +13,10 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
-# React Native
+-dontwarn com.facebook.imagepipeline.nativecode.WebpTranscoder
 
-# Keep our interfaces so they can be used by other ProGuard rules.
-# See http://sourceforge.net/p/proguard/bugs/466/
 -keep,allowobfuscation @interface com.facebook.proguard.annotations.DoNotStrip
 -keep,allowobfuscation @interface com.facebook.proguard.annotations.KeepGettersAndSetters
--keep class com.facebook.imagepipeline.nativecode.WebpTranscoderImpl { *; }
--keep class com.facebook.imagepipeline.nativecode.WebpTranscoder { *; }
-
--dontwarn com.facebook.imagepipeline.nativecode.**
--dontwarn com.facebook.imagepipeline.nativecode.WebpTranscoder
 
 # Do not strip any method/class that is annotated with @DoNotStrip
 -keep @com.facebook.proguard.annotations.DoNotStrip class *
